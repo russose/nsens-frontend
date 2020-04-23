@@ -1,0 +1,13 @@
+{
+  "categories": [
+    { "id": "PLT" },
+    { "id": "ECO" },
+    { "id": "INO" },
+    { "id": "POL" },
+    { "id": "HUM" }
+  ],
+  "languages": [
+    { "id": "fr", "label": "Français" },
+    { "id": "en", "label": "English" }
+  ]
+}
