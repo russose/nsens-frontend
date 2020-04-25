@@ -1,7 +1,8 @@
 import React, { SyntheticEvent } from "react";
-import { Box, IconButton, Link } from "gestalt";
+import { Box, IconButton } from "gestalt";
 
 import { JsText } from "./js_components";
+import Link from "next/link";
 
 interface IButtonWithLabelProps {
   icon: any;
@@ -31,14 +32,16 @@ const ButtonWithLabel: React.FunctionComponent<IButtonWithLabelProps> = (
 
       <Box>
         <Link href={props.pathPage_onClick}>
-          <IconButton
-            accessibilityLabel={props.label}
-            //bgColor={props.enabled ? "lightGray" : "transparent"}
-            icon={props.icon}
-            iconColor="darkGray"
-            size={icon_size}
-            //onClick={props.onClick}
-          />
+          <a>
+            <IconButton
+              accessibilityLabel={props.label}
+              //bgColor={props.enabled ? "lightGray" : "transparent"}
+              icon={props.icon}
+              iconColor="darkGray"
+              size={icon_size}
+              //onClick={props.onClick}
+            />
+          </a>
         </Link>
       </Box>
     </Box>

@@ -1,20 +1,24 @@
-import { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { Sticky, Box } from "gestalt";
+import SearchBar from "../SearchBar";
+import { onSearch } from "../../_handlers";
 
-interface IMobileWithSearchLayoutProps {
-  top?: ReactNode;
-  content: ReactNode;
-}
+import data_gui from "../../data/data_gui.json";
+import { IConfigData } from "../../types";
+import { useStores } from "../../states/_RootStore";
+const guiConfig: IConfigData = data_gui.fr;
 
-const MobileWithSearchLayout: React.FunctionComponent<IMobileWithSearchLayoutProps> = (
-  props
-) => {
+const MobileWithSearchLayout: React.FunctionComponent = (props) => {
+  const { pageLayoutStore } = useStores();
   return (
     <div>
       <Sticky top={0}>
         <Box color="green" padding={1} display="block">
-          {props.top}
+          <SearchBar
+            value={pageLayoutStore.searchPattern}
+            config={guiConfig.searchBar}
+            handler={onSearch(pageLayoutStore)}
+          />
         </Box>
       </Sticky>
 
@@ -28,7 +32,7 @@ const MobileWithSearchLayout: React.FunctionComponent<IMobileWithSearchLayoutPro
         justifyContent="between"
         overflow="scrollY"
       >
-        {props.content}
+        {props.children}
       </Box>
     </div>
   );

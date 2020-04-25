@@ -21,7 +21,6 @@ const MobileDefaultLayout: React.FunctionComponent = (props) => {
         overflow="hidden"
       >
         {props.children}
-
         <Sticky bottom={0}>
           <Box color="green" padding={1} display="block">
             <MenuBar

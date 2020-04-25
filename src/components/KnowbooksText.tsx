@@ -1,6 +1,6 @@
 import { Box } from "gestalt";
 
-const ContentKnowbooks: React.FunctionComponent = (props) => {
+const KnowbooksText: React.FunctionComponent = (props) => {
   return (
     <div>
       <Box color="gray" padding={0}>
@@ -10,4 +10,4 @@ const ContentKnowbooks: React.FunctionComponent = (props) => {
   );
 };
 
-export default ContentKnowbooks;
+export default KnowbooksText;

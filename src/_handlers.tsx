@@ -23,7 +23,6 @@ export const onSavedClick = (dataStore: DataStore) => (
   } else {
     dataStore.addSaved(id);
   }
-  console.log(id);
 };
 
 // export const onLikedClick = (dataStore: DataStore) => (
@@ -39,7 +38,7 @@ export const onSavedClick = (dataStore: DataStore) => (
 
 export const openLink = (url: string) => (): void => {
   window.open(url);
-  console.log(url);
+  // console.log(url);
 };
 
 //Change page

@@ -14,11 +14,15 @@ interface IStores {
 export class RootStore {
   private $stores: IStores = {
     pageLayoutStore: new PageLayoutStore(),
-    dataStore: new DataStore()
+    dataStore: new DataStore(),
   };
 
   public stores(): IStores {
     return this.$stores;
+  }
+
+  public getDataStore(): DataStore {
+    return this.$stores.dataStore;
   }
 }
 
@@ -28,7 +32,7 @@ interface IContextStores {
 }
 
 export const ContextStores = React.createContext<IContextStores>({
-  rootStore: null
+  rootStore: null,
 });
 
 //Hook
@@ -44,7 +48,7 @@ export function useStores(): IStores & { rootStore: RootStore } {
 
   const allStores = {
     ...value.rootStore.stores(),
-    rootStore: value.rootStore
+    rootStore: value.rootStore,
   };
 
   return allStores;

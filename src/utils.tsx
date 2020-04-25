@@ -1,4 +1,7 @@
 import { IAtom } from "./types";
+import { RootStore } from "./states/_RootStore";
+import { usersLoaded } from "./data/dataLoader";
+import { DataStore } from "./states/DataStore";
 
 export function prepare_url(root_url: string, params: Object): string {
   let url = root_url + "?origin=*";
@@ -16,6 +19,22 @@ export function save_object_to_file(path: string, object: Object, fs: any) {
       console.log("An error occured while writing to File.");
     }
   });
+}
+
+export function initialyzeRootStore(): RootStore {
+  const rootStore: RootStore = new RootStore();
+
+  const dataStore: DataStore = rootStore.getDataStore();
+
+  if (dataStore.user === undefined) {
+    // pageLayoutStore.set_gui_config(data_gui.fr);
+    dataStore.setUser(usersLoaded[0]);
+    dataStore.setAtoms(usersLoaded[0].atoms_cache);
+  }
+
+  //console.log("Initialyze RootStore completed!");
+
+  return rootStore;
 }
 
 //TO BE DELETED?
