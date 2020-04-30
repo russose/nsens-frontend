@@ -27,7 +27,7 @@ const MobileDefaultLayout: React.FunctionComponent = (props) => {
               label_active="Saved"
               buttons_config={guiConfig.menuBar}
               pathPages_onClick={[
-                "/Home",
+                "/index",
                 "/Knowbooks",
                 "/Saved",
                 "/Knowbooks",

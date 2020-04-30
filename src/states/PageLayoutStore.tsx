@@ -5,7 +5,7 @@ import { IConfigData } from "../types.jsx";
 import data_gui from "../data/data_gui.json";
 
 export class PageLayoutStore {
-  @observable private $searchPattern: string = "";
+  @observable private $searchPatternHome: string = "";
   @observable private $selectedAtomId: number = 0;
 
   private $guiConfig: IConfigData = data_gui.fr;
@@ -19,13 +19,13 @@ export class PageLayoutStore {
   }
 
   @computed
-  get searchPattern() {
-    return this.$searchPattern;
+  get searchPatternHome() {
+    return this.$searchPatternHome;
   }
 
   @action
-  setSearchPattern(pattern: string): void {
-    this.$searchPattern = pattern;
+  setsearchPatternHome(pattern: string): void {
+    this.$searchPatternHome = pattern;
   }
 
   @computed

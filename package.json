@@ -13,19 +13,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "gestalt": "^1.37.0",
+    "gestalt": "^1.45.0",
     "isomorphic-unfetch": "^3.0.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
-    "next": "^9.3.4",
+    "next": "^9.3.5",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "swr": "^0.2.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@types/gestalt": "^1.15.0",
-    "@types/node": "^13.11.1",
+    "@types/node": "^13.13.2",
     "@types/react": "^16.9.34",
     "typescript": "^3.8.3"
   }

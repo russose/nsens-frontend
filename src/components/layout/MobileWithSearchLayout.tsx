@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Sticky, Box } from "gestalt";
 import SearchBar from "../SearchBar";
-import { onSearch } from "../../_handlers";
+import { onSearchHome } from "../../_handlers";
 
 import data_gui from "../../data/data_gui.json";
 import { IConfigData } from "../../types";
@@ -9,15 +9,14 @@ import { useStores } from "../../states/_RootStore";
 const guiConfig: IConfigData = data_gui.fr;
 
 const MobileWithSearchLayout: React.FunctionComponent = (props) => {
-  const { pageLayoutStore } = useStores();
+  const { dataStore } = useStores();
   return (
     <div>
       <Sticky top={0}>
         <Box color="green" padding={1} display="block">
           <SearchBar
-            value={pageLayoutStore.searchPattern}
             config={guiConfig.searchBar}
-            handler={onSearch(pageLayoutStore)}
+            handler={onSearchHome(dataStore)}
           />
         </Box>
       </Sticky>

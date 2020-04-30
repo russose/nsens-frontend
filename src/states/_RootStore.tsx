@@ -1,5 +1,4 @@
 import React from "react";
-import { PageLayoutStore } from "./PageLayoutStore";
 import { DataStore } from "./DataStore";
 
 type Maybe<T> = T | null;
@@ -7,13 +6,13 @@ type Maybe<T> = T | null;
 //RootStore
 
 interface IStores {
-  pageLayoutStore: PageLayoutStore;
+  //pageLayoutStore: PageLayoutStore;
   dataStore: DataStore;
 }
 
 export class RootStore {
   private $stores: IStores = {
-    pageLayoutStore: new PageLayoutStore(),
+    //pageLayoutStore: new PageLayoutStore(),
     dataStore: new DataStore(),
   };
 

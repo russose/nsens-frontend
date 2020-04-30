@@ -22,7 +22,7 @@ interface ICardProps {
 export const Card: React.FunctionComponent<ICardProps> = (props) => {
   const my_size = "sm";
   return (
-    <Box color="white" padding={1} column={6} minWidth={150} maxWidth={300}>
+    <Box color="green" padding={1} column={6} minWidth={150} maxWidth={300}>
       <ColoredContour
         color_contour={props.color}
         color_inside="white"
@@ -33,13 +33,23 @@ export const Card: React.FunctionComponent<ICardProps> = (props) => {
         </JsText>
 
         <Touchable onTouch={props.image_handler} rounding={1}>
-          <Image
-            alt="image"
-            color="white"
-            naturalHeight={396}
-            naturalWidth={512}
-            src={props.image_url}
-          />
+          <Box
+            color="darkGray"
+            height={150}
+            width={150}
+            marginLeft={4}
+            marginRight={4}
+          >
+            <Image
+              alt="image"
+              color="white"
+              fit="cover"
+              naturalHeight={1}
+              naturalWidth={1}
+              loading="lazy"
+              src={props.image_url}
+            />
+          </Box>
         </Touchable>
 
         <Box

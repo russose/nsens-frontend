@@ -55,12 +55,14 @@ export type AtomID = number;
 export type UserID = number;
 
 export interface IAtom {
+  id: number;
   wikibase_item: string;
   pageid_wp: AtomID;
   author_id: UserID;
   language: ConfigDataLanguage;
   title: string;
-  thumbnail_wp: string;
+  title_en: string;
+  image: string;
   creation_date: number;
   category: ConfigDataCategoryType;
 }
