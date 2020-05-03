@@ -1,4 +1,5 @@
 import { DataStore } from "./states/DataStore";
+import { IAtom } from "./types";
 
 interface IonSearchInput {
   value: string;
@@ -9,18 +10,18 @@ interface IonSearchInput {
 export const onSearchHome = (dataStore: DataStore) => (
   input: IonSearchInput
 ): void => {
-  dataStore.searchAtomsFromWeb(input.value);
+  dataStore.setSearchPattern(input.value);
 };
 
-//Save and Like
+//Save
 export const onSavedClick = (dataStore: DataStore) => (
-  id: number
+  item: IAtom
 ) => (): void => {
-  const condition = Array.from(dataStore.saved.keys()).includes(id);
+  const condition = Array.from(dataStore.saved.keys()).includes(item.id);
   if (condition) {
-    dataStore.removeSaved(id);
+    dataStore.removeSaved(item);
   } else {
-    dataStore.addSaved(id);
+    dataStore.addSaved(item);
   }
 };
 

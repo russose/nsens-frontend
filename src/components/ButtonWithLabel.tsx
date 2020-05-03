@@ -14,7 +14,7 @@ interface IButtonWithLabelProps {
 
 const font_size = "sm";
 const icon_size = "md";
-const weight = "normal";
+const weight = "bold";
 
 const ButtonWithLabel: React.FunctionComponent<IButtonWithLabelProps> = (
   props
@@ -24,12 +24,6 @@ const ButtonWithLabel: React.FunctionComponent<IButtonWithLabelProps> = (
 
   return (
     <Box padding={0} display="flex" direction="column" alignItems="center">
-      <Box padding={0}>
-        <JsText size={font_size} weight={weight}>
-          {props.label}
-        </JsText>
-      </Box>
-
       <Box>
         <Link href={props.pathPage_onClick}>
           <a>
@@ -43,6 +37,11 @@ const ButtonWithLabel: React.FunctionComponent<IButtonWithLabelProps> = (
             />
           </a>
         </Link>
+      </Box>
+      <Box padding={0}>
+        <JsText size={font_size} weight={weight}>
+          {props.label}
+        </JsText>
       </Box>
     </Box>
   );

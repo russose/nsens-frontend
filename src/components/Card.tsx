@@ -1,8 +1,15 @@
 import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
 import { JsText } from "./js_components";
-import { Touchable, Image, Box, IconButton } from "gestalt";
-import ColoredContour from "./ColoredContour";
+import {
+  Touchable,
+  Image,
+  Box,
+  IconButton,
+  Card,
+  Mask,
+  Letterbox,
+} from "gestalt";
 
 interface ICardProps {
   id: number;
@@ -18,27 +25,36 @@ interface ICardProps {
 
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
+const image_dim = 150;
+const my_size = "xs";
 
-export const Card: React.FunctionComponent<ICardProps> = (props) => {
-  const my_size = "sm";
+export const CardAtom: React.FunctionComponent<ICardProps> = (props) => {
   return (
-    <Box color="green" padding={1} column={6} minWidth={150} maxWidth={300}>
-      <ColoredContour
-        color_contour={props.color}
-        color_inside="white"
-        rounding={3}
+    <Box padding={3}>
+      <Box
+        color="lightGray"
+        display="flex"
+        direction="column"
+        justifyContent="between"
+        // alignItems="center"
+        borderSize="lg"
+        rounding={4}
+        padding={1}
+        // column={5}
+        // minWidth={150}
+        // maxWidth={300}
       >
-        <JsText align="center" size="sm" weight="bold">
-          {props.title}
-        </JsText>
+        <Box padding={1} width={image_dim}>
+          <JsText align="center" size="sm" weight="bold">
+            {props.title}
+          </JsText>
+        </Box>
 
-        <Touchable onTouch={props.image_handler} rounding={1}>
-          <Box
-            color="darkGray"
-            height={150}
-            width={150}
-            marginLeft={4}
-            marginRight={4}
+        <Mask rounding={3}>
+          <Letterbox
+            height={image_dim}
+            width={image_dim}
+            contentAspectRatio={1}
           >
             <Image
               alt="image"
@@ -49,35 +65,22 @@ export const Card: React.FunctionComponent<ICardProps> = (props) => {
               loading="lazy"
               src={props.image_url}
             />
-          </Box>
-        </Touchable>
+          </Letterbox>
+        </Mask>
 
-        <Box
-          display="flex"
-          direction="row"
-          justifyContent="end"
-          alignItems="center"
-          padding={2}
-        >
+        <Box display="flex" direction="row" justifyContent="end" padding={0}>
           <IconButton
             accessibilityLabel="save"
             icon="angled-pin"
-            iconColor={props.saved_enabled ? "red" : "gray"}
-            bgColor="white"
+            iconColor={props.saved_enabled ? "red" : "darkGray"}
+            bgColor="transparent"
             size={my_size}
             onClick={props.saved_handler}
           />
-          {/* <IconButton
-            accessibilityLabel="like"
-            icon="heart"
-            iconColor={props.liked_enabled ? "red" : "gray"}
-            size={my_size}
-            onClick={props.liked_handler}
-          /> */}
         </Box>
-      </ColoredContour>
+      </Box>{" "}
     </Box>
   );
 };
 
-export default observer(Card);
+export default observer(CardAtom);

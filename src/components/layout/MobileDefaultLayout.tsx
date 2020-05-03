@@ -1,18 +1,16 @@
 import { observer } from "mobx-react";
 import { Sticky, Box } from "gestalt";
 import MenuBar from "../MenuBar";
-
-import data_gui from "../../data/data_gui.json";
-import { IConfigData } from "../../types";
-
-const guiConfig: IConfigData = data_gui.fr;
+import { USER_GUI_CONFIG } from "../../config";
+import { useStores } from "../../states/_RootStore";
 
 const MobileDefaultLayout: React.FunctionComponent = (props) => {
+  const { dataStore } = useStores();
   return (
     <div className="MobileDefaultLayout">
       <Box
-        color="red"
-        padding={1}
+        color="white"
+        padding={0}
         display="flex"
         direction="column"
         height="98vh"
@@ -22,14 +20,14 @@ const MobileDefaultLayout: React.FunctionComponent = (props) => {
       >
         {props.children}
         <Sticky bottom={0}>
-          <Box color="green" padding={1} display="block">
+          <Box color="white" padding={1} display="block">
             <MenuBar
               label_active="Saved"
-              buttons_config={guiConfig.menuBar}
+              buttons_config={USER_GUI_CONFIG.menuBar}
               pathPages_onClick={[
-                "/index",
+                dataStore.getHomeUrl(),
                 "/Knowbooks",
-                "/Saved",
+                "/Knowbooks",
                 "/Knowbooks",
               ]}
             />
@@ -40,4 +38,5 @@ const MobileDefaultLayout: React.FunctionComponent = (props) => {
   );
 };
 
-export default observer(MobileDefaultLayout);
+//export default observer(MobileDefaultLayout);
+export default MobileDefaultLayout;

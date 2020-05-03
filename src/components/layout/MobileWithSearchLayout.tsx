@@ -3,30 +3,29 @@ import { Sticky, Box } from "gestalt";
 import SearchBar from "../SearchBar";
 import { onSearchHome } from "../../_handlers";
 
-import data_gui from "../../data/data_gui.json";
-import { IConfigData } from "../../types";
 import { useStores } from "../../states/_RootStore";
-const guiConfig: IConfigData = data_gui.fr;
+import { USER_GUI_CONFIG } from "../../config";
 
 const MobileWithSearchLayout: React.FunctionComponent = (props) => {
   const { dataStore } = useStores();
   return (
     <div>
       <Sticky top={0}>
-        <Box color="green" padding={1} display="block">
+        <Box color="white" padding={1} display="block">
           <SearchBar
-            config={guiConfig.searchBar}
+            config={USER_GUI_CONFIG.searchBar}
             handler={onSearchHome(dataStore)}
+            value={dataStore.searchPattern}
           />
         </Box>
       </Sticky>
 
       <Box
-        color="blue"
+        color="white"
         padding={1}
         display="flex"
         direction="column"
-        height="85vh"
+        height="90vh"
         width="100"
         justifyContent="between"
         overflow="scrollY"

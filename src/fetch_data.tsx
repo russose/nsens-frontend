@@ -1,7 +1,6 @@
 import fetch from "isomorphic-unfetch";
 import { IAtom } from "./types";
 import { prepare_url, newAtom } from "./utils";
-import { ROOT_URL_WIKIPEDIA_EN } from "./data/dataLoader";
 
 export async function fetchAtomsFromWeb(
   pattern: string,
@@ -21,7 +20,7 @@ export async function fetchAtomsFromWeb(
   };
   const data = await fetch_data(ROOT_URL, PARAMS, false);
 
-  if (data["query"]["search"] === undefined) {
+  if (data["query"] === undefined || data["query"]["search"] === undefined) {
     return [];
   }
 
@@ -68,11 +67,7 @@ export async function fetchAtomsFromWeb(
     list_information_atoms.push(atom);
   });
 
-  const list_information_atoms_withEnrichedImages = await enrichImagesFromWikipediaEN(
-    list_information_atoms
-  );
-
-  return list_information_atoms_withEnrichedImages;
+  return list_information_atoms;
 }
 
 export async function enrichImagesFromWikipediaEN(
@@ -105,7 +100,11 @@ export async function enrichImagesFromWikipediaEN(
     titles: list_of_title_en_string,
     piprop: "original",
   };
-  const data3 = await fetch_data(ROOT_URL_WIKIPEDIA_EN, PARAMS_3, false);
+  const data3 = await fetch_data(
+    "https://en.wikipedia.org/w/api.php",
+    PARAMS_3,
+    false
+  );
 
   if (data3["query"]["pages"] === undefined) {
     return list_information_atoms;
@@ -142,8 +141,14 @@ export async function fetch_data(
   PARAMS: Object,
   output_URL: boolean
 ): Promise<any> {
+  const header = {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+    },
+  };
   // Fetch data from external API
-  let res = await fetch(prepare_url(ROOT_URL, PARAMS));
+  let res = await fetch(prepare_url(ROOT_URL, PARAMS), header);
   const data = await res.json();
 
   if (output_URL) {
@@ -152,3 +157,43 @@ export async function fetch_data(
 
   return data;
 }
+
+// A ne pas utiliser, Qwant nous bloque!
+// async function enrichImagesFromQwant(
+//   list_information_atoms: IAtom[]
+// ): Promise<IAtom[]> {
+//   if (list_information_atoms.length === 0) {
+//     return list_information_atoms;
+//   }
+
+//   //Obtenir les images de Quant
+//   const PARAMS = {
+//     count: 1,
+//     q: "to_be_defined",
+//     t: "images",
+//     licence: "public",
+//     size: "medium",
+//     safesearch: 1,
+//     locale: "en_US",
+//     uiv: 4,
+//   };
+
+//   list_information_atoms.forEach(async (item: IAtom) => {
+//     PARAMS.q = item.title_en;
+//     try {
+//       const data = await fetch_data(
+//         "https://api.qwant.com/api/search/images",
+//         PARAMS,
+//         false
+//       );
+
+//       item["image"] = data["data"]["result"]["items"][0]["media"];
+//       console.log(item["image"]);
+//     } catch (err) {
+//       console.log("error in fetching image for:", PARAMS.q);
+//       console.log(err);
+//     }
+//   });
+
+//   return list_information_atoms;
+// }

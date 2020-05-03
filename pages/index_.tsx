@@ -1,6 +1,9 @@
 import { GetServerSideProps, GetStaticProps } from "next";
 import React from "react";
-import { fetchAtomsFromWeb, fetch_data } from "../src/fetch_data";
+import {
+  fetchAtomsFromWeb,
+  enrichImagesFromWikipediaEN,
+} from "../src/fetch_data";
 import { save_object_to_file, prepare_url } from "../src/utils";
 
 interface Props {
@@ -17,10 +20,12 @@ const Test: React.FunctionComponent<Props> = (props) => {
   //   srprop: "",
   // };
 
-  // searchAtomsFromWeb("https://fr.wikipedia.org/w/api.php", PARAMS, true).then((data) => {
-  //   console.log("****************");
-  //   console.log(JSON.stringify(data));
-  // });
+  enrichImagesFromWikipediaEN([]).then((data: any) => {
+    if (typeof window === "undefined") {
+      console.log("****************");
+      console.log(JSON.stringify(data["data"]["result"]["items"][0]["media"]));
+    }
+  });
 
   return <div>"ok"</div>;
 };
@@ -29,7 +34,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const ROOT_URL = "https://fr.wikipedia.org/w/api.php";
   const data = await fetchAtomsFromWeb("proton", ROOT_URL, 20);
 
-  //console.log(JSON.stringify(data));
+  // const data2: any = await enrichImagesFromQwant([]);
+  // console.log(JSON.stringify(data2["data"]["result"]["items"][0]["media"]));
+  // console.log(data[0]);
+  // console.log(data2);
+
   const save_data_to_file = false;
 
   if (save_data_to_file) {

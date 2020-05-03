@@ -9,6 +9,7 @@ interface ISearchBarProps {
     value: string;
     syntheticEvent: SyntheticEvent<any>;
   }) => void;
+  value: string;
 }
 
 export const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
@@ -18,6 +19,7 @@ export const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
       id="searchField"
       onChange={props.handler}
       placeholder={props.config.placeholder}
+      value={props.value}
     />
   );
 };

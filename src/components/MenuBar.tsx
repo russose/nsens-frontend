@@ -18,7 +18,9 @@ const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
       display="flex"
       alignItems="center"
       justifyContent="around"
-      color="white"
+      color="lightGray"
+      borderSize="lg"
+      rounding={2}
     >
       {props.buttons_config.map((data, index) => {
         return (

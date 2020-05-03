@@ -46,33 +46,33 @@ export interface IConfig {
   [ConfigDataLanguage.en]: IConfigData;
 }
 
-export interface IUserAction {
-  id: AtomID;
-  date: number;
-}
+// export interface IUserAction {
+//   id: AtomID;
+//   date: number;
+// }
 
 export type AtomID = number;
 export type UserID = number;
 
 export interface IAtom {
-  id: number;
+  id: AtomID;
+  saved: boolean; //VRAIMENT UTILE???
+  tags: string[];
+  save_date: number;
   wikibase_item: string;
   pageid_wp: AtomID;
-  author_id: UserID;
-  language: ConfigDataLanguage;
   title: string;
   title_en: string;
   image: string;
-  creation_date: number;
   category: ConfigDataCategoryType;
 }
 
-export interface IUser {
+export interface IUserData {
   id: UserID;
-  name: string;
+  username: string;
   language: ConfigDataLanguage;
   creation_date: number;
-  liked: IUserAction[];
-  saved: IUserAction[];
+  //saved: IUserAction[];
+  saved: IAtom[];
   atoms_cache: IAtom[];
 }

@@ -1,32 +1,27 @@
-import { IAtom, ConfigDataLanguage, ConfigDataCategoryType } from "./types";
-import { RootStore } from "./states/_RootStore";
-import { usersLoaded } from "./data/dataLoader";
+import { IAtom, ConfigDataCategoryType } from "./types";
 import { DataStore } from "./states/DataStore";
 
 export function newAtom(id: number): IAtom {
   const atom = {
     id: id,
+    saved: false,
+    tags: [],
+    save_date: -1,
     wikibase_item: "none",
     pageid_wp: -1,
-    author_id: -1,
-    language: ConfigDataLanguage.fr,
     title: "none",
     title_en: "none",
     image: "none",
-    creation_date: -1,
     category: ConfigDataCategoryType.TBD,
   };
   return atom;
 }
 
 export function prepare_url(root_url: string, params: Object): string {
-  // let url = root_url + "?origin=*";
   let query: string = "";
   Object.entries(params).forEach(([key, value]) => {
     query += "&" + key + "=" + value;
   });
-  //console.log(url);
-  // return encodeURI(url);
   return root_url + "?origin=*" + encodeURI(query);
 }
 
@@ -39,39 +34,32 @@ export function save_object_to_file(path: string, object: Object, fs: any) {
   });
 }
 
-// export function getListstringFromObjectlist(
-//   myobject: Object[],
-//   key_value: string
-// ): string {
-//   let list_of_PageIds_string = "";
-//   myobject.map((item: Object) => {
-//     Object.entries(item).forEach(([key, value]) => {
-//       if (key === key_value) {
-//         list_of_PageIds_string = list_of_PageIds_string + value + "|";
-//       }
-//       return {
-//         list_of_PageIds_string,
-//       };
-//     });
-//   });
-//   return list_of_PageIds_string.slice(0, -1);
-// }
-
-export function initialyzeRootStore(): RootStore {
-  const rootStore: RootStore = new RootStore();
-
-  const dataStore: DataStore = rootStore.getDataStore();
-
-  if (dataStore.user === undefined) {
-    dataStore.setUser(usersLoaded[0]);
-    //dataStore.setAtoms([]);
-    dataStore.setAtoms(usersLoaded[0].atoms_cache);
+export function printUserData(dataStore: DataStore) {
+  if (dataStore.userData === undefined) {
+    return;
   }
-
-  //console.log("Initialyze RootStore completed!");
-
-  return rootStore;
+  const cache: any = dataStore.userData;
+  cache.saved = dataStore.getSavedList();
+  console.log("****cache***");
+  console.log(JSON.stringify(cache));
+  console.log("************");
 }
+
+// export function initialyzeRootStore(): RootStore {
+//   const rootStore: RootStore = new RootStore();
+
+//   // const dataStore: DataStore = rootStore.getDataStore();
+
+//   // if (dataStore.user === undefined) {
+//   //   dataStore.setUser(usersLoaded[0]);
+//   //   //dataStore.setAtoms([]);
+//   //   dataStore.setAtoms(usersLoaded[0].atoms_cache);
+//   // }
+
+//   //console.log("Initialyze RootStore completed!");
+
+//   return rootStore;
+// }
 
 //TO BE DELETED?
 //My initial findbyID function
@@ -93,3 +81,20 @@ export function isDefined<T>(o: Perhaps<T>): o is T {
 
 // return T | null | undefined
 export type Perhaps<T> = T | null | undefined;
+
+// export function read_object_from_file(
+//   path: string,
+//   object: Object,
+//   fs: any
+// ): Object {
+//   // const fs = require("fs") declare on server side before calling the function
+//   let data: Object = {};
+//   fs.readFile(path, "utf8", (err: Object, mydata: Object) => {
+//     if (err) {
+//       console.log("An error occured while reading from File.");
+//     }
+//     object = mydata;
+//     console.log(object);
+//   });
+//   return data;
+// }

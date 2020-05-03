@@ -1,14 +1,15 @@
 import { observable, action, computed } from "mobx";
 
-import { IConfigData } from "../types.jsx";
+import { IConfigData } from "../src/types.jsx";
+import { USER_GUI_CONFIG } from "../src/config.jsx";
 
-import data_gui from "../data/data_gui.json";
+// import data_gui from "../data/data_gui.json";
 
 export class PageLayoutStore {
   @observable private $searchPatternHome: string = "";
   @observable private $selectedAtomId: number = 0;
 
-  private $guiConfig: IConfigData = data_gui.fr;
+  private $guiConfig: IConfigData = USER_GUI_CONFIG;
 
   get guiConfig(): IConfigData {
     return this.$guiConfig;
