@@ -41,7 +41,7 @@ export function printUserData(dataStore: DataStore) {
   const cache: any = dataStore.userData;
   cache.saved = dataStore.getSavedList();
   console.log("****cache***");
-  console.log(JSON.stringify(cache));
+  console.log(JSON.stringify({ user: cache }));
   console.log("************");
 }
 

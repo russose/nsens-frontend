@@ -9,7 +9,7 @@ import {
   fetchAtomsFromWeb,
   enrichImagesFromWikipediaEN,
 } from "../src/fetch_data";
-import { CONFIG_FETCHING } from "../src/config";
+import { CONFIG_FETCHING, CONFIG_GUI } from "../src/config";
 import { IAtom, IUserData } from "../src/types";
 import { printUserData } from "../src/utils";
 
@@ -18,11 +18,25 @@ interface IHomeProps {
   userCache: IUserData;
 }
 
+let atomsList_to_display_cache: IAtom[];
+
 const Home: React.FunctionComponent<IHomeProps> = (props) => {
   const { dataStore } = useStores();
+  let atomsList_to_display: IAtom[];
 
   if (Object.keys(props.userCache).length !== 0) {
+    // Load cache sent by server
     dataStore.setUserData(props.userCache);
+    atomsList_to_display_cache = props.atomsList;
+    atomsList_to_display = props.atomsList;
+  } else if (
+    dataStore.searchPattern.length <= CONFIG_GUI.all.SEARCH_MIN_LENGTH_SEARCH
+  ) {
+    //display cache
+    atomsList_to_display = atomsList_to_display_cache;
+  } else {
+    // nominal situation
+    atomsList_to_display = props.atomsList;
   }
 
   const print_UserData = false;
@@ -32,7 +46,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
 
   return (
     <CardGrid
-      atoms={props.atomsList}
+      atoms={atomsList_to_display}
       listOfIdsSaved={dataStore.getSavedIds()}
       saved_handler={onSavedClick(dataStore)}
       image_handler={(): void => {}}
@@ -63,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  if (searchPattern.lenght === 0 || searchPattern === undefined) {
+  if (searchPattern.length === 0) {
     return {
       props: { userCache: {}, atomsList: [] },
     };
