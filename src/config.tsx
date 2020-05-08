@@ -1,8 +1,13 @@
 export const CONFIG_FETCHING = {
   URLs: {
     ROOT_URL_WIKIPEDIA: "https://fr.wikipedia.org/w/api.php",
+    ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
+    ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
   amount_data_fetched: 20,
+  max_width_image: 2000,
+  min_width_image: 120,
+  path_empty_image: "The_Scientific_Universe_small.png",
 };
 
 export const CONFIG_GUI = {

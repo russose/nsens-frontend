@@ -3,12 +3,14 @@ import { Box, IconButton } from "gestalt";
 
 import { JsText } from "./js_components";
 import Link from "next/link";
+import { ParsedUrlQueryInput } from "querystring";
 
 interface IButtonWithLabelProps {
   icon: any;
   label: string;
   //onClick: (args: { event: SyntheticEvent<any> }) => void;
-  pathPage_onClick: string;
+  pathname: string;
+  queryObject: ParsedUrlQueryInput;
   enabled: boolean;
 }
 
@@ -25,7 +27,7 @@ const ButtonWithLabel: React.FunctionComponent<IButtonWithLabelProps> = (
   return (
     <Box padding={0} display="flex" direction="column" alignItems="center">
       <Box>
-        <Link href={props.pathPage_onClick}>
+        <Link href={{ pathname: props.pathname, query: props.queryObject }}>
           <a>
             <IconButton
               accessibilityLabel={props.label}

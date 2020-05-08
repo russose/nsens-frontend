@@ -10,9 +10,10 @@ import {
   Mask,
   Letterbox,
 } from "gestalt";
+import { AtomID } from "../types";
 
 interface ICardProps {
-  id: number;
+  id: AtomID;
   title: string;
   image_url: string;
   image_handler: (args: { event: SyntheticEvent<any> }) => void;

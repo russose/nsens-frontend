@@ -13,7 +13,7 @@
         { "id": 3, "date": 1212212 },
         { "id": 2, "date": 1212212 }
       ],
-      "atoms_cache": [
+      "history": [
         {
           "id": 189,
           "wikibase_item": "Q9121",

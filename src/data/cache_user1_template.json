@@ -1,0 +1,26 @@
+{
+  "user": {
+    "identity": {
+      "id": 1,
+      "username": "Salvatore",
+      "language": "fr",
+      "creation_date": 1212212
+    },
+    "saved": [],
+    "knowbooks": [
+      {
+        "id": 1,
+        "name": "Knowbook1",
+        "content_atoms": [],
+        "content_knowbooks": []
+      },
+      {
+        "id": 2,
+        "name": "Knowbook2",
+        "content_atoms": [],
+        "content_knowbooks": []
+      }
+    ],
+    "history": []
+  }
+}

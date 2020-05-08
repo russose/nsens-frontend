@@ -1,29 +1,24 @@
 import { observable, action, computed } from "mobx";
-import { IUserData, IAtom, AtomID } from "../types";
-import { isDefined } from "../utils";
-
-import { CONFIG_GUI } from "../config";
-import Router from "next/router";
+import { IUserData, IAtom, AtomID, IIdentity } from "../types";
 
 export class DataStore {
-  private $userData: IUserData | undefined = undefined;
+  private $identity: IIdentity | null = null;
   private $saved = observable.map<AtomID, IAtom>();
+  private $history = new Map<AtomID, IAtom>();
   @observable private $searchPattern: string = "";
   //@observable private $selectedAtomId: number = 0;
 
-  setUserData(userData: IUserData): void {
-    this.$userData = userData;
-    this.setSaved(userData.saved);
+  get identity() {
+    return this.$identity;
   }
-
-  get userData(): IUserData | undefined {
-    return this.$userData;
-  }
-
   @computed
   get saved() {
     return this.$saved;
   }
+  get history() {
+    return this.$history;
+  }
+
   @computed
   get searchPattern() {
     return this.$searchPattern;
@@ -31,8 +26,19 @@ export class DataStore {
 
   /************************************************ */
 
+  setUserData(userData: IUserData | null): void {
+    if (userData !== null) {
+      this.setIdentity(userData.identity);
+      this.setSaved(userData.saved);
+      this.setHistory(userData.history);
+    }
+  }
+
   getSavedList(): IAtom[] {
     return Array.from(this.saved.values());
+  }
+  getHistoryList(): IAtom[] {
+    return Array.from(this.history.values());
   }
   getSavedIds() {
     return Array.from(this.saved.keys());
@@ -50,18 +56,27 @@ export class DataStore {
   removeSaved(item: IAtom): void {
     this.saved.delete(item.id);
   }
-  @action
-  setSearchPattern(searchPattern: string): void {
-    this.$searchPattern = searchPattern;
-    if (searchPattern.length > CONFIG_GUI.all.SEARCH_MIN_LENGTH_SEARCH) {
-      Router.push({
-        pathname: "/",
-        query: { q: this.$searchPattern },
+  //
+  setIdentity(identity: IIdentity): void {
+    this.$identity = identity;
+  }
+  setHistory(history: IAtom[]): void {
+    history.forEach((item) => this.history.set(item.id, item));
+  }
+  addAtomsInHistory(atoms: IAtom[]): void {
+    if (atoms.length !== 0) {
+      atoms.forEach((item) => {
+        if (this.history.has(item.id)) {
+          this.history.delete(item.id);
+        }
+        this.history.set(item.id, item);
       });
     }
   }
-  getHomeUrl() {
-    return "/" + "?q=" + encodeURI(this.$searchPattern);
+
+  @action
+  setSearchPattern(searchPattern: string): void {
+    this.$searchPattern = searchPattern;
   }
 
   /************************************************ */

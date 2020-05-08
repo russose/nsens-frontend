@@ -1,6 +1,29 @@
 import fetch from "isomorphic-unfetch";
-import { IAtom } from "./types";
-import { prepare_url, newAtom } from "./utils";
+import { IAtom, newAtom, empty_value_atom } from "./types";
+import { prepare_url } from "./utils";
+import { CONFIG_FETCHING } from "./config";
+
+export async function fetch_data(
+  ROOT_URL: string,
+  PARAMS: Object,
+  output_URL: boolean
+): Promise<any> {
+  const header = {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+    },
+  };
+  // Fetch data from external API
+  let res = await fetch(prepare_url(ROOT_URL, PARAMS), header);
+  const data = await res.json();
+
+  if (output_URL) {
+    console.log(prepare_url(ROOT_URL, PARAMS));
+  }
+
+  return data;
+}
 
 export async function fetchAtomsFromWeb(
   pattern: string,
@@ -39,20 +62,24 @@ export async function fetchAtomsFromWeb(
   const PARAMS_2 = {
     action: "query",
     format: "json",
-    prop: "pageprops|langlinks|pageimages",
+    prop: "pageprops|langlinks|pageimages|imageinfo",
     pageids: list_of_PageIds_string,
     utf8: 1,
     lllang: "en",
     lllimit: nb_atoms.toString(),
     //imlimit: (3 * nb_atoms).toString(),
-    piprop: "original",
+    piprop: "original|thumbnail",
+    pilicense: "free",
+    iiprop: "url|size|mediatype|dimensions",
   };
   const data2 = await fetch_data(ROOT_URL, PARAMS_2, false);
 
   //Extract relevant information to keep
   const list_information_atoms: IAtom[] = [];
   Object.values(data2["query"]["pages"]).forEach((item: any) => {
-    const atom = newAtom(item["pageid"]);
+    //const atom = newAtom(item["pageid"]);
+    const id = item["pageprops"]["wikibase_item"];
+    const atom = newAtom(id);
     atom.wikibase_item = item["pageprops"]["wikibase_item"];
     atom.pageid_wp = item["pageid"];
     atom.title = item["title"];
@@ -62,7 +89,13 @@ export async function fetchAtomsFromWeb(
       //console.log("error in getting english title");
     }
     if (item["original"] !== undefined) {
-      atom.image = item["original"]["source"];
+      atom.image_url = item["original"]["source"];
+      atom.image_height = item["original"]["height"];
+      atom.image_width = item["original"]["width"];
+    }
+    if (item["thumbnail"] !== undefined) {
+      atom.thumbnail_url = item["thumbnail"]["source"];
+      atom.thumbnail_width = item["thumbnail"]["width"];
     }
     list_information_atoms.push(atom);
   });
@@ -70,7 +103,9 @@ export async function fetchAtomsFromWeb(
   return list_information_atoms;
 }
 
-export async function enrichImagesFromWikipediaEN(
+/****************************************************************** */
+
+export async function enrichImagesBatchFromWikipediaEN(
   list_information_atoms: IAtom[]
 ): Promise<IAtom[]> {
   if (list_information_atoms.length === 0) {
@@ -80,9 +115,15 @@ export async function enrichImagesFromWikipediaEN(
   //Build que list of items without images (for querry)
   let list_of_title_en_string = "";
   list_information_atoms.forEach((item: IAtom) => {
-    if (item["image"] === "none") {
+    if (
+      item["title_en"] !== empty_value_atom &&
+      (item["image_url"] === empty_value_atom ||
+        item["image_width"] > CONFIG_FETCHING.max_width_image)
+    ) {
       list_of_title_en_string =
         list_of_title_en_string + item["title_en"] + "|";
+
+      // console.log(item.title, item.image_width);
     }
   });
   list_of_title_en_string = list_of_title_en_string.slice(0, -1);
@@ -92,70 +133,132 @@ export async function enrichImagesFromWikipediaEN(
   }
 
   //Obtenir les images de Wikipedia EN
-  const PARAMS_3 = {
+  const PARAMS = {
     action: "query",
     format: "json",
     prop: "pageimages",
     utf8: 1,
     titles: list_of_title_en_string,
-    piprop: "original",
+    piprop: "original|thumbnail",
+    pilicense: "free",
   };
-  const data3 = await fetch_data(
-    "https://en.wikipedia.org/w/api.php",
-    PARAMS_3,
+  const data = await fetch_data(
+    CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_EN,
+    PARAMS,
     false
   );
 
-  if (data3["query"]["pages"] === undefined) {
+  if (data["query"]["pages"] === undefined) {
     return list_information_atoms;
   }
+  const atoms_where_image_found: IAtom[] = [];
+  Object.values(data["query"]["pages"]).forEach((item: any) => {
+    //Find the atom to update in list_information_atoms
+    const atom = list_information_atoms.filter((atom) => {
+      return atom.title_en === item["title"];
+    })[0];
 
-  Object.values(data3["query"]["pages"]).forEach((item: any) => {
+    if (item["thumbnail"] !== undefined) {
+      atom.thumbnail_url = item["thumbnail"]["source"];
+      atom.thumbnail_width = item["thumbnail"]["width"];
+    }
     if (item["original"] !== undefined) {
-      list_information_atoms.filter((atom) => {
-        return atom.title_en === item["title"];
-      })[0].image = item["original"]["source"];
+      atom.image_url = item["original"]["source"];
+      atom.image_height = item["original"]["height"];
+      atom.image_width = item["original"]["width"];
+      atoms_where_image_found.push(atom);
+      //console.log("image trouvé sur EN pour:", atom.title, atom.image_url);
     } else {
       //console.log("no image for:", item["title"]);
     }
   });
 
-  const list_information_atoms_without_image: IAtom[] = [];
-  const list_information_atoms_with_image: IAtom[] = [];
-  list_information_atoms.forEach((item: IAtom) => {
-    if (item["image"] !== "none") {
-      list_information_atoms_with_image.push(item);
-    } else {
-      list_information_atoms_without_image.push(item);
-    }
-  });
+  const list_information_atoms_updated = list_information_atoms.map((item) => {
+    let item_updated = item;
 
-  //return list_information_atoms;
-  return list_information_atoms_with_image.concat(
-    list_information_atoms_without_image
-  );
+    for (const item_image_completed of atoms_where_image_found) {
+      if (item_image_completed.title_en === item.title_en) {
+        item_updated = item_image_completed;
+        break;
+      }
+    }
+    return item_updated;
+  });
+  return list_information_atoms_updated;
 }
 
-export async function fetch_data(
-  ROOT_URL: string,
-  PARAMS: Object,
-  output_URL: boolean
-): Promise<any> {
-  const header = {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
-    },
-  };
-  // Fetch data from external API
-  let res = await fetch(prepare_url(ROOT_URL, PARAMS), header);
-  const data = await res.json();
+export async function enrichOneImageFromWikiCommonPedia(
+  item: IAtom,
+  ROOT_URL: string
+): Promise<IAtom> {
+  const item_updated = item;
 
-  if (output_URL) {
-    console.log(prepare_url(ROOT_URL, PARAMS));
+  if (item.image_url !== CONFIG_FETCHING.path_empty_image) {
+    return item;
   }
 
-  return data;
+  //Obtenir les images de WikiCommon ou Wikipedia une par une (generator)
+  const PARAMS = {
+    action: "query",
+    format: "json",
+    prop: "pageimages|imageinfo",
+    utf8: 1,
+    titles: item.title_en, //+ "|Category:" + item.title_en,
+    generator: "images",
+    redirects: 1,
+    piprop: "thumbnail",
+    pilicense: "free",
+    iiprop: "url|size|mediatype|dimensions",
+    gimlimit: "5",
+  };
+  const data = await fetch_data(ROOT_URL, PARAMS, false);
+
+  if (data["query"] !== undefined) {
+    //https://commons.wikimedia.org/w/api.php?origin=*&action=query&format=json&prop=pageimages%7Cimageinfo&utf8=1&titles=proton&generator=images&redirects=1&piprop=thumbnail&pilicense=free&iiprop=url%7Csize%7Cmediatype%7Cdimensions&gimlimit=20
+
+    const images: any[] = Object.values(data["query"]["pages"]);
+    for (const image of images) {
+      const imageinfo = image["imageinfo"][0];
+
+      if (
+        imageinfo["width"] < CONFIG_FETCHING.max_width_image &&
+        imageinfo["width"] > CONFIG_FETCHING.min_width_image &&
+        imageinfo["size"] < 700000 && //500ko
+        imageinfo["mediatype"] === "BITMAP"
+      ) {
+        item_updated.image_url = imageinfo["url"];
+        item_updated.image_height = imageinfo["height"];
+        item_updated.image_width = imageinfo["width"];
+        //item.image_type = imageinfo["mediatype"];
+
+        item_updated.thumbnail_url = image["thumbnail"]["source"];
+        item_updated.thumbnail_width = image["thumbnail"]["width"];
+
+        //console.log("image trouvée par générateur pour:", item.title);
+
+        break;
+      }
+    }
+  }
+
+  return item_updated;
+}
+
+export async function enrichImagesOneByOneFromWikiCommonPediaParralel(
+  list_information_atoms: IAtom[],
+  ROOT_URL: string
+): Promise<IAtom[]> {
+  if (list_information_atoms.length === 0) {
+    return list_information_atoms;
+  }
+
+  const myBigPromise = await Promise.all(
+    list_information_atoms.map((item: IAtom) => {
+      return enrichOneImageFromWikiCommonPedia(item, ROOT_URL);
+    })
+  );
+
+  return myBigPromise;
 }
 
 // A ne pas utiliser, Qwant nous bloque!
@@ -187,8 +290,8 @@ export async function fetch_data(
 //         false
 //       );
 
-//       item["image"] = data["data"]["result"]["items"][0]["media"];
-//       console.log(item["image"]);
+//       item["image_url"] = data["data"]["result"]["items"][0]["media"];
+//       console.log(item["image_url"]);
 //     } catch (err) {
 //       console.log("error in fetching image for:", PARAMS.q);
 //       console.log(err);

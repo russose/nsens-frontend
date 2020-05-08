@@ -1,5 +1,7 @@
 import { DataStore } from "./states/DataStore";
 import { IAtom } from "./types";
+import { CONFIG_GUI } from "./config";
+import Router from "next/router";
 
 interface IonSearchInput {
   value: string;
@@ -11,6 +13,14 @@ export const onSearchHome = (dataStore: DataStore) => (
   input: IonSearchInput
 ): void => {
   dataStore.setSearchPattern(input.value);
+  if (
+    dataStore.searchPattern.length > CONFIG_GUI.all.SEARCH_MIN_LENGTH_SEARCH
+  ) {
+    Router.push({
+      pathname: "/",
+      query: { q: encodeURI(dataStore.searchPattern), a: "s" },
+    });
+  }
 };
 
 //Save
@@ -29,11 +39,3 @@ export const openLink = (url: string) => (): void => {
   window.open(url);
   // console.log(url);
 };
-
-// export const onImageClick = (pageLayoutStore: PageLayoutStore) => (
-//   pagelayout: string,
-//   id: number
-// ) => (): void => {
-//   pageLayoutStore.changePage(pagelayout);
-//   pageLayoutStore.setselectedDavizId(id);
-// };

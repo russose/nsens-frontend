@@ -1,21 +1,5 @@
-import { IAtom, ConfigDataCategoryType } from "./types";
-import { DataStore } from "./states/DataStore";
-
-export function newAtom(id: number): IAtom {
-  const atom = {
-    id: id,
-    saved: false,
-    tags: [],
-    save_date: -1,
-    wikibase_item: "none",
-    pageid_wp: -1,
-    title: "none",
-    title_en: "none",
-    image: "none",
-    category: ConfigDataCategoryType.TBD,
-  };
-  return atom;
-}
+import { IAtom, empty_value_atom } from "./types";
+import { CONFIG_FETCHING } from "./config";
 
 export function prepare_url(root_url: string, params: Object): string {
   let query: string = "";
@@ -25,49 +9,41 @@ export function prepare_url(root_url: string, params: Object): string {
   return root_url + "?origin=*" + encodeURI(query);
 }
 
-export function save_object_to_file(path: string, object: Object, fs: any) {
-  // const fs = require("fs") declare on server side before calling the function
-  fs.writeFile(path, JSON.stringify(object), "utf8", (err: Object) => {
-    if (err) {
-      console.log("An error occured while writing to File.");
+export function removeBadImages(list_information_atoms: IAtom[]): IAtom[] {
+  const list_information_atoms_updated: IAtom[] = [];
+  list_information_atoms.forEach((item) => {
+    const item_updated = item;
+    if (
+      item.image_url === empty_value_atom ||
+      item.image_width > 2 * CONFIG_FETCHING.max_width_image ||
+      !["jpg", "JPG", "png", "PNG", "tif", "TIF", "svg", "SVG"].includes(
+        item.image_url.slice(-3)
+      )
+    ) {
+      item_updated.image_url = CONFIG_FETCHING.path_empty_image;
+      //console.log(item.title);
     }
+    list_information_atoms_updated.push(item_updated);
+  });
+  return list_information_atoms_updated;
+}
+
+export function findUndefined(list: Object[]) {
+  list.forEach((item) => {
+    Object.values(item).forEach((value) => {
+      if (value === undefined) {
+        console.log(item);
+      }
+    });
   });
 }
 
-export function printUserData(dataStore: DataStore) {
-  if (dataStore.userData === undefined) {
-    return;
-  }
-  const cache: any = dataStore.userData;
-  cache.saved = dataStore.getSavedList();
-  console.log("****cache***");
-  console.log(JSON.stringify({ user: cache }));
-  console.log("************");
-}
-
-// export function initialyzeRootStore(): RootStore {
-//   const rootStore: RootStore = new RootStore();
-
-//   // const dataStore: DataStore = rootStore.getDataStore();
-
-//   // if (dataStore.user === undefined) {
-//   //   dataStore.setUser(usersLoaded[0]);
-//   //   //dataStore.setAtoms([]);
-//   //   dataStore.setAtoms(usersLoaded[0].atoms_cache);
-//   // }
-
-//   //console.log("Initialyze RootStore completed!");
-
-//   return rootStore;
-// }
-
-//TO BE DELETED?
 //My initial findbyID function
-export function findById(array: IAtom[], ids: number[]): IAtom[] {
-  return ids
-    .map((id) => array.find((el) => el.pageid_wp === id))
-    .filter(isDefined);
-}
+// export function findById(array: IAtom[], ids: number[]): IAtom[] {
+//   return ids
+//     .map((id) => array.find((el) => el.pageid_wp === id))
+//     .filter(isDefined);
+// }
 
 /**
  * Returns a type predicate to filter undefined values of a list.
@@ -81,20 +57,3 @@ export function isDefined<T>(o: Perhaps<T>): o is T {
 
 // return T | null | undefined
 export type Perhaps<T> = T | null | undefined;
-
-// export function read_object_from_file(
-//   path: string,
-//   object: Object,
-//   fs: any
-// ): Object {
-//   // const fs = require("fs") declare on server side before calling the function
-//   let data: Object = {};
-//   fs.readFile(path, "utf8", (err: Object, mydata: Object) => {
-//     if (err) {
-//       console.log("An error occured while reading from File.");
-//     }
-//     object = mydata;
-//     console.log(object);
-//   });
-//   return data;
-// }

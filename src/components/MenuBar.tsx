@@ -2,12 +2,13 @@ import { Box } from "gestalt";
 import ButtonWithLabel from "./ButtonWithLabel";
 
 import { IConfigMenuBar } from "../types";
-import { SyntheticEvent } from "react";
+import { ParsedUrlQueryInput } from "querystring";
 
 interface IMenuBarProps {
   buttons_config: IConfigMenuBar[];
   //buttons_handlers: ((args: { event: SyntheticEvent<any> }) => void)[];
-  pathPages_onClick: string[];
+  pathnames: string[];
+  queryObjects: ParsedUrlQueryInput[];
   label_active: string;
 }
 
@@ -28,8 +29,8 @@ const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
             key={index.toString()}
             icon={data.icon}
             label={data.label}
-            //onClick={props.buttons_handlers[index]}
-            pathPage_onClick={props.pathPages_onClick[index]}
+            pathname={props.pathnames[index]}
+            queryObject={props.queryObjects[index]}
             enabled={data.label === props.label_active ? true : false}
           />
         );
