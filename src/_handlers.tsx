@@ -1,6 +1,6 @@
 import { DataStore } from "./states/DataStore";
 import { IAtom } from "./types";
-import { CONFIG_GUI } from "./config";
+import { CONFIG_FETCHING } from "./config";
 import Router from "next/router";
 
 interface IonSearchInput {
@@ -14,7 +14,7 @@ export const onSearchHome = (dataStore: DataStore) => (
 ): void => {
   dataStore.setSearchPattern(input.value);
   if (
-    dataStore.searchPattern.length > CONFIG_GUI.all.SEARCH_MIN_LENGTH_SEARCH
+    dataStore.searchPattern.length > CONFIG_FETCHING.search_min_length_search
   ) {
     Router.push({
       pathname: "/",

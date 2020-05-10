@@ -6,7 +6,6 @@ import { configure } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 
 import MobileDefaultLayout from "../src/components/layout/MobileDefaultLayout";
-import MobileWithSearchLayout from "../src/components/layout/MobileWithSearchLayout";
 import { NextPage } from "next";
 
 // enable MobX strict mode

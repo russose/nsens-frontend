@@ -17,10 +17,6 @@ export interface IDataCategory {
   color: string;
 }
 
-export interface IConfigSearchBar {
-  placeholder: string;
-}
-
 export interface IConfigMenuBar {
   label: string;
   icon: string;
@@ -36,7 +32,10 @@ export interface IConfigCategories {
 }
 
 export interface IConfigData {
-  searchBar: IConfigSearchBar;
+  searchBar: string;
+  knowbooks_title: string;
+  empty_tag: string;
+  all_tags: string;
   menuBar: IConfigMenuBar[];
   categories: IConfigCategories;
 }
@@ -46,8 +45,10 @@ export interface IConfig {
   [ConfigDataLanguage.en]: IConfigData;
 }
 
+/*************************************************** */
+
 export type AtomID = string;
-export type KnowbookID = number;
+export type KnowbookID = string;
 export type UserID = number;
 
 export interface IIdentity {
@@ -59,33 +60,29 @@ export interface IIdentity {
 
 export interface IKnowbook {
   id: KnowbookID;
-  name: string;
-  content_atoms: AtomID[];
-  content_knowbooks: string[];
+  name: KnowbookID;
+  content_atoms: IAtom[];
+  //content_knowbooks: string[];
 }
 
 export interface IAtom {
   id: AtomID;
-  saved: boolean; //VRAIMENT UTILE??? REdondant avec le groupe saved
-  tags: string[];
+  tags: KnowbookID[];
   save_date: number;
   wikibase_item: string;
   pageid_wp: number;
   title: string;
   title_en: string;
   image_url: string;
-  image_type: string; // A SUPPRIMER
   image_width: number;
   image_height: number;
   thumbnail_url: string;
-  thumbnail_width: number; //A garder?
   category: ConfigDataCategoryType;
 }
 
 export interface IUserData {
   identity: IIdentity;
   saved: IAtom[];
-  knowbooks: IKnowbook[];
   history: IAtom[];
 }
 
@@ -93,7 +90,6 @@ export const empty_value_atom = "";
 export function newAtom(id: AtomID): IAtom {
   const atom = {
     id: id,
-    saved: false,
     tags: [],
     save_date: -1,
     wikibase_item: empty_value_atom,
@@ -101,11 +97,9 @@ export function newAtom(id: AtomID): IAtom {
     title: empty_value_atom,
     title_en: empty_value_atom,
     image_url: empty_value_atom,
-    image_type: empty_value_atom,
     image_width: -1,
     image_height: -1,
     thumbnail_url: empty_value_atom,
-    thumbnail_width: -1,
     category: ConfigDataCategoryType.TBD,
   };
   return atom;

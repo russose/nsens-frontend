@@ -22,7 +22,7 @@ const MobileDefaultLayout: React.FunctionComponent = (props) => {
               label_active="Saved"
               buttons_config={USER_GUI_CONFIG.menuBar}
               pathnames={["/", "/Knowbooks", "/User", "/More"]}
-              queryObjects={[{ a: "n" }, {}, {}, {}]}
+              queryObjects={[{ a: "n" }, { k: "test2" }, {}, {}]}
             />
           </Box>
         </Sticky>

@@ -1,10 +1,9 @@
 import { SearchField } from "gestalt";
-import { IConfigSearchBar } from "../types";
 import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
 
 interface ISearchBarProps {
-  config: IConfigSearchBar;
+  placeholder: string;
   handler: (args: {
     value: string;
     syntheticEvent: SyntheticEvent<any>;
@@ -18,7 +17,7 @@ export const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
       accessibilityLabel="Search Field"
       id="searchField"
       onChange={props.handler}
-      placeholder={props.config.placeholder}
+      placeholder={props.placeholder}
       value={props.value}
     />
   );

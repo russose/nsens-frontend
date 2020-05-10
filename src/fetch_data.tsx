@@ -95,7 +95,6 @@ export async function fetchAtomsFromWeb(
     }
     if (item["thumbnail"] !== undefined) {
       atom.thumbnail_url = item["thumbnail"]["source"];
-      atom.thumbnail_width = item["thumbnail"]["width"];
     }
     list_information_atoms.push(atom);
   });
@@ -160,7 +159,6 @@ export async function enrichImagesBatchFromWikipediaEN(
 
     if (item["thumbnail"] !== undefined) {
       atom.thumbnail_url = item["thumbnail"]["source"];
-      atom.thumbnail_width = item["thumbnail"]["width"];
     }
     if (item["original"] !== undefined) {
       atom.image_url = item["original"]["source"];
@@ -232,7 +230,6 @@ export async function enrichOneImageFromWikiCommonPedia(
         //item.image_type = imageinfo["mediatype"];
 
         item_updated.thumbnail_url = image["thumbnail"]["source"];
-        item_updated.thumbnail_width = image["thumbnail"]["width"];
 
         //console.log("image trouvée par générateur pour:", item.title);
 

@@ -1,8 +1,8 @@
 import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
-import { JsText } from "./js_components";
 import { Touchable, Image, Box, IconButton } from "gestalt";
 import ColoredContour from "./ColoredContour";
+import { JsText } from "../js_components";
 
 interface ICardProps {
   id: number;

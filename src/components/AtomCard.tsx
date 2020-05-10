@@ -1,65 +1,49 @@
 import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
 import { JsText } from "./js_components";
-import {
-  Touchable,
-  Image,
-  Box,
-  IconButton,
-  Card,
-  Mask,
-  Letterbox,
-} from "gestalt";
+import { Image, Box, IconButton, Mask, Letterbox } from "gestalt";
 import { AtomID } from "../types";
+import { card_dim, size_icon, padding_grid, title_card_size } from "../config";
 
-interface ICardProps {
+interface IAtomCardProps {
   id: AtomID;
   title: string;
   image_url: string;
-  image_handler: (args: { event: SyntheticEvent<any> }) => void;
   saved_enabled: boolean;
+  saved_disabled: boolean;
   saved_handler: (args: { event: SyntheticEvent<any> }) => void;
-  // liked_enabled: boolean;
-  // liked_handler: (args: { event: SyntheticEvent<any> }) => void;
-  color: any;
 }
 
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
-const image_dim = 150;
-const my_size = "xs";
 
-export const CardAtom: React.FunctionComponent<ICardProps> = (props) => {
+export const AtomCard: React.FunctionComponent<IAtomCardProps> = (props) => {
   return (
-    <Box padding={3}>
+    <Box padding={padding_grid}>
       <Box
-        color="lightGray"
+        color="white"
         display="flex"
         direction="column"
         justifyContent="between"
         // alignItems="center"
         borderSize="lg"
-        rounding={4}
+        rounding={6}
         padding={1}
         // column={5}
         // minWidth={150}
-        // maxWidth={300}
+        maxWidth={card_dim}
       >
-        <Box padding={1} width={image_dim}>
-          <JsText align="center" size="sm" weight="bold">
+        <Box padding={1} width={card_dim}>
+          <JsText align="center" size={title_card_size} weight="bold">
             {props.title}
           </JsText>
         </Box>
 
-        <Mask rounding={3}>
-          <Letterbox
-            height={image_dim}
-            width={image_dim}
-            contentAspectRatio={1}
-          >
+        <Mask rounding={6}>
+          <Letterbox height={card_dim} width={card_dim} contentAspectRatio={1}>
             <Image
               alt="image"
-              color="white"
+              color="transparent"
               fit="cover"
               naturalHeight={1}
               naturalWidth={1}
@@ -75,13 +59,14 @@ export const CardAtom: React.FunctionComponent<ICardProps> = (props) => {
             icon="angled-pin"
             iconColor={props.saved_enabled ? "red" : "darkGray"}
             bgColor="transparent"
-            size={my_size}
+            size={size_icon}
             onClick={props.saved_handler}
+            disabled={props.saved_disabled}
           />
         </Box>
-      </Box>{" "}
+      </Box>
     </Box>
   );
 };
 
-export default observer(CardAtom);
+export default observer(AtomCard);

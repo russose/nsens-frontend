@@ -1,16 +1,18 @@
 import { observer } from "mobx-react";
 import { Box } from "gestalt";
-import Card from "./Card";
+import AtomCardSaved from "./AtomCardSaved";
 import { IAtom, AtomID } from "../types";
 
-interface ICardGridProps {
+interface IAtomCardGridSavedProps {
   atoms: IAtom[];
   listOfIdsSaved: AtomID[];
   saved_handler: any;
-  image_handler: any;
+  saved_disabled?: boolean;
 }
 
-const CardGrid: React.FunctionComponent<ICardGridProps> = (props) => {
+const AtomCardGridSaved: React.FunctionComponent<IAtomCardGridSavedProps> = (
+  props
+) => {
   if (props.atoms === undefined) {
     return <div />;
   } else {
@@ -26,15 +28,11 @@ const CardGrid: React.FunctionComponent<ICardGridProps> = (props) => {
         >
           {/* {props.atoms.slice(0, 2).map((item) => ( */}
           {props.atoms.map((item) => (
-            <Card
+            <AtomCardSaved
               key={item.id}
               id={item.id}
               title={item.title}
               image_url={item.image_url} //{"graph.jpg"}
-              image_handler={props.image_handler}
-              saved_enabled={props.listOfIdsSaved.includes(item.id)}
-              saved_handler={props.saved_handler(item)}
-              color="white"
             />
           ))}
         </Box>
@@ -43,4 +41,4 @@ const CardGrid: React.FunctionComponent<ICardGridProps> = (props) => {
   }
 };
 
-export default observer(CardGrid);
+export default observer(AtomCardGridSaved);

@@ -5,7 +5,7 @@ import { JsText } from "./js_components";
 import Link from "next/link";
 import { ParsedUrlQueryInput } from "querystring";
 
-interface IButtonWithLabelProps {
+interface IButtonWithLabelLinkProps {
   icon: any;
   label: string;
   //onClick: (args: { event: SyntheticEvent<any> }) => void;
@@ -18,7 +18,7 @@ const font_size = "sm";
 const icon_size = "md";
 const weight = "bold";
 
-const ButtonWithLabel: React.FunctionComponent<IButtonWithLabelProps> = (
+const ButtonWithLabelLink: React.FunctionComponent<IButtonWithLabelLinkProps> = (
   props
 ) => {
   // const size = props.enabled ? "md" : "xs";
@@ -49,4 +49,4 @@ const ButtonWithLabel: React.FunctionComponent<IButtonWithLabelProps> = (
   );
 };
 
-export default ButtonWithLabel;
+export default ButtonWithLabelLink;

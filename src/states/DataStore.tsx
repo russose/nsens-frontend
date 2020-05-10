@@ -1,10 +1,23 @@
 import { observable, action, computed } from "mobx";
-import { IUserData, IAtom, AtomID, IIdentity } from "../types";
+import {
+  IUserData,
+  IAtom,
+  AtomID,
+  IIdentity,
+  KnowbookID,
+  IKnowbook,
+} from "../types";
+import { USER_GUI_CONFIG } from "../config";
+import { isDate } from "util";
+
+const emptyTag = USER_GUI_CONFIG.empty_tag;
+const allTags = USER_GUI_CONFIG.all_tags;
 
 export class DataStore {
   private $identity: IIdentity | null = null;
   private $saved = observable.map<AtomID, IAtom>();
   private $history = new Map<AtomID, IAtom>();
+  private $knowbooks = new Map<KnowbookID, IKnowbook>();
   @observable private $searchPattern: string = "";
   //@observable private $selectedAtomId: number = 0;
 
@@ -17,6 +30,9 @@ export class DataStore {
   }
   get history() {
     return this.$history;
+  }
+  get knowbooks() {
+    return this.$knowbooks;
   }
 
   @computed
@@ -31,15 +47,117 @@ export class DataStore {
       this.setIdentity(userData.identity);
       this.setSaved(userData.saved);
       this.setHistory(userData.history);
+      this.setKnowbooks(userData);
     }
   }
+
+  /************************************************ */
+
+  setKnowbooks(userData: IUserData): void {
+    userData.saved.forEach((value, key) => {
+      this.addAtomInKnowbook(allTags, value);
+      if (value.tags.length !== 0) {
+        value.tags.forEach((tag) => {
+          this.addAtomInKnowbook(tag, value);
+        });
+      } else {
+        this.addAtomInKnowbook(emptyTag, value);
+      }
+    });
+
+    // userData.saved.forEach((value, key) => {
+    //   this.addAtomInKnowbook(emptyTag, value);
+    //   // if (value.tags.length !== 0) {
+    //   value.tags.forEach((tag) => {
+    //     this.addAtomInKnowbook(tag, value);
+    //   });
+    //   // } else {
+    //   //   this.addAtomInKnowbook(emptyTag, value);
+    //   // }
+    // });
+  }
+
+  addAtomInKnowbook(knowbookID: KnowbookID, atom: IAtom) {
+    if (knowbookID === undefined) {
+      return;
+    }
+    if (this.knowbooks.has(knowbookID)) {
+      let knowbook_updated: IKnowbook | undefined = this.knowbooks.get(
+        knowbookID
+      );
+      if (knowbook_updated !== undefined) {
+        knowbook_updated.content_atoms.push(atom);
+        this.knowbooks.set(knowbookID, knowbook_updated);
+      }
+    } else {
+      const newKnowbook: IKnowbook = {
+        id: knowbookID,
+        name: knowbookID,
+        content_atoms: [atom],
+      };
+      this.knowbooks.set(knowbookID, newKnowbook);
+    }
+
+    // this.knowbooks.forEach((value, key) => {
+    //   console.log(key, value.name, value.content_atoms);
+    // });
+  }
+
+  removeAtomFromKnowbook(knowbookID: KnowbookID, atom: IAtom) {
+    if (this.knowbooks.has(knowbookID)) {
+      let knowbook_updated: IKnowbook | undefined = this.knowbooks.get(
+        knowbookID
+      );
+      if (knowbook_updated !== undefined) {
+        knowbook_updated.content_atoms = knowbook_updated.content_atoms.filter(
+          (item) => {
+            item.id !== atom.id;
+          }
+        );
+        this.knowbooks.set(knowbookID, knowbook_updated);
+      }
+    }
+  }
+
+  getKnowbookAtomsList(knowbookID: KnowbookID): IAtom[] {
+    let my_knowbook: IKnowbook | undefined;
+    let my_knowbookID: KnowbookID = knowbookID;
+    if (knowbookID === undefined) {
+      my_knowbookID = emptyTag;
+    }
+
+    if (this.knowbooks.has(my_knowbookID)) {
+      my_knowbook = this.knowbooks.get(my_knowbookID);
+
+      return my_knowbook !== undefined ? my_knowbook.content_atoms : [];
+    } else {
+      return [];
+    }
+  }
+
+  geAtomsIdsSavedAndInKnowbooks(): AtomID[] {
+    const ids_all = this.getKnowbookAtomsList(allTags).map((item) => {
+      return item.id;
+    });
+    const ids_none = this.getKnowbookAtomsList(emptyTag).map((item) => {
+      return item.id;
+    });
+    let ids: AtomID[] = [];
+    ids_all.forEach((item) => {
+      if (!ids_none.includes(item)) {
+        ids.push(item);
+      }
+    });
+
+    return ids;
+  }
+
+  /************************************************ */
 
   getSavedList(): IAtom[] {
     return Array.from(this.saved.values());
   }
-  getHistoryList(): IAtom[] {
-    return Array.from(this.history.values());
-  }
+
   getSavedIds() {
     return Array.from(this.saved.keys());
   }
@@ -51,14 +169,17 @@ export class DataStore {
   @action
   addSaved(item: IAtom): void {
     this.saved.set(item.id, item);
+    this.addAtomInKnowbook(emptyTag, item);
   }
   @action
   removeSaved(item: IAtom): void {
     this.saved.delete(item.id);
   }
-  //
-  setIdentity(identity: IIdentity): void {
-    this.$identity = identity;
+
+  /************************************************ */
+
+  getHistoryList(): IAtom[] {
+    return Array.from(this.history.values());
   }
   setHistory(history: IAtom[]): void {
     history.forEach((item) => this.history.set(item.id, item));
@@ -72,6 +193,11 @@ export class DataStore {
         this.history.set(item.id, item);
       });
     }
+  }
+
+  /************************************************ */
+  setIdentity(identity: IIdentity): void {
+    this.$identity = identity;
   }
 
   @action
@@ -97,39 +223,5 @@ export class DataStore {
   // @action
   // setselectedAtomId(id: number): void {
   //   this.$selectedAtomId = id;
-  // }
-
-  // @action
-  // searchAtomsFromWeb(searchPattern: string): IAtom[] {
-  //   if (searchPattern.length > CONFIG_GUI.all.SEARCH_MIN_LENGTH_SEARCH) {
-  //     fetchAtomsFromWeb(
-  //       searchPattern,
-  //       CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA,
-  //       CONFIG_FETCHING.amount_data_fetched,
-  //       enrichImagesFromWikipediaEN
-  //     ).then((data) => {
-  //       this.setAtoms(data);
-  //     });
-  //   }
-
-  //   return this.getAtomsList();
-  // }
-
-  // getAtomsFromSearchPattern(searchPattern: string): IAtom[] {
-  //   const ids_all = [0, 3, 8, 1, 2];
-  //   let ids = [];
-
-  //   for (var [key, value] of Array.from(this.atoms.entries())) {
-  //     const stringtoSearchIn = value["title"];
-  //     const position = stringtoSearchIn.search(searchPattern);
-  //     if (position !== -1) {
-  //       ids.push(key);
-  //     }
-  //   }
-  //   if (ids.length === 0) {
-  //     ids = ids_all;
-  //   }
-
-  //   return this.getAtomsById(ids);
   // }
 }

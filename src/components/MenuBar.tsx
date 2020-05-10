@@ -1,5 +1,5 @@
 import { Box } from "gestalt";
-import ButtonWithLabel from "./ButtonWithLabel";
+import ButtonWithLabelLink from "./ButtonWithLabelLink";
 
 import { IConfigMenuBar } from "../types";
 import { ParsedUrlQueryInput } from "querystring";
@@ -25,7 +25,7 @@ const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
     >
       {props.buttons_config.map((data, index) => {
         return (
-          <ButtonWithLabel
+          <ButtonWithLabelLink
             key={index.toString()}
             icon={data.icon}
             label={data.label}

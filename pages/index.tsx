@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 
 import { onSavedClick } from "../src/_handlers";
-import CardGrid from "../src/components/CardGrid";
+import AtomCardGrid from "../src/components/AtomCardGrid";
 import { useStores } from "../src/states/_RootStore";
 import { NextPage, GetServerSideProps } from "next";
-import MobileWithSearchLayout from "../src/components/layout/MobileWithSearchLayout";
+import MobileIndexLayout from "../src/components/layout/MobileIndexLayout";
 
-import { CONFIG_FETCHING } from "../src/config";
+import { CONFIG_FETCHING, USER_GUI_CONFIG } from "../src/config";
 import { ISyncBackFrontProps, indexSyncServerClientBack } from "../src/api";
 
 const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
@@ -19,19 +19,19 @@ const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
   }
 
   return (
-    <CardGrid
+    <AtomCardGrid
       atoms={dataStore
         .getHistoryList()
         .slice(-CONFIG_FETCHING.amount_data_fetched)}
       listOfIdsSaved={dataStore.getSavedIds()}
       saved_handler={onSavedClick(dataStore)}
-      image_handler={(): void => {}}
+      ids_saved_disabled={dataStore.geAtomsIdsSavedAndInKnowbooks()}
     />
   );
 };
 
 (Home as any).getLayoutMobile = (page: NextPage) => (
-  <MobileWithSearchLayout>{page}</MobileWithSearchLayout>
+  <MobileIndexLayout>{page}</MobileIndexLayout>
 );
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

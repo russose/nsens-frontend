@@ -1,6 +1,8 @@
 import { observer } from "mobx-react";
 import { useStores } from "../src/states/_RootStore";
 import { buildUserDataExport } from "../src/api";
+import { NextPage } from "next";
+import MobilePagesLayout from "../src/components/layout/MobilePagesLayout";
 
 const User: React.FunctionComponent = (props) => {
   const { dataStore } = useStores();
@@ -23,5 +25,9 @@ const User: React.FunctionComponent = (props) => {
     </div>
   );
 };
+
+(User as any).getLayoutMobile = (page: NextPage) => (
+  <MobilePagesLayout top_components={<div />}>{page}</MobilePagesLayout>
+);
 
 export default observer(User);

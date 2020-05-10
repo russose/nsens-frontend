@@ -8,13 +8,16 @@ export const CONFIG_FETCHING = {
   max_width_image: 2000,
   min_width_image: 120,
   path_empty_image: "The_Scientific_Universe_small.png",
+  search_min_length_search: 4,
 };
 
-export const CONFIG_GUI = {
+const CONFIG_GUI = {
   fr: {
-    searchBar: {
-      placeholder: "rechercher dans les atomes de connaissance",
-    },
+    searchBar: "Recherche de connaissance",
+    knowbooks_title: "Knowledge Books",
+    empty_tag: "Vide",
+    all_tags: "Tous",
+
     menuBar: [
       { label: "Acceuil", icon: "workflow-status-all" },
       { label: "Knowbooks", icon: "folder" },
@@ -22,6 +25,7 @@ export const CONFIG_GUI = {
       { label: "More", icon: "ellipsis" },
     ],
     categories: {
+      //Plus utilisés, à voir plus tard
       PLT: { label: "Planète", color: "green" },
       ECO: { label: "Économie", color: "blue" },
       INO: { label: "Innovation", color: "orchid" },
@@ -30,10 +34,16 @@ export const CONFIG_GUI = {
       TBD: { label: "To be defined", color: "black" },
     },
   },
-  all: { SEARCH_MIN_LENGTH_SEARCH: 4 },
 };
 
 export const USER_GUI_CONFIG = CONFIG_GUI["fr"];
+
+// A ajouter dans la config quand stabilisé
+export const card_dim = 170;
+export const size_icon = "xs";
+export const padding_grid = 2;
+export const title_card_size = "sm";
+export const header_size = "md";
 
 export const REFERENTIAL = {
   categories: [

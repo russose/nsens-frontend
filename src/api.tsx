@@ -88,7 +88,6 @@ export function buildUserDataExport(dataStore: DataStore): string {
       identity: dataStore.identity,
       saved: dataStore.getSavedList(),
       history: dataStore.getHistoryList(),
-      knowbooks: [],
     };
   }
   return JSON.stringify({ user: userData });
