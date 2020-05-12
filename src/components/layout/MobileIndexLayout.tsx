@@ -7,12 +7,12 @@ import { USER_GUI_CONFIG } from "../../config";
 import MobilePagesLayout from "./MobilePagesLayout";
 
 const MobileIndexLayout: React.FunctionComponent = (props) => {
-  const { dataStore } = useStores();
+  const { uiStore } = useStores();
   const searchbar = (
     <SearchBar
       placeholder={USER_GUI_CONFIG.searchBar}
-      handler={onSearchHome(dataStore)}
-      value={dataStore.searchPattern}
+      handler={onSearchHome(uiStore)}
+      value={uiStore.searchPattern}
     />
   );
   return (

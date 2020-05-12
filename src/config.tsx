@@ -34,16 +34,24 @@ const CONFIG_GUI = {
       TBD: { label: "To be defined", color: "black" },
     },
   },
+  mobile_display: {
+    card_dim: 170,
+    size_icon: "xs",
+    padding_grid: 2,
+    title_card_size: "sm",
+    header_size: "md",
+  },
 };
 
 export const USER_GUI_CONFIG = CONFIG_GUI["fr"];
+export const USER_DISPLAY = CONFIG_GUI["mobile_display"];
 
 // A ajouter dans la config quand stabilisé
-export const card_dim = 170;
-export const size_icon = "xs";
-export const padding_grid = 2;
-export const title_card_size = "sm";
-export const header_size = "md";
+// export const card_dim = 170;
+// export const size_icon = "xs";
+// export const padding_grid = 2;
+// export const title_card_size = "sm";
+// export const header_size = "md";
 
 export const REFERENTIAL = {
   categories: [

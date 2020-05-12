@@ -40,9 +40,18 @@ export interface IConfigData {
   categories: IConfigCategories;
 }
 
+// export interface IMobileDisplayDataData {
+//   card_dim: number;
+//   size_icon: string;
+//   padding_grid: any;
+//   title_card_size: string;
+//   header_size: string;
+// }
+
 export interface IConfig {
   [ConfigDataLanguage.fr]: IConfigData;
   [ConfigDataLanguage.en]: IConfigData;
+  //mobile_display: IMobileDisplayDataData;
 }
 
 /*************************************************** */

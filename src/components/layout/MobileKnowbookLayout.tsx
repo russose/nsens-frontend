@@ -2,11 +2,13 @@ import { observer } from "mobx-react";
 import SearchBar from "../SearchBar";
 import { onSearchHome } from "../../_handlers";
 
-import { USER_GUI_CONFIG, header_size } from "../../config";
+import { USER_GUI_CONFIG, USER_DISPLAY } from "../../config";
 import MobilePagesLayout from "./MobilePagesLayout";
 import { Box } from "gestalt";
 import { JsText } from "../js_components";
 import { useRouter } from "next/router";
+
+const header_size = USER_DISPLAY.header_size;
 
 const MobileKnowbookLayout: React.FunctionComponent = (props) => {
   const router = useRouter();

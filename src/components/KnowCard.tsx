@@ -4,7 +4,7 @@ import { Image, Box, Mask, Letterbox, Collage } from "gestalt";
 import { KnowbookID } from "../types";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
-import { card_dim, padding_grid, title_card_size, size_icon } from "../config";
+import { USER_DISPLAY } from "../config";
 
 interface IKnowCardProps {
   id: KnowbookID;
@@ -17,6 +17,10 @@ interface IKnowCardProps {
 
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
+
+const card_dim = USER_DISPLAY.card_dim;
+const title_card_size = USER_DISPLAY.title_card_size;
+const padding_grid: any = USER_DISPLAY.padding_grid;
 
 export const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
   let collage;

@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { JsText } from "./js_components";
 import { Image, Box, IconButton, Mask, Letterbox } from "gestalt";
 import { AtomID } from "../types";
-import { card_dim, size_icon, padding_grid, title_card_size } from "../config";
+import { USER_DISPLAY } from "../config";
 
 interface IAtomCardProps {
   id: AtomID;
@@ -16,6 +16,11 @@ interface IAtomCardProps {
 
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
+
+const card_dim = USER_DISPLAY.card_dim;
+const title_card_size = USER_DISPLAY.title_card_size;
+const padding_grid: any = USER_DISPLAY.padding_grid;
+const size_icon: any = USER_DISPLAY.size_icon;
 
 export const AtomCard: React.FunctionComponent<IAtomCardProps> = (props) => {
   return (

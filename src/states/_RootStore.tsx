@@ -1,18 +1,19 @@
 import React from "react";
 import { DataStore } from "./DataStore";
+import { UIStore } from "./UIStore";
 
 type Maybe<T> = T | null;
 
 //RootStore
 
 interface IStores {
-  //pageLayoutStore: PageLayoutStore;
+  uiStore: UIStore;
   dataStore: DataStore;
 }
 
 export class RootStore {
   private $stores: IStores = {
-    //pageLayoutStore: new PageLayoutStore(),
+    uiStore: new UIStore(),
     dataStore: new DataStore(),
   };
 

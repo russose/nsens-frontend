@@ -8,7 +8,6 @@ import {
   IKnowbook,
 } from "../types";
 import { USER_GUI_CONFIG } from "../config";
-import { isDate } from "util";
 
 const emptyTag = USER_GUI_CONFIG.empty_tag;
 const allTags = USER_GUI_CONFIG.all_tags;
@@ -18,8 +17,6 @@ export class DataStore {
   private $saved = observable.map<AtomID, IAtom>();
   private $history = new Map<AtomID, IAtom>();
   private $knowbooks = new Map<KnowbookID, IKnowbook>();
-  @observable private $searchPattern: string = "";
-  //@observable private $selectedAtomId: number = 0;
 
   get identity() {
     return this.$identity;
@@ -33,11 +30,6 @@ export class DataStore {
   }
   get knowbooks() {
     return this.$knowbooks;
-  }
-
-  @computed
-  get searchPattern() {
-    return this.$searchPattern;
   }
 
   /************************************************ */
@@ -77,8 +69,8 @@ export class DataStore {
     // });
   }
 
-  addAtomInKnowbook(knowbookID: KnowbookID, atom: IAtom) {
-    if (knowbookID === undefined) {
+  addAtomInKnowbook(knowbookID: KnowbookID, atom: IAtom | undefined) {
+    if (knowbookID === undefined || atom === undefined) {
       return;
     }
     if (this.knowbooks.has(knowbookID)) {
@@ -103,7 +95,11 @@ export class DataStore {
     // });
   }
 
-  removeAtomFromKnowbook(knowbookID: KnowbookID, atom: IAtom) {
+  removeAtomFromKnowbook(knowbookID: KnowbookID, atom: IAtom | undefined) {
+    if (atom === undefined) {
+      return;
+    }
+
     if (this.knowbooks.has(knowbookID)) {
       let knowbook_updated: IKnowbook | undefined = this.knowbooks.get(
         knowbookID
@@ -135,7 +131,7 @@ export class DataStore {
     }
   }
 
-  geAtomsIdsSavedAndInKnowbooks(): AtomID[] {
+  getAtomsIdsSavedAndInKnowbooks(): AtomID[] {
     const ids_all = this.getKnowbookAtomsList(allTags).map((item) => {
       return item.id;
     });
@@ -150,6 +146,18 @@ export class DataStore {
     });
 
     return ids;
+  }
+
+  isAtomInKnowbook(atomId: AtomID, knowbookId: KnowbookID): boolean {
+    const knowbook = this.knowbooks.get(knowbookId);
+    if (knowbook !== undefined) {
+      const knowbookContentId = knowbook.content_atoms.map((item) => {
+        return item.id;
+      });
+      return knowbookContentId.includes(atomId);
+    } else {
+      return false;
+    }
   }
 
   /************************************************ */
@@ -170,9 +178,11 @@ export class DataStore {
   addSaved(item: IAtom): void {
     this.saved.set(item.id, item);
     this.addAtomInKnowbook(emptyTag, item);
+    this.addAtomInKnowbook(allTags, item);
   }
   @action
   removeSaved(item: IAtom): void {
+    //TO DO: check that item is in NO knowbooks except emptyTag and allTags
     this.saved.delete(item.id);
   }
 
@@ -198,11 +208,6 @@ export class DataStore {
   /************************************************ */
   setIdentity(identity: IIdentity): void {
     this.$identity = identity;
-  }
-
-  @action
-  setSearchPattern(searchPattern: string): void {
-    this.$searchPattern = searchPattern;
   }
 
   /************************************************ */

@@ -1,17 +1,24 @@
 import { observer } from "mobx-react";
 import { JsText } from "./js_components";
-import { Image, Box, IconButton, Mask, Letterbox, TextField } from "gestalt";
+import { Image, Box, IconButton, Mask, Letterbox, Modal, Layer } from "gestalt";
 import { AtomID } from "../types";
-import { card_dim, size_icon, padding_grid, title_card_size } from "../config";
+import { USER_DISPLAY } from "../config";
+import React from "react";
 
 interface IAtomCardSavedProps {
   id: AtomID;
   title: string;
   image_url: string;
+  edit_handler: any;
 }
 
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
+
+const card_dim = USER_DISPLAY.card_dim;
+const title_card_size = USER_DISPLAY.title_card_size;
+const padding_grid: any = USER_DISPLAY.padding_grid;
+const size_icon: any = USER_DISPLAY.size_icon;
 
 export const AtomCardSaved: React.FunctionComponent<IAtomCardSavedProps> = (
   props
@@ -27,8 +34,6 @@ export const AtomCardSaved: React.FunctionComponent<IAtomCardSavedProps> = (
         borderSize="lg"
         rounding={6}
         padding={1}
-        // column={5}
-        // minWidth={150}
         maxWidth={card_dim}
       >
         <Box padding={1} width={card_dim}>
@@ -58,6 +63,7 @@ export const AtomCardSaved: React.FunctionComponent<IAtomCardSavedProps> = (
             iconColor="darkGray"
             bgColor="transparent"
             size={size_icon}
+            onClick={props.edit_handler}
           />
         </Box>
       </Box>
