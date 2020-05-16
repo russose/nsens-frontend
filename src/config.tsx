@@ -7,7 +7,7 @@ export const CONFIG_FETCHING = {
   amount_data_fetched: 20,
   max_width_image: 2000,
   min_width_image: 120,
-  path_empty_image: "The_Scientific_Universe_small.png",
+  path_empty_image: "/The_Scientific_Universe_small.png",
   search_min_length_search: 4,
 };
 
@@ -15,8 +15,9 @@ const CONFIG_GUI = {
   fr: {
     searchBar: "Recherche de connaissance",
     knowbooks_title: "Knowledge Books",
-    empty_tag: "Vide",
-    all_tags: "Tous",
+    AllSaved_title: "Sauvés (tous)",
+    None_Title: "Aucun Knowbook",
+    //empty_tag: "Sans Knowbook",
 
     menuBar: [
       { label: "Acceuil", icon: "workflow-status-all" },
@@ -35,11 +36,11 @@ const CONFIG_GUI = {
     },
   },
   mobile_display: {
-    card_dim: 170,
+    card_dim: 120,
     size_icon: "xs",
-    padding_grid: 2,
+    padding_grid: 1,
     title_card_size: "sm",
-    header_size: "md",
+    header_size: "sm",
   },
 };
 

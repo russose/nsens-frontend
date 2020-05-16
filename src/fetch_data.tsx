@@ -1,7 +1,29 @@
-import fetch from "isomorphic-unfetch";
+//import fetch from "isomorphic-unfetch";
 import { IAtom, newAtom, empty_value_atom } from "./types";
 import { prepare_url } from "./utils";
 import { CONFIG_FETCHING } from "./config";
+
+export async function fetchArticle(
+  pattern: string,
+  ROOT_URL: string
+): Promise<string> {
+  const PARAMS = {
+    action: "query",
+    format: "json",
+    utf8: 1,
+    titles: pattern,
+    prop: "extracts",
+  };
+  const data = await fetch_data(ROOT_URL, PARAMS, true);
+
+  if (data["query"] === undefined || data["query"]["pages"] === undefined) {
+    return "No article";
+  }
+
+  const article = data["query"]["pages"]["extract"];
+
+  return article;
+}
 
 export async function fetch_data(
   ROOT_URL: string,

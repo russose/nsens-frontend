@@ -25,22 +25,43 @@ export const onSearchHome = (uiStore: UIStore) => (input: IonInput): void => {
 };
 
 //Save Atom Card
-export const onSaved = (dataStore: DataStore) => (item: IAtom) => (): void => {
-  const condition = Array.from(dataStore.saved.keys()).includes(item.id);
-  if (condition) {
-    dataStore.removeSaved(item);
+export const onSaved = (dataStore: DataStore) => (
+  itemID: AtomID
+) => (): void => {
+  if (
+    dataStore.saved.has(itemID) === undefined ||
+    dataStore.saved.has(itemID) === false
+  ) {
+    dataStore.addSaved(itemID);
   } else {
-    dataStore.addSaved(item);
+    dataStore.removeSaved(itemID);
+  }
+};
+
+export const isItemSavedActivated = (dataStore: DataStore) => (
+  itemID: AtomID
+) => {
+  return dataStore.IsAtomInAnyKnowbook(itemID);
+};
+
+export const isItemSaved = (dataStore: DataStore) => (itemID: AtomID) => {
+  if (dataStore.saved.has(itemID) === undefined) {
+    return false;
+  }
+  if (dataStore.saved.has(itemID)) {
+    return true;
+  } else {
+    return false;
   }
 };
 
 //Edit Knowbooks (open Edition Window)
 export const onEditKnowbooks = (uiStore: UIStore, dataStore: DataStore) => (
-  item: IAtom
+  itemId: AtomID
 ) => (): void => {
-  uiStore.setSelectedAtomId(item.id);
+  uiStore.setSelectedAtomId(itemId);
   uiStore.setEditKnowbookOpened(true);
-  uiStore.initKnowbookEditionElements(item.id, dataStore);
+  uiStore.initKnowbookEditionElements(itemId, dataStore);
 };
 export const onCancelEditKnowbooks = (uiStore: UIStore) => (): void => {
   uiStore.setEditKnowbookOpened(false);
@@ -59,28 +80,23 @@ export const onChangeKnwobooksInclusionEditKnowbooks = (uiStore: UIStore) => (
 export const onSubmitChangesEditKnowbooks = (
   uiStore: UIStore,
   dataStore: DataStore
-) => (item: AtomID) => (): void => {
-  if (item === undefined) {
+) => (itemId: AtomID) => (): void => {
+  if (itemId === undefined) {
     return;
   }
 
-  const atom = dataStore.saved.get(item);
+  //const atom = dataStore.getAtom(item);
   if (uiStore.knowbookEditionNewTag.length !== 0) {
-    dataStore.addAtomInKnowbook(uiStore.knowbookEditionNewTag, atom);
+    dataStore.addAtomInKnowbook(uiStore.knowbookEditionNewTag, itemId);
   }
 
   uiStore.knowbookEditionInclusion.forEach((value, key) => {
     if (value === true) {
-      dataStore.addAtomInKnowbook(key, atom);
+      dataStore.addAtomInKnowbook(key, itemId);
     } else {
-      dataStore.removeAtomFromKnowbook(key, atom);
+      dataStore.removeAtomFromKnowbook(key, itemId);
     }
   });
 
   uiStore.setEditKnowbookOpened(false);
 };
-
-// export const openLink = (url: string) => (): void => {
-//   window.open(url);
-//   // console.log(url);
-// };

@@ -1,17 +1,15 @@
-import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
-import { JsText } from "./js_components";
-import { Image, Box, IconButton, Mask, Letterbox } from "gestalt";
-import { AtomID } from "../types";
-import { USER_DISPLAY } from "../config";
+import { JsText } from "../js_components";
+import { Image, Box, IconButton, Mask, Letterbox, Modal, Layer } from "gestalt";
+import { AtomID } from "../../types";
+import { USER_DISPLAY } from "../../config";
+import React from "react";
 
-interface IAtomCardProps {
+interface IAtomCardSavedProps {
   id: AtomID;
   title: string;
   image_url: string;
-  saved_enabled: boolean;
-  saved_disabled: boolean;
-  saved_handler: (args: { event: SyntheticEvent<any> }) => void;
+  edit_handler: any;
 }
 
 // const width_screen = window.innerWidth;
@@ -22,7 +20,9 @@ const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 const size_icon: any = USER_DISPLAY.size_icon;
 
-export const AtomCard: React.FunctionComponent<IAtomCardProps> = (props) => {
+export const AtomCardSaved: React.FunctionComponent<IAtomCardSavedProps> = (
+  props
+) => {
   return (
     <Box padding={padding_grid}>
       <Box
@@ -34,8 +34,6 @@ export const AtomCard: React.FunctionComponent<IAtomCardProps> = (props) => {
         borderSize="lg"
         rounding={6}
         padding={1}
-        // column={5}
-        // minWidth={150}
         maxWidth={card_dim}
       >
         <Box padding={1} width={card_dim}>
@@ -60,13 +58,12 @@ export const AtomCard: React.FunctionComponent<IAtomCardProps> = (props) => {
 
         <Box display="flex" direction="row" justifyContent="end" padding={0}>
           <IconButton
-            accessibilityLabel="save"
-            icon="angled-pin"
-            iconColor={props.saved_enabled ? "red" : "darkGray"}
+            accessibilityLabel="edit"
+            icon="edit"
+            iconColor="darkGray"
             bgColor="transparent"
             size={size_icon}
-            onClick={props.saved_handler}
-            disabled={props.saved_disabled}
+            onClick={props.edit_handler}
           />
         </Box>
       </Box>
@@ -74,4 +71,4 @@ export const AtomCard: React.FunctionComponent<IAtomCardProps> = (props) => {
   );
 };
 
-export default observer(AtomCard);
+export default observer(AtomCardSaved);

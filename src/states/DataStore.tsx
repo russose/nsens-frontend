@@ -7,23 +7,21 @@ import {
   KnowbookID,
   IKnowbook,
 } from "../types";
-import { USER_GUI_CONFIG } from "../config";
-
-const emptyTag = USER_GUI_CONFIG.empty_tag;
-const allTags = USER_GUI_CONFIG.all_tags;
 
 export class DataStore {
   private $identity: IIdentity | null = null;
-  private $saved = observable.map<AtomID, IAtom>();
+  //private $knowbooks = observable.map<KnowbookID, IKnowbook>();
+  //private $saved = new Map<AtomID, IAtom>();
   private $history = new Map<AtomID, IAtom>();
   private $knowbooks = new Map<KnowbookID, IKnowbook>();
+  private $saved = observable.map<AtomID, IAtom>();
 
-  get identity() {
-    return this.$identity;
-  }
-  @computed
+  //@computed
   get saved() {
     return this.$saved;
+  }
+  get identity() {
+    return this.$identity;
   }
   get history() {
     return this.$history;
@@ -35,7 +33,7 @@ export class DataStore {
   /************************************************ */
 
   setUserData(userData: IUserData | null): void {
-    if (userData !== null) {
+    if (userData !== null && userData !== undefined) {
       this.setIdentity(userData.identity);
       this.setSaved(userData.saved);
       this.setHistory(userData.history);
@@ -44,146 +42,191 @@ export class DataStore {
   }
 
   /************************************************ */
-
   setKnowbooks(userData: IUserData): void {
     userData.saved.forEach((value, key) => {
-      this.addAtomInKnowbook(allTags, value);
       if (value.tags.length !== 0) {
         value.tags.forEach((tag) => {
-          this.addAtomInKnowbook(tag, value);
+          this.addAtomInKnowbook(tag, value.id);
         });
-      } else {
-        this.addAtomInKnowbook(emptyTag, value);
       }
     });
-
-    // userData.saved.forEach((value, key) => {
-    //   this.addAtomInKnowbook(emptyTag, value);
-    //   // if (value.tags.length !== 0) {
-    //   value.tags.forEach((tag) => {
-    //     this.addAtomInKnowbook(tag, value);
-    //   });
-    //   // } else {
-    //   //   this.addAtomInKnowbook(emptyTag, value);
-    //   // }
-    // });
   }
 
-  addAtomInKnowbook(knowbookID: KnowbookID, atom: IAtom | undefined) {
-    if (knowbookID === undefined || atom === undefined) {
+  @action
+  //Update both Knowbooks and saved (tags)
+  addAtomInKnowbook(knowbookID: KnowbookID, atomId: AtomID) {
+    if (knowbookID === undefined || atomId === undefined) {
+      console.log("undefined values");
       return;
     }
+
     if (this.knowbooks.has(knowbookID)) {
-      let knowbook_updated: IKnowbook | undefined = this.knowbooks.get(
-        knowbookID
-      );
+      let knowbook_updated = this.knowbooks.get(knowbookID);
       if (knowbook_updated !== undefined) {
-        knowbook_updated.content_atoms.push(atom);
+        if (knowbook_updated.content_atoms.includes(atomId)) {
+          return;
+        }
+
+        knowbook_updated.content_atoms.push(atomId);
         this.knowbooks.set(knowbookID, knowbook_updated);
       }
     } else {
       const newKnowbook: IKnowbook = {
         id: knowbookID,
         name: knowbookID,
-        content_atoms: [atom],
+        content_atoms: [atomId],
       };
       this.knowbooks.set(knowbookID, newKnowbook);
     }
 
-    // this.knowbooks.forEach((value, key) => {
-    //   console.log(key, value.name, value.content_atoms);
-    // });
+    const updated_atom = this.getAtom(atomId);
+    if (!updated_atom.tags.includes(knowbookID)) {
+      updated_atom.tags.push(knowbookID);
+      this.saved.set(atomId, updated_atom);
+    }
   }
 
-  removeAtomFromKnowbook(knowbookID: KnowbookID, atom: IAtom | undefined) {
-    if (atom === undefined) {
+  @action
+  //Update both Knowbooks and saved (tags)
+  removeAtomFromKnowbook(knowbookID: KnowbookID, atomId: AtomID) {
+    if (knowbookID === undefined || atomId === undefined) {
+      console.log("undefined values");
       return;
     }
 
     if (this.knowbooks.has(knowbookID)) {
-      let knowbook_updated: IKnowbook | undefined = this.knowbooks.get(
-        knowbookID
-      );
+      let knowbook_updated = this.knowbooks.get(knowbookID);
       if (knowbook_updated !== undefined) {
         knowbook_updated.content_atoms = knowbook_updated.content_atoms.filter(
-          (item) => {
-            item.id !== atom.id;
+          (itemId) => {
+            return itemId !== atomId;
           }
         );
         this.knowbooks.set(knowbookID, knowbook_updated);
+
+        const updated_atom = this.getAtom(atomId);
+        updated_atom.tags = updated_atom.tags.filter((itemId) => {
+          return itemId !== knowbookID;
+        });
+        this.saved.set(atomId, updated_atom);
+      } else {
+        console.log("undefined values");
+        return;
       }
+    } else {
+      console.log("impossible to remove from knowbook");
+      return;
     }
   }
 
   getKnowbookAtomsList(knowbookID: KnowbookID): IAtom[] {
     let my_knowbook: IKnowbook | undefined;
-    let my_knowbookID: KnowbookID = knowbookID;
-    if (knowbookID === undefined) {
-      my_knowbookID = emptyTag;
-    }
 
-    if (this.knowbooks.has(my_knowbookID)) {
-      my_knowbook = this.knowbooks.get(my_knowbookID);
+    if (this.knowbooks.has(knowbookID)) {
+      my_knowbook = this.knowbooks.get(knowbookID);
 
-      return my_knowbook !== undefined ? my_knowbook.content_atoms : [];
+      return my_knowbook !== undefined
+        ? this.getAtomsFromAtomIdList(my_knowbook.content_atoms)
+        : [];
     } else {
+      console.log("impossible to provide Atoms List from knowbook");
       return [];
     }
   }
 
-  getAtomsIdsSavedAndInKnowbooks(): AtomID[] {
-    const ids_all = this.getKnowbookAtomsList(allTags).map((item) => {
-      return item.id;
-    });
-    const ids_none = this.getKnowbookAtomsList(emptyTag).map((item) => {
-      return item.id;
-    });
-    let ids: AtomID[] = [];
-    ids_all.forEach((item) => {
-      if (!ids_none.includes(item)) {
-        ids.push(item);
-      }
-    });
-
-    return ids;
+  IsAtomInAnyKnowbook(atomId: AtomID): boolean {
+    if (this.getAtom(atomId) === undefined) {
+      return false;
+    }
+    const atomTag: KnowbookID[] = this.getAtom(atomId).tags;
+    if (atomTag.length === 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   isAtomInKnowbook(atomId: AtomID, knowbookId: KnowbookID): boolean {
     const knowbook = this.knowbooks.get(knowbookId);
     if (knowbook !== undefined) {
-      const knowbookContentId = knowbook.content_atoms.map((item) => {
-        return item.id;
-      });
+      const knowbookContentId = knowbook.content_atoms;
       return knowbookContentId.includes(atomId);
     } else {
+      console.log("impossible to get the knowbook");
       return false;
     }
   }
 
   /************************************************ */
 
-  getSavedList(): IAtom[] {
-    return Array.from(this.saved.values());
-  }
-
-  getSavedIds() {
-    return Array.from(this.saved.keys());
-  }
-
   @action
   setSaved(atoms: IAtom[]): void {
-    atoms.forEach((item) => this.saved.set(item.id, item));
+    atoms.forEach((item) => this.$saved.set(item.id, item));
   }
+
   @action
-  addSaved(item: IAtom): void {
-    this.saved.set(item.id, item);
-    this.addAtomInKnowbook(emptyTag, item);
-    this.addAtomInKnowbook(allTags, item);
+  //Only use inside the class
+  addAtomInSavedFromHistory(itemId: AtomID): void {
+    if (itemId === undefined) {
+      return;
+    }
+
+    if (this.$history.has(itemId)) {
+      const atom = this.$history.get(itemId);
+      if (atom !== undefined) {
+        this.$saved.set(atom.id, atom);
+      } else {
+        console.log(
+          "impossible de trouver l'élément à sauver dans l'historique"
+        );
+      }
+    } else {
+      console.log("impossible de trouver l'élément à sauver dans l'historique");
+    }
   }
+
+  addSaved(itemId: AtomID): void {
+    if (itemId === undefined) {
+      return;
+    }
+    this.addAtomInSavedFromHistory(itemId);
+  }
+
   @action
-  removeSaved(item: IAtom): void {
-    //TO DO: check that item is in NO knowbooks except emptyTag and allTags
-    this.saved.delete(item.id);
+  removeSaved(itemId: AtomID): void {
+    if (!this.IsAtomInAnyKnowbook(itemId)) {
+      this.$saved.delete(itemId);
+    } else {
+      console.log("impossible to unsave Atoms present in Custom Knowbooks");
+    }
+  }
+
+  //From Saved Atoms
+  getAtomsFromAtomIdList(list_atoms: AtomID[]): IAtom[] {
+    if (list_atoms === undefined || list_atoms.length === 0) {
+      return [];
+    }
+
+    const result = list_atoms.map((id) => {
+      if (this.$saved.has(id)) {
+        return this.$saved.get(id);
+      } else {
+        return undefined;
+      }
+    });
+    const result_no_undefined = result.filter((item) => {
+      return item !== undefined;
+    }) as IAtom[];
+
+    return result_no_undefined;
+  }
+
+  getAtom(id: AtomID): IAtom {
+    return this.getAtomsFromAtomIdList([id])[0];
+  }
+
+  getSavedList(): IAtom[] {
+    return Array.from(this.saved.values());
   }
 
   /************************************************ */
@@ -192,9 +235,15 @@ export class DataStore {
     return Array.from(this.history.values());
   }
   setHistory(history: IAtom[]): void {
+    if (history === undefined) {
+      return;
+    }
     history.forEach((item) => this.history.set(item.id, item));
   }
   addAtomsInHistory(atoms: IAtom[]): void {
+    if (atoms === undefined) {
+      return;
+    }
     if (atoms.length !== 0) {
       atoms.forEach((item) => {
         if (this.history.has(item.id)) {
@@ -209,24 +258,4 @@ export class DataStore {
   setIdentity(identity: IIdentity): void {
     this.$identity = identity;
   }
-
-  /************************************************ */
-
-  // get guiConfig(): IConfigData {
-  //   return this.$guiConfig;
-  // }
-
-  // setGuiConfig(config: IConfigData): void {
-  //   this.$guiConfig = config;
-  // }
-
-  // @computed
-  // get selectedAtomId() {
-  //   return this.$selectedAtomId;
-  // }
-
-  // @action
-  // setselectedAtomId(id: number): void {
-  //   this.$selectedAtomId = id;
-  // }
 }

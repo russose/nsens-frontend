@@ -1,5 +1,4 @@
 import { observer } from "mobx-react";
-
 import { Box, TextField, IconButton, Modal } from "gestalt";
 import { AtomID } from "../types";
 import { USER_DISPLAY } from "../config";
@@ -25,7 +24,7 @@ interface IModalTextInputCheckboxesProps {
 const title_card_size = USER_DISPLAY.title_card_size;
 const modal_dim = 1.5 * USER_DISPLAY.card_dim;
 
-export const ModalTextInputCheckboxes: React.FunctionComponent<IModalTextInputCheckboxesProps> = (
+const ModalTextInputCheckboxes: React.FunctionComponent<IModalTextInputCheckboxesProps> = (
   props
 ) => {
   return (

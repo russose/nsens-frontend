@@ -60,18 +60,26 @@ export class UIStore {
     this.$knowbookEditionNewTag = "";
     this.knowbookEditionInclusion.clear();
 
-    const atom = datastore.saved.get(atomID);
-    if (atom !== undefined) {
-      const tags = atom.tags;
-      tags.forEach((tag) => {
-        this.knowbookEditionInclusion.set(
-          tag,
-          datastore.isAtomInKnowbook(atomID, tag)
-        );
-      });
-    } else {
-      console.log("issue...");
-    }
+    const knowbook_id_list = Array.from(datastore.knowbooks.keys());
+    knowbook_id_list.forEach((tag) => {
+      this.knowbookEditionInclusion.set(
+        tag,
+        datastore.isAtomInKnowbook(atomID, tag)
+      );
+    });
+
+    // //const atom = datastore.getAtom(atomID);
+    // if (atom !== undefined) {
+    //   const tags = atom.tags;
+    //   tags.forEach((tag) => {
+    //     this.knowbookEditionInclusion.set(
+    //       tag,
+    //       datastore.isAtomInKnowbook(atomID, tag)
+    //     );
+    //   });
+    // } else {
+    //   console.log("issue...");
+    // }
   }
 
   @action
@@ -83,4 +91,24 @@ export class UIStore {
   UpdateKnwobooksInclusion(knowbookId: KnowbookID, value: boolean): void {
     this.knowbookEditionInclusion.set(knowbookId, value);
   }
+
+  /************************************************ */
+
+  // get guiConfig(): IConfigData {
+  //   return this.$guiConfig;
+  // }
+
+  // setGuiConfig(config: IConfigData): void {
+  //   this.$guiConfig = config;
+  // }
+
+  // @computed
+  // get selectedAtomId() {
+  //   return this.$selectedAtomId;
+  // }
+
+  // @action
+  // setselectedAtomId(id: number): void {
+  //   this.$selectedAtomId = id;
+  // }
 }

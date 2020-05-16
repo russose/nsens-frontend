@@ -11,7 +11,7 @@ interface ISearchBarProps {
   value: string;
 }
 
-export const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
+const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
   return (
     <SearchField
       accessibilityLabel="Search Field"

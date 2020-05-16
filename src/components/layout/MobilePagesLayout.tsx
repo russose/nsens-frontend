@@ -10,7 +10,7 @@ const MobilePagesLayout: React.FunctionComponent<IMobilePagesLayoutProps> = (
   props
 ) => {
   return (
-    <div>
+    <Box>
       <Sticky top={0}>
         <Box color="white" padding={1} display="block">
           {props.top_components}
@@ -29,7 +29,7 @@ const MobilePagesLayout: React.FunctionComponent<IMobilePagesLayoutProps> = (
       >
         {props.children}
       </Box>
-    </div>
+    </Box>
   );
 };
 

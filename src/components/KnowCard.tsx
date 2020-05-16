@@ -4,15 +4,15 @@ import { Image, Box, Mask, Letterbox, Collage } from "gestalt";
 import { KnowbookID } from "../types";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
-import { USER_DISPLAY } from "../config";
+import { USER_DISPLAY, USER_GUI_CONFIG, CONFIG_FETCHING } from "../config";
 
 interface IKnowCardProps {
   id: KnowbookID;
   name: string;
-  image_url: string[];
+  images_url: string[];
   pathname: string;
   queryObject: ParsedUrlQueryInput;
-  amount: number;
+  amount: number | string;
 }
 
 // const width_screen = window.innerWidth;
@@ -22,10 +22,10 @@ const card_dim = USER_DISPLAY.card_dim;
 const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 
-export const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
+const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
   let collage;
-  const images_src = props.image_url.slice(0, 4);
-  if (props.image_url.length < 4) {
+  const images_src = props.images_url.slice(0, 4);
+  if (props.images_url === undefined || props.images_url.length === 0) {
     collage = (
       <Image
         alt="image"
@@ -34,7 +34,19 @@ export const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
         naturalHeight={1}
         naturalWidth={1}
         loading="lazy"
-        src={props.image_url[0]}
+        src={CONFIG_FETCHING.path_empty_image}
+      />
+    );
+  } else if (props.images_url.length < 4) {
+    collage = (
+      <Image
+        alt="image"
+        color="transparent"
+        fit="cover"
+        naturalHeight={1}
+        naturalWidth={1}
+        loading="lazy"
+        src={props.images_url[0]}
       />
     );
   } else {

@@ -70,8 +70,7 @@ export interface IIdentity {
 export interface IKnowbook {
   id: KnowbookID;
   name: KnowbookID;
-  content_atoms: IAtom[];
-  //content_knowbooks: string[];
+  content_atoms: AtomID[];
 }
 
 export interface IAtom {
@@ -86,7 +85,7 @@ export interface IAtom {
   image_width: number;
   image_height: number;
   thumbnail_url: string;
-  category: ConfigDataCategoryType;
+  category: ConfigDataCategoryType; //Not used yet
 }
 
 export interface IUserData {
