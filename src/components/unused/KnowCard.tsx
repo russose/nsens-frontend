@@ -18,7 +18,7 @@ interface IKnowCardProps {
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
 
-const folder_dim = USER_DISPLAY.folder_dim;
+const folder_dim = 150;
 const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 

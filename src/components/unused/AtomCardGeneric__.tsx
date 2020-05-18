@@ -1,9 +1,9 @@
 import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
-import { JsText } from "./js_components";
-import { Image, Box, IconButton, Mask, Letterbox } from "gestalt";
-import { AtomID } from "../types";
-import { USER_DISPLAY } from "../config";
+import { Image, Box, IconButton, Mask } from "gestalt";
+import { AtomID } from "../../types";
+import { USER_DISPLAY } from "../../config";
+import { JsText } from "../js_components";
 
 interface IAtomCardGenericProps {
   id: AtomID;
@@ -19,7 +19,6 @@ interface IAtomCardGenericProps {
 // const height_screen = window.innerHeight;
 // console.log(width_screen, height_screen);
 
-const card_dim = USER_DISPLAY.card_dim;
 const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 const size_icon: any = USER_DISPLAY.size_icon;

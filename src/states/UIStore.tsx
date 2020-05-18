@@ -13,7 +13,10 @@ export class UIStore {
   private $selectedAtomId: AtomID = "";
   @observable private $editKnowbookOpened: boolean = false;
   @observable private $knowbookEditionNewTag: string = "";
+  @observable private $articleContent: string = "";
   private $knowbookEditionInclusion = observable.map<KnowbookID, boolean>();
+  // @observable private $spinnerState: boolean = false;
+
   // @observable private $knowbookEditionElements: IEditionKnowbook = {
   //   newValue: "",
   //   knwobooksInclusion: [],
@@ -39,6 +42,22 @@ export class UIStore {
   get knowbookEditionInclusion() {
     return this.$knowbookEditionInclusion;
   }
+  @computed
+  get articleContent() {
+    return this.$articleContent;
+  }
+  // @computed
+  // get spinnerState() {
+  //   return this.$spinnerState;
+  // }
+  @action
+  setArticleContent(article: string): void {
+    this.$articleContent = article;
+  }
+  // @action
+  // setSpinnerState(state: boolean): void {
+  //   this.$spinnerState = state;
+  // }
 
   @action
   setSearchPattern(searchPattern: string): void {

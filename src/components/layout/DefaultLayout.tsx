@@ -1,4 +1,4 @@
-import { Sticky, Box } from "gestalt";
+import { Sticky, Box, Container } from "gestalt";
 import MenuBar from "../MenuBar";
 import { USER_GUI_CONFIG, USER_DISPLAY } from "../../config";
 import { useStores } from "../../states/_RootStore";
@@ -6,6 +6,7 @@ import SearchBar from "../SearchBar";
 import { onSearchHome } from "../../_handlers";
 import { JsHeading } from "../js_components";
 import { useRouter } from "next/router";
+import { observer } from "mobx-react";
 
 const header_size = USER_DISPLAY.header_size;
 
@@ -47,9 +48,9 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     Header = searchbar;
   } else if (router.pathname === "/Knowbooks") {
     Header = headerText(USER_GUI_CONFIG.knowbooks_title);
-  } else if (router.pathname === "/Knowbooks/Saved") {
+  } else if (router.pathname === "Saved") {
     Header = headerText(USER_GUI_CONFIG.AllSaved_title);
-  } else if (router.pathname === "/Knowbooks/None") {
+  } else if (router.pathname === "None") {
     Header = headerText(USER_GUI_CONFIG.None_Title);
   } else {
     Header = headerText(router.query.k as string);
@@ -62,15 +63,13 @@ const DefaultLayout: React.FunctionComponent = (props) => {
       display="flex"
       direction="column"
       height="98vh"
-      width="100"
-      justifyContent="between"
+      alignItems="center"
       overflow="hidden"
     >
-      <Box>
+      <Box column={12} smColumn={12} mdColumn={12} lgColumn={10}>
         <Sticky top={0}>
           <Box display="flex" alignItems="center">
             <Box
-              color="white"
               padding={2}
               display="inlineBlock"
               column={12}
@@ -78,9 +77,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
               mdColumn={8}
               lgColumn={8}
             >
-              {/* <Box color="white" padding={2}> */}
               {Header}
-              {/* </Box> */}
             </Box>
             <Box
               column={0}
@@ -99,30 +96,31 @@ const DefaultLayout: React.FunctionComponent = (props) => {
 
         <Box
           color="white"
-          padding={1}
+          padding={0}
           display="flex"
           direction="column"
           height="90vh"
           width="100"
           justifyContent="between"
-          overflow="scrollY"
+          overflow="auto"
+          //overflow="scrollY"
         >
           {props.children}
         </Box>
-      </Box>
 
-      <Sticky bottom={0}>
-        <Box
-          display="block"
-          smDisplay="block"
-          mdDisplay="none"
-          lgDisplay="none"
-        >
-          {navigationMenu}
-        </Box>
-      </Sticky>
+        <Sticky bottom={0}>
+          <Box
+            display="block"
+            smDisplay="block"
+            mdDisplay="none"
+            lgDisplay="none"
+          >
+            {navigationMenu}
+          </Box>
+        </Sticky>
+      </Box>
     </Box>
   );
 };
 
-export default DefaultLayout;
+export default observer(DefaultLayout);

@@ -22,7 +22,6 @@ interface IModalTextInputCheckboxesProps {
 
 // const dim = 2 * USER_DISPLAY.card_dim;
 const title_card_size = USER_DISPLAY.title_card_size;
-const modal_dim = 1.5 * USER_DISPLAY.card_dim;
 
 const ModalTextInputCheckboxes: React.FunctionComponent<IModalTextInputCheckboxesProps> = (
   props

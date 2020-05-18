@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useStores } from "../../src/states/_RootStore";
+import { useStores } from "../src/states/_RootStore";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import {
@@ -7,10 +7,10 @@ import {
   onSaved,
   isItemSaved,
   isItemSavedActivated,
-} from "../../src/_handlers";
+} from "../src/_handlers";
 import { Box } from "gestalt";
-import ModalEditKnowbooks from "../../src/components/ModalEditKnowbooks";
-import CardAtomGrid from "../../src/components/CardAtomGrid";
+import ModalEditKnowbooks from "../src/components/ModalEditKnowbooks";
+import CardAtomGrid from "../src/components/CardAtomGrid";
 
 const Knowbook: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();

@@ -29,7 +29,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       column={6}
     >
       <Box height="100%" borderSize="lg" rounding={4}>
-        <Box height="85%" width="100%">
+        <Box height="80%" width="100%">
           <Mask rounding={4} height="100%" width="100%">
             <Link href={{ pathname: props.pathname, query: props.queryObject }}>
               <a>
@@ -52,7 +52,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
             alignItems="center"
             padding={0}
           >
-            <Box padding={2} width="80%">
+            <Box padding={1} width="85%">
               <JsText size={title_card_size} align="left" weight="bold">
                 {props.title}
               </JsText>

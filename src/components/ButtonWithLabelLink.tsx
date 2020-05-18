@@ -35,7 +35,6 @@ const ButtonWithLabelLink: React.FunctionComponent<IButtonWithLabelLinkProps> = 
               icon={props.icon}
               iconColor="darkGray"
               size={icon_size}
-              //onClick={props.onClick}
             />
           </a>
         </Link>

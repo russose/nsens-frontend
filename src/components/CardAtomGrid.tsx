@@ -33,8 +33,8 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                 id={item.id}
                 title={item.title}
                 image_url={item.image_url}
-                pathname={"/index"}
-                queryObject={{}}
+                pathname={"/Article"}
+                queryObject={{ k: item.title }}
                 saved_enabled={props.isItemSaved_handler(item.id)}
                 saved_desactivated={props.isItemSavedActivated_handler(item.id)}
                 saved_handler={props.saved_handler(item.id)}

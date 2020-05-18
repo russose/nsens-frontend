@@ -17,7 +17,7 @@ interface IAtomCardProps {
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
 
-const card_dim = USER_DISPLAY.card_dim;
+const card_dim = 300;
 const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 const size_icon: any = USER_DISPLAY.size_icon;

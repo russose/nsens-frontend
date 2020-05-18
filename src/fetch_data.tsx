@@ -14,15 +14,22 @@ export async function fetchArticle(
     titles: pattern,
     prop: "extracts",
   };
-  const data = await fetch_data(ROOT_URL, PARAMS, true);
+  const data = await fetch_data(ROOT_URL, PARAMS, false);
 
   if (data["query"] === undefined || data["query"]["pages"] === undefined) {
     return "No article";
   }
 
-  const article = data["query"]["pages"]["extract"];
+  let article: string = "";
+  Object.values(data["query"]["pages"]).forEach((item: any) => {
+    article = item["extract"];
+  });
 
-  return article;
+  if (article === undefined) {
+    return "Article not found";
+  } else {
+    return article;
+  }
 }
 
 export async function fetch_data(

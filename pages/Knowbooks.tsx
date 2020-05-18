@@ -1,9 +1,11 @@
 import { observer } from "mobx-react";
 import { useStores } from "../src/states/_RootStore";
 import { Box } from "gestalt";
-import { USER_GUI_CONFIG } from "../src/config";
+import { USER_GUI_CONFIG, USER_DISPLAY } from "../src/config";
 import CardKnowGrid from "../src/components/CardKnowGrid";
 import CardKnow from "../src/components/CardKnow";
+
+const path_knowbook_image = USER_DISPLAY.path_knowbook_image;
 
 const Knowbooks: React.FunctionComponent = (props) => {
   const { dataStore } = useStores();
@@ -24,16 +26,16 @@ const Knowbooks: React.FunctionComponent = (props) => {
         <CardKnow
           id="saved"
           title={USER_GUI_CONFIG.AllSaved_title}
-          image_url={""}
-          pathname="/Knowbooks/Saved"
+          image_url={path_knowbook_image}
+          pathname="Saved"
           queryObject={{}}
           amount={dataStore.saved.size}
         />
         <CardKnow
           id="none"
           title={USER_GUI_CONFIG.None_Title}
-          image_url={""}
-          pathname="/Knowbooks/None"
+          image_url={path_knowbook_image}
+          pathname="None"
           queryObject={{}}
           amount="-"
         />

@@ -6,7 +6,6 @@ import { ParsedUrlQueryInput } from "querystring";
 
 interface IMenuBarProps {
   buttons_config: IConfigMenuBar[];
-  //buttons_handlers: ((args: { event: SyntheticEvent<any> }) => void)[];
   pathnames: string[];
   queryObjects: ParsedUrlQueryInput[];
   label_active: string;

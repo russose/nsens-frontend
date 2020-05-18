@@ -12,7 +12,6 @@ import { CONFIG_FETCHING } from "../src/config";
 import { ISyncBackFrontProps, indexSyncServerClientBack } from "../src/api";
 import ModalEditKnowbooks from "../src/components/ModalEditKnowbooks";
 import { Box } from "gestalt";
-import ModalArticle from "../src/components/ModalArticle";
 import CardAtomGrid from "../src/components/CardAtomGrid";
 
 const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
@@ -36,7 +35,6 @@ const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
         edit_handler={onEditKnowbooks(uiStore, dataStore)}
       />
       <ModalEditKnowbooks />
-      {/* <ModalArticle id="id" title="mytest" /> */}
     </Box>
   );
 };

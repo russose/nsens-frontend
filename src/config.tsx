@@ -17,7 +17,6 @@ const CONFIG_GUI = {
     knowbooks_title: "Knowledge Books",
     AllSaved_title: "Sauvés (tous)",
     None_Title: "Aucun Knowbook",
-    //empty_tag: "Sans Knowbook",
 
     menuBar: [
       { label: "Acceuil", icon: "workflow-status-all" },
@@ -35,26 +34,18 @@ const CONFIG_GUI = {
       TBD: { label: "To be defined", color: "black" },
     },
   },
-  mobile_display: {
-    card_dim: 120, // to be deleted
-    folder_dim: 150,
-    card_height: 300,
+  display: {
+    card_height: 250,
     size_icon: "sm",
     padding_grid: 2,
     title_card_size: "sm",
     header_size: "sm",
+    path_knowbook_image: "/500px-Book_closed_template.svg.png",
   },
 };
 
 export const USER_GUI_CONFIG = CONFIG_GUI["fr"];
-export const USER_DISPLAY = CONFIG_GUI["mobile_display"];
-
-// A ajouter dans la config quand stabilisé
-// export const card_dim = 170;
-// export const size_icon = "xs";
-// export const padding_grid = 2;
-// export const title_card_size = "sm";
-// export const header_size = "md";
+export const USER_DISPLAY = CONFIG_GUI["display"];
 
 export const REFERENTIAL = {
   categories: [
