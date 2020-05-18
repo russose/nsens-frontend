@@ -24,7 +24,7 @@ const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 const size_icon: any = USER_DISPLAY.size_icon;
 
-const AtomCardGeneric: React.FunctionComponent<IAtomCardGenericProps> = (
+const AtomCardGeneric_original: React.FunctionComponent<IAtomCardGenericProps> = (
   props
 ) => {
   return (
@@ -92,4 +92,4 @@ const AtomCardGeneric: React.FunctionComponent<IAtomCardGenericProps> = (
   );
 };
 
-export default observer(AtomCardGeneric);
+export default observer(AtomCardGeneric_original);

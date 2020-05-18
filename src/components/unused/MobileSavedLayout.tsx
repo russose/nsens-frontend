@@ -3,10 +3,10 @@ import SearchBar from "../SearchBar";
 import { onSearchHome } from "../../_handlers";
 
 import { USER_GUI_CONFIG, USER_DISPLAY } from "../../config";
-import MobilePagesLayout from "../layout/MobilePagesLayout";
 import { Box, Heading } from "gestalt";
 import { JsText, JsHeading } from "../js_components";
 import { useRouter } from "next/router";
+import MobilePagesLayout from "./layout/MobilePagesLayout";
 
 const header_size = USER_DISPLAY.header_size;
 

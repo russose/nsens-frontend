@@ -31,20 +31,10 @@ const ModalTextInputCheckboxes: React.FunctionComponent<IModalTextInputCheckboxe
     <Modal
       accessibilityModalLabel={props.title}
       onDismiss={() => {}}
-      size={modal_dim}
+      //size={modal_dim}
+      //size="80%"
     >
-      <Box
-        color="white"
-        // display="flex"
-        // direction="column"
-        // justifyContent="between"
-        // alignItems="center"
-        //borderSize="lg"
-        rounding={3}
-        padding={2}
-        //minWidth={dim / 1.5}
-        //maxWidth={dim}
-      >
+      <Box color="white" rounding={3} padding={2}>
         <Box padding={1}>
           <JsText align="center" size={title_card_size} weight="bold">
             {props.title}

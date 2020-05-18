@@ -8,9 +8,9 @@ import {
 import { useStores } from "../../src/states/_RootStore";
 import { NextPage } from "next";
 import MobileKnowbookLayout from "../../src/components/layout/MobileKnowbookLayout";
-import AtomCardGridGeneric from "../../src/components/AtomCardGridGeneric";
 import { Box } from "gestalt";
 import ModalEditKnowbooks from "../../src/components/ModalEditKnowbooks";
+import CardAtomGrid from "../../src/components/CardAtomGrid";
 
 const Saved: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
@@ -23,7 +23,7 @@ const Saved: React.FunctionComponent = (props) => {
 
   return (
     <Box>
-      <AtomCardGridGeneric
+      <CardAtomGrid
         atoms={AtomsInNoKnowbooks}
         isItemSaved_handler={isItemSaved(dataStore)}
         isItemSavedActivated_handler={isItemSavedActivated(dataStore)}
@@ -35,8 +35,8 @@ const Saved: React.FunctionComponent = (props) => {
   );
 };
 
-(Saved as any).getLayoutMobile = (page: NextPage) => (
-  <MobileKnowbookLayout>{page}</MobileKnowbookLayout>
-);
+// (Saved as any).getLayoutMobile = (page: NextPage) => (
+//   <MobileKnowbookLayout>{page}</MobileKnowbookLayout>
+// );
 
 export default observer(Saved);

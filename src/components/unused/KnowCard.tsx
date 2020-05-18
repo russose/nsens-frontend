@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
-import { JsText } from "./js_components";
 import { Image, Box, Mask, Letterbox, Collage } from "gestalt";
-import { KnowbookID } from "../types";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
-import { USER_DISPLAY, USER_GUI_CONFIG, CONFIG_FETCHING } from "../config";
+import { JsText } from "../js_components";
+import { KnowbookID } from "../../types";
+import { USER_DISPLAY, CONFIG_FETCHING } from "../../config";
 
 interface IKnowCardProps {
   id: KnowbookID;
@@ -18,7 +18,7 @@ interface IKnowCardProps {
 // const width_screen = window.innerWidth;
 // const height_screen = window.innerHeight;
 
-const card_dim = USER_DISPLAY.card_dim;
+const folder_dim = USER_DISPLAY.folder_dim;
 const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 
@@ -33,7 +33,7 @@ const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
         fit="cover"
         naturalHeight={1}
         naturalWidth={1}
-        loading="lazy"
+        loading="auto"
         src={CONFIG_FETCHING.path_empty_image}
       />
     );
@@ -45,7 +45,7 @@ const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
         fit="cover"
         naturalHeight={1}
         naturalWidth={1}
-        loading="lazy"
+        loading="auto"
         src={props.images_url[0]}
       />
     );
@@ -53,8 +53,8 @@ const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
     collage = (
       <Collage
         columns={2}
-        height={card_dim}
-        width={card_dim}
+        height={folder_dim}
+        width={folder_dim}
         renderImage={({ index, width, height }) => {
           const images = images_src.map((src) => {
             return {
@@ -92,9 +92,8 @@ const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
         borderSize="lg"
         rounding={2}
         padding={1}
-        maxWidth={card_dim}
       >
-        <Box padding={1} width={card_dim}>
+        <Box padding={1}>
           <JsText align="center" size={title_card_size} weight="bold">
             {/* {props.name.charAt(0).toUpperCase() + props.name.slice(1)} */}
             {props.name}
@@ -102,7 +101,11 @@ const KnowCard: React.FunctionComponent<IKnowCardProps> = (props) => {
         </Box>
 
         <Mask rounding={2}>
-          <Letterbox height={card_dim} width={card_dim} contentAspectRatio={1}>
+          <Letterbox
+            height={folder_dim}
+            width={folder_dim}
+            contentAspectRatio={1}
+          >
             <Link href={{ pathname: props.pathname, query: props.queryObject }}>
               <a>{collage}</a>
             </Link>

@@ -1,18 +1,16 @@
 import { observer } from "mobx-react";
 import { useStores } from "../src/states/_RootStore";
-import KnowCardGrid from "../src/components/KnowCardGrid";
-import { NextPage } from "next";
-import MobileKnowbookLayout from "../src/components/layout/MobileKnowbookLayout";
 import { Box } from "gestalt";
 import { USER_GUI_CONFIG } from "../src/config";
-import KnowCard from "../src/components/KnowCard";
+import CardKnowGrid from "../src/components/CardKnowGrid";
+import CardKnow from "../src/components/CardKnow";
 
 const Knowbooks: React.FunctionComponent = (props) => {
   const { dataStore } = useStores();
 
   return (
     <Box>
-      <KnowCardGrid
+      <CardKnowGrid
         knowbooks={Array.from(dataStore.knowbooks.values())}
         datastore={dataStore}
       />
@@ -21,20 +19,20 @@ const Knowbooks: React.FunctionComponent = (props) => {
         display="flex"
         direction="row"
         //padding={1}
-        justifyContent="around"
+        justifyContent="center"
       >
-        <KnowCard
+        <CardKnow
           id="saved"
-          name={USER_GUI_CONFIG.AllSaved_title}
-          images_url={[]}
+          title={USER_GUI_CONFIG.AllSaved_title}
+          image_url={""}
           pathname="/Knowbooks/Saved"
           queryObject={{}}
           amount={dataStore.saved.size}
         />
-        <KnowCard
+        <CardKnow
           id="none"
-          name={USER_GUI_CONFIG.None_Title}
-          images_url={[]}
+          title={USER_GUI_CONFIG.None_Title}
+          image_url={""}
           pathname="/Knowbooks/None"
           queryObject={{}}
           amount="-"
@@ -45,8 +43,8 @@ const Knowbooks: React.FunctionComponent = (props) => {
   );
 };
 
-(Knowbooks as any).getLayoutMobile = (page: NextPage) => (
-  <MobileKnowbookLayout>{page}</MobileKnowbookLayout>
-);
+// (Knowbooks as any).getLayoutMobile = (page: NextPage) => (
+//   <MobileKnowbookLayout>{page}</MobileKnowbookLayout>
+// );
 
 export default observer(Knowbooks);

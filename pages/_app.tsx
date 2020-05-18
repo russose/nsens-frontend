@@ -5,8 +5,8 @@ import { ContextStores, RootStore } from "../src/states/_RootStore";
 import { configure } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 
-import MobileDefaultLayout from "../src/components/layout/MobileDefaultLayout";
 import { NextPage } from "next";
+import DefaultLayout from "../src/components/layout/DefaultLayout";
 
 // enable MobX strict mode
 configure({ enforceActions: "observed" });
@@ -19,9 +19,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ContextStores.Provider value={{ rootStore: rootStore }}>
-      <MobileDefaultLayout>
+      <DefaultLayout>
         {getLayoutMobile(<Component {...pageProps} />)}
-      </MobileDefaultLayout>
+      </DefaultLayout>
     </ContextStores.Provider>
   );
 }

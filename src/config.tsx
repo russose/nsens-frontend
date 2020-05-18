@@ -4,7 +4,7 @@ export const CONFIG_FETCHING = {
     ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
-  amount_data_fetched: 20,
+  amount_data_fetched: 50,
   max_width_image: 2000,
   min_width_image: 120,
   path_empty_image: "/The_Scientific_Universe_small.png",
@@ -36,9 +36,11 @@ const CONFIG_GUI = {
     },
   },
   mobile_display: {
-    card_dim: 120,
-    size_icon: "xs",
-    padding_grid: 1,
+    card_dim: 120, // to be deleted
+    folder_dim: 150,
+    card_height: 300,
+    size_icon: "sm",
+    padding_grid: 2,
     title_card_size: "sm",
     header_size: "sm",
   },

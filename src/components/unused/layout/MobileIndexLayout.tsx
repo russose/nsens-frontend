@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
-import SearchBar from "../SearchBar";
-import { onSearchHome } from "../../_handlers";
 
-import { useStores } from "../../states/_RootStore";
-import { USER_GUI_CONFIG } from "../../config";
 import MobilePagesLayout from "./MobilePagesLayout";
+import { useStores } from "../../../states/_RootStore";
+import { USER_GUI_CONFIG } from "../../../config";
+import { onSearchHome } from "../../../_handlers";
+import SearchBar from "../../SearchBar";
 
 const MobileIndexLayout: React.FunctionComponent = (props) => {
   const { uiStore } = useStores();

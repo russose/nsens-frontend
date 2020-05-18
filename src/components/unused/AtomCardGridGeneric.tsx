@@ -1,9 +1,7 @@
 import { observer } from "mobx-react";
 import { Box } from "gestalt";
+import { IAtom } from "../../types";
 import AtomCardGeneric from "./AtomCardGeneric";
-import { IAtom, AtomID } from "../types";
-import { UIStore } from "../states/UIStore";
-import { DataStore } from "../states/DataStore";
 
 interface IAtomCardGridGenericProps {
   atoms: IAtom[];

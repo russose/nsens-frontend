@@ -5,16 +5,15 @@ import {
   isItemSaved,
   isItemSavedActivated,
 } from "../src/_handlers";
-import AtomCardGridGeneric from "../src/components/AtomCardGridGeneric";
 import { useStores } from "../src/states/_RootStore";
-import { NextPage, GetServerSideProps } from "next";
-import MobileIndexLayout from "../src/components/layout/MobileIndexLayout";
+import { GetServerSideProps } from "next";
 
 import { CONFIG_FETCHING } from "../src/config";
 import { ISyncBackFrontProps, indexSyncServerClientBack } from "../src/api";
 import ModalEditKnowbooks from "../src/components/ModalEditKnowbooks";
 import { Box } from "gestalt";
 import ModalArticle from "../src/components/ModalArticle";
+import CardAtomGrid from "../src/components/CardAtomGrid";
 
 const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
   const { dataStore, uiStore } = useStores();
@@ -27,7 +26,7 @@ const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
 
   return (
     <Box>
-      <AtomCardGridGeneric
+      <CardAtomGrid
         atoms={dataStore
           .getHistoryList()
           .slice(-CONFIG_FETCHING.amount_data_fetched)}
@@ -42,9 +41,9 @@ const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
   );
 };
 
-(Home as any).getLayoutMobile = (page: NextPage) => (
-  <MobileIndexLayout>{page}</MobileIndexLayout>
-);
+// (Home as any).getLayoutMobile = (page: NextPage) => (
+//   <MobileIndexLayout>{page}</MobileIndexLayout>
+// );
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const query_search = context.query.q as string | undefined;

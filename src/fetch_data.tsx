@@ -100,25 +100,27 @@ export async function fetchAtomsFromWeb(
   const list_information_atoms: IAtom[] = [];
   Object.values(data2["query"]["pages"]).forEach((item: any) => {
     //const atom = newAtom(item["pageid"]);
-    const id = item["pageprops"]["wikibase_item"];
-    const atom = newAtom(id);
-    atom.wikibase_item = item["pageprops"]["wikibase_item"];
-    atom.pageid_wp = item["pageid"];
-    atom.title = item["title"];
-    if (item["langlinks"] !== undefined) {
-      atom.title_en = item["langlinks"][0]["*"];
-    } else {
-      //console.log("error in getting english title");
+    if (item["pageprops"] !== undefined) {
+      const id = item["pageprops"]["wikibase_item"];
+      const atom = newAtom(id);
+      atom.wikibase_item = item["pageprops"]["wikibase_item"];
+      atom.pageid_wp = item["pageid"];
+      atom.title = item["title"];
+      if (item["langlinks"] !== undefined) {
+        atom.title_en = item["langlinks"][0]["*"];
+      } else {
+        //console.log("error in getting english title");
+      }
+      if (item["original"] !== undefined) {
+        atom.image_url = item["original"]["source"];
+        atom.image_height = item["original"]["height"];
+        atom.image_width = item["original"]["width"];
+      }
+      if (item["thumbnail"] !== undefined) {
+        atom.thumbnail_url = item["thumbnail"]["source"];
+      }
+      list_information_atoms.push(atom);
     }
-    if (item["original"] !== undefined) {
-      atom.image_url = item["original"]["source"];
-      atom.image_height = item["original"]["height"];
-      atom.image_width = item["original"]["width"];
-    }
-    if (item["thumbnail"] !== undefined) {
-      atom.thumbnail_url = item["thumbnail"]["source"];
-    }
-    list_information_atoms.push(atom);
   });
 
   return list_information_atoms;

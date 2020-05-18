@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 
-import { USER_GUI_CONFIG, USER_DISPLAY } from "../../config";
 import MobilePagesLayout from "./MobilePagesLayout";
 import { Box } from "gestalt";
-import { JsText, JsHeading } from "../js_components";
 import { useRouter } from "next/router";
+import { JsHeading } from "../../js_components";
+import { USER_GUI_CONFIG, USER_DISPLAY } from "../../../config";
 
 const header_size = USER_DISPLAY.header_size;
 
