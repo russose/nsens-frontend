@@ -6,15 +6,25 @@ import { USER_DISPLAY } from "../config";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
 
+interface ICardSizes {
+  height: number;
+  image_ratio: string;
+  lgColumn: any;
+  mdColumn: any;
+  smColumn: any;
+  column: any;
+}
+
 interface ICardGenericProps {
   id: AtomID;
   title: string;
   image_url: string;
+  sizes: ICardSizes;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
 }
 
-const card_height = USER_DISPLAY.card_height;
+//const card_height = USER_DISPLAY.card_height;
 const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 
@@ -22,14 +32,14 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   return (
     <Box
       padding={padding_grid}
-      height={card_height}
-      lgColumn={2}
-      mdColumn={3}
-      smColumn={4}
-      column={6}
+      height={props.sizes.height}
+      lgColumn={props.sizes.lgColumn}
+      mdColumn={props.sizes.mdColumn}
+      smColumn={props.sizes.smColumn}
+      column={props.sizes.column}
     >
       <Box height="100%" borderSize="lg" rounding={4}>
-        <Box height="80%" width="100%">
+        <Box height={props.sizes.image_ratio} width="100%">
           <Mask rounding={4} height="100%" width="100%">
             <Link href={{ pathname: props.pathname, query: props.queryObject }}>
               <a>
@@ -65,27 +75,6 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
               padding={0}
             >
               {props.children}
-              {/* <Box paddingX={0}>
-                {props.saved_enabled && (
-                  <IconButton
-                    accessibilityLabel="edit"
-                    icon="edit"
-                    iconColor="darkGray"
-                    size={size_icon}
-                    onClick={props.edit_handler}
-                  />
-                )}
-              </Box>
-              <Box paddingX={0}>
-                <IconButton
-                  accessibilityLabel="save"
-                  icon="angled-pin"
-                  iconColor={props.saved_enabled ? "red" : "darkGray"}
-                  size={size_icon}
-                  onClick={props.saved_handler}
-                  disabled={props.saved_desactivated}
-                />
-              </Box> */}
             </Box>
           </Box>
         </Box>

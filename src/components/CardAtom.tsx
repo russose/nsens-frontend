@@ -19,9 +19,7 @@ interface ICardAtomProps {
   edit_handler: any;
 }
 
-const card_height = USER_DISPLAY.card_height;
-const title_card_size = USER_DISPLAY.title_card_size;
-const padding_grid: any = USER_DISPLAY.padding_grid;
+const card_sizes = USER_DISPLAY.atom_sizes;
 const size_icon: any = USER_DISPLAY.size_icon;
 
 const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
@@ -30,6 +28,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
       id={props.id}
       title={props.title}
       image_url={props.image_url}
+      sizes={card_sizes}
       pathname={props.pathname}
       queryObject={props.queryObject}
     >

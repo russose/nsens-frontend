@@ -35,12 +35,28 @@ const CONFIG_GUI = {
     },
   },
   display: {
-    card_height: 250,
+    //card_height: 250,
     size_icon: "sm",
     padding_grid: 2,
     title_card_size: "sm",
     header_size: "sm",
-    path_knowbook_image: "/500px-Book_closed_template.svg.png",
+    atom_sizes: {
+      height: 250,
+      image_ratio: "80%",
+      lgColumn: 2,
+      mdColumn: 3,
+      smColumn: 4,
+      column: 6,
+    },
+    knowbook_sizes: {
+      height: 200,
+      image_ratio: "80%",
+      lgColumn: 2,
+      mdColumn: 2,
+      smColumn: 4,
+      column: 4,
+    },
+    path_knowbook_image: "/500px-Question_book-new.svg.png",
   },
 };
 

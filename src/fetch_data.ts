@@ -1,7 +1,51 @@
 //import fetch from "isomorphic-unfetch";
 import { IAtom, newAtom, empty_value_atom } from "./types";
-import { prepare_url } from "./utils";
 import { CONFIG_FETCHING } from "./config";
+
+export function prepare_url(root_url: string, params: Object): string {
+  let query: string = "";
+  Object.entries(params).forEach(([key, value]) => {
+    query += "&" + key + "=" + value;
+  });
+  return root_url + "?origin=*" + encodeURI(query);
+}
+
+export function removeBadImages(list_information_atoms: IAtom[]): IAtom[] {
+  const list_information_atoms_updated: IAtom[] = [];
+  list_information_atoms.forEach((item) => {
+    const item_updated = item;
+    if (
+      item.image_url === empty_value_atom ||
+      item.image_width > 2 * CONFIG_FETCHING.max_width_image ||
+      !["jpg", "JPG", "png", "PNG", "tif", "TIF", "svg", "SVG"].includes(
+        item.image_url.slice(-3)
+      )
+    ) {
+      item_updated.image_url = CONFIG_FETCHING.path_empty_image;
+      //console.log(item.title);
+    }
+    list_information_atoms_updated.push(item_updated);
+  });
+  return list_information_atoms_updated;
+}
+
+export async function searchItemsFetchDataCleanImages(
+  searchPattern: string,
+  ROOT_URL: string,
+  nb_items: number
+): Promise<IAtom[]> {
+  const atomsList = await fetchAtomsFromWeb(searchPattern, ROOT_URL, nb_items);
+  let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
+  atomsListWithImages = removeBadImages(atomsListWithImages);
+  //console.time("First");
+  atomsListWithImages = await enrichImagesOneByOneFromWikiCommonPediaParralel(
+    atomsListWithImages,
+    CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_EN
+  );
+  //console.timeEnd("First");
+
+  return atomsListWithImages;
+}
 
 export async function fetchArticle(
   pattern: string,

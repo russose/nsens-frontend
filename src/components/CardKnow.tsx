@@ -4,6 +4,7 @@ import { Box } from "gestalt";
 import { AtomID } from "../types";
 import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
+import { USER_DISPLAY } from "../config";
 
 interface ICardKnowProps {
   id: AtomID;
@@ -14,12 +15,15 @@ interface ICardKnowProps {
   amount: number | string;
 }
 
+const card_sizes = USER_DISPLAY.knowbook_sizes;
+
 const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
   return (
     <CardGeneric
       id={props.id}
       title={props.title}
       image_url={props.image_url}
+      sizes={card_sizes}
       pathname={props.pathname}
       queryObject={props.queryObject}
     >

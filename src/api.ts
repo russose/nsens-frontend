@@ -3,11 +3,11 @@ import {
   fetchAtomsFromWeb,
   enrichImagesBatchFromWikipediaEN,
   enrichImagesOneByOneFromWikiCommonPediaParralel,
+  searchItemsFetchDataCleanImages,
 } from "./fetch_data";
-import { removeBadImages } from "./utils";
 import { CONFIG_FETCHING } from "./config";
 
-import myData from "../src/data/cache_user1.json";
+import myData from "./data/cache_user1.json";
 import { DataStore } from "./states/DataStore";
 const myUserData = myData.user as IUserData;
 
@@ -45,24 +45,6 @@ export async function indexSyncServerClientBack(
   }
 
   return output;
-}
-
-export async function searchItemsFetchDataCleanImages(
-  searchPattern: string,
-  ROOT_URL: string,
-  nb_items: number
-): Promise<IAtom[]> {
-  const atomsList = await fetchAtomsFromWeb(searchPattern, ROOT_URL, nb_items);
-  let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
-  atomsListWithImages = removeBadImages(atomsListWithImages);
-  //console.time("First");
-  atomsListWithImages = await enrichImagesOneByOneFromWikiCommonPediaParralel(
-    atomsListWithImages,
-    CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_EN
-  );
-  //console.timeEnd("First");
-
-  return atomsListWithImages;
 }
 
 export function save_object_to_file(

@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "description": "",
+  "description": "frontend for Dimension5",
   "main": "index.js",
   "scripts": {
     "dev": "next",
@@ -10,8 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Salvatore Russo",
+  "license": "To be defined",
   "dependencies": {
     "gestalt": "^1.52.0",
     "mobx": "^5.15.4",

@@ -15,7 +15,7 @@ interface IAtomCardGenericProps {
   edit_handler: any;
 }
 
-const card_height = USER_DISPLAY.card_height;
+const card_height = USER_DISPLAY.atom_sizes.height;
 const title_card_size = USER_DISPLAY.title_card_size;
 const padding_grid: any = USER_DISPLAY.padding_grid;
 const size_icon: any = USER_DISPLAY.size_icon;
