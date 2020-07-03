@@ -1,5 +1,4 @@
 import { observer } from "mobx-react";
-import { useStores } from "../src/states/_RootStore";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import {
@@ -7,10 +6,11 @@ import {
   onSaved,
   isItemSaved,
   isItemSavedActivated,
-} from "../src/_handlers";
+} from "../src/handlers";
 import { Box } from "gestalt";
-import ModalEditKnowbooks from "../src/components/ModalEditKnowbooks";
+import EditKnowbooks from "../src/components/EditKnowbooks";
 import CardAtomGrid from "../src/components/CardAtomGrid";
+import { useStores } from "../src/stores/_RootStore";
 
 const Knowbook: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
@@ -23,17 +23,13 @@ const Knowbook: React.FunctionComponent = (props) => {
       <CardAtomGrid
         atoms={dataStore.getKnowbookAtomsList(selected_knowbook)}
         isItemSaved_handler={isItemSaved(dataStore)}
-        isItemSavedActivated_handler={isItemSavedActivated(dataStore)}
+        isItemSavedActionable_handler={isItemSavedActivated(dataStore)}
         saved_handler={onSaved(dataStore)}
         edit_handler={onEditKnowbooks(uiStore, dataStore)}
       />
-      <ModalEditKnowbooks />
+      <EditKnowbooks />
     </Box>
   );
 };
-
-// (Knowbook as any).getLayoutMobile = (page: NextPage) => (
-//   <MobileKnowbookLayout>{page}</MobileKnowbookLayout>
-// );
 
 export default observer(Knowbook);

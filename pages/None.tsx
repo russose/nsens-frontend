@@ -4,38 +4,27 @@ import {
   onEditKnowbooks,
   isItemSaved,
   isItemSavedActivated,
-} from "../src/_handlers";
-import { useStores } from "../src/states/_RootStore";
-import { NextPage } from "next";
+} from "../src/handlers";
+import { useStores } from "../src/stores/_RootStore";
 import { Box } from "gestalt";
-import ModalEditKnowbooks from "../src/components/ModalEditKnowbooks";
+import EditKnowbooks from "../src/components/EditKnowbooks";
 import CardAtomGrid from "../src/components/CardAtomGrid";
 
 const Saved: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
 
-  const AtomsInNoKnowbooks = Array.from(dataStore.saved.values()).filter(
-    (atom) => {
-      return atom.tags.length === 0;
-    }
-  );
-
   return (
     <Box>
       <CardAtomGrid
-        atoms={AtomsInNoKnowbooks}
+        atoms={dataStore.ItemsInNoKnowbook()}
         isItemSaved_handler={isItemSaved(dataStore)}
-        isItemSavedActivated_handler={isItemSavedActivated(dataStore)}
+        isItemSavedActionable_handler={isItemSavedActivated(dataStore)}
         saved_handler={onSaved(dataStore)}
         edit_handler={onEditKnowbooks(uiStore, dataStore)}
       />
-      <ModalEditKnowbooks />
+      <EditKnowbooks />
     </Box>
   );
 };
-
-// (Saved as any).getLayoutMobile = (page: NextPage) => (
-//   <MobileKnowbookLayout>{page}</MobileKnowbookLayout>
-// );
 
 export default observer(Saved);

@@ -1,11 +1,10 @@
 import { observer } from "mobx-react";
-import { useStores } from "../src/states/_RootStore";
+import { useStores } from "../src/stores/_RootStore";
 import { useRouter } from "next/router";
-
 import { Box } from "gestalt";
-import { CONFIG_FETCHING } from "../src/config";
-import { fetchArticle } from "../src/fetch_data";
 import { JsText } from "../src/components/js_components";
+import { CONFIG_FETCHING } from "../src/srcCommon/config";
+import { fetchArticle } from "../src/srcCommon/fetchAtom";
 
 const Article: React.FunctionComponent = (props) => {
   const { uiStore } = useStores();

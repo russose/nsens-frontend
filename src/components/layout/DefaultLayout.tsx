@@ -1,25 +1,33 @@
-import { Sticky, Box, Container } from "gestalt";
+import { Sticky, Box } from "gestalt";
 import MenuBar from "../MenuBar";
-import { USER_GUI_CONFIG, USER_DISPLAY } from "../../config";
-import { useStores } from "../../states/_RootStore";
+import { USER_GUI_CONFIG, USER_DISPLAY } from "../../srcCommon/config";
+import { useStores } from "../../stores/_RootStore";
 import SearchBar from "../SearchBar";
-import { onSearchHome } from "../../_handlers";
+import { onSearchHome } from "../../handlers";
 import { JsHeading } from "../js_components";
 import { useRouter } from "next/router";
 import { observer } from "mobx-react";
+import { initializeApp } from "../../initialization";
+import { _login, _getUser } from "../../_api";
+import AvatarLink from "../AvatarLink";
 
 const header_size = USER_DISPLAY.header_size;
 
 const DefaultLayout: React.FunctionComponent = (props) => {
-  const { uiStore } = useStores();
+  const { dataStore, uiStore } = useStores();
+  const router = useRouter();
+
+  if (dataStore.user === null) {
+    initializeApp(dataStore);
+  }
 
   const navigationMenu = (
     <Box color="white" padding={1} display="block">
       <MenuBar
-        label_active="Saved"
         buttons_config={USER_GUI_CONFIG.menuBar}
-        pathnames={["/", "/Knowbooks", "/User", "/More"]}
-        queryObjects={[{ a: "n" }, {}, {}, {}]}
+        pathnames={["/", "/Knowbooks", "/Vizs"]}
+        loginPath="/User"
+        isLogged={dataStore.isLogged}
       />
     </Box>
   );
@@ -27,8 +35,16 @@ const DefaultLayout: React.FunctionComponent = (props) => {
   const searchbar = (
     <SearchBar
       placeholder={USER_GUI_CONFIG.searchBar}
-      handler={onSearchHome(uiStore)}
+      handler={onSearchHome(dataStore, uiStore)}
       value={uiStore.searchPattern}
+    />
+  );
+
+  const avatar = (
+    <AvatarLink
+      username={dataStore.user === null ? "" : dataStore.user.username}
+      logged={dataStore.isLogged}
+      pathname="/User"
     />
   );
 
@@ -42,18 +58,25 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     );
   };
 
-  const router = useRouter();
-  let Header;
+  let header;
   if (router.pathname === "/" || router.pathname === "/index") {
-    Header = searchbar;
+    header = searchbar;
+  } else if (router.pathname === "/User") {
+    if (dataStore.isLogged) {
+      header = headerText(
+        dataStore.user === null ? "" : dataStore.user.username
+      );
+    } else {
+      header = headerText(USER_GUI_CONFIG.loginSignup.title);
+    }
   } else if (router.pathname === "/Knowbooks") {
-    Header = headerText(USER_GUI_CONFIG.knowbooks_title);
-  } else if (router.pathname === "Saved") {
-    Header = headerText(USER_GUI_CONFIG.AllSaved_title);
-  } else if (router.pathname === "None") {
-    Header = headerText(USER_GUI_CONFIG.None_Title);
+    header = headerText(USER_GUI_CONFIG.knowbooks.knowbooks_title);
+  } else if (router.pathname === "/Saved") {
+    header = headerText(USER_GUI_CONFIG.knowbooks.AllSaved_title);
+  } else if (router.pathname === "/None") {
+    header = headerText(USER_GUI_CONFIG.knowbooks.None_Title);
   } else {
-    Header = headerText(router.query.k as string);
+    header = headerText(router.query.k as string);
   }
 
   return (
@@ -77,7 +100,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
               mdColumn={8}
               lgColumn={8}
             >
-              {Header}
+              {header}
             </Box>
             <Box
               column={0}
@@ -90,6 +113,16 @@ const DefaultLayout: React.FunctionComponent = (props) => {
               lgDisplay="inlineBlock"
             >
               {navigationMenu}
+            </Box>
+            <Box
+              padding={2}
+              display="inlineBlock"
+              column={2}
+              smColumn={2}
+              mdColumn={1}
+              lgColumn={1}
+            >
+              {avatar}
             </Box>
           </Box>
         </Sticky>

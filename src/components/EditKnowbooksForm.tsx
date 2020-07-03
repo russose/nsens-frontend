@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Box, TextField, IconButton, Modal } from "gestalt";
-import { AtomID } from "../types";
-import { USER_DISPLAY } from "../config";
+import { AtomID } from "../srcCommon/types";
+import { USER_DISPLAY } from "../srcCommon/config";
 import { JsCheckbox, JsText } from "./js_components";
 
 export interface ICheckboxes {
@@ -9,7 +9,7 @@ export interface ICheckboxes {
   activated: boolean;
 }
 
-interface IModalTextInputCheckboxesProps {
+interface IEditKnowbooksFormProps {
   id: AtomID;
   title: string;
   input_placeholder: string;
@@ -23,7 +23,7 @@ interface IModalTextInputCheckboxesProps {
 // const dim = 2 * USER_DISPLAY.card_dim;
 const title_card_size = USER_DISPLAY.title_card_size;
 
-const ModalTextInputCheckboxes: React.FunctionComponent<IModalTextInputCheckboxesProps> = (
+const EditKnowbooksForm: React.FunctionComponent<IEditKnowbooksFormProps> = (
   props
 ) => {
   return (
@@ -74,7 +74,7 @@ const ModalTextInputCheckboxes: React.FunctionComponent<IModalTextInputCheckboxe
             iconColor="darkGray"
             size="md"
             onClick={props.handler_cancel}
-          />{" "}
+          />
           <IconButton
             accessibilityLabel="ok"
             icon="check-circle"
@@ -89,4 +89,4 @@ const ModalTextInputCheckboxes: React.FunctionComponent<IModalTextInputCheckboxe
   );
 };
 
-export default observer(ModalTextInputCheckboxes);
+export default observer(EditKnowbooksForm);

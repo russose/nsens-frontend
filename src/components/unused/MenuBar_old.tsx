@@ -1,13 +1,14 @@
 import { Box } from "gestalt";
-import { IConfigMenuBar } from "../srcCommon/types";
-import ButtonLink from "./ButtonLink";
-import { observer } from "mobx-react";
+
+import { ParsedUrlQueryInput } from "querystring";
+import { IConfigMenuBar } from "../../srcCommon/types";
+import ButtonLink from "../ButtonLink";
 
 interface IMenuBarProps {
   buttons_config: IConfigMenuBar[];
   pathnames: string[];
-  isLogged: boolean;
-  loginPath: string;
+  // queryObjects?: ParsedUrlQueryInput[];
+  label_active: string;
 }
 
 const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
@@ -27,11 +28,9 @@ const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
             key={index.toString()}
             icon={data.icon}
             label={data.label}
-            pathname={
-              !props.isLogged && index !== 0
-                ? props.loginPath
-                : props.pathnames[index]
-            }
+            pathname={props.pathnames[index]}
+            // queryObject={props.queryObjects[index]}
+            // enabled={data.label === props.label_active ? true : false}
           />
         );
       })}
@@ -39,4 +38,4 @@ const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
   );
 };
 
-export default observer(MenuBar);
+export default MenuBar;

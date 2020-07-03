@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 import "../styles.css";
 import "gestalt/dist/gestalt.css";
-import { ContextStores, RootStore } from "../src/states/_RootStore";
+import { ContextStores, RootStore } from "../src/stores/_RootStore";
 import { configure } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 

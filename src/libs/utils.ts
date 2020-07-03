@@ -1,3 +1,5 @@
+import Router from "next/router";
+
 export function findUndefined(list: Object[]) {
   list.forEach((item) => {
     Object.values(item).forEach((value) => {
@@ -8,12 +10,17 @@ export function findUndefined(list: Object[]) {
   });
 }
 
-//My initial findbyID function
-// export function findById(array: IAtom[], ids: number[]): IAtom[] {
-//   return ids
-//     .map((id) => array.find((el) => el.pageid_wp === id))
-//     .filter(isDefined);
-// }
+export function goHome() {
+  Router.push({
+    pathname: "/",
+  });
+}
+
+export function goLogin() {
+  Router.push({
+    pathname: "/User",
+  });
+}
 
 /**
  * Returns a type predicate to filter undefined values of a list.

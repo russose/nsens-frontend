@@ -13,20 +13,21 @@
   "author": "Salvatore Russo",
   "license": "To be defined",
   "dependencies": {
-    "gestalt": "^1.52.0",
+    "axios": "^0.19.2",
+    "fetch": "^1.1.0",
+    "gestalt": "^1.63.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
-    "next": "^9.4.0",
+    "next": "^9.4.4",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "swr": "^0.2.0"
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.4",
     "@types/gestalt": "^1.15.3",
-    "@types/node": "^13.13.6",
-    "@types/react": "^16.9.35",
-    "typescript": "^3.9.2"
+    "@types/node": "^13.13.12",
+    "@types/react": "^16.9.41",
+    "typescript": "^3.9.6"
   }
 }

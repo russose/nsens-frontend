@@ -1,11 +1,10 @@
 import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
-import { JsText } from "./js_components";
-import { Image, Box, IconButton, Mask } from "gestalt";
-import { AtomID } from "../types";
-import { USER_DISPLAY } from "../config";
+import { Box, IconButton } from "gestalt";
+import { AtomID } from "../srcCommon/types";
 import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
+import { USER_DISPLAY } from "../srcCommon/config";
 
 interface ICardAtomProps {
   id: AtomID;
@@ -13,8 +12,8 @@ interface ICardAtomProps {
   image_url: string;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
+  saved_actionable: boolean;
   saved_enabled: boolean;
-  saved_desactivated: boolean;
   saved_handler: (args: { event: SyntheticEvent<any> }) => void;
   edit_handler: any;
 }
@@ -50,7 +49,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
           iconColor={props.saved_enabled ? "red" : "darkGray"}
           size={size_icon}
           onClick={props.saved_handler}
-          disabled={props.saved_desactivated}
+          disabled={!props.saved_actionable}
         />
       </Box>
     </CardGeneric>

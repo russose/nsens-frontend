@@ -1,11 +1,12 @@
 import { observer } from "mobx-react";
-import { useStores } from "../src/states/_RootStore";
 import { Box } from "gestalt";
-import { USER_GUI_CONFIG, USER_DISPLAY } from "../src/config";
+
 import CardKnowGrid from "../src/components/CardKnowGrid";
 import CardKnow from "../src/components/CardKnow";
+import { useStores } from "../src/stores/_RootStore";
+import { USER_DISPLAY, USER_GUI_CONFIG } from "../src/srcCommon/config";
 
-const path_knowbook_image = USER_DISPLAY.path_knowbook_image;
+const path_knowbook_image = USER_DISPLAY.paths.knowbook_image;
 
 const Knowbooks: React.FunctionComponent = (props) => {
   const { dataStore } = useStores();
@@ -25,7 +26,7 @@ const Knowbooks: React.FunctionComponent = (props) => {
       >
         <CardKnow
           id="saved"
-          title={USER_GUI_CONFIG.AllSaved_title}
+          title={USER_GUI_CONFIG.knowbooks.AllSaved_title}
           image_url={path_knowbook_image}
           pathname="Saved"
           queryObject={{}}
@@ -33,7 +34,7 @@ const Knowbooks: React.FunctionComponent = (props) => {
         />
         <CardKnow
           id="none"
-          title={USER_GUI_CONFIG.None_Title}
+          title={USER_GUI_CONFIG.knowbooks.None_Title}
           image_url={path_knowbook_image}
           pathname="None"
           queryObject={{}}
@@ -44,9 +45,5 @@ const Knowbooks: React.FunctionComponent = (props) => {
     </Box>
   );
 };
-
-// (Knowbooks as any).getLayoutMobile = (page: NextPage) => (
-//   <MobileKnowbookLayout>{page}</MobileKnowbookLayout>
-// );
 
 export default observer(Knowbooks);

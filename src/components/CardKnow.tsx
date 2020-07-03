@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { JsText } from "./js_components";
 import { Box } from "gestalt";
-import { AtomID } from "../types";
+import { AtomID } from "../srcCommon/types";
 import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
-import { USER_DISPLAY } from "../config";
+import { USER_DISPLAY } from "../srcCommon/config";
 
 interface ICardKnowProps {
   id: AtomID;

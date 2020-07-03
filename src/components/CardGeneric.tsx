@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { JsText } from "./js_components";
 import { Image, Box, Mask } from "gestalt";
-import { AtomID } from "../types";
-import { USER_DISPLAY } from "../config";
+import { AtomID } from "../srcCommon/types";
+import { USER_DISPLAY } from "../srcCommon/config";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
 

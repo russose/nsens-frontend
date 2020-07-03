@@ -1,14 +1,6 @@
-//import fetch from "isomorphic-unfetch";
+import { CONFIG_FETCHING, USER_DISPLAY } from "./config";
 import { IAtom, newAtom, empty_value_atom } from "./types";
-import { CONFIG_FETCHING } from "./config";
-
-export function prepare_url(root_url: string, params: Object): string {
-  let query: string = "";
-  Object.entries(params).forEach(([key, value]) => {
-    query += "&" + key + "=" + value;
-  });
-  return root_url + "?origin=*" + encodeURI(query);
-}
+import { fetch_data } from "./fetch";
 
 export function removeBadImages(list_information_atoms: IAtom[]): IAtom[] {
   const list_information_atoms_updated: IAtom[] = [];
@@ -21,8 +13,7 @@ export function removeBadImages(list_information_atoms: IAtom[]): IAtom[] {
         item.image_url.slice(-3)
       )
     ) {
-      item_updated.image_url = CONFIG_FETCHING.path_empty_image;
-      //console.log(item.title);
+      item_updated.image_url = USER_DISPLAY.paths.empty_image;
     }
     list_information_atoms_updated.push(item_updated);
   });
@@ -74,28 +65,6 @@ export async function fetchArticle(
   } else {
     return article;
   }
-}
-
-export async function fetch_data(
-  ROOT_URL: string,
-  PARAMS: Object,
-  output_URL: boolean
-): Promise<any> {
-  const header = {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
-    },
-  };
-  // Fetch data from external API
-  let res = await fetch(prepare_url(ROOT_URL, PARAMS), header);
-  const data = await res.json();
-
-  if (output_URL) {
-    console.log(prepare_url(ROOT_URL, PARAMS));
-  }
-
-  return data;
 }
 
 export async function fetchAtomsFromWeb(
@@ -266,7 +235,7 @@ export async function enrichOneImageFromWikiCommonPedia(
 ): Promise<IAtom> {
   const item_updated = item;
 
-  if (item.image_url !== CONFIG_FETCHING.path_empty_image) {
+  if (item.image_url !== USER_DISPLAY.paths.empty_image) {
     return item;
   }
 

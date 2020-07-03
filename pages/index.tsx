@@ -4,37 +4,27 @@ import {
   onEditKnowbooks,
   isItemSaved,
   isItemSavedActivated,
-} from "../src/_handlers";
-import { useStores } from "../src/states/_RootStore";
-import { GetServerSideProps } from "next";
-
-import { CONFIG_FETCHING } from "../src/config";
-import { ISyncBackFrontProps, indexSyncServerClientBack } from "../src/api";
-import ModalEditKnowbooks from "../src/components/ModalEditKnowbooks";
+} from "../src/handlers";
+import { useStores } from "../src/stores/_RootStore";
+import EditKnowbooks from "../src/components/EditKnowbooks";
 import { Box } from "gestalt";
 import CardAtomGrid from "../src/components/CardAtomGrid";
+import { initializeApp } from "../src/initialization";
+import { _login, _getUser } from "../src/_api";
 
-const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
+const Home: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
-
-  if (props.userData !== null) {
-    dataStore.setUserData(props.userData);
-  } else {
-    dataStore.addAtomsInHistory(props.atomsListResult);
-  }
 
   return (
     <Box>
       <CardAtomGrid
-        atoms={dataStore
-          .getHistoryList()
-          .slice(-CONFIG_FETCHING.amount_data_fetched)}
+        atoms={dataStore.getFeedList()}
         isItemSaved_handler={isItemSaved(dataStore)}
-        isItemSavedActivated_handler={isItemSavedActivated(dataStore)}
+        isItemSavedActionable_handler={isItemSavedActivated(dataStore)}
         saved_handler={onSaved(dataStore)}
         edit_handler={onEditKnowbooks(uiStore, dataStore)}
       />
-      <ModalEditKnowbooks />
+      <EditKnowbooks />
     </Box>
   );
 };
@@ -43,18 +33,18 @@ const Home: React.FunctionComponent<ISyncBackFrontProps> = (props) => {
 //   <MobileIndexLayout>{page}</MobileIndexLayout>
 // );
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const query_search = context.query.q as string | undefined;
-  const query_action = context.query.a as string | undefined;
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const query_search = context.query.q as string | undefined;
+//   const query_action = context.query.a as string | undefined;
 
-  const output: ISyncBackFrontProps = await indexSyncServerClientBack(
-    query_search,
-    query_action
-  );
+//   const output: ISyncBackFrontProps = await indexSyncServerClientBack(
+//     query_search,
+//     query_action
+//   );
 
-  return {
-    props: output,
-  };
-};
+//   return {
+//     props: output,
+//   };
+// };
 
 export default observer(Home);
