@@ -1,14 +1,16 @@
 import { observer } from "mobx-react";
 import { Box } from "gestalt";
-import { IKnowbook } from "../srcCommon/types";
+import { IKnowbook } from "../common/types";
 import { DataStore } from "../stores/DataStore";
 import CardKnow from "./CardKnow";
-import { USER_DISPLAY } from "../srcCommon/config";
+import { USER_DISPLAY } from "../common/config";
 
 interface ICardKnowGridProps {
   knowbooks: IKnowbook[];
   datastore: DataStore;
 }
+
+const image_path = USER_DISPLAY.paths.knowbook_image;
 
 const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
   if (props.knowbooks === undefined) {
@@ -28,7 +30,7 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
             key={item.name}
             id={item.name}
             title={item.name}
-            image_url={USER_DISPLAY.paths.knowbook_image}
+            image_url={image_path}
             pathname={"/Knowbook"}
             queryObject={{ k: item.name }}
             amount={item.items.length}

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useStores } from "../stores/_RootStore";
 import { Box } from "gestalt";
-import { USER_GUI_CONFIG } from "../srcCommon/config";
+import { USER_GUI_CONFIG } from "../common/config";
 import LoginSignupForm from "./LoginSignupForm";
 import { onChangeUsernamePassword, onSubmitLoginSignup } from "../handlers";
 

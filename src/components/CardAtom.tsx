@@ -1,10 +1,10 @@
 import { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
 import { Box, IconButton } from "gestalt";
-import { AtomID } from "../srcCommon/types";
+import { AtomID } from "../common/types";
 import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
-import { USER_DISPLAY } from "../srcCommon/config";
+import { USER_DISPLAY } from "../common/config";
 
 interface ICardAtomProps {
   id: AtomID;
@@ -20,6 +20,7 @@ interface ICardAtomProps {
 
 const card_sizes = USER_DISPLAY.atom_sizes;
 const size_icon: any = USER_DISPLAY.size_icon;
+const color_image = USER_DISPLAY.colors.item_color_image;
 
 const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
   return (
@@ -27,6 +28,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
       id={props.id}
       title={props.title}
       image_url={props.image_url}
+      color_image={color_image}
       sizes={card_sizes}
       pathname={props.pathname}
       queryObject={props.queryObject}

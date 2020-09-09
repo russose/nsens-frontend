@@ -1,6 +1,6 @@
 import { DataStore } from "./stores/DataStore";
-import { KnowbookID, AtomID } from "./srcCommon/types";
-import { CONFIG_FETCHING } from "./srcCommon/config";
+import { KnowbookID, AtomID } from "./common/types";
+import { CONFIG_FETCHING } from "./common/config";
 import Router from "next/router";
 import { UIStore } from "./stores/UIStore";
 import { _login, _signup, _logout } from "./_api";
@@ -23,6 +23,8 @@ export const onSearchHome = (dataStore: DataStore, uiStore: UIStore) => (
   uiStore.setSearchPattern(input.value);
   if (uiStore.searchPattern.length > CONFIG_FETCHING.search_min_length_search) {
     dataStore.setFeedFromSearch(input.value);
+  } else if (uiStore.searchPattern.length === 0) {
+    dataStore.setFeedFromRandom();
   }
 };
 
@@ -164,6 +166,7 @@ export const onSubmitLoginSignup = (uiStore: UIStore, dataStore: DataStore) => (
         goHome();
       })
       .catch(function (error) {
+        // console.log(error);
         console.log("error in login...");
       });
   } else if (type === "signup") {

@@ -5,29 +5,31 @@
   "main": "index.js",
   "scripts": {
     "dev": "next",
+    "dev-pm2": "pm2 start next --name Front",
     "build": "next build",
     "start": "next start",
+    "start-pm2": "pm2 start \"next start\" --name Front",
+    "docker_old": "next build && pm2-runtime \"next start\" --name Front",
+    "docker": "next build && next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Salvatore Russo",
   "license": "To be defined",
   "dependencies": {
-    "axios": "^0.19.2",
-    "fetch": "^1.1.0",
-    "gestalt": "^1.63.0",
-    "mobx": "^5.15.4",
-    "mobx-react": "^6.2.2",
-    "next": "^9.4.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
-  },
-  "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-proposal-decorators": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
     "@types/gestalt": "^1.15.3",
-    "@types/node": "^13.13.12",
-    "@types/react": "^16.9.41",
-    "typescript": "^3.9.6"
-  }
+    "@types/node": "^13.13.15",
+    "@types/react": "^16.9.49",
+    "axios": "^0.19.2",
+    "gestalt": "^1.63.0",
+    "mobx": "^5.15.6",
+    "mobx-react": "^6.3.0",
+    "next": "^9.5.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "typescript": "^3.9.7"
+  },
+  "devDependencies": {}
 }

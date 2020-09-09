@@ -1,5 +1,5 @@
 import { observable, action, computed } from "mobx";
-import { AtomID, KnowbookID } from "../srcCommon/types";
+import { AtomID, KnowbookID } from "../common/types";
 import { DataStore } from "./DataStore";
 
 export class UIStore {

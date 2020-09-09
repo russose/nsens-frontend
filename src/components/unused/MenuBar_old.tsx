@@ -1,7 +1,7 @@
 import { Box } from "gestalt";
 
 import { ParsedUrlQueryInput } from "querystring";
-import { IConfigMenuBar } from "../../srcCommon/types";
+import { IConfigMenuBar } from "../../common/types";
 import ButtonLink from "../ButtonLink";
 
 interface IMenuBarProps {

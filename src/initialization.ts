@@ -1,13 +1,6 @@
 import { DataStore } from "./stores/DataStore";
-import { _api } from "./srcCommon/fetch";
-import {
-  _getUser,
-  _getRefreshFeed,
-  _getSavedList,
-  _getKnowbooksList,
-} from "./_api";
-
-const searchPattern = "einstein";
+import { _api } from "./common/fetch";
+import { _getUser, _getSavedList, _getKnowbooksList } from "./_api";
 
 export async function initializeApp(datastore: DataStore) {
   try {
@@ -15,9 +8,9 @@ export async function initializeApp(datastore: DataStore) {
     datastore.setUser({ username: user });
 
     if (!datastore.isLogged) {
-      datastore.setFeedFromSearch(searchPattern);
-      // datastore.setSaved([]);
-      // datastore.setKnowbooks([]);
+      datastore.setFeedFromRandom();
+      datastore.setSaved([]);
+      datastore.setKnowbooks([]);
     } else {
       await initializeUserData(datastore);
     }
@@ -29,11 +22,12 @@ export async function initializeApp(datastore: DataStore) {
 export async function initializeUserData(datastore: DataStore) {
   try {
     if (datastore.isLogged) {
-      const atoms = await _getRefreshFeed();
+      // const atoms = await _getAllFeed();
+      // datastore.setFeed(atoms);
+      datastore.setFeedFromRandom();
       const saved = await _getSavedList();
-      const knowbooks = await _getKnowbooksList();
-      datastore.setFeed(atoms);
       datastore.setSaved(saved);
+      const knowbooks = await _getKnowbooksList();
       datastore.setKnowbooks(knowbooks);
     }
   } catch (error) {

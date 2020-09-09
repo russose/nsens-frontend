@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import { Box, TextField, IconButton, Modal } from "gestalt";
-import { AtomID } from "../srcCommon/types";
-import { USER_DISPLAY } from "../srcCommon/config";
+import { AtomID } from "../common/types";
 import { JsCheckbox, JsText } from "./js_components";
 
 export interface ICheckboxes {
@@ -20,22 +19,16 @@ interface IEditKnowbooksFormProps {
   handler_inputTags: any;
 }
 
-// const dim = 2 * USER_DISPLAY.card_dim;
-const title_card_size = USER_DISPLAY.title_card_size;
+const title_size = "md";
 
 const EditKnowbooksForm: React.FunctionComponent<IEditKnowbooksFormProps> = (
   props
 ) => {
   return (
-    <Modal
-      accessibilityModalLabel={props.title}
-      onDismiss={() => {}}
-      //size={modal_dim}
-      //size="80%"
-    >
+    <Modal accessibilityModalLabel={props.title} onDismiss={() => {}}>
       <Box color="white" rounding={3} padding={2}>
         <Box padding={1}>
-          <JsText align="center" size={title_card_size} weight="bold">
+          <JsText align="center" size={title_size} weight="bold">
             {props.title}
           </JsText>
         </Box>

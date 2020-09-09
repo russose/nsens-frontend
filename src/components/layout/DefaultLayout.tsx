@@ -1,6 +1,6 @@
 import { Sticky, Box } from "gestalt";
 import MenuBar from "../MenuBar";
-import { USER_GUI_CONFIG, USER_DISPLAY } from "../../srcCommon/config";
+import { USER_GUI_CONFIG, USER_DISPLAY } from "../../common/config";
 import { useStores } from "../../stores/_RootStore";
 import SearchBar from "../SearchBar";
 import { onSearchHome } from "../../handlers";
@@ -10,8 +10,11 @@ import { observer } from "mobx-react";
 import { initializeApp } from "../../initialization";
 import { _login, _getUser } from "../../_api";
 import AvatarLink from "../AvatarLink";
+import { CONFIG_OPS } from "../../common/config_env";
 
 const header_size = USER_DISPLAY.header_size;
+const color_menu = USER_DISPLAY.colors.menu;
+const color_headers = USER_DISPLAY.colors.headers as any;
 
 const DefaultLayout: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
@@ -26,6 +29,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
       <MenuBar
         buttons_config={USER_GUI_CONFIG.menuBar}
         pathnames={["/", "/Knowbooks", "/Vizs"]}
+        color={color_menu}
         loginPath="/User"
         isLogged={dataStore.isLogged}
       />
@@ -50,7 +54,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
 
   const headerText = (title: string) => {
     return (
-      <Box color="lightGray" borderSize="lg" rounding={2} padding={2}>
+      <Box color={color_headers} borderSize="lg" rounding={2} padding={2}>
         <JsHeading size={header_size} align="center">
           {title}
         </JsHeading>

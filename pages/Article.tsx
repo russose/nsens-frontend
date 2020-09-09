@@ -3,8 +3,8 @@ import { useStores } from "../src/stores/_RootStore";
 import { useRouter } from "next/router";
 import { Box } from "gestalt";
 import { JsText } from "../src/components/js_components";
-import { CONFIG_FETCHING } from "../src/srcCommon/config";
-import { fetchArticle } from "../src/srcCommon/fetchAtom";
+import { CONFIG_FETCHING } from "../src/common/config";
+import { fetchArticle } from "../src/common/fetchAtom";
 
 const Article: React.FunctionComponent = (props) => {
   const { uiStore } = useStores();

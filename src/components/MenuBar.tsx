@@ -1,11 +1,12 @@
 import { Box } from "gestalt";
-import { IConfigMenuBar } from "../srcCommon/types";
+import { IConfigMenuBar } from "../common/types";
 import ButtonLink from "./ButtonLink";
 import { observer } from "mobx-react";
 
 interface IMenuBarProps {
   buttons_config: IConfigMenuBar[];
   pathnames: string[];
+  color: any;
   isLogged: boolean;
   loginPath: string;
 }
@@ -13,11 +14,11 @@ interface IMenuBarProps {
 const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
   return (
     <Box
-      padding={0}
+      padding={1}
       display="flex"
       alignItems="center"
       justifyContent="around"
-      color="lightGray"
+      color={props.color}
       borderSize="lg"
       rounding={2}
     >

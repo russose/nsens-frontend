@@ -1,12 +1,6 @@
-import { LogActionType } from "./../srcCommon/types";
+import { LogActionType } from "./../common/types";
 import { observable, action, computed } from "mobx";
-import {
-  IAtom,
-  AtomID,
-  IUser,
-  KnowbookID,
-  IKnowbook,
-} from "../srcCommon/types";
+import { IAtom, AtomID, IUser, KnowbookID, IKnowbook } from "../common/types";
 import {
   _save,
   _unsave,
@@ -15,8 +9,11 @@ import {
   _addKnowbook,
   _removeItemFromKnowbook,
 } from "../_api";
-import { CONFIG_FETCHING } from "../srcCommon/config";
-import { searchItemsFetchDataCleanImages } from "../srcCommon/fetchAtom";
+import { CONFIG_FETCHING } from "../common/config";
+import {
+  randomItemsFetchDataCleanImages,
+  searchItemsFetchDataCleanImages,
+} from "../common/fetchAtom";
 
 export class DataStore {
   @observable private $user: IUser | null = null; //when username="", it means the user is not logged!
@@ -96,6 +93,20 @@ export class DataStore {
   /*****************FEED**************************** */
 
   @action
+  setFeedFromRandom(): void {
+    randomItemsFetchDataCleanImages(
+      CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA,
+      CONFIG_FETCHING.amount_data_fetched
+    )
+      .then((atoms) => {
+        this.setFeed(atoms);
+      })
+      .catch((error) => {
+        // console.log("error in find random");
+        console.log(error);
+      });
+  }
+  @action
   setFeedFromSearch(searchPattern: string): void {
     if (searchPattern === undefined) {
       return;
@@ -114,8 +125,9 @@ export class DataStore {
           _log(LogActionType.search, searchPattern);
         }
       })
-      .catch(() => {
+      .catch((error) => {
         console.log("error in seach from pattern");
+        console.log(error);
       });
   }
 
@@ -202,7 +214,7 @@ export class DataStore {
   //if the knowbook doesn't extist, create it
   addItemInKnowbook(knowbookID: KnowbookID, atomId: AtomID) {
     if (knowbookID === undefined || atomId === undefined) {
-      console.log("undefined values");
+      // console.log("undefined values");
       return;
     }
     //We do not check that atomId is in saved since it is blocked by the UI and the back check it by construction
@@ -314,7 +326,7 @@ export class DataStore {
         ? this.getSavedAtomsFromIds(my_knowbook.items)
         : [];
     } else {
-      console.log("impossible to provide Atoms List from knowbook");
+      // console.log("impossible to provide Atoms List from knowbook");
       return [];
     }
   }

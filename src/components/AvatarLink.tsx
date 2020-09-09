@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Avatar } from "gestalt";
 import { JsText } from "./js_components";
 import Link from "next/link";
-import { USER_DISPLAY } from "../srcCommon/config";
+import { USER_DISPLAY } from "../common/config";
 
 interface IAvatarLinkProps {
   username: string;
@@ -13,6 +13,7 @@ interface IAvatarLinkProps {
 }
 
 const icon_size = "md";
+const image_path = USER_DISPLAY.paths.user_image;
 
 const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
   return (
@@ -22,7 +23,7 @@ const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
           <a>
             <Avatar
               size={icon_size}
-              src={USER_DISPLAY.paths.user_image}
+              src={image_path}
               name={props.username}
               verified={props.logged}
             />

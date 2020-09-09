@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Box } from "gestalt";
-import { IAtom } from "../srcCommon/types";
+import { IAtom } from "../common/types";
 import CardAtom from "./CardAtom";
 
 interface ICardAtomGridProps {

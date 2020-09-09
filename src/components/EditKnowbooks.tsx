@@ -8,7 +8,7 @@ import {
   onChangeKnwobooksInclusionEditKnowbooks,
 } from "../handlers";
 import { Box } from "gestalt";
-import { USER_GUI_CONFIG } from "../srcCommon/config";
+import { USER_GUI_CONFIG } from "../common/config";
 
 const EditKnowbooks: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();

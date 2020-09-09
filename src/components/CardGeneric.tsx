@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { JsText } from "./js_components";
 import { Image, Box, Mask } from "gestalt";
-import { AtomID } from "../srcCommon/types";
-import { USER_DISPLAY } from "../srcCommon/config";
+import { AtomID } from "../common/types";
+import { USER_DISPLAY } from "../common/config";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
 
@@ -13,12 +13,17 @@ interface ICardSizes {
   mdColumn: any;
   smColumn: any;
   column: any;
+  lgPadding?: any;
+  mdPadding?: any;
+  smPadding?: any;
+  padding?: any;
 }
 
 interface ICardGenericProps {
   id: AtomID;
   title: string;
   image_url: string;
+  color_image: string;
   sizes: ICardSizes;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
@@ -26,35 +31,47 @@ interface ICardGenericProps {
 
 //const card_height = USER_DISPLAY.card_height;
 const title_card_size = USER_DISPLAY.title_card_size;
-const padding_grid: any = USER_DISPLAY.padding_grid;
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   return (
     <Box
-      padding={padding_grid}
+      // padding={padding_grid}
       height={props.sizes.height}
       lgColumn={props.sizes.lgColumn}
       mdColumn={props.sizes.mdColumn}
       smColumn={props.sizes.smColumn}
       column={props.sizes.column}
+      lgPadding={props.sizes.lgPadding}
+      mdPadding={props.sizes.mdPadding}
+      smPadding={props.sizes.smPadding}
+      padding={props.sizes.padding}
     >
-      <Box height="100%" borderSize="lg" rounding={4}>
+      <Box
+        height="100%"
+        borderSize="lg"
+        rounding={4}
+        display="flex"
+        direction="column"
+      >
         <Box height={props.sizes.image_ratio} width="100%">
           <Mask rounding={4} height="100%" width="100%">
             <Link href={{ pathname: props.pathname, query: props.queryObject }}>
               <a>
                 <Image
                   alt="image"
-                  color="white"
+                  color={props.image_url === "" ? props.color_image : "white"}
                   fit="cover"
                   naturalHeight={1}
                   naturalWidth={1}
                   loading="auto"
                   src={props.image_url}
+                  // src=""
                 ></Image>
               </a>
             </Link>
           </Mask>
+          <Box display="flex" direction="row" height="2%"></Box>
+
           <Box
             display="flex"
             direction="row"

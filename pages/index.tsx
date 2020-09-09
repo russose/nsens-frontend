@@ -9,8 +9,8 @@ import { useStores } from "../src/stores/_RootStore";
 import EditKnowbooks from "../src/components/EditKnowbooks";
 import { Box } from "gestalt";
 import CardAtomGrid from "../src/components/CardAtomGrid";
-import { initializeApp } from "../src/initialization";
 import { _login, _getUser } from "../src/_api";
+import { CONFIG_OPS } from "../src/common/config_env";
 
 const Home: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();

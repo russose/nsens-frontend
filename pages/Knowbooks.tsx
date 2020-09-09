@@ -4,7 +4,7 @@ import { Box } from "gestalt";
 import CardKnowGrid from "../src/components/CardKnowGrid";
 import CardKnow from "../src/components/CardKnow";
 import { useStores } from "../src/stores/_RootStore";
-import { USER_DISPLAY, USER_GUI_CONFIG } from "../src/srcCommon/config";
+import { USER_DISPLAY, USER_GUI_CONFIG } from "../src/common/config";
 
 const path_knowbook_image = USER_DISPLAY.paths.knowbook_image;
 

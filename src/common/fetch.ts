@@ -1,9 +1,9 @@
-import { CONFIG_FETCHING, CONFIG_OPS } from "./config";
-
 /************************************** */
 //Temporary when using self signed certificate
 // To be remove when in production
 import * as https from "https";
+import { CONFIG_OPS } from "./config_env";
+
 const agent = new https.Agent({
   rejectUnauthorized: false,
 });
@@ -44,10 +44,10 @@ export async function _api(
   data: object
 ): Promise<any> {
   const res = await axios({
-    httpsAgent: agent,
+    // httpsAgent: agent,
     withCredentials: true,
     method: method,
-    url: CONFIG_OPS.ROOT_URL_API_SERVER + uri,
+    url: CONFIG_OPS.BACK_URL + uri,
     data: data,
   });
 

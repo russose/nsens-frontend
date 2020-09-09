@@ -1,3 +1,7 @@
 .next
-node_modules
-Lien vers Business_Plan.pdf
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
