@@ -3,10 +3,8 @@ import "../styles.css";
 import "gestalt/dist/gestalt.css";
 import { ContextStores, RootStore } from "../src/stores/_RootStore";
 import { configure } from "mobx";
-import "mobx-react-lite/batchingForReactDom";
-
-import { NextPage } from "next";
 import DefaultLayout from "../src/components/layout/DefaultLayout";
+import { useStaticRendering } from "mobx-react";
 
 // enable MobX strict mode
 configure({ enforceActions: "observed" });
@@ -14,13 +12,20 @@ configure({ enforceActions: "observed" });
 const rootStore: RootStore = new RootStore();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const getLayoutMobile =
-    (Component as any).getLayoutMobile || ((page: NextPage) => <>{page}</>);
+  // const getLayoutMobile =
+  //   (Component as any).getLayoutMobile || ((page: NextPage) => <>{page}</>);
+
+  //MobX
+  const isServer = typeof window === "undefined";
+  useStaticRendering(isServer);
 
   return (
     <ContextStores.Provider value={{ rootStore: rootStore }}>
-      <DefaultLayout>
+      {/* <DefaultLayout>
         {getLayoutMobile(<Component {...pageProps} />)}
+      </DefaultLayout> */}
+      <DefaultLayout>
+        <Component {...pageProps} />
       </DefaultLayout>
     </ContextStores.Provider>
   );

@@ -14,7 +14,7 @@ interface ICardAtomProps {
   queryObject?: ParsedUrlQueryInput;
   saved_actionable: boolean;
   saved_enabled: boolean;
-  saved_handler: (args: { event: SyntheticEvent<any> }) => void;
+  saved_handler: any;
   edit_handler: any;
 }
 

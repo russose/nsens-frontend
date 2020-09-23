@@ -14,7 +14,6 @@ import { CONFIG_OPS } from "../src/common/config_env";
 
 const Home: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
-
   return (
     <Box>
       <CardAtomGrid

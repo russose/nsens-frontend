@@ -12,7 +12,7 @@ interface IAvatarLinkProps {
   // queryObject?: ParsedUrlQueryInput;
 }
 
-const icon_size = "md";
+const icon_size = "sm";
 const image_path = USER_DISPLAY.paths.user_image;
 
 const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {

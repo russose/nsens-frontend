@@ -19,7 +19,7 @@ const header_size = USER_DISPLAY.header_size;
 const color_menu = USER_DISPLAY.colors.menu;
 const color_headers = USER_DISPLAY.colors.headers as any;
 
-const DefaultLayout: React.FunctionComponent = (props) => {
+const DefaultLayout_old: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
   const router = useRouter();
 
@@ -31,7 +31,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     <Box color="white" padding={1} display="block">
       <MenuBarH
         buttons_config={USER_GUI_CONFIG.menuBar}
-        pathnames={["/", "/Knowbooks", "/Vizs", "/User"]}
+        pathnames={["/", "/Knowbooks", "/Vizs"]}
         color={color_menu}
         loginPath="/User"
         isLogged={dataStore.isLogged}
@@ -45,6 +45,10 @@ const DefaultLayout: React.FunctionComponent = (props) => {
       handlerText={onSearchHomeText(uiStore)}
       handlerSubmit={onSearchHomeSubmit(dataStore, uiStore)}
       handlerKeyboard={onSearchHomeKeyboard(dataStore, uiStore)}
+      // handlerButton={() => {
+      //   onSearchHomeButton(dataStore, uiStore);
+      // }}
+
       value={uiStore.searchPattern}
     />
   );
@@ -100,22 +104,9 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     >
       <Box column={12} smColumn={12} mdColumn={12} lgColumn={10}>
         <Sticky top={0}>
-          <Box display="flex" alignItems="center" wrap={true}>
+          <Box display="flex" alignItems="center">
             <Box
-              padding={0}
-              column={12}
-              smColumn={12}
-              mdColumn={4}
-              lgColumn={4}
-              display="inlineBlock"
-              smDisplay="inlineBlock"
-              mdDisplay="inlineBlock"
-              lgDisplay="inlineBlock"
-            >
-              {navigationMenu}
-            </Box>
-            <Box
-              padding={1}
+              padding={2}
               display="inlineBlock"
               column={12}
               smColumn={12}
@@ -124,17 +115,28 @@ const DefaultLayout: React.FunctionComponent = (props) => {
             >
               {header}
             </Box>
-
-            {/* <Box
-              padding={1}
+            <Box
+              column={0}
+              smColumn={0}
+              mdColumn={4}
+              lgColumn={4}
+              display="none"
+              smDisplay="none"
+              mdDisplay="inlineBlock"
+              lgDisplay="inlineBlock"
+            >
+              {navigationMenu}
+            </Box>
+            <Box
+              padding={2}
               display="inlineBlock"
-              column={1}
-              smColumn={1}
+              column={2}
+              smColumn={2}
               mdColumn={1}
               lgColumn={1}
             >
               {avatar}
-            </Box> */}
+            </Box>
           </Box>
         </Sticky>
 
@@ -152,7 +154,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
           {props.children}
         </Box>
 
-        {/* <Sticky bottom={0}>
+        <Sticky bottom={0}>
           <Box
             display="block"
             smDisplay="block"
@@ -161,11 +163,11 @@ const DefaultLayout: React.FunctionComponent = (props) => {
           >
             {navigationMenu}
           </Box>
-        </Sticky> */}
+        </Sticky>
       </Box>
     </Box>
   );
 };
 
-export default observer(DefaultLayout);
+export default observer(DefaultLayout_old);
 // export default DefaultLayout;

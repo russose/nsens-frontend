@@ -13,8 +13,12 @@ interface ICardKnowGridProps {
 const image_path = USER_DISPLAY.paths.knowbook_image;
 
 const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
-  if (props.knowbooks === undefined) {
-    return <Box></Box>;
+  if (
+    props.knowbooks === undefined ||
+    props.knowbooks === null ||
+    props.knowbooks.length === 0
+  ) {
+    return null;
   } else {
     return (
       <Box
@@ -27,7 +31,8 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
       >
         {props.knowbooks.map((item) => (
           <CardKnow
-            key={item.name}
+            // key={item.name}
+            key={`cardKnowbook-${item.name}`}
             id={item.name}
             title={item.name}
             image_url={image_path}

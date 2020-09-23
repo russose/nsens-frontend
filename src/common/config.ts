@@ -4,7 +4,7 @@ export const CONFIG_FETCHING = {
     ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
-  amount_data_fetched: 50,
+  amount_data_fetched: 20,
   max_width_image: 2000,
   min_width_image: 120,
   search_min_length_search: 4,
@@ -13,9 +13,10 @@ export const CONFIG_FETCHING = {
 const CONFIG_GUI = {
   fr: {
     menuBar: [
-      { label: "Acceuil", icon: "workflow-status-all" },
+      { label: "Accueil", icon: "workflow-status-all" },
       { label: "Carnets", icon: "folder" },
       { label: "Vizs", icon: "compass" },
+      { label: "User", icon: "person" },
       // { label: "Se connecter", icon: "person" },
     ],
     knowbooks: {
@@ -36,7 +37,7 @@ const CONFIG_GUI = {
       login_label: "Connexion",
       signup_label: "Enregistrement",
     },
-    searchBar: "Recherche de connaissance",
+    searchBar: "Rechercher...",
     // categories: {
     //   //Plus utilisés, à voir plus tard
     //   PLT: { label: "Planète", color: "green" },
@@ -53,10 +54,11 @@ const CONFIG_GUI = {
     title_card_size: "sm",
     header_size: "sm",
     colors: {
+      //https://www.rapidtables.com/web/color/RGB_Color.html
       menu: "white",
       headers: "white",
-      item_color_image: "rgb(245, 245, 245)",
-      knowbook_color_image: "rgb(30,144,255)",
+      item_color_image: "rgb(220, 220, 220)",
+      knowbook_color_image: "rgb(245, 245, 245)",
     },
     atom_sizes: {
       height: 250,

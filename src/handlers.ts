@@ -1,30 +1,48 @@
 import { DataStore } from "./stores/DataStore";
 import { KnowbookID, AtomID } from "./common/types";
-import { CONFIG_FETCHING } from "./common/config";
-import Router from "next/router";
 import { UIStore } from "./stores/UIStore";
 import { _login, _signup, _logout } from "./_api";
 import { initializeUserData } from "./initialization";
 import { goHome, goLogin } from "./libs/utils";
 
-interface IonInput {
-  value: string;
-  syntheticEvent: any;
-}
-interface IonChecked {
-  checked: boolean;
-  syntheticEvent: any;
-}
+// interface IonInput {
+//   value: string;
+//   syntheticEvent: any;
+// }
+// interface IonChecked {
+//   checked: boolean;
+//   syntheticEvent: any;
+// }
 
 /*******************Searchbar*************************** */
-export const onSearchHome = (dataStore: DataStore, uiStore: UIStore) => (
-  input: IonInput
-): void => {
+
+export const onSearchHomeText = (uiStore: UIStore) => (input: {
+  value: string;
+  syntheticEvent: any;
+}): void => {
   uiStore.setSearchPattern(input.value);
-  if (uiStore.searchPattern.length > CONFIG_FETCHING.search_min_length_search) {
-    dataStore.setFeedFromSearch(input.value);
-  } else if (uiStore.searchPattern.length === 0) {
-    dataStore.setFeedFromRandom();
+  // console.log(uiStore.searchPattern);
+};
+
+export const onSearchHomeSubmit = (
+  dataStore: DataStore,
+  uiStore: UIStore
+) => (): void => {
+  if (uiStore.searchPattern.length > 0) {
+    dataStore.setFeedFromSearch(uiStore.searchPattern);
+  } else {
+    //dataStore.setFeedFromRandom();
+  }
+};
+
+export const onSearchHomeKeyboard = (
+  dataStore: DataStore,
+  uiStore: UIStore
+) => (input: { event: any; value: string }): void => {
+  if (input.event.key === "Enter") {
+    onSearchHomeSubmit(dataStore, uiStore)();
+  } else if (input.event.key === "Escape") {
+    uiStore.setSearchPattern("");
   }
 };
 
@@ -81,15 +99,16 @@ export const onCancelEditKnowbooks = (uiStore: UIStore) => (): void => {
   uiStore.setEditKnowbookOpened(false);
 };
 
-export const onChangeInputValueEditKnowbooks = (uiStore: UIStore) => (
-  input: IonInput
-): void => {
+export const onChangeInputValueEditKnowbooks = (uiStore: UIStore) => (input: {
+  value: string;
+  syntheticEvent: any;
+}): void => {
   uiStore.setEditKnowbookNewValue(input.value);
 };
 
 export const onChangeKnwobooksInclusionEditKnowbooks = (uiStore: UIStore) => (
   tag: KnowbookID
-) => (input: IonChecked): void => {
+) => (input: { checked: boolean; syntheticEvent: any }): void => {
   uiStore.setEditKnowbookMembers(tag, input.checked);
 };
 
@@ -128,7 +147,7 @@ export const onSubmitChangesEditKnowbooks = (
 
 export const onChangeUsernamePassword = (uiStore: UIStore) => (
   type: string
-) => (input: IonInput): void => {
+) => (input: { value: string; syntheticEvent: any }): void => {
   if (type === "username") {
     uiStore.setLoginScreenUsername(input.value);
   } else if (type === "password") {

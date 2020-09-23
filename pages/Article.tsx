@@ -23,7 +23,8 @@ const Article: React.FunctionComponent = (props) => {
       dangerouslySetInnerHTML={{
         __html: uiStore.articleContent,
       }}
-    ></div>
+    />
+    // </div>
   );
   return (
     <Box>

@@ -10,7 +10,7 @@ interface IButtonLinkProps {
 }
 
 const font_size = "sm";
-const icon_size = "md";
+const icon_size = "xs";
 const weight = "bold";
 
 const ButtonLink: React.FunctionComponent<IButtonLinkProps> = (props) => {

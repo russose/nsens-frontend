@@ -1,9 +1,8 @@
 import { Box } from "gestalt";
 import { IConfigMenuBar } from "../common/types";
 import ButtonLink from "./ButtonLink";
-import { observer } from "mobx-react";
 
-interface IMenuBarProps {
+interface IMenuBarHProps {
   buttons_config: IConfigMenuBar[];
   pathnames: string[];
   color: any;
@@ -11,7 +10,7 @@ interface IMenuBarProps {
   loginPath: string;
 }
 
-const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
+const MenuBarH: React.FunctionComponent<IMenuBarHProps> = (props) => {
   return (
     <Box
       padding={1}
@@ -25,7 +24,8 @@ const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
       {props.buttons_config.map((data, index) => {
         return (
           <ButtonLink
-            key={index.toString()}
+            // key={index.toString()}
+            key={`menuBar-${index}`}
             icon={data.icon}
             label={data.label}
             pathname={
@@ -40,4 +40,5 @@ const MenuBar: React.FunctionComponent<IMenuBarProps> = (props) => {
   );
 };
 
-export default observer(MenuBar);
+// export default observer(MenuBar_v);
+export default MenuBarH;
