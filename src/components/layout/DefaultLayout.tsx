@@ -102,27 +102,27 @@ const DefaultLayout: React.FunctionComponent = (props) => {
         <Sticky top={0}>
           <Box display="flex" alignItems="center" wrap={true}>
             <Box
+              padding={2}
+              display="inlineBlock"
+              column={7}
+              smColumn={8}
+              mdColumn={8}
+              lgColumn={9}
+            >
+              {header}
+            </Box>
+            <Box
               padding={0}
-              column={12}
-              smColumn={12}
+              column={5}
+              smColumn={4}
               mdColumn={4}
-              lgColumn={4}
+              lgColumn={3}
               display="inlineBlock"
               smDisplay="inlineBlock"
               mdDisplay="inlineBlock"
               lgDisplay="inlineBlock"
             >
               {navigationMenu}
-            </Box>
-            <Box
-              padding={1}
-              display="inlineBlock"
-              column={12}
-              smColumn={12}
-              mdColumn={8}
-              lgColumn={8}
-            >
-              {header}
             </Box>
 
             {/* <Box

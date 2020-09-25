@@ -1,4 +1,4 @@
-import { Box, TextField, Icon } from "gestalt";
+import { Box, TextField } from "gestalt";
 
 interface ISearchBarProps {
   placeholder: string;
@@ -10,28 +10,17 @@ interface ISearchBarProps {
 
 const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      // justifyContent="around"
-      // borderSize="sm"
-    >
-      <Box flex="grow">
-        <TextField
-          id="searchField"
-          onChange={props.handlerText}
-          onBlur={props.handlerSubmit}
-          placeholder={props.placeholder}
-          value={props.value}
-          onKeyDown={props.handlerKeyboard}
-        />
-      </Box>
-      <Box padding={0} paddingX={2}>
-        <Icon icon="search" accessibilityLabel="Search" color="gray" />
-      </Box>
+    <Box flex="grow" alignItems="center">
+      <TextField
+        id="searchField"
+        onChange={props.handlerText}
+        onBlur={props.handlerSubmit}
+        placeholder={props.placeholder}
+        value={props.value}
+        onKeyDown={props.handlerKeyboard}
+      />
     </Box>
   );
 };
 
-// export default observer(SearchBar);
 export default SearchBar;
