@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import {
@@ -16,7 +16,7 @@ const Knowbook: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
 
   const router = useRouter();
-  let selected_knowbook = router.query.k as string;
+  let selected_knowbook = router.query.title as string;
 
   return (
     <Box>

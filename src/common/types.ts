@@ -1,7 +1,7 @@
-export enum ConfigDataLanguage {
-  fr = "fr",
-  en = "en",
-}
+// export interface IConfigMenuBar {
+//   label: string;
+//   icon: string;
+// }
 
 // export enum ConfigDataCategoryType {
 //   PLT = "PLT",
@@ -16,11 +16,6 @@ export enum ConfigDataLanguage {
 //   label: string;
 //   color: string;
 // }
-
-export interface IConfigMenuBar {
-  label: string;
-  icon: string;
-}
 
 // export interface IConfigCategories {
 //   [ConfigDataCategoryType.PLT]: IDataCategory;
@@ -47,6 +42,19 @@ export interface IConfigMenuBar {
 
 /*************************************************** */
 
+export enum ConfigDataLanguage {
+  fr = "fr",
+  en = "en",
+}
+
+export enum ButtonIDType {
+  HOME = "HOME",
+  KNOWBOOKS = "KNOWBOOKS",
+  LOGIN = "LOGIN",
+  VIZS = "VIZS",
+  ARTICLE = "ARTICLE",
+}
+
 export type UserID = string;
 export type AtomID = string;
 export type KnowbookID = string;
@@ -69,26 +77,12 @@ export interface IAtom {
   image_width: number;
   image_height: number;
   thumbnail_url: string;
+  related: string;
   // category: ConfigDataCategoryType; //Not used yet
 }
 
-// export interface _IAtom {
-//   owner: UserID;
-//   active?: boolean;
-//   id: AtomID;
-//   //tags: KnowbookID[];
-//   wikibase_item: string;
-//   pageid_wp: number;
-//   title: string;
-//   title_en: string;
-//   image_url: string;
-//   image_width: number;
-//   image_height: number;
-//   thumbnail_url: string;
-//   // category: ConfigDataCategoryType; //Not used yet
-// }
-
 export interface IKnowbook {
+  id: number;
   name: KnowbookID;
   //creation_date: Date;
   //update_date: Date;
@@ -96,6 +90,7 @@ export interface IKnowbook {
 }
 
 export interface IKnowbookFull {
+  id: number; //internal ide for back only (database)
   name: KnowbookID;
   //creation_date: Date;
   //update_date: Date;
@@ -124,6 +119,7 @@ export function newAtom(id: AtomID): IAtom {
     image_width: -1,
     image_height: -1,
     thumbnail_url: empty_value_atom,
+    related: empty_value_atom,
     // category: ConfigDataCategoryType.TBD,
   };
   return atom;
@@ -133,10 +129,24 @@ export enum LogActionType {
   search = "search",
   save = "save",
   archive = "archive",
-  addKnowbook = "addKnowbook",
+  addRenameKnowbook = "addRenameKnowbook",
   addKnowbookItem = "addKnowbookItem",
   removeKnowbookItem = "removeKnowbookItem",
   removeKnowbook = "removeKnowbook",
   createUser = "createUser",
   loginUser = "loginUser",
+}
+
+export interface INode extends IAtom {
+  x: number;
+  y: number;
+}
+
+export interface ILink {
+  source: INode;
+  target: INode;
+}
+export interface IGraph {
+  nodes: INode[];
+  links: ILink[];
 }

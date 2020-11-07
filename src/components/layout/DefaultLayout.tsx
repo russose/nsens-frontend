@@ -6,18 +6,22 @@ import {
   onSearchHomeText,
   onSearchHomeSubmit,
   onSearchHomeKeyboard,
+  onMenuButtonPath,
+  onMenuButtonClick,
 } from "../../handlers";
 import { JsHeading } from "../js_components";
 import { useRouter } from "next/router";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { initializeApp } from "../../initialization";
 import { _login, _getUser } from "../../_api";
-import AvatarLink from "../AvatarLink";
-import MenuBarH from "../MenuBarH";
+import MenuBarLink from "../MenuBarLink";
+import MenuBarButton from "../MenuBarButton";
+import { ButtonIDType } from "../../common/types";
 
 const header_size = USER_DISPLAY.header_size;
 const color_menu = USER_DISPLAY.colors.menu;
 const color_headers = USER_DISPLAY.colors.headers as any;
+// const buttons = USER_GUI_CONFIG.buttons;
 
 const DefaultLayout: React.FunctionComponent = (props) => {
   const { dataStore, uiStore } = useStores();
@@ -27,14 +31,31 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     initializeApp(dataStore);
   }
 
+  const navigationButtonsIds: ButtonIDType[] = [
+    ButtonIDType.HOME,
+    ButtonIDType.KNOWBOOKS,
+    // ButtonIDType.VIZS,
+    ButtonIDType.LOGIN,
+  ];
   const navigationMenu = (
     <Box color="white" padding={1} display="block">
-      <MenuBarH
-        buttons_config={USER_GUI_CONFIG.menuBar}
-        pathnames={["/", "/Knowbooks", "/Vizs", "/User"]}
+      <MenuBarLink
+        name="NavigationMenuBar"
+        buttonsIds={navigationButtonsIds}
         color={color_menu}
-        loginPath="/User"
-        isLogged={dataStore.isLogged}
+        path_handler={onMenuButtonPath(dataStore, uiStore)}
+      />
+    </Box>
+  );
+
+  const displayMenuDisplayed = router.pathname.includes("ItemView");
+  const displayMenu = displayMenuDisplayed && (
+    <Box color="white" padding={1} display="block">
+      <MenuBarButton
+        name="displayMenuBar"
+        buttonsIds={[ButtonIDType.ARTICLE, ButtonIDType.VIZS]}
+        color={color_menu}
+        onClick_handler={onMenuButtonClick(uiStore)}
       />
     </Box>
   );
@@ -49,17 +70,23 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     />
   );
 
-  const avatar = (
-    <AvatarLink
-      username={dataStore.user === null ? "" : dataStore.user.username}
-      logged={dataStore.isLogged}
-      pathname="/User"
-    />
-  );
+  // const avatar = (
+  //   <AvatarLink
+  //     username={dataStore.user === null ? "" : dataStore.user.username}
+  //     logged={dataStore.isLogged}
+  //     pathname="/User"
+  //   />
+  // );
 
   const headerText = (title: string) => {
     return (
-      <Box color={color_headers} borderSize="lg" rounding={2} padding={2}>
+      <Box
+        color={color_headers}
+        borderSize="lg"
+        flex="grow"
+        rounding={2}
+        padding={2}
+      >
         <JsHeading size={header_size} align="center">
           {title}
         </JsHeading>
@@ -85,7 +112,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
   } else if (router.pathname === "/None") {
     header = headerText(USER_GUI_CONFIG.knowbooks.None_Title);
   } else {
-    header = headerText(router.query.k as string);
+    header = headerText(router.query.title as string);
   }
 
   return (
@@ -109,8 +136,18 @@ const DefaultLayout: React.FunctionComponent = (props) => {
               mdColumn={8}
               lgColumn={9}
             >
-              {header}
+              <Box
+                padding={1}
+                display="flex"
+                flex="grow"
+                alignItems="center"
+                // justifyContent="start"
+              >
+                {displayMenu}
+                {header}
+              </Box>
             </Box>
+
             <Box
               padding={0}
               column={5}

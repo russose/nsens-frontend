@@ -1,87 +1,158 @@
-import { observable, action, computed } from "mobx";
+import { observable, action, makeObservable } from "mobx";
 import { AtomID, KnowbookID } from "../common/types";
 import { DataStore } from "./DataStore";
+import { _getRelated } from "../_api";
+
+export enum IItemDisplayMode {
+  Article = "Article",
+  Network = "Network",
+}
 
 export class UIStore {
-  @observable private $searchPattern: string = "";
+  private $searchPattern: string = "";
   private $selectedAtomId: AtomID = "";
-  @observable private $articleContent: string = "";
+  private $articleContent: string = "";
+  private $itemDisplayMode: "Article" | "Network" = IItemDisplayMode.Article;
 
-  @observable private $editKnowbookOpened: boolean = false;
-  @observable private $editKnowbookNewValue: string = "";
+  private $editKnowbookOpened: boolean = false;
+  private $editKnowbookNewValue: string = "";
   private $editKnowbookMembers = observable.map<KnowbookID, boolean>();
 
-  @observable private $loginScreenUsername: string = "";
-  @observable private $loginScreenPassword: string = "";
+  private $selectedKnowbookIdName: KnowbookID = "";
+  private $renameKnowbookOpened: boolean = false;
+  private $renameKnowbookNewName: string = "";
 
-  @computed
+  private $loginScreenUsername: string = "";
+  private $loginScreenPassword: string = "";
+
+  constructor() {
+    makeObservable<
+      UIStore,
+      | "$searchPattern"
+      | "$articleContent"
+      | "$itemDisplayMode"
+      | "$editKnowbookOpened"
+      | "$editKnowbookNewValue"
+      | "$selectedKnowbookIdName"
+      | "$renameKnowbookOpened"
+      | "$renameKnowbookNewName"
+      | "$loginScreenUsername"
+      | "$loginScreenPassword"
+    >(this, {
+      $searchPattern: observable,
+      $articleContent: observable,
+      $itemDisplayMode: observable,
+      setItemDisplayMode: action,
+      $editKnowbookOpened: observable,
+      $editKnowbookNewValue: observable,
+      $loginScreenUsername: observable,
+      $loginScreenPassword: observable,
+      $selectedKnowbookIdName: observable,
+      $renameKnowbookOpened: observable,
+      $renameKnowbookNewName: observable,
+      // searchPattern: computed,
+      setSearchPattern: action,
+      // selectedAtomId: computed,
+      setSelectedAtomId: action,
+      // articleContent: computed,
+      setArticleContent: action,
+      // editKnowbookOpened: computed,
+      setEditKnowbookOpened: action,
+      // editKnowbookNewValue: computed,
+      setEditKnowbookNewValue: action,
+      // editKnowbookMembers: computed,
+      setEditKnowbookMembers: action,
+      // renameKnowbookOpened: computed,
+      setSelectedKnowbookIdName: action,
+      setRenameKnowbookOpened: action,
+      // renameKnowbookNewName: computed,
+      setRenameKnowbookNewName: action,
+      // loginScreenUsername: computed,
+      setLoginScreenUsername: action,
+      // loginScreenPassword: computed,
+      setLoginScreenPassword: action,
+      initKnowbookEditionElements: action,
+    });
+  }
+
+  get selectedKnowbookIdName() {
+    return this.$selectedKnowbookIdName;
+  }
+  setSelectedKnowbookIdName(knowbookId: KnowbookID): void {
+    this.$selectedKnowbookIdName = knowbookId;
+  }
+
+  get renameKnowbookOpened() {
+    return this.$renameKnowbookOpened;
+  }
+  setRenameKnowbookOpened(state: boolean): void {
+    this.$renameKnowbookOpened = state;
+  }
+
+  get renameKnowbookNewName() {
+    return this.$renameKnowbookNewName;
+  }
+  setRenameKnowbookNewName(value: string): void {
+    this.$renameKnowbookNewName = value;
+  }
+
+  get itemDisplayMode() {
+    return this.$itemDisplayMode;
+  }
+  setItemDisplayMode(mode: IItemDisplayMode): void {
+    this.$itemDisplayMode = mode;
+  }
   get searchPattern() {
     return this.$searchPattern;
   }
-  @action
   setSearchPattern(searchPattern: string): void {
     this.$searchPattern = searchPattern;
   }
-  @computed
   get selectedAtomId() {
     return this.$selectedAtomId;
   }
-  @action
   setSelectedAtomId(id: AtomID): void {
     this.$selectedAtomId = id;
   }
-  @computed
   get articleContent() {
     return this.$articleContent;
   }
-  @action
   setArticleContent(article: string): void {
     this.$articleContent = article;
   }
-  @computed
   get editKnowbookOpened() {
     return this.$editKnowbookOpened;
   }
-  @action
   setEditKnowbookOpened(state: boolean): void {
     this.$editKnowbookOpened = state;
   }
-  @computed
   get editKnowbookNewValue() {
     return this.$editKnowbookNewValue;
   }
-  @action
   setEditKnowbookNewValue(value: string): void {
     this.$editKnowbookNewValue = value;
   }
-  @computed
   get editKnowbookMembers() {
     return this.$editKnowbookMembers;
   }
-  @action
   setEditKnowbookMembers(knowbookId: KnowbookID, value: boolean): void {
     this.editKnowbookMembers.set(knowbookId, value);
   }
 
-  @computed
   get loginScreenUsername() {
     return this.$loginScreenUsername;
   }
-  @action
   setLoginScreenUsername(value: string): void {
     this.$loginScreenUsername = value;
   }
-  @computed
   get loginScreenPassword() {
     return this.$loginScreenPassword;
   }
-  @action
   setLoginScreenPassword(value: string): void {
     this.$loginScreenPassword = value;
   }
 
   /******************************************************* */
-  @action
   initKnowbookEditionElements(atomID: AtomID, datastore: DataStore): void {
     this.$editKnowbookNewValue = "";
     this.editKnowbookMembers.clear();

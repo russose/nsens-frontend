@@ -22,6 +22,15 @@ export function goLogin() {
   });
 }
 
+//nombre aléatoire entre min (inclus) et max (exclue)
+export function getRandomArbitrary(min: number, max: number): number {
+  return Math.random() * (max - min) + min;
+}
+
+export function entierAleatoire(min: number, max: number): number {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
 /**
  * Returns a type predicate to filter undefined values of a list.
  *

@@ -24,7 +24,7 @@ export async function initializeUserData(datastore: DataStore) {
     if (datastore.isLogged) {
       // const atoms = await _getAllFeed();
       // datastore.setFeed(atoms);
-      datastore.setFeedFromRandom();
+      datastore.setFeedFromRelated();
       const saved = await _getSavedList();
       datastore.setSaved(saved);
       const knowbooks = await _getKnowbooksList();

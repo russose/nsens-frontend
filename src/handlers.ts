@@ -1,9 +1,12 @@
 import { DataStore } from "./stores/DataStore";
-import { KnowbookID, AtomID } from "./common/types";
-import { UIStore } from "./stores/UIStore";
+import { KnowbookID, AtomID, ButtonIDType } from "./common/types";
+import { IItemDisplayMode, UIStore } from "./stores/UIStore";
 import { _login, _signup, _logout } from "./_api";
 import { initializeUserData } from "./initialization";
 import { goHome, goLogin } from "./libs/utils";
+import { USER_GUI_CONFIG } from "./common/config";
+
+const buttons = USER_GUI_CONFIG.buttons;
 
 // interface IonInput {
 //   value: string;
@@ -87,6 +90,11 @@ export const isItemSaved = (dataStore: DataStore) => (itemID: AtomID) => {
 
 /******************* Edit Knowbooks ************************************ */
 
+export const onCancel = (uiStore: UIStore) => (): void => {
+  uiStore.setEditKnowbookOpened(false);
+  uiStore.setRenameKnowbookOpened(false);
+};
+
 export const onEditKnowbooks = (uiStore: UIStore, dataStore: DataStore) => (
   itemId: AtomID
 ) => (): void => {
@@ -95,9 +103,9 @@ export const onEditKnowbooks = (uiStore: UIStore, dataStore: DataStore) => (
   uiStore.setEditKnowbookOpened(true);
 };
 
-export const onCancelEditKnowbooks = (uiStore: UIStore) => (): void => {
-  uiStore.setEditKnowbookOpened(false);
-};
+// export const onCancelEditKnowbooks = (uiStore: UIStore) => (): void => {
+//   uiStore.setEditKnowbookOpened(false);
+// };
 
 export const onChangeInputValueEditKnowbooks = (uiStore: UIStore) => (input: {
   value: string;
@@ -141,6 +149,47 @@ export const onSubmitChangesEditKnowbooks = (
   }
 
   uiStore.setEditKnowbookOpened(false);
+};
+
+/******************* Rename or Delete Knowbook ************************************ */
+
+export const onOpenRenameKnowbook = (uiStore: UIStore) => (
+  name: KnowbookID
+) => (): void => {
+  uiStore.setSelectedKnowbookIdName(name);
+  uiStore.setRenameKnowbookNewName(name);
+  uiStore.setRenameKnowbookOpened(true);
+};
+
+export const onChangeInputValueRenameKnowbook = (uiStore: UIStore) => (input: {
+  value: string;
+  syntheticEvent: any;
+}): void => {
+  uiStore.setRenameKnowbookNewName(input.value);
+};
+
+export const onRenameKnowbook = (
+  uiStore: UIStore,
+  dataStore: DataStore
+) => (): void => {
+  dataStore.renameKnowbook(
+    uiStore.selectedKnowbookIdName,
+    uiStore.renameKnowbookNewName
+  );
+  uiStore.setRenameKnowbookOpened(false);
+};
+
+// export const onRenameKnowbook = (uiStore: UIStore, dataStore: DataStore) => (
+//   name: string
+// ): void => {
+//   dataStore.renameKnowbook(name, uiStore.renameKnowbookNewName);
+//   uiStore.setRenameKnowbookOpened(false);
+// };
+
+export const onDeleteKnowbook = (dataStore: DataStore) => (
+  name: KnowbookID
+) => (): void => {
+  dataStore.deleteKnowbook(name);
 };
 
 /*******************Login and Signup*************************** */
@@ -202,4 +251,29 @@ export const onSubmitLoginSignup = (uiStore: UIStore, dataStore: DataStore) => (
         console.log("error in signing...");
       });
   }
+};
+
+/*******************Navigation*************************** */
+
+export const onMenuButtonPath = (dataStore: DataStore, uiStore: UIStore) => (
+  buttonId: ButtonIDType
+): string => {
+  uiStore.setItemDisplayMode(IItemDisplayMode.Article);
+  if (!dataStore.isLogged && buttonId !== ButtonIDType.HOME) {
+    return buttons[ButtonIDType.LOGIN].path;
+  } else {
+    return buttons[buttonId].path;
+  }
+};
+
+export const onMenuButtonClick = (uiStore: UIStore) => (
+  buttonId: ButtonIDType
+) => () => {
+  let mode;
+  if (buttonId === ButtonIDType.ARTICLE) {
+    mode = IItemDisplayMode.Article;
+  } else {
+    mode = IItemDisplayMode.Network;
+  }
+  uiStore.setItemDisplayMode(mode);
 };

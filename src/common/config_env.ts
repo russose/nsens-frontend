@@ -1,3 +1,5 @@
+//Warning: different between back and front
+
 export const CONFIG_OPS = {
   FRONT_URL: process.env.FRONT_URL,
   BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,

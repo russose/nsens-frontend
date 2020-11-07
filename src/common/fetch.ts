@@ -1,12 +1,15 @@
+import { CONFIG_OPS } from "./config_env";
+const ROOT_URL_WIKIDATA = "https://query.wikidata.org/sparql";
+
 /************************************** */
 //Temporary when using self signed certificate
 // To be remove when in production
-import * as https from "https";
-import { CONFIG_OPS } from "./config_env";
+// import * as https from "https";
+// import { CONFIG_OPS } from "./config_env";
 
-const agent = new https.Agent({
-  rejectUnauthorized: false,
-});
+// const agent = new https.Agent({
+//   rejectUnauthorized: false,
+// });
 /************************************** */
 
 const axios = require("axios");
@@ -34,6 +37,18 @@ export async function fetch_data(
   if (output_URL) {
     console.log(prepare_url(ROOT_URL, PARAMS));
   }
+
+  return data;
+}
+
+export async function fetch_data_wikidata(sparqlQuery: string): Promise<any> {
+  const res = await axios({
+    method: "get",
+    headers: { Accept: "application/sparql-results+json" },
+    url: ROOT_URL_WIKIDATA + "?query=" + encodeURIComponent(sparqlQuery),
+  });
+
+  const data = await res.data.results.bindings;
 
   return data;
 }

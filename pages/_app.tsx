@@ -4,7 +4,7 @@ import "gestalt/dist/gestalt.css";
 import { ContextStores, RootStore } from "../src/stores/_RootStore";
 import { configure } from "mobx";
 import DefaultLayout from "../src/components/layout/DefaultLayout";
-import { useStaticRendering } from "mobx-react";
+import { enableStaticRendering } from "mobx-react-lite";
 
 // enable MobX strict mode
 configure({ enforceActions: "observed" });
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   //MobX
   const isServer = typeof window === "undefined";
-  useStaticRendering(isServer);
+  enableStaticRendering(isServer);
 
   return (
     <ContextStores.Provider value={{ rootStore: rootStore }}>

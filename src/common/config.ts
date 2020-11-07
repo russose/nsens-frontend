@@ -4,21 +4,27 @@ export const CONFIG_FETCHING = {
     ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
-  amount_data_fetched: 20,
+  amount_data_fetched_items: 20,
+  amount_data_fetched_images: 20,
   max_width_image: 2000,
   min_width_image: 120,
-  search_min_length_search: 4,
+  // search_min_length_search: 4,
+  max_size_api: 40,
 };
 
 const CONFIG_GUI = {
   fr: {
-    menuBar: [
-      { label: "Accueil", icon: "workflow-status-all" },
-      { label: "Carnets", icon: "folder" },
-      { label: "Vizs", icon: "compass" },
-      { label: "User", icon: "person" },
-      // { label: "Se connecter", icon: "person" },
-    ],
+    buttons: {
+      HOME: { label: "Accueil", icon: "workflow-status-all", path: "/" },
+      KNOWBOOKS: { label: "Carnets", icon: "folder", path: "/Knowbooks" },
+      LOGIN: { label: "User", icon: "person", path: "/User" },
+      VIZS: { label: "Vizs", icon: "compass", path: "" },
+      ARTICLE: {
+        label: "Article",
+        icon: "text-align-left",
+        path: "",
+      },
+    },
     knowbooks: {
       knowbooks_title: "Carnets de connaissance (Knowbooks)",
       AllSaved_title: "Sauvés (tous)",
@@ -27,6 +33,11 @@ const CONFIG_GUI = {
     editKnowbook: {
       title: "Mise à jour des carnets",
       input_placeholder: "Nouveau Carnet",
+    },
+    renameDeleteKnowbook: {
+      title: "Renommer un knowbook",
+      rename_label: "Renommer",
+      cancel_label: "Annuler",
     },
     loginSignup: {
       title: "Connexion et enregistrement",
@@ -38,15 +49,7 @@ const CONFIG_GUI = {
       signup_label: "Enregistrement",
     },
     searchBar: "Rechercher...",
-    // categories: {
-    //   //Plus utilisés, à voir plus tard
-    //   PLT: { label: "Planète", color: "green" },
-    //   ECO: { label: "Économie", color: "blue" },
-    //   INO: { label: "Innovation", color: "orchid" },
-    //   POL: { label: "Politique", color: "darkGray" },
-    //   HUM: { label: "Humain", color: "orange" },
-    //   TBD: { label: "To be defined", color: "black" },
-    // },
+    USER_WIKIDATA_LANG: "fr",
   },
   display: {
     //card_height: 250,
@@ -83,6 +86,11 @@ const CONFIG_GUI = {
       mdPadding: 6,
       smPadding: 4,
       padding: 2,
+    },
+    network: {
+      node_size: 100,
+      image_size: 45,
+      max_title_size: 33,
     },
     paths: {
       // item_empty_image: "/The_Scientific_Universe_small.png",

@@ -1,6 +1,16 @@
-import { LogActionType } from "./../common/types";
-import { observable, action, computed } from "mobx";
-import { IAtom, AtomID, IUser, KnowbookID, IKnowbook } from "../common/types";
+import { observable, action, computed, makeObservable } from "mobx";
+import {
+  IAtom,
+  AtomID,
+  IUser,
+  IKnowbook,
+  IGraph,
+  ILink,
+  INode,
+  LogActionType,
+  newAtom,
+  KnowbookID,
+} from "../common/types";
 import {
   _save,
   _unsave,
@@ -8,21 +18,213 @@ import {
   _addItemInKnowbook,
   _addKnowbook,
   _removeItemFromKnowbook,
+  _randomFromWeb,
+  _searchFromWeb,
+  _getRelatedFromWeb,
+  _getItemsFromTitlesFromWeb,
+  _saveRelated,
+  _getRelated,
+  _renameKnowbook,
+  _removeKnowbook,
 } from "../_api";
-import { CONFIG_FETCHING } from "../common/config";
 import {
-  randomItemsFetchDataCleanImages,
-  searchItemsFetchDataCleanImages,
-} from "../common/fetchAtom";
+  forceCenter,
+  forceCollide,
+  forceLink,
+  forceManyBody,
+  forceSimulation,
+} from "d3-force";
 
 export class DataStore {
-  @observable private $user: IUser | null = null; //when username="", it means the user is not logged!
+  private $user: IUser | null = null; //when username="", it means the user is not logged!
   private $feed = observable.map<AtomID, IAtom>();
   private $saved = observable.map<AtomID, IAtom>();
   private $knowbooks = observable.map<KnowbookID, IKnowbook>();
-  // private $knowbooks = new Map<KnowbookID, IKnowbook>();
 
-  @computed get isLogged(): boolean {
+  private $graph: IGraph = { nodes: [], links: [] };
+
+  constructor() {
+    makeObservable<DataStore, "$user" | "$graph">(this, {
+      $user: observable,
+      $graph: observable,
+      setGraph: action,
+      graph: computed,
+      updateGraphItem: action,
+      isLogged: computed,
+      setUser: action,
+      setFeed: action,
+      setSaved: action,
+      clearSaved: action,
+      // knowbooks: computed,
+      setKnowbooks: action,
+      clearKnowbooks: action,
+      setFeedFromRandom: action,
+      setFeedFromSearch: action,
+      addSaved: action,
+      removeSaved: action,
+      addItemInKnowbook: action,
+      removeItemFromKnowbook: action,
+      renameKnowbook: action,
+      deleteKnowbook: action,
+    });
+  }
+
+  get graph() {
+    return this.$graph;
+  }
+  setGraph(graph: IGraph): void {
+    if (graph === undefined) {
+      return;
+    }
+    this.$graph = graph;
+  }
+
+  updateGraphItem(
+    itemID: AtomID,
+    title: string,
+    width: number,
+    height: number
+  ): void {
+    const width_node = 100;
+    const forceManyStrength = -50;
+    const forceColiideRadius = width_node;
+    const forceLinkDistance = width_node * 1;
+    const forceLinkIterations = 5;
+    const forceAlphaMin = 0.001;
+    const forceAlphaDecay = 0.1;
+
+    this.getGraphDataItem(itemID, title)
+      // _getRelated(itemID)
+      .then(
+        action((items: IAtom[]) => {
+          if (items === undefined) {
+            return;
+          }
+          const graph = this.buildGraphItem(items);
+          this.setGraph(graph);
+
+          const nodes = graph.nodes;
+          const links = graph.links;
+
+          let self = this;
+          const simulation = forceSimulation(nodes)
+            .force("center", forceCenter(width / 2, height / 2))
+            .force("collision", forceCollide().radius(forceColiideRadius))
+            .force("charge", forceManyBody().strength(forceManyStrength))
+            .force(
+              "link",
+              forceLink(links)
+                .distance(forceLinkDistance)
+                // .strength(1)
+                .iterations(forceLinkIterations)
+            )
+            .on("tick", function () {
+              self.setGraph({ nodes: nodes, links: links });
+            })
+            .alphaMin(forceAlphaMin) //To converge quickly, default is 0.001
+            .alphaDecay(forceAlphaDecay);
+        })
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  buildGraphItem(items: IAtom[]): IGraph {
+    const graph_map = new Map<string, INode[]>();
+    const items_INode: INode[] = items.map((item) => {
+      return {
+        x: 0,
+        y: 0,
+        ...item,
+      };
+    });
+    const node_root = items_INode[0];
+    items_INode.shift(); //remove node_root from items_INode
+
+    items_INode.forEach((node) => {
+      const key = node.related;
+
+      if (!graph_map.has(key)) {
+        graph_map.set(key, [node]);
+      } else {
+        const nodes_list: INode[] = graph_map.get(key);
+        nodes_list.push(node);
+        graph_map.set(key, nodes_list);
+      }
+    });
+    const nodes: INode[] = [node_root];
+    const links: ILink[] = [];
+
+    // const cluster_amount = Array.from(graph_map.keys()).length
+    // let pos_cluster = 0;
+    // const ecart = 200;
+    // const initial_cluster_position = Array.from({length: cluster_amount}, (x, i) => ecart * i);
+
+    graph_map.forEach((nodes_list_prop, key) => {
+      //NodeGroup Element
+      // pos_cluster = pos_cluster + ecart;
+      const node_prop: INode = {
+        x: 0,
+        y: 0,
+        ...newAtom(key),
+      };
+      node_prop["title"] = key.split("|")[1];
+      node_prop["related"] = "prop";
+
+      if (nodes_list_prop.length > 1) {
+        // if (true) {
+        nodes.push(node_prop);
+        links.push({
+          source: nodes[0],
+          target: node_prop,
+        });
+
+        nodes_list_prop.forEach((node) => {
+          nodes.push(node);
+          links.push({
+            source: node_prop,
+            target: node,
+          });
+        });
+      } else {
+        const node = nodes_list_prop[0];
+        nodes.push(node);
+        links.push({
+          source: nodes[0],
+          target: node,
+        });
+      }
+    });
+    return { nodes: nodes, links: links };
+  }
+
+  //Important: graph[0] doiut toujours avoir le RootItem!
+  async getGraphDataItem(itemID: AtomID, title: string): Promise<IAtom[]> {
+    const items_all = await _getRelatedFromWeb(itemID);
+    const items = items_all.filter((item) => {
+      const filter =
+        !item.title_en.includes("Category:") && !item.title_en.includes("Wiki");
+      return filter;
+    });
+
+    const rootItemList: IAtom[] = await _getItemsFromTitlesFromWeb(title);
+    const rootItem = rootItemList[0];
+
+    if (rootItem !== undefined) {
+      //add root at the beginning
+      items.unshift(rootItem);
+    } else {
+      console.log("graph broken!");
+    }
+
+    return items;
+  }
+
+  /**
+   * User
+   */
+  get isLogged(): boolean {
     if (this.user === undefined || this.user === null) {
       return false;
     }
@@ -36,17 +238,18 @@ export class DataStore {
   get user() {
     return this.$user;
   }
-  @action
   setUser(user: IUser): void {
     this.$user = user;
   }
+  /**
+   * Feed
+   */
   get feed() {
     return this.$feed;
   }
   getFeedList(): IAtom[] {
     return Array.from(this.feed.values());
   }
-  @action
   setFeed(feed: IAtom[]): void {
     if (feed === undefined) {
       return;
@@ -54,69 +257,68 @@ export class DataStore {
     this.$feed.clear();
     feed.forEach((item) => this.$feed.set(item.id, item));
   }
+  /**
+   * Saved
+   */
   get saved() {
     return this.$saved;
   }
   getSavedList(): IAtom[] {
     return Array.from(this.saved.values());
   }
-  @action
   setSaved(atoms: IAtom[]): void {
     atoms.forEach((item) => this.$saved.set(item.id, item));
   }
-  @action
   clearSaved(): void {
     this.$saved.clear();
   }
+  /**
+   * Knowbook
+   */
   get knowbooks() {
     return this.$knowbooks;
   }
-  @action
   setKnowbooks(knowbooks: IKnowbook[]): void {
     knowbooks.forEach((item) => {
       this.$knowbooks.set(item.name, item);
     });
   }
-  @action
   clearKnowbooks(): void {
     this.$knowbooks.clear();
   }
 
-  /******************INIT**************************** */
-  // initDatastore(userData: IUserData): void {
-  //   this.setUser(userData.user);
-  //   this.setFeed(userData.feed);
-  //   this.setSaved(userData.saved);
-  //   this.setKnowbooks(userData.knowbooks);
-  // }
-
   /*****************FEED**************************** */
 
-  @action
   setFeedFromRandom(): void {
-    randomItemsFetchDataCleanImages(
-      CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA,
-      CONFIG_FETCHING.amount_data_fetched
-    )
+    _randomFromWeb()
       .then((atoms) => {
         this.setFeed(atoms);
       })
       .catch((error) => {
         // console.log("error in find random");
-        console.log(error);
+        // console.log(error);
       });
   }
-  @action
+  setFeedFromRelated(): void {
+    _getRelated("all")
+      .then((atoms) => {
+        if (atoms.length === 0) {
+          this.setFeedFromRandom();
+        } else {
+          this.setFeed(atoms);
+        }
+      })
+      .catch((error) => {
+        // console.log("error in find random");
+        // console.log(error);
+      });
+  }
   setFeedFromSearch(searchPattern: string): void {
     if (searchPattern === undefined) {
       return;
     }
 
-    searchItemsFetchDataCleanImages(
-      searchPattern,
-      CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA,
-      CONFIG_FETCHING.amount_data_fetched
-    )
+    _searchFromWeb(searchPattern)
       .then((atoms) => {
         this.setFeed(atoms);
       })
@@ -126,22 +328,20 @@ export class DataStore {
         }
       })
       .catch((error) => {
-        console.log("error in seach from pattern");
-        console.log(error);
+        // console.log("error in seach from pattern");
       });
   }
 
   /******************SAVED************************** */
 
-  @action
   addSaved(itemId: AtomID): void {
     if (itemId === undefined || !this.isLogged) {
       return;
     }
+    //Items in feed items
     if (this.$feed.has(itemId)) {
       const atom = this.$feed.get(itemId);
       if (atom !== undefined) {
-        // this.$saved.set(atom.id, atom);
         _save(atom)
           .then(
             action(() => {
@@ -154,14 +354,48 @@ export class DataStore {
             console.log("network error, error in saved");
           });
       } else {
-        console.log("impossible to save");
+        // console.log("impossible to save");
+        return;
       }
-    } else {
-      console.log("impossible to save");
     }
+    //Items in graph items
+    else {
+      const item_from_graph_with_id_list: IAtom[] = this.graph.nodes.filter(
+        (item) => {
+          return item.id === itemId;
+        }
+      );
+      if (
+        item_from_graph_with_id_list !== undefined &&
+        item_from_graph_with_id_list.length === 1
+      ) {
+        const atom: IAtom = item_from_graph_with_id_list[0];
+        _save(atom)
+          .then(
+            action(() => {
+              this.$saved.set(atom.id, atom);
+              console.log(atom);
+              // console.log("saved successfully");
+            })
+          )
+          .catch(() => {
+            // this.$saved.delete(itemId);
+            // console.log("network error, error in saved");
+          });
+      } else {
+        // console.log("impossible to save");
+        return;
+      }
+    }
+
+    //Store related items
+    _saveRelated(itemId)
+      .then(() => {})
+      .catch(() => {
+        console.log("impossible to store related items");
+      });
   }
 
-  @action
   removeSaved(itemId: AtomID): void {
     if (itemId === undefined || !this.isLogged) {
       return;
@@ -210,7 +444,51 @@ export class DataStore {
 
   /*******************KNOWBOOKS*************************** */
 
-  @action
+  renameKnowbook(name: KnowbookID, new_name: KnowbookID) {
+    if (!this.$knowbooks.has(name) || this.$knowbooks.has(new_name)) {
+      return;
+    }
+
+    _renameKnowbook(name, new_name)
+      .then(
+        action(() => {
+          const knowbooks_list: IKnowbook[] = [];
+          this.$knowbooks.forEach((knowbook, key_name) => {
+            if (key_name !== name) {
+              knowbooks_list.push(knowbook);
+            } else {
+              const knowbook_with_new_name = knowbook;
+              knowbook_with_new_name.name = new_name;
+              knowbooks_list.push(knowbook_with_new_name);
+            }
+          });
+          this.clearKnowbooks();
+          this.setKnowbooks(knowbooks_list);
+        })
+      )
+      .catch((error) => {
+        // console.log("error in renaming knowbook");
+      });
+  }
+
+  deleteKnowbook(name: KnowbookID) {
+    if (!this.knowbooks.has(name)) {
+      return;
+    }
+    if (this.getKnowbookAtomsList(name).length !== 0) {
+      return;
+    }
+    _removeKnowbook(name)
+      .then(
+        action(() => {
+          this.knowbooks.delete(name);
+        })
+      )
+      .catch((error) => {
+        // console.log("error in removing knowbook");
+      });
+  }
+
   //if the knowbook doesn't extist, create it
   addItemInKnowbook(knowbookID: KnowbookID, atomId: AtomID) {
     if (knowbookID === undefined || atomId === undefined) {
@@ -246,6 +524,7 @@ export class DataStore {
       }
     } else {
       const newKnowbook: IKnowbook = {
+        id: -1, //id not used in front but only in back
         name: knowbookID,
         items: [atomId],
       };
@@ -274,7 +553,6 @@ export class DataStore {
     }
   }
 
-  @action
   //Update both Knowbooks and saved (tags)
   removeItemFromKnowbook(knowbookID: KnowbookID, atomId: AtomID) {
     if (knowbookID === undefined || atomId === undefined) {

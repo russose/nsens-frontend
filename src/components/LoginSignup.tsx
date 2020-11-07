@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { useStores } from "../stores/_RootStore";
 import { Box } from "gestalt";
 import { USER_GUI_CONFIG } from "../common/config";

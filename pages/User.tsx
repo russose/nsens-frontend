@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { useStores } from "../src/stores/_RootStore";
 import LoginSignup from "../src/components/LoginSignup";
 import { Text, Button, Box } from "gestalt";

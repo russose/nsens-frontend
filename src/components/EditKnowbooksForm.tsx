@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { Box, TextField, IconButton, Modal } from "gestalt";
 import { AtomID } from "../common/types";
 import { JsCheckbox, JsText } from "./js_components";
@@ -25,7 +25,7 @@ const EditKnowbooksForm: React.FunctionComponent<IEditKnowbooksFormProps> = (
   props
 ) => {
   return (
-    <Modal accessibilityModalLabel={props.title} onDismiss={() => {}}>
+    <Modal accessibilityModalLabel={props.title} onDismiss={props.handler_cancel}>
       <Box color="white" rounding={3} padding={2}>
         <Box padding={1}>
           <JsText align="center" size={title_size} weight="bold">

@@ -1,6 +1,6 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { JsText } from "./js_components";
-import { Box } from "gestalt";
+import { Box, IconButton } from "gestalt";
 import { AtomID } from "../common/types";
 import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
@@ -13,12 +13,17 @@ interface ICardKnowProps {
   pathname: string;
   queryObject: ParsedUrlQueryInput;
   amount: number | string;
+  edit_handler: any;
+  delete_handler:any
 }
 
 const card_sizes = USER_DISPLAY.knowbook_sizes;
 const color_image = USER_DISPLAY.colors.knowbook_color_image;
+const size_icon: any = USER_DISPLAY.size_icon;
 
 const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
+  const display_edit_icon = props.edit_handler === undefined ? false : true;
+  const display_delete_icon = props.amount === 0 ? true : false;
   return (
     <CardGeneric
       id={props.id}
@@ -29,6 +34,29 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
       pathname={props.pathname}
       queryObject={props.queryObject}
     >
+      <Box paddingX={0}>
+        {display_delete_icon && (
+          <IconButton
+            accessibilityLabel="clear"
+            icon="clear"
+            iconColor="darkGray"
+            size={size_icon}
+            onClick={props.delete_handler}
+          />
+        )}
+      </Box>
+
+      <Box paddingX={0}>
+        {display_edit_icon && (
+          <IconButton
+            accessibilityLabel="edit"
+            icon="edit"
+            iconColor="darkGray"
+            size={size_icon}
+            onClick={props.edit_handler}
+          />
+        )}
+      </Box>
       <Box paddingX={2}>
         <JsText align="center" size="sm" weight="bold">
           {props.amount}

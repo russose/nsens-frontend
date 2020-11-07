@@ -1,5 +1,4 @@
-import { SyntheticEvent } from "react";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
 import { AtomID } from "../common/types";
 import CardGeneric from "./CardGeneric";

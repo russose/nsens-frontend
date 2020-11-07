@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { Box } from "gestalt";
 import { IAtom } from "../common/types";
 import CardAtom from "./CardAtom";
@@ -36,8 +36,9 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
               id={item.id}
               title={item.title}
               image_url={item.image_url}
-              pathname={"/Article"}
-              queryObject={{ k: item.title }}
+              // pathname={"/Article"}
+              pathname={"/ItemView"}
+              queryObject={{ title: item.title, id: item.id }}
               saved_enabled={props.isItemSaved_handler(item.id)}
               saved_actionable={props.isItemSavedActionable_handler(item.id)}
               saved_handler={props.saved_handler(item.id)}

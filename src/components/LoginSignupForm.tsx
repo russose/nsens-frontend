@@ -1,5 +1,5 @@
-import { observer } from "mobx-react";
-import { Box, TextField, IconButton, Button } from "gestalt";
+import { observer } from "mobx-react-lite";
+import { Box, TextField, Button } from "gestalt";
 import { JsText } from "./js_components";
 
 interface ILoginSignupFormProps {
@@ -54,12 +54,7 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
           </Box>
         </Box>
 
-        <Box
-          padding={3}
-          display="flex"
-          direction="row"
-          justifyContent="between"
-        >
+        <Box padding={3} display="flex" direction="row" justifyContent="around">
           <Button
             accessibilityLabel="login"
             text={props.label_login}
