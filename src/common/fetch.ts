@@ -69,6 +69,55 @@ export async function _api(
   return res;
 }
 
+export async function fetchArticle(
+  title: string,
+  ROOT_URL: string
+): Promise<string> {
+  const res = await axios({
+    method: "get",
+    headers: {
+      Accept: "text/html",
+    },
+    url:
+      // "https://en.wikipedia.org/api/rest_v1/page/mobile-html/Albert_Einstein", //Mobile
+      // "https://en.wikipedia.org/api/rest_v1/page/html/einstein?redirect=true", //Desktop
+      ROOT_URL + title, //Desktop
+  });
+
+  const data = await res.data;
+
+  return data;
+}
+
+// export async function fetchArticle_old(
+//   pattern: string,
+//   ROOT_URL: string
+// ): Promise<string> {
+//   const PARAMS = {
+//     action: "query",
+//     format: "json",
+//     utf8: 1,
+//     titles: pattern,
+//     prop: "extracts",
+//   };
+//   const data = await fetch_data(ROOT_URL, PARAMS, false);
+
+//   if (data["query"] === undefined || data["query"]["pages"] === undefined) {
+//     return "No article";
+//   }
+
+//   let article: string = "";
+//   Object.values(data["query"]["pages"]).forEach((item: any) => {
+//     article = item["extract"];
+//   });
+
+//   if (article === undefined) {
+//     return "Article not found";
+//   } else {
+//     return article;
+//   }
+// }
+
 // export async function fetch_data_old(
 //   ROOT_URL: string,
 //   PARAMS: Object,

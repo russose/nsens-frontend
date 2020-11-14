@@ -1,6 +1,10 @@
+export const LANGUAGE = "fr";
+
 export const CONFIG_FETCHING = {
   URLs: {
-    ROOT_URL_WIKIPEDIA: "https://fr.wikipedia.org/w/api.php",
+    ROOT_URL_WIKIPEDIA: "https://" + LANGUAGE + ".wikipedia.org/w/api.php",
+    ROOT_URL_WIKIPEDIA_REST:
+      "https://" + LANGUAGE + ".wikipedia.org/api/rest_v1/page/html/",
     ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
@@ -49,6 +53,7 @@ const CONFIG_GUI = {
       signup_label: "Enregistrement",
     },
     searchBar: "Rechercher...",
+    WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
     USER_WIKIDATA_LANG: "fr",
   },
   display: {
@@ -102,7 +107,7 @@ const CONFIG_GUI = {
   },
 };
 
-export const USER_GUI_CONFIG = CONFIG_GUI["fr"];
+export const USER_GUI_CONFIG = CONFIG_GUI[LANGUAGE];
 export const USER_DISPLAY = CONFIG_GUI["display"];
 
 // export const REFERENTIAL = {

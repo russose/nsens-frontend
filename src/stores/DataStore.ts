@@ -91,7 +91,7 @@ export class DataStore {
     const forceLinkDistance = width_node * 1;
     const forceLinkIterations = 5;
     const forceAlphaMin = 0.001;
-    const forceAlphaDecay = 0.1;
+    const forceAlphaDecay = 0.5;
 
     this.getGraphDataItem(itemID, title)
       // _getRelated(itemID)

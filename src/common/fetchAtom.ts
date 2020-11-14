@@ -1,9 +1,9 @@
-import { CONFIG_FETCHING, USER_DISPLAY, USER_GUI_CONFIG } from "./config";
-import { IAtom, newAtom, empty_value_atom, AtomID } from "./types";
+import { CONFIG_FETCHING, LANGUAGE, USER_DISPLAY } from "./config";
+import { IAtom, newAtom, empty_value_atom } from "./types";
 import { fetch_data, fetch_data_wikidata } from "./fetch";
 
 const path_empty_image = USER_DISPLAY.paths.item_empty_image;
-const wikidata_language = USER_GUI_CONFIG.USER_WIKIDATA_LANG;
+const wikidata_language = LANGUAGE;
 const nb_images = CONFIG_FETCHING.amount_data_fetched_images;
 const max_size_api = CONFIG_FETCHING.max_size_api;
 
@@ -178,39 +178,6 @@ export async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia(
   );
 
   return atomsListWithImages;
-}
-
-/**
- * Articles
- */
-
-export async function fetchArticle(
-  pattern: string,
-  ROOT_URL: string
-): Promise<string> {
-  const PARAMS = {
-    action: "query",
-    format: "json",
-    utf8: 1,
-    titles: pattern,
-    prop: "extracts",
-  };
-  const data = await fetch_data(ROOT_URL, PARAMS, false);
-
-  if (data["query"] === undefined || data["query"]["pages"] === undefined) {
-    return "No article";
-  }
-
-  let article: string = "";
-  Object.values(data["query"]["pages"]).forEach((item: any) => {
-    article = item["extract"];
-  });
-
-  if (article === undefined) {
-    return "Article not found";
-  } else {
-    return article;
-  }
 }
 
 /**
