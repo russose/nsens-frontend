@@ -55,7 +55,11 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       >
         <Box height={props.sizes.image_ratio} width="100%">
           <Mask rounding={4} height="100%" width="100%">
-            <Link href={{ pathname: props.pathname, query: props.queryObject }}>
+            <Link
+              href={{ pathname: props.pathname, query: props.queryObject }}
+              as={props.pathname}
+              passHref
+            >
               <a>
                 <Image
                   alt="image"

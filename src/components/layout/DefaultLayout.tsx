@@ -1,6 +1,5 @@
 import { Sticky, Box } from "gestalt";
 import { USER_GUI_CONFIG, USER_DISPLAY } from "../../common/config";
-import { useStores } from "../../stores/_RootStore";
 import SearchBar from "../SearchBar";
 import {
   onSearchHomeText,
@@ -17,6 +16,7 @@ import { _login, _getUser } from "../../_api";
 import MenuBarLink from "../MenuBarLink";
 import MenuBarButton from "../MenuBarButton";
 import { ButtonIDType } from "../../common/types";
+import { useStores } from "../../stores/_RootStoreHook";
 
 const header_size = USER_DISPLAY.header_size;
 const color_menu = USER_DISPLAY.colors.menu;
@@ -24,11 +24,11 @@ const color_headers = USER_DISPLAY.colors.headers as any;
 // const buttons = USER_GUI_CONFIG.buttons;
 
 const DefaultLayout: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore } = useStores();
+  const { dataStore, uiStore, userStore, knowbookStore } = useStores();
   const router = useRouter();
 
-  if (dataStore.user === null) {
-    initializeApp(dataStore);
+  if (userStore.user === null) {
+    initializeApp(dataStore, userStore, knowbookStore);
   }
 
   const navigationButtonsIds: ButtonIDType[] = [
@@ -43,7 +43,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
         name="NavigationMenuBar"
         buttonsIds={navigationButtonsIds}
         color={color_menu}
-        path_handler={onMenuButtonPath(dataStore, uiStore)}
+        path_handler={onMenuButtonPath(uiStore, userStore)}
       />
     </Box>
   );
@@ -64,8 +64,8 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     <SearchBar
       placeholder={USER_GUI_CONFIG.searchBar}
       handlerText={onSearchHomeText(uiStore)}
-      handlerSubmit={onSearchHomeSubmit(dataStore, uiStore)}
-      handlerKeyboard={onSearchHomeKeyboard(dataStore, uiStore)}
+      handlerSubmit={onSearchHomeSubmit(dataStore, uiStore, userStore)}
+      handlerKeyboard={onSearchHomeKeyboard(dataStore, uiStore, userStore)}
       value={uiStore.searchPattern}
     />
   );
@@ -98,9 +98,9 @@ const DefaultLayout: React.FunctionComponent = (props) => {
   if (router.pathname === "/" || router.pathname === "/index") {
     header = searchbar;
   } else if (router.pathname === "/User") {
-    if (dataStore.isLogged) {
+    if (userStore.isLogged) {
       header = headerText(
-        dataStore.user === null ? "" : dataStore.user.username
+        userStore.user === null ? "" : userStore.user.username
       );
     } else {
       header = headerText(USER_GUI_CONFIG.loginSignup.title);

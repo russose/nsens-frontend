@@ -3,11 +3,11 @@ import Network from "../src/components/vizs/Network";
 import { ParentSize } from "@visx/responsive";
 import { Box } from "gestalt";
 import EditKnowbooks from "../src/components/EditKnowbooks";
-import { useStores } from "../src/stores/_RootStore";
+import { useStores } from "../src/stores/_RootStoreHook";
 import { IItemDisplayMode } from "../src/stores/UIStore";
 
 const Vizs: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore } = useStores();
+  const { uiStore } = useStores();
   uiStore.setItemDisplayMode(IItemDisplayMode.Network);
 
   const title = "Astrophysique";

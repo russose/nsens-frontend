@@ -3,7 +3,7 @@ import { Box } from "gestalt";
 
 import CardKnowGrid from "../src/components/CardKnowGrid";
 import CardKnow from "../src/components/CardKnow";
-import { useStores } from "../src/stores/_RootStore";
+import { useStores } from "../src/stores/_RootStoreHook";
 import { USER_DISPLAY, USER_GUI_CONFIG } from "../src/common/config";
 import RenameKnowbooks from "../src/components/RenameKnowbooks";
 import { onDeleteKnowbook, onOpenRenameKnowbook } from "../src/handlers";
@@ -11,15 +11,16 @@ import { onDeleteKnowbook, onOpenRenameKnowbook } from "../src/handlers";
 const path_knowbook_image = USER_DISPLAY.paths.knowbook_image;
 
 const Knowbooks: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore } = useStores();
+  const { dataStore, uiStore, knowbookStore } = useStores();
 
   return (
     <Box>
       <CardKnowGrid
-        knowbooks={Array.from(dataStore.knowbooks.values())}
+        knowbooks={Array.from(knowbookStore.knowbooks.values())}
         edit_handler={onOpenRenameKnowbook(uiStore)}
-        delete_handler={onDeleteKnowbook(dataStore)}
+        delete_handler={onDeleteKnowbook(dataStore, knowbookStore)}
         datastore={dataStore}
+        knowbookStore={knowbookStore}
       />
       <Box
         //wrap={true}

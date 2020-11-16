@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { useStores } from "../src/stores/_RootStore";
+import { useStores } from "../src/stores/_RootStoreHook";
 import { useRouter } from "next/router";
 import { Box } from "gestalt";
 // import { JsText } from "../src/components/js_components";
@@ -12,7 +12,7 @@ import { IItemDisplayMode } from "../src/stores/UIStore";
 import Article from "../src/components/Article";
 
 const ItemView: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore } = useStores();
+  const { uiStore } = useStores();
 
   const router = useRouter();
   const item_title = router.query.title as string;

@@ -1,6 +1,6 @@
 import FormEditKnowbooks from "./EditKnowbooksForm";
 import { observer } from "mobx-react-lite";
-import { useStores } from "../stores/_RootStore";
+import { useStores } from "../stores/_RootStoreHook";
 import {
   onSubmitChangesEditKnowbooks,
   onChangeInputValueEditKnowbooks,
@@ -11,7 +11,7 @@ import { Box } from "gestalt";
 import { USER_GUI_CONFIG } from "../common/config";
 
 const EditKnowbooks: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore } = useStores();
+  const { knowbookStore, uiStore } = useStores();
   return (
     <Box>
       {uiStore.editKnowbookOpened && (
@@ -25,7 +25,7 @@ const EditKnowbooks: React.FunctionComponent = (props) => {
               return { label: key, activated: value };
             })}
           handler_cancel={onCancel(uiStore)}
-          handler_confirm={onSubmitChangesEditKnowbooks(uiStore, dataStore)}
+          handler_confirm={onSubmitChangesEditKnowbooks(uiStore, knowbookStore)}
           handler_inputValue={onChangeInputValueEditKnowbooks(uiStore)}
           handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(uiStore)}
         />

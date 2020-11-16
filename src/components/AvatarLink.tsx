@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Avatar } from "gestalt";
-import { JsText } from "./js_components";
 import Link from "next/link";
 import { USER_DISPLAY } from "../common/config";
 
@@ -19,7 +18,7 @@ const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
   return (
     <Box padding={0} display="flex" direction="column" alignItems="center">
       <Box>
-        <Link href={{ pathname: props.pathname }}>
+        <Link href={{ pathname: props.pathname }} as={props.pathname} passHref>
           <a>
             <Avatar
               size={icon_size}

@@ -4,19 +4,25 @@ import { IKnowbook, KnowbookID } from "../common/types";
 import { DataStore } from "../stores/DataStore";
 import CardKnow from "./CardKnow";
 import { entierAleatoire } from "../libs/utils";
+import { KnowkookStore } from "../stores/KnowkookStore";
 
 interface ICardKnowGridProps {
   knowbooks: IKnowbook[];
   edit_handler: any;
-  delete_handler:any;
+  delete_handler: any;
   datastore: DataStore;
+  knowbookStore: KnowkookStore;
 }
 
 // const image_path = USER_DISPLAY.paths.knowbook_image;
 
-function getKnowbookImage(knowbook: KnowbookID, datastore: DataStore): string {
-  let image_paths_list: string[] = datastore
-    .getKnowbookAtomsList(knowbook)
+function getKnowbookImage(
+  knowbook: KnowbookID,
+  datastore: DataStore,
+  knowbookStore: KnowkookStore
+): string {
+  let image_paths_list: string[] = knowbookStore
+    .getKnowbookAtomsList(knowbook, datastore)
     .map((item) => {
       return item.image_url;
     });
@@ -56,13 +62,16 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
             id={item.name}
             title={item.name}
             // image_url={image_path}
-            image_url={getKnowbookImage(item.name, props.datastore)}
+            image_url={getKnowbookImage(
+              item.name,
+              props.datastore,
+              props.knowbookStore
+            )}
             pathname={"/Knowbook"}
             queryObject={{ title: item.name }}
             amount={item.items.length}
             edit_handler={props.edit_handler(item.name)}
             delete_handler={props.delete_handler(item.name)}
-
           />
         ))}
       </Box>

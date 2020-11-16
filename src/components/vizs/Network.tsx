@@ -1,9 +1,8 @@
 import React from "react";
 import { Links, Nodes } from "@visx/network";
 import { LinkProvidedProps, NodeProvidedProps } from "@visx/network/lib/types";
-
 import { observer } from "mobx-react-lite";
-import { LinkVerticalCurve, LinkVerticalLine } from "@visx/shape";
+import { LinkVerticalLine } from "@visx/shape";
 import { Group } from "@visx/group";
 import { Text } from "@visx/text";
 import {
@@ -12,7 +11,7 @@ import {
   onEditKnowbooks,
   onSaved,
 } from "../../handlers";
-import { useStores } from "../../stores/_RootStore";
+import { useStores } from "../../stores/_RootStoreHook";
 import NodeAtom from "./NodeAtom";
 import NodeGroup from "./NodeGroup";
 import { USER_DISPLAY } from "../../common/config";
@@ -77,7 +76,13 @@ const NetworkLink: React.FunctionComponent<LinkProvidedProps<any>> = (
 const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   props
 ) => {
-  const { dataStore, uiStore } = useStores();
+  const {
+    dataStore,
+    uiStore,
+    graphStore,
+    userStore,
+    knowbookStore,
+  } = useStores();
   let node;
   if (props.node.related === "prop") {
     node = (
@@ -102,10 +107,15 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
           id={props.node.id}
           title={props.node.title}
           thumbnail_url={props.node.thumbnail_url}
-          saved_actionable={isItemSavedActivated(dataStore)(props.node.id)}
+          saved_actionable={isItemSavedActivated(knowbookStore)(props.node.id)}
           saved_enabled={isItemSaved(dataStore)(props.node.id)}
-          saved_handler={onSaved(dataStore)(props.node.id)}
-          edit_handler={onEditKnowbooks(uiStore, dataStore)(props.node.id)}
+          saved_handler={onSaved(
+            dataStore,
+            graphStore,
+            userStore,
+            knowbookStore
+          )(props.node.id)}
+          edit_handler={onEditKnowbooks(uiStore, knowbookStore)(props.node.id)}
           pathname={"/ItemView"}
           queryObject={{ title: props.node.title, id: props.node.id }}
         />
@@ -120,15 +130,15 @@ const NetworkNode = observer(NetworkNode_);
 // const NetworkNode = NetworkNodeGroup;
 
 const Network: React.FunctionComponent<INetworkProps> = (props) => {
-  const { dataStore, uiStore } = useStores();
+  const { uiStore, graphStore } = useStores();
 
   // if (process.browser) {
   if (
     uiStore.itemDisplayMode === IItemDisplayMode.Network &&
-    (dataStore.graph.nodes.length === 0 ||
-      dataStore.graph.nodes[0].id !== props.itemId)
+    (graphStore.graph.nodes.length === 0 ||
+      graphStore.graph.nodes[0].id !== props.itemId)
   ) {
-    dataStore.updateGraphItem(
+    graphStore.updateGraphItem(
       props.itemId,
       props.title,
       props.width,
@@ -142,8 +152,8 @@ const Network: React.FunctionComponent<INetworkProps> = (props) => {
   //   return empty_svg;
   // }
 
-  const nodes = dataStore.graph.nodes;
-  const links = dataStore.graph.links;
+  const nodes = graphStore.graph.nodes;
+  const links = graphStore.graph.links;
 
   return props.width < 10 ? null : (
     <svg width={props.width} height={props.height}>

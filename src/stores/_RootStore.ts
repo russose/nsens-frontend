@@ -1,55 +1,37 @@
-import React from "react";
+import { KnowkookStore } from "./KnowkookStore";
+import { UserStore } from "./UserStore";
 import { DataStore } from "./DataStore";
 import { UIStore } from "./UIStore";
-
-type Maybe<T> = T | null;
+import { GraphStore } from "./GraphStore";
 
 //RootStore
 
-interface IStores {
+export interface IStores {
   uiStore: UIStore;
   dataStore: DataStore;
+  graphStore: GraphStore;
+  userStore: UserStore;
+  knowbookStore: KnowkookStore;
 }
 
 export class RootStore {
   private $stores: IStores = {
-    uiStore: new UIStore(),
     dataStore: new DataStore(),
+    uiStore: new UIStore(),
+    graphStore: new GraphStore(),
+    userStore: new UserStore(),
+    knowbookStore: new KnowkookStore(),
   };
 
   public stores(): IStores {
     return this.$stores;
   }
 
-  public getDataStore(): DataStore {
-    return this.$stores.dataStore;
-  }
+  // public getDataStore(): DataStore {
+  //   return this.$stores.dataStore;
+  // }
 }
 
-//Context
-interface IContextStores {
-  rootStore: Maybe<RootStore>;
-}
+const rootStore: RootStore = new RootStore();
 
-export const ContextStores = React.createContext<IContextStores>({
-  rootStore: null,
-});
-
-//Hook
-/**
- * Retrieve MobX stores from the context.
- */
-export function useStores(): IStores & { rootStore: RootStore } {
-  const value = React.useContext(ContextStores);
-
-  if (!value.rootStore) {
-    throw new Error(`Root store has not been found`);
-  }
-
-  const allStores = {
-    ...value.rootStore.stores(),
-    rootStore: value.rootStore,
-  };
-
-  return allStores;
-}
+export default rootStore;

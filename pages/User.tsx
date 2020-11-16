@@ -1,15 +1,15 @@
 import { observer } from "mobx-react-lite";
-import { useStores } from "../src/stores/_RootStore";
+import { useStores } from "../src/stores/_RootStoreHook";
 import LoginSignup from "../src/components/LoginSignup";
-import { Text, Button, Box } from "gestalt";
+import { Button, Box } from "gestalt";
 import { onLogout } from "../src/handlers";
 
 const User: React.FunctionComponent = (props) => {
-  const { dataStore } = useStores();
+  const { dataStore, userStore, knowbookStore } = useStores();
 
   let content;
 
-  if (!dataStore.isLogged) {
+  if (!userStore.isLogged) {
     content = <LoginSignup />;
   } else {
     content = (
@@ -18,7 +18,7 @@ const User: React.FunctionComponent = (props) => {
           accessibilityLabel="logout"
           text={"Logout"}
           size="md"
-          onClick={onLogout(dataStore)}
+          onClick={onLogout(dataStore, userStore, knowbookStore)}
           // inline
         />
       </Box>

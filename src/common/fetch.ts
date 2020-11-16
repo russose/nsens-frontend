@@ -78,10 +78,10 @@ export async function fetchArticle(
     headers: {
       Accept: "text/html",
     },
+    baseURL: ROOT_URL + "html/",
     url:
       // "https://en.wikipedia.org/api/rest_v1/page/mobile-html/Albert_Einstein", //Mobile
-      // "https://en.wikipedia.org/api/rest_v1/page/html/einstein?redirect=true", //Desktop
-      ROOT_URL + title, //Desktop
+      title + "?redirect=true", //Desktop
   });
 
   const data = await res.data;

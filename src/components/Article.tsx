@@ -1,6 +1,6 @@
 import React from "react";
 import { JsText } from "./js_components";
-import { CONFIG_FETCHING, USER_GUI_CONFIG } from "../common/config";
+import { CONFIG_FETCHING, LANGUAGE, USER_GUI_CONFIG } from "../common/config";
 import { fetchArticle } from "../common/fetch";
 import { UIStore } from "../stores/UIStore";
 import { observer } from "mobx-react-lite";
@@ -11,6 +11,7 @@ interface IArticleProps {
   uiStore: UIStore;
 }
 
+const language = LANGUAGE;
 const last_section_header = USER_GUI_CONFIG.WIKI_LAST_SECTION_HEADER.replaceAll(
   " ",
   "\\s"
@@ -25,24 +26,30 @@ function prepareArticle(article: string): string {
     "<section(.)*" + last_section_header + "(.|\n)*</body>",
     "gi"
   );
+  const base = /<base[^>]*>/gi;
+  const base_url = "//" + language + ".wikipedia.org/";
 
   const article_clean = article
-    .replaceAll(link_open_regex, "")
+    .replaceAll(base, "") //remove base to not destroy navigation...
+    .replaceAll('href="/', 'href="' + base_url) //add path to relative link of stylesheet
+    .replaceAll(sections_ending_including_body, "</body>") //remove end of article
+    .replaceAll(link_open_regex, "") //remove links
     .replaceAll(link_close_regex, "")
-    .replaceAll(sections_ending_including_body, "</body>")
-    .replaceAll("//", "https://");
+    .replaceAll('"//', '"https://');
 
   return article_clean;
 }
 
 const path = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_REST;
-
+// const path = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA;
 const Article: React.FunctionComponent<IArticleProps> = (props) => {
   if (props.item_title === undefined) {
     return <JsText>{"..."}</JsText>;
   }
 
+  // const title = props.item_title;
   const title = props.item_title.replaceAll(" ", "_");
+
   fetchArticle(title, path)
     .then((value) => {
       props.uiStore.setArticleContent(prepareArticle(value));

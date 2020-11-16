@@ -4,7 +4,7 @@ export const CONFIG_FETCHING = {
   URLs: {
     ROOT_URL_WIKIPEDIA: "https://" + LANGUAGE + ".wikipedia.org/w/api.php",
     ROOT_URL_WIKIPEDIA_REST:
-      "https://" + LANGUAGE + ".wikipedia.org/api/rest_v1/page/html/",
+      "https://" + LANGUAGE + ".wikipedia.org/api/rest_v1/page/",
     ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },

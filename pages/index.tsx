@@ -5,23 +5,28 @@ import {
   isItemSaved,
   isItemSavedActivated,
 } from "../src/handlers";
-import { useStores } from "../src/stores/_RootStore";
 import EditKnowbooks from "../src/components/EditKnowbooks";
 import { Box } from "gestalt";
 import CardAtomGrid from "../src/components/CardAtomGrid";
 import { _login, _getUser } from "../src/_api";
-import { CONFIG_OPS } from "../src/common/config_env";
+import { useStores } from "../src/stores/_RootStoreHook";
 
 const Home: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore } = useStores();
+  const {
+    dataStore,
+    uiStore,
+    graphStore,
+    userStore,
+    knowbookStore,
+  } = useStores();
   return (
     <Box>
       <CardAtomGrid
         atoms={dataStore.getFeedList()}
         isItemSaved_handler={isItemSaved(dataStore)}
-        isItemSavedActionable_handler={isItemSavedActivated(dataStore)}
-        saved_handler={onSaved(dataStore)}
-        edit_handler={onEditKnowbooks(uiStore, dataStore)}
+        isItemSavedActionable_handler={isItemSavedActivated(knowbookStore)}
+        saved_handler={onSaved(dataStore, graphStore, userStore, knowbookStore)}
+        edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
       />
       <EditKnowbooks />
     </Box>

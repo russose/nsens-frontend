@@ -1,3 +1,4 @@
+import { KnowkookStore } from "./KnowkookStore";
 import { observable, action, makeObservable } from "mobx";
 import { AtomID, KnowbookID } from "../common/types";
 import { DataStore } from "./DataStore";
@@ -153,15 +154,18 @@ export class UIStore {
   }
 
   /******************************************************* */
-  initKnowbookEditionElements(atomID: AtomID, datastore: DataStore): void {
+  initKnowbookEditionElements(
+    atomID: AtomID,
+    knowbookStore: KnowkookStore
+  ): void {
     this.$editKnowbookNewValue = "";
     this.editKnowbookMembers.clear();
 
-    const knowbook_id_list = Array.from(datastore.knowbooks.keys());
+    const knowbook_id_list = Array.from(knowbookStore.knowbooks.keys());
     knowbook_id_list.forEach((knowbookId) => {
       this.editKnowbookMembers.set(
         knowbookId,
-        datastore.isItemInKnowbook(atomID, knowbookId)
+        knowbookStore.isItemInKnowbook(atomID, knowbookId)
       );
     });
   }
