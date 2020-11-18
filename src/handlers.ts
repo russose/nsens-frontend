@@ -1,6 +1,7 @@
+import { FeedStore } from "./stores/FeedStore";
 import { UserStore } from "./stores/UserStore";
 import { GraphStore } from "./stores/GraphStore";
-import { DataStore } from "./stores/DataStore";
+import { SavedStore } from "./stores/SavedStore";
 import { KnowbookID, AtomID, ButtonIDType } from "./common/types";
 import { IItemDisplayMode, UIStore } from "./stores/UIStore";
 import { _login, _signup, _logout } from "./_api";
@@ -31,24 +32,24 @@ export const onSearchHomeText = (uiStore: UIStore) => (input: {
 };
 
 export const onSearchHomeSubmit = (
-  dataStore: DataStore,
+  feedStore: FeedStore,
   uiStore: UIStore,
   userStore: UserStore
 ) => (): void => {
   if (uiStore.searchPattern.length > 0) {
-    dataStore.setFeedFromSearch(uiStore.searchPattern, userStore);
+    feedStore.setFeedFromSearch(uiStore.searchPattern, userStore);
   } else {
-    //dataStore.setFeedFromRandom();
+    //feedStore.setFeedFromRandom();
   }
 };
 
 export const onSearchHomeKeyboard = (
-  dataStore: DataStore,
+  feedStore: FeedStore,
   uiStore: UIStore,
   userStore: UserStore
 ) => (input: { event: any; value: string }): void => {
   if (input.event.key === "Enter") {
-    onSearchHomeSubmit(dataStore, uiStore, userStore)();
+    onSearchHomeSubmit(feedStore, uiStore, userStore)();
   } else if (input.event.key === "Escape") {
     uiStore.setSearchPattern("");
   }
@@ -57,21 +58,22 @@ export const onSearchHomeKeyboard = (
 /*******************Save atom card*************************** */
 
 export const onSaved = (
-  dataStore: DataStore,
+  savedStore: SavedStore,
   graphStore: GraphStore,
   userStore: UserStore,
-  knowbookStore: KnowkookStore
+  knowbookStore: KnowkookStore,
+  feedStore: FeedStore
 ) => (itemID: AtomID) => (): void => {
   if (!userStore.isLogged) {
     goLogin();
   }
   if (
-    dataStore.saved.has(itemID) === undefined ||
-    dataStore.saved.has(itemID) === false
+    savedStore.saved.has(itemID) === undefined ||
+    savedStore.saved.has(itemID) === false
   ) {
-    dataStore.addSaved(itemID, graphStore);
+    savedStore.addSaved(itemID, graphStore, feedStore);
   } else {
-    dataStore.removeSaved(itemID, knowbookStore);
+    savedStore.removeSaved(itemID, knowbookStore);
   }
 };
 
@@ -85,11 +87,11 @@ export const isItemSavedActivated = (knowbookStore: KnowkookStore) => (
   }
 };
 
-export const isItemSaved = (dataStore: DataStore) => (itemID: AtomID) => {
-  if (dataStore.saved.has(itemID) === undefined) {
+export const isItemSaved = (savedStore: SavedStore) => (itemID: AtomID) => {
+  if (savedStore.saved.has(itemID) === undefined) {
     return false;
   }
-  if (dataStore.saved.has(itemID)) {
+  if (savedStore.saved.has(itemID)) {
     return true;
   } else {
     return false;
@@ -188,18 +190,18 @@ export const onRenameKnowbook = (
   uiStore.setRenameKnowbookOpened(false);
 };
 
-// export const onRenameKnowbook = (uiStore: UIStore, dataStore: DataStore) => (
+// export const onRenameKnowbook = (uiStore: UIStore, savedStore: SavedStore) => (
 //   name: string
 // ): void => {
-//   dataStore.renameKnowbook(name, uiStore.renameKnowbookNewName);
+//   savedStore.renameKnowbook(name, uiStore.renameKnowbookNewName);
 //   uiStore.setRenameKnowbookOpened(false);
 // };
 
 export const onDeleteKnowbook = (
-  dataStore: DataStore,
+  savedStore: SavedStore,
   knowbookStore: KnowkookStore
 ) => (name: KnowbookID) => (): void => {
-  knowbookStore.deleteKnowbook(name, dataStore);
+  knowbookStore.deleteKnowbook(name, savedStore);
 };
 
 /*******************Login and Signup*************************** */
@@ -216,14 +218,14 @@ export const onChangeUsernamePassword = (uiStore: UIStore) => (
 };
 
 export const onLogout = (
-  dataStore: DataStore,
+  savedStore: SavedStore,
   userStore: UserStore,
   knowbookStore: KnowkookStore
 ) => (): void => {
   _logout()
     .then(() => {
       userStore.setUser({ username: "" });
-      dataStore.clearSaved();
+      savedStore.clearSaved();
       knowbookStore.clearKnowbooks();
     })
     .then(() => {
@@ -236,9 +238,10 @@ export const onLogout = (
 
 export const onSubmitLoginSignup = (
   uiStore: UIStore,
-  dataStore: DataStore,
+  savedStore: SavedStore,
   userStore: UserStore,
-  knowbookStore: KnowkookStore
+  knowbookStore: KnowkookStore,
+  feedStore: FeedStore
 ) => (type: string) => (): void => {
   if (type === "login") {
     _login(uiStore.loginScreenUsername, uiStore.loginScreenPassword)
@@ -247,7 +250,7 @@ export const onSubmitLoginSignup = (
         // console.log("logged successfully!");
       })
       .then(() => {
-        initializeUserData(dataStore, userStore, knowbookStore);
+        initializeUserData(savedStore, userStore, knowbookStore, feedStore);
         goHome();
       })
       .catch(function (error) {
@@ -261,7 +264,7 @@ export const onSubmitLoginSignup = (
         // console.log("signed successfully!");
       })
       .then(() => {
-        initializeUserData(dataStore, userStore, knowbookStore);
+        initializeUserData(savedStore, userStore, knowbookStore, feedStore);
         goHome();
       })
       .catch(function (error) {

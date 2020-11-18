@@ -13,19 +13,26 @@ import { useStores } from "../src/stores/_RootStoreHook";
 
 const Home: React.FunctionComponent = (props) => {
   const {
-    dataStore,
+    savedStore,
     uiStore,
     graphStore,
     userStore,
     knowbookStore,
+    feedStore,
   } = useStores();
   return (
     <Box>
       <CardAtomGrid
-        atoms={dataStore.getFeedList()}
-        isItemSaved_handler={isItemSaved(dataStore)}
+        atoms={feedStore.getFeedList()}
+        isItemSaved_handler={isItemSaved(savedStore)}
         isItemSavedActionable_handler={isItemSavedActivated(knowbookStore)}
-        saved_handler={onSaved(dataStore, graphStore, userStore, knowbookStore)}
+        saved_handler={onSaved(
+          savedStore,
+          graphStore,
+          userStore,
+          knowbookStore,
+          feedStore
+        )}
         edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
       />
       <EditKnowbooks />

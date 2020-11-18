@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Box } from "gestalt";
 import { IKnowbook, KnowbookID } from "../common/types";
-import { DataStore } from "../stores/DataStore";
+import { SavedStore } from "../stores/SavedStore";
 import CardKnow from "./CardKnow";
 import { entierAleatoire } from "../libs/utils";
 import { KnowkookStore } from "../stores/KnowkookStore";
@@ -10,7 +10,7 @@ interface ICardKnowGridProps {
   knowbooks: IKnowbook[];
   edit_handler: any;
   delete_handler: any;
-  datastore: DataStore;
+  savedStore: SavedStore;
   knowbookStore: KnowkookStore;
 }
 
@@ -18,11 +18,11 @@ interface ICardKnowGridProps {
 
 function getKnowbookImage(
   knowbook: KnowbookID,
-  datastore: DataStore,
+  savedStore: SavedStore,
   knowbookStore: KnowkookStore
 ): string {
   let image_paths_list: string[] = knowbookStore
-    .getKnowbookAtomsList(knowbook, datastore)
+    .getKnowbookAtomsList(knowbook, savedStore)
     .map((item) => {
       return item.image_url;
     });
@@ -64,7 +64,7 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
             // image_url={image_path}
             image_url={getKnowbookImage(
               item.name,
-              props.datastore,
+              props.savedStore,
               props.knowbookStore
             )}
             pathname={"/Knowbook"}

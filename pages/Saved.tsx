@@ -12,20 +12,27 @@ import CardAtomGrid from "../src/components/CardAtomGrid";
 
 const Saved: React.FunctionComponent = (props) => {
   const {
-    dataStore,
+    savedStore,
     uiStore,
     graphStore,
     userStore,
     knowbookStore,
+    feedStore,
   } = useStores();
 
   return (
     <Box>
       <CardAtomGrid
-        atoms={Array.from(dataStore.saved.values())}
-        isItemSaved_handler={isItemSaved(dataStore)}
+        atoms={Array.from(savedStore.saved.values())}
+        isItemSaved_handler={isItemSaved(savedStore)}
         isItemSavedActionable_handler={isItemSavedActivated(knowbookStore)}
-        saved_handler={onSaved(dataStore, graphStore, userStore, knowbookStore)}
+        saved_handler={onSaved(
+          savedStore,
+          graphStore,
+          userStore,
+          knowbookStore,
+          feedStore
+        )}
         edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
       />
       <EditKnowbooks />

@@ -1,6 +1,7 @@
+import { FeedStore } from "./FeedStore";
 import { KnowkookStore } from "./KnowkookStore";
 import { UserStore } from "./UserStore";
-import { DataStore } from "./DataStore";
+import { SavedStore } from "./SavedStore";
 import { UIStore } from "./UIStore";
 import { GraphStore } from "./GraphStore";
 
@@ -8,27 +9,29 @@ import { GraphStore } from "./GraphStore";
 
 export interface IStores {
   uiStore: UIStore;
-  dataStore: DataStore;
+  savedStore: SavedStore;
   graphStore: GraphStore;
   userStore: UserStore;
   knowbookStore: KnowkookStore;
+  feedStore: FeedStore;
 }
 
 export class RootStore {
   private $stores: IStores = {
-    dataStore: new DataStore(),
+    savedStore: new SavedStore(),
     uiStore: new UIStore(),
     graphStore: new GraphStore(),
     userStore: new UserStore(),
     knowbookStore: new KnowkookStore(),
+    feedStore: new FeedStore(),
   };
 
   public stores(): IStores {
     return this.$stores;
   }
 
-  // public getDataStore(): DataStore {
-  //   return this.$stores.dataStore;
+  // public getSavedStore(): SavedStore {
+  //   return this.$stores.savedStore;
   // }
 }
 

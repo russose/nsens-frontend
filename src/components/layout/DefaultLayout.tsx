@@ -24,11 +24,17 @@ const color_headers = USER_DISPLAY.colors.headers as any;
 // const buttons = USER_GUI_CONFIG.buttons;
 
 const DefaultLayout: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore, userStore, knowbookStore } = useStores();
+  const {
+    savedStore,
+    uiStore,
+    userStore,
+    knowbookStore,
+    feedStore,
+  } = useStores();
   const router = useRouter();
 
   if (userStore.user === null) {
-    initializeApp(dataStore, userStore, knowbookStore);
+    initializeApp(savedStore, userStore, knowbookStore, feedStore);
   }
 
   const navigationButtonsIds: ButtonIDType[] = [
@@ -64,16 +70,16 @@ const DefaultLayout: React.FunctionComponent = (props) => {
     <SearchBar
       placeholder={USER_GUI_CONFIG.searchBar}
       handlerText={onSearchHomeText(uiStore)}
-      handlerSubmit={onSearchHomeSubmit(dataStore, uiStore, userStore)}
-      handlerKeyboard={onSearchHomeKeyboard(dataStore, uiStore, userStore)}
+      handlerSubmit={onSearchHomeSubmit(feedStore, uiStore, userStore)}
+      handlerKeyboard={onSearchHomeKeyboard(feedStore, uiStore, userStore)}
       value={uiStore.searchPattern}
     />
   );
 
   // const avatar = (
   //   <AvatarLink
-  //     username={dataStore.user === null ? "" : dataStore.user.username}
-  //     logged={dataStore.isLogged}
+  //     username={savedStore.user === null ? "" : savedStore.user.username}
+  //     logged={savedStore.isLogged}
   //     pathname="/User"
   //   />
   // );

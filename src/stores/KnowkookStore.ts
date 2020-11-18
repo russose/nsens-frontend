@@ -1,4 +1,4 @@
-import { DataStore } from "./DataStore";
+import { SavedStore } from "./SavedStore";
 import { observable, action, makeObservable } from "mobx";
 import {
   IAtom,
@@ -19,7 +19,7 @@ export class KnowkookStore {
   private $knowbooks = observable.map<KnowbookID, IKnowbook>();
 
   constructor() {
-    // makeObservable<DataStore, "$user">(this, {
+    // makeObservable<SavedStore, "$user">(this, {
     makeObservable<KnowkookStore>(this, {
       // knowbooks: computed,
       setKnowbooks: action,
@@ -74,11 +74,11 @@ export class KnowkookStore {
       });
   }
 
-  deleteKnowbook(name: KnowbookID, dataStore: DataStore) {
+  deleteKnowbook(name: KnowbookID, savedStore: SavedStore) {
     if (!this.knowbooks.has(name)) {
       return;
     }
-    if (this.getKnowbookAtomsList(name, dataStore).length !== 0) {
+    if (this.getKnowbookAtomsList(name, savedStore).length !== 0) {
       return;
     }
     _removeKnowbook(name)
@@ -197,14 +197,17 @@ export class KnowkookStore {
     }
   }
 
-  getKnowbookAtomsList(knowbookID: KnowbookID, dataStore: DataStore): IAtom[] {
+  getKnowbookAtomsList(
+    knowbookID: KnowbookID,
+    savedStore: SavedStore
+  ): IAtom[] {
     let my_knowbook: IKnowbook | undefined;
 
     if (this.knowbooks.has(knowbookID)) {
       my_knowbook = this.knowbooks.get(knowbookID);
 
       return my_knowbook !== undefined
-        ? dataStore.getSavedAtomsFromIds(my_knowbook.items)
+        ? savedStore.getSavedAtomsFromIds(my_knowbook.items)
         : [];
     } else {
       // console.log("impossible to provide Atoms List from knowbook");
@@ -238,10 +241,10 @@ export class KnowkookStore {
     return false;
   }
 
-  ItemsInNoKnowbook(dataStore: DataStore): IAtom[] {
+  ItemsInNoKnowbook(savedStore: SavedStore): IAtom[] {
     const itemsIdList: AtomID[] = [];
 
-    dataStore.saved.forEach((item) => {
+    savedStore.saved.forEach((item) => {
       const knowbookIds: KnowbookID[] = Array.from(this.knowbooks.keys());
       for (let knowbookId of knowbookIds) {
         const inside = this.isItemInKnowbook(item.id, knowbookId);
@@ -253,6 +256,6 @@ export class KnowkookStore {
       return;
     });
 
-    return dataStore.getSavedAtomsFromIds(itemsIdList);
+    return savedStore.getSavedAtomsFromIds(itemsIdList);
   }
 }

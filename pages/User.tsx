@@ -5,7 +5,7 @@ import { Button, Box } from "gestalt";
 import { onLogout } from "../src/handlers";
 
 const User: React.FunctionComponent = (props) => {
-  const { dataStore, userStore, knowbookStore } = useStores();
+  const { savedStore, userStore, knowbookStore } = useStores();
 
   let content;
 
@@ -18,7 +18,7 @@ const User: React.FunctionComponent = (props) => {
           accessibilityLabel="logout"
           text={"Logout"}
           size="md"
-          onClick={onLogout(dataStore, userStore, knowbookStore)}
+          onClick={onLogout(savedStore, userStore, knowbookStore)}
           // inline
         />
       </Box>

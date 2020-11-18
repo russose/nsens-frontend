@@ -1,24 +1,26 @@
+import { FeedStore } from "./stores/FeedStore";
 import { KnowkookStore } from "./stores/KnowkookStore";
 import { UserStore } from "./stores/UserStore";
-import { DataStore } from "./stores/DataStore";
+import { SavedStore } from "./stores/SavedStore";
 import { _api } from "./common/fetch";
 import { _getUser, _getSavedList, _getKnowbooksList } from "./_api";
 
 export async function initializeApp(
-  datastore: DataStore,
+  savedStore: SavedStore,
   userStore: UserStore,
-  knowbookStore: KnowkookStore
+  knowbookStore: KnowkookStore,
+  feedStore: FeedStore
 ) {
   try {
     const user = await _getUser();
     userStore.setUser({ username: user });
 
     if (!userStore.isLogged) {
-      datastore.setFeedFromRandom();
-      datastore.setSaved([]);
+      feedStore.setFeedFromRandom();
+      savedStore.setSaved([]);
       knowbookStore.setKnowbooks([]);
     } else {
-      await initializeUserData(datastore, userStore, knowbookStore);
+      await initializeUserData(savedStore, userStore, knowbookStore, feedStore);
     }
   } catch (error) {
     // console.log(error);
@@ -26,17 +28,18 @@ export async function initializeApp(
 }
 
 export async function initializeUserData(
-  datastore: DataStore,
+  savedStore: SavedStore,
   userStore: UserStore,
-  knowbookStore: KnowkookStore
+  knowbookStore: KnowkookStore,
+  feedStore: FeedStore
 ) {
   try {
     if (userStore.isLogged) {
       // const atoms = await _getAllFeed();
-      // datastore.setFeed(atoms);
-      datastore.setFeedFromRelated();
+      // savedStore.setFeed(atoms);
+      feedStore.setFeedFromRelated();
       const saved = await _getSavedList();
-      datastore.setSaved(saved);
+      savedStore.setSaved(saved);
       const knowbooks = await _getKnowbooksList();
       knowbookStore.setKnowbooks(knowbooks);
     }

@@ -77,11 +77,12 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   props
 ) => {
   const {
-    dataStore,
+    savedStore,
     uiStore,
     graphStore,
     userStore,
     knowbookStore,
+    feedStore,
   } = useStores();
   let node;
   if (props.node.related === "prop") {
@@ -108,12 +109,13 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
           title={props.node.title}
           thumbnail_url={props.node.thumbnail_url}
           saved_actionable={isItemSavedActivated(knowbookStore)(props.node.id)}
-          saved_enabled={isItemSaved(dataStore)(props.node.id)}
+          saved_enabled={isItemSaved(savedStore)(props.node.id)}
           saved_handler={onSaved(
-            dataStore,
+            savedStore,
             graphStore,
             userStore,
-            knowbookStore
+            knowbookStore,
+            feedStore
           )(props.node.id)}
           edit_handler={onEditKnowbooks(uiStore, knowbookStore)(props.node.id)}
           pathname={"/ItemView"}
@@ -148,7 +150,7 @@ const Network: React.FunctionComponent<INetworkProps> = (props) => {
   // }
 
   // const empty_svg = <svg></svg>;
-  // if (dataStore.graph === undefined) {
+  // if (savedStore.graph === undefined) {
   //   return empty_svg;
   // }
 

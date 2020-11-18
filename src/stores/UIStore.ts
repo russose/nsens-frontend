@@ -1,7 +1,7 @@
 import { KnowkookStore } from "./KnowkookStore";
 import { observable, action, makeObservable } from "mobx";
 import { AtomID, KnowbookID } from "../common/types";
-import { DataStore } from "./DataStore";
+import { SavedStore } from "./SavedStore";
 import { _getRelated } from "../_api";
 
 export enum IItemDisplayMode {

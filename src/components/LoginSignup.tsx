@@ -6,7 +6,13 @@ import LoginSignupForm from "./LoginSignupForm";
 import { onChangeUsernamePassword, onSubmitLoginSignup } from "../handlers";
 
 const LoginSignup: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore, userStore, knowbookStore } = useStores();
+  const {
+    savedStore,
+    uiStore,
+    userStore,
+    knowbookStore,
+    feedStore,
+  } = useStores();
   return (
     <Box>
       {true && (
@@ -23,9 +29,10 @@ const LoginSignup: React.FunctionComponent = (props) => {
           label_signup={USER_GUI_CONFIG.loginSignup.signup_label}
           handler_button={onSubmitLoginSignup(
             uiStore,
-            dataStore,
+            savedStore,
             userStore,
-            knowbookStore
+            knowbookStore,
+            feedStore
           )}
           handler_text={onChangeUsernamePassword(uiStore)}
         />

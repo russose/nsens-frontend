@@ -11,15 +11,15 @@ import { onDeleteKnowbook, onOpenRenameKnowbook } from "../src/handlers";
 const path_knowbook_image = USER_DISPLAY.paths.knowbook_image;
 
 const Knowbooks: React.FunctionComponent = (props) => {
-  const { dataStore, uiStore, knowbookStore } = useStores();
+  const { savedStore, uiStore, knowbookStore } = useStores();
 
   return (
     <Box>
       <CardKnowGrid
         knowbooks={Array.from(knowbookStore.knowbooks.values())}
         edit_handler={onOpenRenameKnowbook(uiStore)}
-        delete_handler={onDeleteKnowbook(dataStore, knowbookStore)}
-        datastore={dataStore}
+        delete_handler={onDeleteKnowbook(savedStore, knowbookStore)}
+        savedStore={savedStore}
         knowbookStore={knowbookStore}
       />
       <Box
@@ -35,7 +35,7 @@ const Knowbooks: React.FunctionComponent = (props) => {
           image_url={path_knowbook_image}
           pathname="Saved"
           queryObject={{}}
-          amount={dataStore.saved.size}
+          amount={savedStore.saved.size}
           edit_handler={undefined}
           delete_handler={undefined}
         />
