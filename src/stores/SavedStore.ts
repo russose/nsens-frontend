@@ -31,6 +31,8 @@ export class SavedStore {
   }
 
   addSaved(itemId: AtomID, graphStore: GraphStore, feedStore: FeedStore): void {
+    let title: string;
+
     // if (itemId === undefined || !this.isLogged) {
     if (itemId === undefined) {
       return;
@@ -38,6 +40,7 @@ export class SavedStore {
     //Items in feed items
     if (feedStore.feed.has(itemId)) {
       const atom = feedStore.feed.get(itemId);
+      title = atom.title;
       if (atom !== undefined) {
         _save(atom)
           .then(
@@ -69,11 +72,11 @@ export class SavedStore {
         item_from_graph_with_id_list.length === 1
       ) {
         const atom: IAtom = item_from_graph_with_id_list[0];
+        title = atom.title;
         _save(atom)
           .then(
             action(() => {
               this.$saved.set(atom.id, atom);
-              console.log(atom);
               // console.log("saved successfully");
             })
           )
@@ -88,7 +91,7 @@ export class SavedStore {
     }
 
     //Store related items
-    _saveRelated(itemId)
+    _saveRelated(itemId, title)
       .then(() => {})
       .catch(() => {
         console.log("impossible to store related items");

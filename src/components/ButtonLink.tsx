@@ -13,7 +13,7 @@ const icon_size = "sm";
 const ButtonLink: React.FunctionComponent<IButtonLinkProps> = (props) => {
   return (
     <Box padding={0} alignItems="center">
-      <Link href={{ pathname: props.pathname }} as={props.pathname} passHref>
+      <Link href={{ pathname: props.pathname }} passHref>
         <a>
           <IconButton
             accessibilityLabel={props.label}

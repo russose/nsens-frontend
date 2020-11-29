@@ -7,7 +7,11 @@ import {
   forceManyBody,
   forceSimulation,
 } from "d3-force";
-import { _getItemsFromTitlesFromWeb, _getRelatedFromWeb } from "../_api";
+import {
+  _getItemsFromTitlesFromWeb,
+  _getRelatedFromWikidataFromWeb,
+  _getRelatedFromWikipediaFromWeb,
+} from "../_api";
 
 export class GraphStore {
   private $graph: IGraph = { nodes: [], links: [] };
@@ -38,21 +42,22 @@ export class GraphStore {
     height: number
   ): void {
     const width_node = 100;
-    const forceManyStrength = -50;
-    const forceColiideRadius = width_node;
-    const forceLinkDistance = width_node * 1;
-    const forceLinkIterations = 5;
+    const forceColiideRadius = width_node * 1.0;
+    const forceLinkDistance = width_node * 1.0;
+    const forceIterations = 10;
     const forceAlphaMin = 0.001;
-    const forceAlphaDecay = 0.5;
 
     this.getGraphDataItem(itemID, title)
-      // _getRelated(itemID)
       .then(
         action((items: IAtom[]) => {
           if (items === undefined) {
             return;
           }
-          const graph = this.buildGraphItem(items);
+          const graph = this.buildGraphItemWithGroup(
+            items,
+            width / 2,
+            height / 2
+          );
           this.setGraph(graph);
 
           const nodes = graph.nodes;
@@ -60,21 +65,26 @@ export class GraphStore {
 
           let self = this;
           const simulation = forceSimulation(nodes)
-            .force("center", forceCenter(width / 2, height / 2))
-            .force("collision", forceCollide().radius(forceColiideRadius))
-            .force("charge", forceManyBody().strength(forceManyStrength))
+            .force("center", forceCenter(width / 2, height / 2).strength(1.2))
+            .force(
+              "collision",
+              forceCollide()
+                .radius(forceColiideRadius)
+                .iterations(forceIterations)
+            )
+            // .force("charge", forceManyBody().strength(-50))
             .force(
               "link",
               forceLink(links)
                 .distance(forceLinkDistance)
-                // .strength(1)
-                .iterations(forceLinkIterations)
+                .strength(0.7)
+                .iterations(forceIterations)
             )
             .on("tick", function () {
               self.setGraph({ nodes: nodes, links: links });
             })
             .alphaMin(forceAlphaMin) //To converge quickly, default is 0.001
-            .alphaDecay(forceAlphaDecay);
+            .alphaDecay(0.05);
         })
       )
       .catch((error) => {
@@ -82,19 +92,71 @@ export class GraphStore {
       });
   }
 
-  buildGraphItem(items: IAtom[]): IGraph {
+  //Important: graph[0] doit toujours avoir le RootItem!
+  async getGraphDataItem(itemID: AtomID, title: string): Promise<IAtom[]> {
+    const items_wikipedia: IAtom[] = await _getRelatedFromWikipediaFromWeb(
+      itemID,
+      title
+    );
+    const items_wikidata: IAtom[] = await _getRelatedFromWikidataFromWeb(
+      itemID
+    );
+
+    const items = items_wikidata.concat(items_wikipedia);
+
+    // const items = items_all.filter((item) => {
+    //   const filter =
+    //     !item.title_en.includes("Category:") && !item.title_en.includes("Wiki");
+    //   return filter;
+    // });
+
+    const rootItemList: IAtom[] = await _getItemsFromTitlesFromWeb(title);
+    const rootItem = rootItemList[0];
+
+    if (rootItem !== undefined) {
+      //add root at the beginning
+      items.unshift(rootItem);
+    } else {
+      console.log("graph broken!");
+    }
+
+    return items;
+  }
+
+  buildGraphItemSimple(items: IAtom[], x0: number, y0: number): IGraph {
+    const nodes: INode[] = items.map((item) => {
+      return {
+        x: x0,
+        y: y0,
+        ...item,
+      };
+    });
+    const links: ILink[] = [];
+
+    //nodes.slice(1) exclude the first item which is the node_root
+    nodes.slice(1).forEach((node_item) => {
+      links.push({
+        source: nodes[0],
+        target: node_item,
+      });
+    });
+
+    return { nodes: nodes, links: links };
+  }
+
+  buildGraphItemWithGroup(items: IAtom[], x0: number, y0: number): IGraph {
     const graph_map = new Map<string, INode[]>();
     const items_INode: INode[] = items.map((item) => {
       return {
-        x: 0,
-        y: 0,
+        x: x0,
+        y: y0,
         ...item,
       };
     });
     const node_root = items_INode[0];
-    items_INode.shift(); //remove node_root from items_INode
 
-    items_INode.forEach((node) => {
+    //nodes.slice(1) exclude the first item which is the node_root
+    items_INode.slice(1).forEach((node) => {
       const key = node.related;
 
       if (!graph_map.has(key)) {
@@ -108,21 +170,15 @@ export class GraphStore {
     const nodes: INode[] = [node_root];
     const links: ILink[] = [];
 
-    // const cluster_amount = Array.from(graph_map.keys()).length
-    // let pos_cluster = 0;
-    // const ecart = 200;
-    // const initial_cluster_position = Array.from({length: cluster_amount}, (x, i) => ecart * i);
-
     graph_map.forEach((nodes_list_prop, key) => {
       //NodeGroup Element
-      // pos_cluster = pos_cluster + ecart;
       const node_prop: INode = {
         x: 0,
         y: 0,
         ...newAtom(key),
       };
       node_prop["title"] = key.split("|")[1];
-      node_prop["related"] = "prop";
+      node_prop["related"] = "group_prop";
 
       if (nodes_list_prop.length > 1) {
         // if (true) {
@@ -149,27 +205,5 @@ export class GraphStore {
       }
     });
     return { nodes: nodes, links: links };
-  }
-
-  //Important: graph[0] doit toujours avoir le RootItem!
-  async getGraphDataItem(itemID: AtomID, title: string): Promise<IAtom[]> {
-    const items_all = await _getRelatedFromWeb(itemID);
-    const items = items_all.filter((item) => {
-      const filter =
-        !item.title_en.includes("Category:") && !item.title_en.includes("Wiki");
-      return filter;
-    });
-
-    const rootItemList: IAtom[] = await _getItemsFromTitlesFromWeb(title);
-    const rootItem = rootItemList[0];
-
-    if (rootItem !== undefined) {
-      //add root at the beginning
-      items.unshift(rootItem);
-    } else {
-      console.log("graph broken!");
-    }
-
-    return items;
   }
 }

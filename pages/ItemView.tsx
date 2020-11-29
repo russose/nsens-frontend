@@ -10,6 +10,7 @@ import { ParentSize } from "@visx/responsive";
 import EditKnowbooks from "../src/components/EditKnowbooks";
 import { IItemDisplayMode } from "../src/stores/UIStore";
 import Article from "../src/components/Article";
+import NetworkWithPropGroup from "../src/components/vizs/NetworkWithPropGroup";
 
 const ItemView: React.FunctionComponent = (props) => {
   const { uiStore } = useStores();
@@ -28,7 +29,7 @@ const ItemView: React.FunctionComponent = (props) => {
     <ParentSize>
       {(parent) => (
         <Box>
-          <Network
+          <NetworkWithPropGroup
             width={parent.width - 5}
             height={parent.height - 5}
             itemId={item_id}

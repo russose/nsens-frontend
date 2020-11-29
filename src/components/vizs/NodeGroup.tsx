@@ -12,6 +12,9 @@ const node_size = USER_DISPLAY.network.node_size;
 
 const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
   let title = props.title;
+  if (title === undefined) {
+    return <Box />;
+  }
   if (title.length > max_title_size) {
     title = props.title.substring(0, max_title_size) + "...";
   }

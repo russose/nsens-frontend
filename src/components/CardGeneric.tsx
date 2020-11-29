@@ -31,6 +31,7 @@ interface ICardGenericProps {
 
 //const card_height = USER_DISPLAY.card_height;
 const title_card_size = USER_DISPLAY.title_card_size;
+const path_empty_image = USER_DISPLAY.paths.item_empty_image;
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   return (
@@ -57,7 +58,6 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
           <Mask rounding={4} height="100%" width="100%">
             <Link
               href={{ pathname: props.pathname, query: props.queryObject }}
-              as={props.pathname}
               passHref
             >
               <a>
@@ -68,7 +68,11 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
                   naturalHeight={1}
                   naturalWidth={1}
                   loading="auto"
-                  src={props.image_url}
+                  src={
+                    props.image_url === "" || props.image_url === undefined
+                      ? path_empty_image
+                      : props.image_url
+                  }
                   // src=""
                 ></Image>
               </a>

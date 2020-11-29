@@ -49,7 +49,11 @@ export const onSearchHomeKeyboard = (
   userStore: UserStore
 ) => (input: { event: any; value: string }): void => {
   if (input.event.key === "Enter") {
-    onSearchHomeSubmit(feedStore, uiStore, userStore)();
+    if (uiStore.searchPattern.length === 0) {
+      feedStore.setFeedFromRelated();
+    } else {
+      onSearchHomeSubmit(feedStore, uiStore, userStore)();
+    }
   } else if (input.event.key === "Escape") {
     uiStore.setSearchPattern("");
   }

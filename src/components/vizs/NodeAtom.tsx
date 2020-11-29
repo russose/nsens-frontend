@@ -55,7 +55,6 @@ const NodeAtom: React.FunctionComponent<INodeAtomProps> = (props) => {
         <Box padding={1} width={image_size} height={image_size}>
           <Link
             href={{ pathname: props.pathname, query: props.queryObject }}
-            as={props.pathname}
             passHref
           >
             <a>

@@ -71,6 +71,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
       <JsText>{article}</JsText>
       <Box padding={1}></Box>
       <Divider />
+      <Box padding={1}></Box>
       <JsText>Source: Wikipedia</JsText>
     </Box>
   );

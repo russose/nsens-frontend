@@ -2,18 +2,22 @@ export const LANGUAGE = "fr";
 
 export const CONFIG_FETCHING = {
   URLs: {
-    ROOT_URL_WIKIPEDIA: "https://" + LANGUAGE + ".wikipedia.org/w/api.php",
+    ROOT_URL_WIKIPEDIA_ACTION:
+      "https://" + LANGUAGE + ".wikipedia.org/w/api.php",
     ROOT_URL_WIKIPEDIA_REST:
       "https://" + LANGUAGE + ".wikipedia.org/api/rest_v1/page/",
     ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
+    ROOT_URL_WIKIDATA: "https://query.wikidata.org/sparql",
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
-  amount_data_fetched_items: 20,
-  amount_data_fetched_images: 20,
-  max_width_image: 2000,
-  min_width_image: 120,
+  amount_data_fetched_items: 40,
+  amount_related: 10,
+  amount_data_fetched_images: 10,
+  // max_width_image: 2000,
+  max_width_image: 1400,
+  min_width_image: 400,
   // search_min_length_search: 4,
-  max_size_api: 40,
+  max_size_chunk_api: 40,
 };
 
 const CONFIG_GUI = {
@@ -33,6 +37,7 @@ const CONFIG_GUI = {
       knowbooks_title: "Carnets de connaissance (Knowbooks)",
       AllSaved_title: "Sauvés (tous)",
       None_Title: "Aucun Carnet",
+      Related_title: "Related:",
     },
     editKnowbook: {
       title: "Mise à jour des carnets",
@@ -98,10 +103,10 @@ const CONFIG_GUI = {
       max_title_size: 33,
     },
     paths: {
-      // item_empty_image: "/The_Scientific_Universe_small.png",
-      // knowbook_image: "/500px-Book_closed_template_small.svg.png",
-      item_empty_image: "",
-      knowbook_image: "",
+      item_empty_image: "/The_Scientific_Universe_small.png",
+      knowbook_all_image: "/500px-Book_closed_template_small.svg.png",
+      knowbook_none_image: "/The_Scientific_Universe_small.png",
+      // knowbook_image: "",
       user_image: "/icon_user.jpg",
     },
   },

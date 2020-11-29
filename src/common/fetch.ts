@@ -1,5 +1,5 @@
+import { CONFIG_FETCHING } from "./config";
 import { CONFIG_OPS } from "./config_env";
-const ROOT_URL_WIKIDATA = "https://query.wikidata.org/sparql";
 
 /************************************** */
 //Temporary when using self signed certificate
@@ -11,6 +11,8 @@ const ROOT_URL_WIKIDATA = "https://query.wikidata.org/sparql";
 //   rejectUnauthorized: false,
 // });
 /************************************** */
+
+const wikidata_url = CONFIG_FETCHING.URLs.ROOT_URL_WIKIDATA;
 
 const axios = require("axios");
 
@@ -45,7 +47,7 @@ export async function fetch_data_wikidata(sparqlQuery: string): Promise<any> {
   const res = await axios({
     method: "get",
     headers: { Accept: "application/sparql-results+json" },
-    url: ROOT_URL_WIKIDATA + "?query=" + encodeURIComponent(sparqlQuery),
+    url: wikidata_url + "?query=" + encodeURIComponent(sparqlQuery),
   });
 
   const data = await res.data.results.bindings;
@@ -82,6 +84,24 @@ export async function fetchArticle(
     url:
       // "https://en.wikipedia.org/api/rest_v1/page/mobile-html/Albert_Einstein", //Mobile
       title + "?redirect=true", //Desktop
+  });
+
+  const data = await res.data;
+
+  return data;
+}
+
+export async function fetchRelatedWikipedia(
+  title: string,
+  ROOT_URL: string
+): Promise<string> {
+  const res = await axios({
+    method: "get",
+    headers: {
+      Accept: "text/html",
+    },
+    baseURL: ROOT_URL + "related/",
+    url: encodeURI(title),
   });
 
   const data = await res.data;

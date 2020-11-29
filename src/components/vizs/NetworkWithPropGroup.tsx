@@ -2,7 +2,6 @@ import React from "react";
 import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
-
 import { Group } from "@visx/group";
 import {
   isItemSaved,
@@ -12,12 +11,12 @@ import {
 } from "../../handlers";
 import { useStores } from "../../stores/_RootStoreHook";
 import NodeAtom from "./NodeAtom";
+import NodeGroup from "./NodeGroup";
 import { USER_DISPLAY } from "../../common/config";
 import { IItemDisplayMode } from "../../stores/UIStore";
-import NetworkLink from "./NetworkLink";
 import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
 
-export type INetworkProps = {
+export type INetworkWithPropGroupProps = {
   // graph: IGraph;
   title: string;
   itemId: string;
@@ -41,38 +40,55 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
     knowbookStore,
     feedStore,
   } = useStores();
+  let node;
+  if (props.node.related === "group_prop") {
+    node = (
+      <foreignObject
+        x={-node_size / 2}
+        y={-node_size / 4}
+        width={node_size}
+        height={node_size}
+      >
+        <NodeGroup title={props.node.title} />
+      </foreignObject>
+    );
+  } else {
+    node = (
+      <foreignObject
+        x={-node_size / 2}
+        y={-node_size / 2}
+        width={node_size}
+        height={node_size}
+      >
+        <NodeAtom
+          id={props.node.id}
+          title={props.node.title}
+          thumbnail_url={props.node.thumbnail_url}
+          saved_actionable={isItemSavedActivated(knowbookStore)(props.node.id)}
+          saved_enabled={isItemSaved(savedStore)(props.node.id)}
+          saved_handler={onSaved(
+            savedStore,
+            graphStore,
+            userStore,
+            knowbookStore,
+            feedStore
+          )(props.node.id)}
+          edit_handler={onEditKnowbooks(uiStore, knowbookStore)(props.node.id)}
+          pathname={"/ItemView"}
+          queryObject={{ title: props.node.title, id: props.node.id }}
+        />
+      </foreignObject>
+    );
+  }
 
-  return (
-    <foreignObject
-      x={-node_size / 2}
-      y={-node_size / 2}
-      width={node_size}
-      height={node_size}
-    >
-      <NodeAtom
-        id={props.node.id}
-        title={props.node.title}
-        thumbnail_url={props.node.thumbnail_url}
-        saved_actionable={isItemSavedActivated(knowbookStore)(props.node.id)}
-        saved_enabled={isItemSaved(savedStore)(props.node.id)}
-        saved_handler={onSaved(
-          savedStore,
-          graphStore,
-          userStore,
-          knowbookStore,
-          feedStore
-        )(props.node.id)}
-        edit_handler={onEditKnowbooks(uiStore, knowbookStore)(props.node.id)}
-        pathname={"/ItemView"}
-        queryObject={{ title: props.node.title, id: props.node.id }}
-      />
-    </foreignObject>
-  );
+  return node;
 };
 
 const NetworkNode = observer(NetworkNode_);
 
-const Network: React.FunctionComponent<INetworkProps> = (props) => {
+const NetworkWithPropGroup: React.FunctionComponent<INetworkWithPropGroupProps> = (
+  props
+) => {
   const { uiStore, graphStore } = useStores();
 
   // if (process.browser) {
@@ -104,4 +120,4 @@ const Network: React.FunctionComponent<INetworkProps> = (props) => {
   );
 };
 
-export default observer(Network);
+export default observer(NetworkWithPropGroup);
