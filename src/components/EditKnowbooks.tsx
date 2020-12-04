@@ -7,13 +7,13 @@ import {
   onChangeKnwobooksInclusionEditKnowbooks,
   onCancel,
 } from "../handlers";
-import { Box } from "gestalt";
 import { USER_GUI_CONFIG } from "../common/config";
 
 const EditKnowbooks: React.FunctionComponent = (props) => {
   const { knowbookStore, uiStore } = useStores();
   return (
-    <Box>
+    // <Box>
+    <>
       {uiStore.editKnowbookOpened && (
         <FormEditKnowbooks
           id={uiStore.selectedAtomId}
@@ -30,7 +30,8 @@ const EditKnowbooks: React.FunctionComponent = (props) => {
           handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(uiStore)}
         />
       )}
-    </Box>
+    </>
+    // </Box>
   );
 };
 

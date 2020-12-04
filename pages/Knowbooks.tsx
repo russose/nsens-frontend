@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Box } from "gestalt";
-
+import { Box, Divider } from "gestalt";
 import CardKnowGrid from "../src/components/CardKnowGrid";
 import CardKnow from "../src/components/CardKnow";
 import { useStores } from "../src/stores/_RootStoreHook";
@@ -23,6 +22,7 @@ const Knowbooks: React.FunctionComponent = (props) => {
         savedStore={savedStore}
         knowbookStore={knowbookStore}
       />
+      <Divider />
       <Box
         //wrap={true}
         display="flex"

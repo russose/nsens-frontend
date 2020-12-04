@@ -2,15 +2,11 @@ import { observer } from "mobx-react-lite";
 import { useStores } from "../src/stores/_RootStoreHook";
 import { useRouter } from "next/router";
 import { Box } from "gestalt";
-// import { JsText } from "../src/components/js_components";
-// import { CONFIG_FETCHING } from "../src/common/config";
-// import { fetchArticle } from "../src/common/fetch";
-import Network from "../src/components/vizs/Network";
-import { ParentSize } from "@visx/responsive";
 import EditKnowbooks from "../src/components/EditKnowbooks";
 import { IItemDisplayMode } from "../src/stores/UIStore";
 import Article from "../src/components/Article";
-import NetworkWithPropGroup from "../src/components/vizs/NetworkWithPropGroup";
+
+import ZoomableNetworkWithGroup from "../src/components/vizs/ZoomableNetworkWithGroup";
 
 const ItemView: React.FunctionComponent = (props) => {
   const { uiStore } = useStores();
@@ -26,19 +22,10 @@ const ItemView: React.FunctionComponent = (props) => {
   );
 
   const network = (
-    <ParentSize>
-      {(parent) => (
-        <Box>
-          <NetworkWithPropGroup
-            width={parent.width - 5}
-            height={parent.height - 5}
-            itemId={item_id}
-            title={item_title}
-          />
-          <EditKnowbooks />
-        </Box>
-      )}
-    </ParentSize>
+    <>
+      <ZoomableNetworkWithGroup itemId={item_id} title={item_title} />
+      <EditKnowbooks />
+    </>
   );
 
   let page;

@@ -87,7 +87,7 @@ const CONFIG_GUI = {
     },
     knowbook_sizes: {
       height: 200,
-      image_ratio: "80%",
+      image_ratio: "75%",
       lgColumn: 2,
       mdColumn: 3,
       smColumn: 4,

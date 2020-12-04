@@ -143,7 +143,7 @@ const DefaultLayout: React.FunctionComponent = (props) => {
               lgColumn={9}
             >
               <Box
-                padding={1}
+                padding={0}
                 display="flex"
                 flex="grow"
                 alignItems="center"

@@ -14,7 +14,7 @@ import { useStores } from "../../stores/_RootStoreHook";
 import NodeAtom from "./NodeAtom";
 import { USER_DISPLAY } from "../../common/config";
 import { IItemDisplayMode } from "../../stores/UIStore";
-import NetworkLink from "./NetworkLink";
+// import NetworkLink from "./NetworkLink";
 import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
 
 export type INetworkProps = {

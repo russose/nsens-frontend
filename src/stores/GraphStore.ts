@@ -45,7 +45,7 @@ export class GraphStore {
     const forceColiideRadius = width_node * 1.0;
     const forceLinkDistance = width_node * 1.0;
     const forceIterations = 10;
-    const forceAlphaMin = 0.001;
+    const forceAlphaMin = 0.001; //0.001 working well
 
     this.getGraphDataItem(itemID, title)
       .then(
@@ -65,7 +65,7 @@ export class GraphStore {
 
           let self = this;
           const simulation = forceSimulation(nodes)
-            .force("center", forceCenter(width / 2, height / 2).strength(1.2))
+            .force("center", forceCenter(width / 2, height / 2).strength(0.8))
             .force(
               "collision",
               forceCollide()
@@ -84,6 +84,7 @@ export class GraphStore {
               self.setGraph({ nodes: nodes, links: links });
             })
             .alphaMin(forceAlphaMin) //To converge quickly, default is 0.001
+            // .alphaDecay(0.08);
             .alphaDecay(0.05);
         })
       )

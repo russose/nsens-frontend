@@ -1,7 +1,6 @@
 import RenameKnowbookForm from "./RenameKnowbookForm";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores/_RootStoreHook";
-import { Box } from "gestalt";
 import { USER_GUI_CONFIG } from "../common/config";
 import {
   onCancel,
@@ -12,7 +11,8 @@ import {
 const RenameKnowbooks: React.FunctionComponent = (props) => {
   const { knowbookStore, uiStore } = useStores();
   return (
-    <Box>
+    // <Box>
+    <>
       {uiStore.renameKnowbookOpened && (
         <RenameKnowbookForm
           title={USER_GUI_CONFIG.renameDeleteKnowbook.title}
@@ -24,7 +24,8 @@ const RenameKnowbooks: React.FunctionComponent = (props) => {
           handler_inputValue={onChangeInputValueRenameKnowbook(uiStore)}
         />
       )}
-    </Box>
+    </>
+    // </Box>
   );
 };
 

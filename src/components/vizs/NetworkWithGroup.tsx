@@ -16,7 +16,7 @@ import { USER_DISPLAY } from "../../common/config";
 import { IItemDisplayMode } from "../../stores/UIStore";
 import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
 
-export type INetworkWithPropGroupProps = {
+export type INetworkWithGroupProps = {
   // graph: IGraph;
   title: string;
   itemId: string;
@@ -86,7 +86,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
 
 const NetworkNode = observer(NetworkNode_);
 
-const NetworkWithPropGroup: React.FunctionComponent<INetworkWithPropGroupProps> = (
+const NetworkWithGroup: React.FunctionComponent<INetworkWithGroupProps> = (
   props
 ) => {
   const { uiStore, graphStore } = useStores();
@@ -111,7 +111,9 @@ const NetworkWithPropGroup: React.FunctionComponent<INetworkWithPropGroupProps> 
 
   return props.width < 10 ? null : (
     <svg width={props.width} height={props.height}>
-      {/* <rect width={width} height={height} rx={14} fill={background} /> */}
+      {/* <rect width={props.width} height={props.height} rx={14} fill="blue" /> */}
+      {/* <circle cx={0} cy={0} r={30} fill="green" />
+      <circle cx={props.width / 2} cy={props.height / 2} r={30} fill="red" /> */}
       <Group>
         <Links links={links} linkComponent={NetworkLinkWithLabel} />
         <Nodes nodes={nodes} nodeComponent={NetworkNode} />
@@ -120,4 +122,4 @@ const NetworkWithPropGroup: React.FunctionComponent<INetworkWithPropGroupProps> 
   );
 };
 
-export default observer(NetworkWithPropGroup);
+export default observer(NetworkWithGroup);

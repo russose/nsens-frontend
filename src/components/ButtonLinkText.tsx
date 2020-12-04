@@ -21,7 +21,9 @@ const ButtonLinkText: React.FunctionComponent<IButtonLinkTextProps> = (
 
   return (
     <Box padding={0} display="flex" direction="column" alignItems="center">
-      <Box>
+      {/* <Box> */}
+      <>
+        {" "}
         <Link href={{ pathname: props.pathname }} passHref>
           <a>
             <IconButton
@@ -32,7 +34,8 @@ const ButtonLinkText: React.FunctionComponent<IButtonLinkTextProps> = (
             />
           </a>
         </Link>
-      </Box>
+      </>
+      {/* </Box> */}
       <Box padding={0}>
         <JsText size={font_size} weight={weight}>
           {props.label}

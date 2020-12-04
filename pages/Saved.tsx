@@ -6,7 +6,6 @@ import {
   isItemSavedActivated,
 } from "../src/handlers";
 import { useStores } from "../src/stores/_RootStoreHook";
-import { Box } from "gestalt";
 import EditKnowbooks from "../src/components/EditKnowbooks";
 import CardAtomGrid from "../src/components/CardAtomGrid";
 
@@ -21,7 +20,8 @@ const Saved: React.FunctionComponent = (props) => {
   } = useStores();
 
   return (
-    <Box>
+    // <Box>
+    <>
       <CardAtomGrid
         atoms={Array.from(savedStore.saved.values())}
         isItemSaved_handler={isItemSaved(savedStore)}
@@ -36,7 +36,8 @@ const Saved: React.FunctionComponent = (props) => {
         edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
       />
       <EditKnowbooks />
-    </Box>
+    </>
+    // </Box>
   );
 };
 

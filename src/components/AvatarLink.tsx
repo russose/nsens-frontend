@@ -17,7 +17,8 @@ const image_path = USER_DISPLAY.paths.user_image;
 const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
   return (
     <Box padding={0} display="flex" direction="column" alignItems="center">
-      <Box>
+      {/* <Box> */}
+      <>
         <Link href={{ pathname: props.pathname }} passHref>
           <a>
             <Avatar
@@ -28,7 +29,8 @@ const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
             />
           </a>
         </Link>
-      </Box>
+      </>
+      {/* </Box> */}
       {/* <Box padding={0}>
         <JsText size={font_size} weight={weight}>
           {props.label}

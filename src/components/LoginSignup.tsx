@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores/_RootStoreHook";
-import { Box } from "gestalt";
 import { USER_GUI_CONFIG } from "../common/config";
 import LoginSignupForm from "./LoginSignupForm";
 import { onChangeUsernamePassword, onSubmitLoginSignup } from "../handlers";
@@ -14,7 +13,8 @@ const LoginSignup: React.FunctionComponent = (props) => {
     feedStore,
   } = useStores();
   return (
-    <Box>
+    // <Box>
+    <>
       {true && (
         <LoginSignupForm
           title="Really necessary?"
@@ -37,7 +37,8 @@ const LoginSignup: React.FunctionComponent = (props) => {
           handler_text={onChangeUsernamePassword(uiStore)}
         />
       )}
-    </Box>
+    </>
+    // </Box>
   );
 };
 

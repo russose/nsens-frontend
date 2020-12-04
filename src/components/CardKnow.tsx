@@ -14,7 +14,7 @@ interface ICardKnowProps {
   queryObject: ParsedUrlQueryInput;
   amount: number | string;
   edit_handler: any;
-  delete_handler:any
+  delete_handler: any;
 }
 
 const card_sizes = USER_DISPLAY.knowbook_sizes;
