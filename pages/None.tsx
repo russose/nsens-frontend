@@ -1,43 +1,33 @@
 import { observer } from "mobx-react-lite";
+import CardAtomGrid from "../src/components/CardAtomGrid";
 import {
-  onSaved,
-  onEditKnowbooks,
   isItemSaved,
   isItemSavedActivated,
+  onEditKnowbooks,
+  onSaved,
 } from "../src/handlers";
 import { useStores } from "../src/stores/_RootStoreHook";
-import EditKnowbooks from "../src/components/EditKnowbooks";
-import CardAtomGrid from "../src/components/CardAtomGrid";
 
 const Saved: React.FunctionComponent = (props) => {
   const {
     savedStore,
     uiStore,
-    graphStore,
     userStore,
     knowbookStore,
     feedStore,
   } = useStores();
 
   return (
-    // <Box>
     <>
       <CardAtomGrid
+        id="None"
         atoms={knowbookStore.ItemsInNoKnowbook(savedStore)}
         isItemSaved_handler={isItemSaved(savedStore)}
         isItemSavedActionable_handler={isItemSavedActivated(knowbookStore)}
-        saved_handler={onSaved(
-          savedStore,
-          graphStore,
-          userStore,
-          knowbookStore,
-          feedStore
-        )}
+        saved_handler={onSaved(savedStore, userStore, knowbookStore, feedStore)}
         edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
       />
-      <EditKnowbooks />
     </>
-    // </Box>
   );
 };
 

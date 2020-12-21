@@ -1,6 +1,6 @@
-import { observer } from "mobx-react-lite";
 import { ParentSize } from "@visx/responsive";
-import EditKnowbooks from "../src/components/EditKnowbooks";
+import { observer } from "mobx-react-lite";
+import Dialogs from "../src/components/Dialogs";
 
 // import { useStores } from "../src/stores/_RootStoreHook";
 // import { IItemDisplayMode } from "../src/stores/UIStore";
@@ -14,7 +14,7 @@ const Vizs: React.FunctionComponent = (props) => {
       {(parent) => (
         <>
           {/* <Example width={parent.width - 5} height={parent.height - 5} /> */}
-          <EditKnowbooks />
+          <Dialogs />
         </>
       )}
     </ParentSize>

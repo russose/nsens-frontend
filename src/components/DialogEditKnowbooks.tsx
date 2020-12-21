@@ -1,21 +1,20 @@
-import FormEditKnowbooks from "./EditKnowbooksForm";
 import { observer } from "mobx-react-lite";
-import { useStores } from "../stores/_RootStoreHook";
+import { USER_GUI_CONFIG } from "../common/config";
 import {
-  onSubmitChangesEditKnowbooks,
+  onCancel,
   onChangeInputValueEditKnowbooks,
   onChangeKnwobooksInclusionEditKnowbooks,
-  onCancel,
+  onSubmitChangesEditKnowbooks,
 } from "../handlers";
-import { USER_GUI_CONFIG } from "../common/config";
+import { useStores } from "../stores/_RootStoreHook";
+import DialogEditKnowbooksForm from "./DialogEditKnowbooksForm";
 
-const EditKnowbooks: React.FunctionComponent = (props) => {
+const DialogEditKnowbooks: React.FunctionComponent = (props) => {
   const { knowbookStore, uiStore } = useStores();
   return (
-    // <Box>
     <>
       {uiStore.editKnowbookOpened && (
-        <FormEditKnowbooks
+        <DialogEditKnowbooksForm
           id={uiStore.selectedAtomId}
           title={USER_GUI_CONFIG.editKnowbook.title}
           input_placeholder={USER_GUI_CONFIG.editKnowbook.input_placeholder}
@@ -31,8 +30,7 @@ const EditKnowbooks: React.FunctionComponent = (props) => {
         />
       )}
     </>
-    // </Box>
   );
 };
 
-export default observer(EditKnowbooks);
+export default observer(DialogEditKnowbooks);

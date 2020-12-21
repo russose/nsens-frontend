@@ -31,6 +31,24 @@ export function entierAleatoire(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
+export function removeDuplicates(array: any[]): any[] {
+  return Array.from(new Set(array));
+}
+
+export function shuffleArray(array: any[]): any[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * i);
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
+
+export function makeArrayFlat(array: any[]): any[] {
+  return [].concat(...array);
+}
+
 /**
  * Returns a type predicate to filter undefined values of a list.
  *

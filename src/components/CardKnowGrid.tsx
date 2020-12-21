@@ -1,12 +1,13 @@
 import { observer } from "mobx-react-lite";
-import { Box } from "gestalt";
 import { IKnowbook, KnowbookID } from "../common/types";
-import { SavedStore } from "../stores/SavedStore";
-import CardKnow from "./CardKnow";
 import { entierAleatoire } from "../libs/utils";
 import { KnowkookStore } from "../stores/KnowkookStore";
+import { SavedStore } from "../stores/SavedStore";
+import CardKnow from "./CardKnow";
+import GridKnow from "./GridKnow";
 
 interface ICardKnowGridProps {
+  id: string;
   knowbooks: IKnowbook[];
   edit_handler: any;
   delete_handler: any;
@@ -44,37 +45,32 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
     props.knowbooks === null ||
     props.knowbooks.length === 0
   ) {
-    return null;
+    return <></>;
   } else {
     return (
-      <Box
-        color="white"
-        wrap={true}
-        display="flex"
-        direction="row"
-        padding={1}
-        justifyContent="center"
-      >
-        {props.knowbooks.map((item) => (
-          <CardKnow
-            // key={item.name}
-            key={`cardKnowbook-${item.name}`}
-            id={item.name}
-            title={item.name}
-            // image_url={image_path}
-            image_url={getKnowbookImage(
-              item.name,
-              props.savedStore,
-              props.knowbookStore
-            )}
-            pathname={"/Knowbook"}
-            queryObject={{ title: item.name }}
-            amount={item.items.length}
-            edit_handler={props.edit_handler(item.name)}
-            delete_handler={props.delete_handler(item.name)}
-          />
-        ))}
-      </Box>
+      <GridKnow
+        items={props.knowbooks.map((item) => {
+          return (
+            <CardKnow
+              // key={item.name}
+              key={`cardKnowbook-${props.id}-${item.name}`}
+              id={item.name}
+              title={item.name}
+              // image_url={image_path}
+              image_url={getKnowbookImage(
+                item.name,
+                props.savedStore,
+                props.knowbookStore
+              )}
+              pathname={"/Knowbook"}
+              queryObject={{ title: item.name }}
+              amount={item.items.length}
+              edit_handler={props.edit_handler(item.name)}
+              delete_handler={props.delete_handler(item.name)}
+            />
+          );
+        })}
+      />
     );
   }
 };

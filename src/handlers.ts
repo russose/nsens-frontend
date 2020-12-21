@@ -63,7 +63,6 @@ export const onSearchHomeKeyboard = (
 
 export const onSaved = (
   savedStore: SavedStore,
-  graphStore: GraphStore,
   userStore: UserStore,
   knowbookStore: KnowkookStore,
   feedStore: FeedStore
@@ -75,7 +74,7 @@ export const onSaved = (
     savedStore.saved.has(itemID) === undefined ||
     savedStore.saved.has(itemID) === false
   ) {
-    savedStore.addSaved(itemID, graphStore, feedStore);
+    savedStore.addSaved(itemID, feedStore);
   } else {
     savedStore.removeSaved(itemID, knowbookStore);
   }
@@ -193,13 +192,6 @@ export const onRenameKnowbook = (
   );
   uiStore.setRenameKnowbookOpened(false);
 };
-
-// export const onRenameKnowbook = (uiStore: UIStore, savedStore: SavedStore) => (
-//   name: string
-// ): void => {
-//   savedStore.renameKnowbook(name, uiStore.renameKnowbookNewName);
-//   uiStore.setRenameKnowbookOpened(false);
-// };
 
 export const onDeleteKnowbook = (
   savedStore: SavedStore,

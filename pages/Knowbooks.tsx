@@ -1,21 +1,50 @@
-import { observer } from "mobx-react-lite";
 import { Box, Divider } from "gestalt";
-import CardKnowGrid from "../src/components/CardKnowGrid";
-import CardKnow from "../src/components/CardKnow";
-import { useStores } from "../src/stores/_RootStoreHook";
+import { observer } from "mobx-react-lite";
 import { USER_DISPLAY, USER_GUI_CONFIG } from "../src/common/config";
-import RenameKnowbooks from "../src/components/RenameKnowbooks";
+import CardKnow from "../src/components/CardKnow";
+import CardKnowGrid from "../src/components/CardKnowGrid";
+import GridKnow from "../src/components/GridKnow";
 import { onDeleteKnowbook, onOpenRenameKnowbook } from "../src/handlers";
+import { useStores } from "../src/stores/_RootStoreHook";
 
+const knowbook_all_title = USER_GUI_CONFIG.knowbooks.AllSaved_title;
+const knowbook_none_title = USER_GUI_CONFIG.knowbooks.None_Title;
 const knowbook_all_image = USER_DISPLAY.paths.knowbook_all_image;
 const knowbook_none_image = USER_DISPLAY.paths.knowbook_none_image;
 
 const Knowbooks: React.FunctionComponent = (props) => {
   const { savedStore, uiStore, knowbookStore } = useStores();
 
+  const Saved = (
+    <CardKnow
+      id="saved knowbook"
+      title={knowbook_all_title}
+      image_url={knowbook_all_image}
+      pathname="Saved"
+      queryObject={{}}
+      amount={savedStore.saved.size}
+      edit_handler={undefined}
+      delete_handler={undefined}
+    />
+  );
+
+  const None = (
+    <CardKnow
+      id="none knowbook"
+      title={knowbook_none_title}
+      image_url={knowbook_none_image}
+      pathname="None"
+      queryObject={{}}
+      amount="-"
+      edit_handler={undefined}
+      delete_handler={undefined}
+    />
+  );
+
   return (
     <Box>
       <CardKnowGrid
+        id="knowbooks"
         knowbooks={Array.from(knowbookStore.knowbooks.values())}
         edit_handler={onOpenRenameKnowbook(uiStore)}
         delete_handler={onDeleteKnowbook(savedStore, knowbookStore)}
@@ -23,36 +52,8 @@ const Knowbooks: React.FunctionComponent = (props) => {
         knowbookStore={knowbookStore}
       />
       <Divider />
-      <Box
-        //wrap={true}
-        display="flex"
-        direction="row"
-        //padding={1}
-        justifyContent="center"
-      >
-        <CardKnow
-          id="saved"
-          title={USER_GUI_CONFIG.knowbooks.AllSaved_title}
-          image_url={knowbook_all_image}
-          pathname="Saved"
-          queryObject={{}}
-          amount={savedStore.saved.size}
-          edit_handler={undefined}
-          delete_handler={undefined}
-        />
-        <CardKnow
-          id="none"
-          title={USER_GUI_CONFIG.knowbooks.None_Title}
-          image_url={knowbook_none_image}
-          pathname="None"
-          queryObject={{}}
-          amount="-"
-          edit_handler={undefined}
-          delete_handler={undefined}
-        />
-      </Box>
-      <Box paddingY={10}></Box>
-      <RenameKnowbooks />
+      <GridKnow items={[Saved, None]} />
+      {/* <Box paddingY={10}></Box> */}
     </Box>
   );
 };

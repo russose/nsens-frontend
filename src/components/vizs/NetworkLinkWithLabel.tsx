@@ -1,6 +1,7 @@
 import { LinkProvidedProps } from "@visx/network/lib/types";
 import { LinkVerticalLine } from "@visx/shape";
 import { Text } from "@visx/text";
+import { observer } from "mobx-react-lite";
 
 const black = "#000000";
 
@@ -9,18 +10,28 @@ const NetworkLinkWithLabel: React.FunctionComponent<LinkProvidedProps<any>> = (
 ) => {
   const link_label = props.link.target.related.split("|")[1];
   const displayCondition = props.link.source.related !== "group_prop";
-  const a =
-    (props.link.source.y - props.link.target.y) /
-    (props.link.source.x - props.link.target.x);
-  // const X = (props.link.source.x + props.link.target.x) * 0.5;
-  // const Y = (props.link.source.y + props.link.target.y) * 0.5;
-  const ecart_t = 0.65;
-  const X =
-    (props.link.target.x - props.link.source.x) * ecart_t + props.link.source.x;
-  const Y = a * (X - props.link.target.x) + props.link.target.y;
+  let x = 0;
+  let y = 0;
 
+  if (
+    isNaN(props.link.source.x) ||
+    isNaN(props.link.source.y) ||
+    isNaN(props.link.target.x) ||
+    isNaN(props.link.target.y)
+  ) {
+    const a =
+      (props.link.source.y - props.link.target.y) /
+      (props.link.source.x - props.link.target.x);
+    // const X = (props.link.source.x + props.link.target.x) * 0.5;
+    // const Y = (props.link.source.y + props.link.target.y) * 0.5;
+    const ecart_t = 0.65;
+    x =
+      (props.link.target.x - props.link.source.x) * ecart_t +
+      props.link.source.x;
+    y = a * (x - props.link.target.x) + props.link.target.y;
+  }
   const Label = displayCondition && (
-    <Text textAnchor="middle" dy={Y} dx={X} fontSize={12}>
+    <Text textAnchor="middle" dy={y} dx={x} fontSize={12}>
       {link_label}
     </Text>
   );
@@ -46,4 +57,4 @@ const NetworkLinkWithLabel: React.FunctionComponent<LinkProvidedProps<any>> = (
   );
 };
 
-export default NetworkLinkWithLabel;
+export default observer(NetworkLinkWithLabel);

@@ -9,14 +9,7 @@ import Link from "next/link";
 interface ICardSizes {
   height: number;
   image_ratio: string;
-  lgColumn: any;
-  mdColumn: any;
-  smColumn: any;
-  column: any;
-  lgPadding?: any;
-  mdPadding?: any;
-  smPadding?: any;
-  padding?: any;
+  max_title_size: number;
 }
 
 interface ICardGenericProps {
@@ -29,33 +22,28 @@ interface ICardGenericProps {
   queryObject?: ParsedUrlQueryInput;
 }
 
-//const card_height = USER_DISPLAY.card_height;
 const title_card_size = USER_DISPLAY.title_card_size;
 const path_empty_image = USER_DISPLAY.paths.item_empty_image;
 
+const rounding = 3;
+
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
+  const max_title_size = props.sizes.max_title_size;
+  let title = props.title;
+  if (title.length > max_title_size) {
+    title = props.title.substring(0, max_title_size) + "...";
+  }
   return (
-    <Box
-      // padding={padding_grid}
-      height={props.sizes.height}
-      lgColumn={props.sizes.lgColumn}
-      mdColumn={props.sizes.mdColumn}
-      smColumn={props.sizes.smColumn}
-      column={props.sizes.column}
-      lgPadding={props.sizes.lgPadding}
-      mdPadding={props.sizes.mdPadding}
-      smPadding={props.sizes.smPadding}
-      padding={props.sizes.padding}
-    >
+    <Box height={props.sizes.height}>
       <Box
         height="100%"
         borderSize="lg"
-        rounding={4}
+        rounding={rounding}
         display="flex"
         direction="column"
       >
         <Box height={props.sizes.image_ratio} width="100%">
-          <Mask rounding={4} height="100%" width="100%">
+          <Mask rounding={rounding} height="100%" width="100%">
             <Link
               href={{ pathname: props.pathname, query: props.queryObject }}
               passHref
@@ -89,7 +77,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
           >
             <Box padding={1} width="85%">
               <JsText size={title_card_size} align="left" weight="bold">
-                {props.title}
+                {title}
               </JsText>
             </Box>
 

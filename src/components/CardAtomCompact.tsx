@@ -1,11 +1,11 @@
-import { Box, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
+import { Box, IconButton } from "gestalt";
+import { AtomID } from "../common/types";
+import CardGenericCompact from "./CardGenericCompact";
 import { ParsedUrlQueryInput } from "querystring";
 import { USER_DISPLAY } from "../common/config";
-import { AtomID } from "../common/types";
-import CardGeneric from "./CardGeneric";
 
-interface ICardAtomProps {
+interface ICardAtomCompactProps {
   id: AtomID;
   title: string;
   image_url: string;
@@ -17,13 +17,15 @@ interface ICardAtomProps {
   edit_handler: any;
 }
 
-const card_sizes = USER_DISPLAY.atom_sizes;
+const card_sizes = USER_DISPLAY.atom_compact_sizes;
 const size_icon: any = USER_DISPLAY.size_icon;
 const color_image = USER_DISPLAY.colors.item_color_image;
 
-const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
+const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
+  props
+) => {
   return (
-    <CardGeneric
+    <CardGenericCompact
       id={props.id}
       title={props.title}
       image_url={props.image_url}
@@ -53,8 +55,8 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
           disabled={!props.saved_actionable}
         />
       </Box>
-    </CardGeneric>
+    </CardGenericCompact>
   );
 };
 
-export default observer(CardAtom);
+export default observer(CardAtomCompact);

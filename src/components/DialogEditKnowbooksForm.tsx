@@ -1,5 +1,5 @@
+import { Box, IconButton, Modal, TextField } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { Box, TextField, IconButton, Modal } from "gestalt";
 import { AtomID } from "../common/types";
 import { JsCheckbox, JsText } from "./js_components";
 
@@ -8,7 +8,7 @@ export interface ICheckboxes {
   activated: boolean;
 }
 
-interface IEditKnowbooksFormProps {
+interface IDialogEditKnowbooksFormProps {
   id: AtomID;
   title: string;
   input_placeholder: string;
@@ -21,11 +21,14 @@ interface IEditKnowbooksFormProps {
 
 const title_size = "md";
 
-const EditKnowbooksForm: React.FunctionComponent<IEditKnowbooksFormProps> = (
+const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormProps> = (
   props
 ) => {
   return (
-    <Modal accessibilityModalLabel={props.title} onDismiss={props.handler_cancel}>
+    <Modal
+      accessibilityModalLabel={props.title}
+      onDismiss={props.handler_cancel}
+    >
       <Box color="white" rounding={3} padding={2}>
         <Box padding={1}>
           <JsText align="center" size={title_size} weight="bold">
@@ -82,4 +85,4 @@ const EditKnowbooksForm: React.FunctionComponent<IEditKnowbooksFormProps> = (
   );
 };
 
-export default observer(EditKnowbooksForm);
+export default observer(DialogEditKnowbooksForm);

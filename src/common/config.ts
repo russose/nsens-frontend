@@ -11,13 +11,12 @@ export const CONFIG_FETCHING = {
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
   amount_data_fetched_items: 40,
+  max_size_chunk_api: 40,
   amount_related: 10,
   amount_data_fetched_images: 10,
-  // max_width_image: 2000,
   max_width_image: 1400,
   min_width_image: 400,
   // search_min_length_search: 4,
-  max_size_chunk_api: 40,
 };
 
 const CONFIG_GUI = {
@@ -63,6 +62,10 @@ const CONFIG_GUI = {
   },
   display: {
     //card_height: 250,
+    amount_item_displayed: 100,
+    max_nodes_network: 50,
+    max_width_network: 500,
+    tbd: 3,
     size_icon: "xs",
     title_card_size: "sm",
     header_size: "sm",
@@ -84,6 +87,17 @@ const CONFIG_GUI = {
       mdPadding: 6,
       smPadding: 4,
       padding: 2,
+      max_title_size: 33,
+    },
+    atom_compact_sizes: {
+      height: 100,
+      width: 120,
+      // image_ratio: "80%",
+      lgPadding: 2,
+      mdPadding: 2,
+      smPadding: 2,
+      padding: 2,
+      max_title_size: 33,
     },
     knowbook_sizes: {
       height: 200,
@@ -96,10 +110,6 @@ const CONFIG_GUI = {
       mdPadding: 6,
       smPadding: 4,
       padding: 2,
-    },
-    network: {
-      node_size: 100,
-      image_size: 45,
       max_title_size: 33,
     },
     paths: {

@@ -2,7 +2,7 @@ import { FeedStore } from "./stores/FeedStore";
 import { KnowkookStore } from "./stores/KnowkookStore";
 import { UserStore } from "./stores/UserStore";
 import { SavedStore } from "./stores/SavedStore";
-import { _api } from "./common/fetch";
+import { _api } from "./libs/fetch";
 import { _getUser, _getSavedList, _getKnowbooksList } from "./_api";
 
 export async function initializeApp(
@@ -17,8 +17,8 @@ export async function initializeApp(
 
     if (!userStore.isLogged) {
       feedStore.setFeedFromRandom();
-      savedStore.setSaved([]);
-      knowbookStore.setKnowbooks([]);
+      // savedStore.setSaved([]);
+      // knowbookStore.setKnowbooks([]);
     } else {
       await initializeUserData(savedStore, userStore, knowbookStore, feedStore);
     }
@@ -35,11 +35,10 @@ export async function initializeUserData(
 ) {
   try {
     if (userStore.isLogged) {
-      // const atoms = await _getAllFeed();
-      // savedStore.setFeed(atoms);
-      feedStore.setFeedFromRelated();
       const saved = await _getSavedList();
       savedStore.setSaved(saved);
+      feedStore.initialyzeRelatedFromSaved(savedStore);
+      feedStore.setFeedFromRelated();
       const knowbooks = await _getKnowbooksList();
       knowbookStore.setKnowbooks(knowbooks);
     }

@@ -1,5 +1,5 @@
-import { CONFIG_FETCHING } from "./config";
-import { IAtom, newAtom, empty_value_atom } from "./types";
+import { CONFIG_FETCHING } from "../common/config";
+import { IAtom, newAtom, empty_value_atom } from "../common/types";
 import { fetchRelatedWikipedia, fetch_data } from "./fetch";
 
 const amount_data_fetched_images = CONFIG_FETCHING.amount_data_fetched_images;
@@ -79,7 +79,7 @@ export function buildListStringSeparated(array: string[]): string {
 
 export async function ItemsRelatedFromWikipediaRaw(
   title: string,
-  itemid: string,
+  // itemid: string,
   amount: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string
@@ -116,11 +116,11 @@ export async function ItemsRelatedFromWikipediaRaw(
       ROOT_URL_ACTION_API
     );
 
-    atomsList = atomsList.map((item: IAtom) => {
-      let item_updated = item;
-      item_updated["related"] = itemid + "|" + "wikipedia";
-      return item_updated;
-    });
+    // atomsList = atomsList.map((item: IAtom) => {
+    //   let item_updated = item;
+    //   item_updated["related"] = itemid + "|" + "wikipedia";
+    //   return item_updated;
+    // });
 
     return atomsList;
   } catch (error) {
@@ -430,7 +430,7 @@ export async function enrichOneImageFromRelatedWikipedia(
 
   const items_related: IAtom[] = await ItemsRelatedFromWikipediaRaw(
     item.title,
-    item.id,
+    // item.id,
     amount_data_fetched_images,
     ROOT_URL_REST_API,
     ROOT_URL_ACTION_API

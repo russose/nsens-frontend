@@ -1,46 +1,4 @@
-// export interface IConfigMenuBar {
-//   label: string;
-//   icon: string;
-// }
-
-// export enum ConfigDataCategoryType {
-//   PLT = "PLT",
-//   ECO = "ECO",
-//   INO = "INO",
-//   POL = "POL",
-//   HUM = "HUM",
-//   TBD = "TBD",
-// }
-
-// export interface IDataCategory {
-//   label: string;
-//   color: string;
-// }
-
-// export interface IConfigCategories {
-//   [ConfigDataCategoryType.PLT]: IDataCategory;
-//   [ConfigDataCategoryType.ECO]: IDataCategory;
-//   [ConfigDataCategoryType.INO]: IDataCategory;
-//   [ConfigDataCategoryType.POL]: IDataCategory;
-//   [ConfigDataCategoryType.HUM]: IDataCategory;
-//   [ConfigDataCategoryType.TBD]: IDataCategory;
-// }
-
-// export interface IConfigData {
-//   searchBar: string;
-//   knowbooks_title: string;
-//   empty_tag: string;
-//   all_tags: string;
-//   menuBar: IConfigMenuBar[];
-//   categories: IConfigCategories;
-// }
-
-// export interface IConfig {
-//   [ConfigDataLanguage.fr]: IConfigData;
-//   [ConfigDataLanguage.en]: IConfigData;
-// }
-
-/*************************************************** */
+import { LANGUAGE } from "./config";
 
 export enum ConfigDataLanguage {
   fr = "fr",
@@ -66,19 +24,17 @@ export interface IUser {
 }
 
 export interface IAtom {
-  //owner: UserID;
   id: AtomID;
-  //tags: KnowbookID[];
   wikibase_item: string;
   pageid_wp: number;
   title: string;
   title_en: string;
+  language: string;
   image_url: string;
   image_width: number;
   image_height: number;
   thumbnail_url: string;
   related: string;
-  // category: ConfigDataCategoryType; //Not used yet
 }
 
 export interface IKnowbook {
@@ -92,35 +48,28 @@ export interface IKnowbook {
 export interface IKnowbookFull {
   id: number; //internal ide for back only (database)
   name: KnowbookID;
-  //creation_date: Date;
-  //update_date: Date;
   items: IAtom[];
 }
 
-// export interface IUserData {
-//   user: IUser;
-//   feed: IAtom[];
-//   saved: IAtom[];
-//   knowbooks: IKnowbook[];
-// }
+export interface IRelatedAtom {
+  relation: string;
+  item: IAtom;
+}
 
 export const empty_value_atom = "";
 export function newAtom(id: AtomID): IAtom {
   const atom = {
-    //owner: owner,
     id: id,
-    //tags: [],
-    // IsSaved: false, //A SUPPRIMER
     wikibase_item: empty_value_atom,
     pageid_wp: -1,
     title: empty_value_atom,
     title_en: empty_value_atom,
+    language: LANGUAGE,
     image_url: empty_value_atom,
     image_width: -1,
     image_height: -1,
     thumbnail_url: empty_value_atom,
     related: empty_value_atom,
-    // category: ConfigDataCategoryType.TBD,
   };
   return atom;
 }
@@ -140,13 +89,10 @@ export enum LogActionType {
 export interface INode extends IAtom {
   x: number;
   y: number;
+  pos: number;
 }
 
 export interface ILink {
   source: INode;
   target: INode;
-}
-export interface IGraph {
-  nodes: INode[];
-  links: ILink[];
 }

@@ -1,13 +1,11 @@
-import { KnowkookStore } from "./KnowkookStore";
-import { GraphStore } from "./GraphStore";
-import { observable, action, makeObservable } from "mobx";
-import { IAtom, AtomID } from "../common/types";
-import { _save, _unsave, _saveRelated } from "../_api";
+import { action, makeObservable, observable } from "mobx";
+import { AtomID, IAtom } from "../common/types";
+import { _save, _unsave } from "../_api";
 import { FeedStore } from "./FeedStore";
+import { KnowkookStore } from "./KnowkookStore";
 
 export class SavedStore {
   private $saved = observable.map<AtomID, IAtom>();
-
   constructor() {
     makeObservable<SavedStore>(this, {
       setSaved: action,
@@ -30,72 +28,38 @@ export class SavedStore {
     this.$saved.clear();
   }
 
-  addSaved(itemId: AtomID, graphStore: GraphStore, feedStore: FeedStore): void {
-    let title: string;
-
-    // if (itemId === undefined || !this.isLogged) {
+  addSaved(itemId: AtomID, feedStore: FeedStore): void {
     if (itemId === undefined) {
       return;
     }
-    //Items in feed items
-    if (feedStore.feed.has(itemId)) {
-      const atom = feedStore.feed.get(itemId);
-      title = atom.title;
-      if (atom !== undefined) {
-        _save(atom)
-          .then(
-            action(() => {
-              this.$saved.set(atom.id, atom);
-              // console.log("saved successfully");
-            })
-          )
-          .catch(() => {
-            // this.$saved.delete(itemId);
-            console.log("network error, error in saved");
-          });
-      } else {
-        // console.log("impossible to save");
-        return;
-      }
-    }
-    //Items in graph items
-    else {
-      const graph = graphStore.graph;
-      // const item_from_graph_with_id_list: IAtom[] = this.graph.nodes.filter(
-      const item_from_graph_with_id_list: IAtom[] = graph.nodes.filter(
-        (item) => {
-          return item.id === itemId;
-        }
-      );
-      if (
-        item_from_graph_with_id_list !== undefined &&
-        item_from_graph_with_id_list.length === 1
-      ) {
-        const atom: IAtom = item_from_graph_with_id_list[0];
-        title = atom.title;
-        _save(atom)
-          .then(
-            action(() => {
-              this.$saved.set(atom.id, atom);
-              // console.log("saved successfully");
-            })
-          )
-          .catch(() => {
-            // this.$saved.delete(itemId);
-            // console.log("network error, error in saved");
-          });
-      } else {
-        // console.log("impossible to save");
-        return;
-      }
+
+    const item = feedStore.getItemFromAnywhere(itemId);
+    if (item === undefined) {
+      console.log("impossible to save, not item found");
+      return;
     }
 
-    //Store related items
-    _saveRelated(itemId, title)
-      .then(() => {})
-      .catch(() => {
-        console.log("impossible to store related items");
-      });
+    this.$saved.set(item.id, item); //to not freeze UI
+
+    feedStore
+      .fetchRelated(item.id, item.title) //take time
+      .then(() => {
+        item.related = JSON.stringify(feedStore.getRelated(itemId));
+      })
+      .then(
+        action(() => {
+          this.$saved.set(item.id, item);
+        })
+      )
+      .then(() => {
+        _save(item);
+      })
+      .catch(
+        action(() => {
+          this.$saved.delete(itemId);
+          console.log("error in saving item");
+        })
+      );
   }
 
   removeSaved(itemId: AtomID, knowbookStore: KnowkookStore): void {
@@ -105,20 +69,13 @@ export class SavedStore {
     }
 
     if (!knowbookStore.IsItemInAnyKnowbook(itemId)) {
-      // const atom_backup: IAtom | undefined = this.$saved.get(itemId);
-      // if (atom_backup === undefined) {
-      //   return;
-      // }
-      // this.$saved.delete(itemId);
       _unsave(itemId)
         .then(
           action(() => {
             this.$saved.delete(itemId);
-            // console.log("unsaved successfully");
           })
         )
         .catch(() => {
-          // this.$saved.set(itemId, atom_backup);
           console.log("network error, error in unsaved");
         });
     } else {

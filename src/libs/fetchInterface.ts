@@ -1,5 +1,5 @@
-import { CONFIG_FETCHING, LANGUAGE } from "./config";
-import { IAtom } from "./types";
+import { CONFIG_FETCHING, LANGUAGE } from "../common/config";
+import { IAtom, IRelatedAtom } from "../common/types";
 import { fetch_data_wikidata } from "./fetch";
 import {
   buildListStringSeparated,
@@ -49,14 +49,12 @@ export async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia(
 
 export async function ItemsRelatedFromWikipedia(
   title: string,
-  itemid: string,
   amount: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string
-): Promise<IAtom[]> {
+): Promise<IRelatedAtom[]> {
   const atomsList = await ItemsRelatedFromWikipediaRaw(
     title,
-    itemid,
     amount,
     ROOT_URL_REST_API,
     ROOT_URL_ACTION_API
@@ -71,19 +69,22 @@ export async function ItemsRelatedFromWikipedia(
     CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_ACTION
   );
 
+  const related: IRelatedAtom[] = atomsListWithImages.map((item: IAtom) => {
+    return { relation: "wikipedia", item: item };
+  });
+
   // atomsListWithImages = await enrichImagesOneByOneFromWikiCommonPediaParallel(
   //   atomsListWithImages,
   //   CONFIG_FETCHING.URLs.ROOT_URL_WIKICOMMON
   // );
 
-  return atomsListWithImages;
+  return related;
 }
 
 export async function ItemsFromWikidata(
   itemId: string,
   ROOT_URL_WIKIPEDIA: string
-  // nb_images: number
-): Promise<IAtom[]> {
+): Promise<IRelatedAtom[]> {
   //
   async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
     list_of_PageTitle_string: string[]
@@ -150,11 +151,17 @@ export async function ItemsFromWikidata(
     const items_chunked: IAtom[][] = await ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
       list_of_PageTitle_string
     );
-    let items_flat: IAtom[] = [].concat(...items_chunked);
+    // const items_flat: IAtom[] = makeArrayFlat(items_chunked)
+    const items_flat: IAtom[] = [].concat(...items_chunked);
 
-    items_flat = items_flat.map((item: IAtom) => {
+    let related_items: IRelatedAtom[] = items_flat.map((item: IAtom) => {
+      if (item === undefined) {
+        return undefined;
+      }
+
       const prop_from_id = mapping_prop.get(item["id"]);
       const prop_from_label = mapping_label_prop.get(item["title"]);
+
       let prop: string;
       if (prop_from_id !== undefined) {
         prop = prop_from_id;
@@ -163,15 +170,17 @@ export async function ItemsFromWikidata(
       } else {
         return undefined;
       }
-      item["related"] = itemId + "|" + prop;
-      return item;
+
+      // item["related"] = itemId + "|" + prop;
+      const related: IRelatedAtom = { relation: prop, item: item };
+      return related;
     });
 
-    items_flat = items_flat.filter((item) => {
-      return item !== undefined;
+    related_items = related_items.filter((item_related) => {
+      return item_related !== undefined;
     });
 
-    return items_flat;
+    return related_items;
   } catch (error) {
     // console.log(error);
     return [];

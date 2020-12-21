@@ -1,10 +1,10 @@
 import React from "react";
 import { JsText } from "./js_components";
 import { CONFIG_FETCHING, LANGUAGE, USER_GUI_CONFIG } from "../common/config";
-import { fetchArticle } from "../common/fetch";
+import { fetchArticle } from "../libs/fetch";
 import { UIStore } from "../stores/UIStore";
 import { observer } from "mobx-react-lite";
-import { Box, Divider } from "gestalt";
+import Separator from "./Separator";
 
 interface IArticleProps {
   item_title: string;
@@ -70,9 +70,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
     // <Box>
     <>
       <JsText>{article}</JsText>
-      <Box padding={1}></Box>
-      <Divider />
-      <Box padding={1}></Box>
+      <Separator />
       <JsText>Source: Wikipedia</JsText>
     </>
     //  </Box>

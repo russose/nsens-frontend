@@ -1,20 +1,19 @@
-import RenameKnowbookForm from "./RenameKnowbookForm";
 import { observer } from "mobx-react-lite";
-import { useStores } from "../stores/_RootStoreHook";
 import { USER_GUI_CONFIG } from "../common/config";
 import {
   onCancel,
   onChangeInputValueRenameKnowbook,
   onRenameKnowbook,
 } from "../handlers";
+import { useStores } from "../stores/_RootStoreHook";
+import DialogRenameKnowbookForm from "./DialogRenameKnowbookForm";
 
-const RenameKnowbooks: React.FunctionComponent = (props) => {
+const DialogRenameKnowbooks: React.FunctionComponent = (props) => {
   const { knowbookStore, uiStore } = useStores();
   return (
-    // <Box>
     <>
       {uiStore.renameKnowbookOpened && (
-        <RenameKnowbookForm
+        <DialogRenameKnowbookForm
           title={USER_GUI_CONFIG.renameDeleteKnowbook.title}
           value={uiStore.renameKnowbookNewName}
           label_rename={USER_GUI_CONFIG.renameDeleteKnowbook.rename_label}
@@ -25,8 +24,7 @@ const RenameKnowbooks: React.FunctionComponent = (props) => {
         />
       )}
     </>
-    // </Box>
   );
 };
 
-export default observer(RenameKnowbooks);
+export default observer(DialogRenameKnowbooks);

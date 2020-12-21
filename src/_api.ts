@@ -1,10 +1,16 @@
-import { IAtom, AtomID, LogActionType, IKnowbook } from "./common/types";
-import { _api } from "./common/fetch";
+import {
+  IAtom,
+  AtomID,
+  LogActionType,
+  IKnowbook,
+  IRelatedAtom,
+} from "./common/types";
+import { _api } from "./libs/fetch";
 import {
   ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia,
   ItemsFromWikidata,
   ItemsRelatedFromWikipedia,
-} from "./common/fetchInterface";
+} from "./libs/fetchInterface";
 import { CONFIG_FETCHING } from "./common/config";
 
 const max_amount_data_fetched_items = CONFIG_FETCHING.amount_data_fetched_items;
@@ -60,14 +66,43 @@ export async function _getItemsFromTitlesFromWeb(
   }
 }
 
+// export async function _getRelatedFromWikipediaFromWeb(
+//   itemId: AtomID,
+//   title: string
+// ): Promise<IAtom[]> {
+//   try {
+//     return ItemsRelatedFromWikipedia(
+//       title,
+//       itemId,
+//       amount_related,
+//       url_wikipedia_rest,
+//       url_wikipedia_action
+//     );
+//   } catch (error) {
+//     // console.log(error);
+//     return [];
+//   }
+// }
+
+// export async function _getRelatedFromWikidataFromWeb(
+//   itemId: AtomID
+// ): Promise<IAtom[]> {
+//   try {
+//     return ItemsFromWikidata(itemId, url_wikipedia_action);
+//   } catch (error) {
+//     // console.log(error);
+//     return [];
+//   }
+// }
+
 export async function _getRelatedFromWikipediaFromWeb(
-  itemId: AtomID,
+  // itemId: AtomID,
   title: string
-): Promise<IAtom[]> {
+): Promise<IRelatedAtom[]> {
   try {
     return ItemsRelatedFromWikipedia(
       title,
-      itemId,
+      // itemId,
       amount_related,
       url_wikipedia_rest,
       url_wikipedia_action
@@ -80,7 +115,7 @@ export async function _getRelatedFromWikipediaFromWeb(
 
 export async function _getRelatedFromWikidataFromWeb(
   itemId: AtomID
-): Promise<IAtom[]> {
+): Promise<IRelatedAtom[]> {
   try {
     return ItemsFromWikidata(itemId, url_wikipedia_action);
   } catch (error) {
@@ -93,28 +128,28 @@ export async function _getRelatedFromWikidataFromWeb(
  * Related
  */
 
-export async function _getRelated(itemId: AtomID): Promise<IAtom[]> {
-  try {
-    const res = await _api("get", "/related/" + itemId, {});
-    return res.data;
-  } catch (error) {
-    // console.log(error);
-    return [];
-  }
-}
+// export async function _getRelated(itemId: AtomID): Promise<IAtom[]> {
+//   try {
+//     const res = await _api("get", "/related/" + itemId, {});
+//     return res.data;
+//   } catch (error) {
+//     // console.log(error);
+//     return [];
+//   }
+// }
 
-export async function _saveRelated(
-  itemId: AtomID,
-  title: string
-): Promise<string> {
-  try {
-    const res = await _api("post", "/related/" + itemId + "/" + title, {});
-    return res.data;
-  } catch (error) {
-    // console.log(error);
-    return error;
-  }
-}
+// export async function _saveRelated(
+//   itemId: AtomID,
+//   title: string
+// ): Promise<string> {
+//   try {
+//     const res = await _api("post", "/related/" + itemId + "/" + title, {});
+//     return res.data;
+//   } catch (error) {
+//     // console.log(error);
+//     return error;
+//   }
+// }
 
 /**
  * Users

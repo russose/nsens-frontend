@@ -1,15 +1,14 @@
-import { observer } from "mobx-react-lite";
-import { useStores } from "../src/stores/_RootStoreHook";
-import { useRouter } from "next/router";
 import { Box } from "gestalt";
-import EditKnowbooks from "../src/components/EditKnowbooks";
-import { IItemDisplayMode } from "../src/stores/UIStore";
+import { observer } from "mobx-react-lite";
+import { useRouter } from "next/router";
+import React from "react";
 import Article from "../src/components/Article";
-
-import ZoomableNetworkWithGroup from "../src/components/vizs/ZoomableNetworkWithGroup";
+import NetworkZoomable from "../src/components/vizs/NetworkZoomable";
+import { IItemDisplayMode } from "../src/stores/UIStore";
+import { useStores } from "../src/stores/_RootStoreHook";
 
 const ItemView: React.FunctionComponent = (props) => {
-  const { uiStore } = useStores();
+  const { uiStore, graphStore } = useStores();
 
   const router = useRouter();
   const item_title = router.query.title as string;
@@ -23,13 +22,17 @@ const ItemView: React.FunctionComponent = (props) => {
 
   const network = (
     <>
-      <ZoomableNetworkWithGroup itemId={item_id} title={item_title} />
-      <EditKnowbooks />
+      <NetworkZoomable
+        itemId={item_id}
+        title={item_title}
+        graphStore={graphStore}
+      />
     </>
   );
 
   let page;
   if (uiStore.itemDisplayMode === IItemDisplayMode.Network) {
+    // if (true) {
     page = network;
   } else {
     page = article;

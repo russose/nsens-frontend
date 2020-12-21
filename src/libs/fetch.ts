@@ -1,5 +1,5 @@
-import { CONFIG_FETCHING } from "./config";
-import { CONFIG_OPS } from "./config_env";
+import { CONFIG_FETCHING } from "../common/config";
+import { CONFIG_OPS } from "../common/config_env";
 
 /************************************** */
 //Temporary when using self signed certificate

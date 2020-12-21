@@ -1,210 +1,273 @@
-import { observable, action, computed, makeObservable } from "mobx";
-import { IAtom, AtomID, IGraph, ILink, INode, newAtom } from "../common/types";
 import {
   forceCenter,
   forceCollide,
   forceLink,
-  forceManyBody,
+  // forceManyBody,
   forceSimulation,
 } from "d3-force";
+import { action, makeObservable, observable } from "mobx";
+import { USER_DISPLAY } from "../common/config";
 import {
-  _getItemsFromTitlesFromWeb,
-  _getRelatedFromWikidataFromWeb,
-  _getRelatedFromWikipediaFromWeb,
-} from "../_api";
+  AtomID,
+  IAtom,
+  ILink,
+  INode,
+  IRelatedAtom,
+  newAtom,
+} from "../common/types";
+import { FeedStore } from "./FeedStore";
+
+const width_node = USER_DISPLAY.atom_compact_sizes.width;
+
+interface IGraph {
+  nodes: INode[];
+  links: ILink[];
+}
 
 export class GraphStore {
+  private $rootItemId: AtomID = undefined;
   private $graph: IGraph = { nodes: [], links: [] };
+  private $relatedMap = observable.map<AtomID, IAtom[]>();
 
   constructor() {
-    makeObservable<GraphStore, "$graph">(this, {
+    makeObservable<GraphStore, "$rootItemId" | "$graph">(this, {
+      $rootItemId: observable,
       $graph: observable,
+      setRelatedMap: action,
       setGraph: action,
-      graph: computed,
-      updateGraphItem: action,
+      renderGraph: action,
+      runSimulation: action,
+      renderRelatedMap: action,
     });
   }
 
+  get rootItemId() {
+    return this.$rootItemId;
+  }
   get graph() {
     return this.$graph;
   }
-  setGraph(graph: IGraph): void {
-    if (graph === undefined) {
-      return;
-    }
-    this.$graph = graph;
+  get graphMap() {
+    return this.$relatedMap;
   }
 
-  updateGraphItem(
-    itemID: AtomID,
-    title: string,
-    width: number,
-    height: number
+  setRelatedMap(root_itemId: AtomID, feedStore: FeedStore): void {
+    const related: IRelatedAtom[] = feedStore.getRelated(root_itemId);
+    if (
+      root_itemId === undefined ||
+      related === undefined ||
+      related.length === 0
+    ) {
+      return;
+    }
+
+    const relatedMap_local = new Map<AtomID, IAtom[]>();
+
+    related.forEach((el) => {
+      const key = el.relation;
+      if (!relatedMap_local.has(key)) {
+        relatedMap_local.set(key, [el.item]);
+      } else {
+        const item_list: IAtom[] = relatedMap_local.get(key);
+        item_list.push(el.item);
+        relatedMap_local.set(key, item_list);
+      }
+    });
+
+    this.$relatedMap.clear();
+    //Sort Map by lengh
+    const keys_values_sorted = Array.from(relatedMap_local.entries()).sort(
+      (a, b) => {
+        if (a[1].length > b[1].length) {
+          //a est avant à b
+          return -1;
+        } else if (a[1].length < b[1].length) {
+          //a est après à b
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+    );
+
+    keys_values_sorted.forEach((key_value) => {
+      this.$relatedMap.set(key_value[0], key_value[1]);
+    });
+
+    this.$rootItemId = root_itemId;
+  }
+
+  setGraph(
+    root_item: IAtom,
+    feedStore: FeedStore,
+    x0: number,
+    y0: number
   ): void {
-    const width_node = 100;
-    const forceColiideRadius = width_node * 1.0;
-    const forceLinkDistance = width_node * 1.0;
+    if (root_item === undefined) {
+      return;
+    }
+
+    this.setRelatedMap(root_item.id, feedStore);
+
+    const rootNode: INode = {
+      x: x0,
+      y: y0,
+      pos: 0,
+      ...root_item,
+    };
+
+    this.graph.nodes = [rootNode];
+    this.graph.links = [];
+
+    this.$relatedMap.forEach((items_list_for_relation, key) => {
+      if (items_list_for_relation.length > 1) {
+        //NodeGroup Element
+        const node_group: INode = {
+          x: x0,
+          y: y0,
+          pos: this.graph.nodes.length,
+          ...newAtom(key),
+        };
+        node_group.title = key;
+        node_group.related = "group";
+
+        this.graph.nodes.push(node_group);
+        this.graph.links.push({
+          source: this.graph.nodes[0],
+          target: this.graph.nodes[node_group.pos],
+        });
+
+        items_list_for_relation.forEach((item: IAtom) => {
+          const node: INode = {
+            x: x0,
+            y: y0,
+            pos: this.graph.nodes.length,
+            ...item,
+          };
+          this.graph.nodes.push(node);
+          this.graph.links.push({
+            source: this.graph.nodes[node_group.pos],
+            target: this.graph.nodes[node.pos],
+          });
+        });
+      } else if (items_list_for_relation.length === 1) {
+        //No group
+        const node: INode = {
+          x: x0,
+          y: y0,
+          pos: this.graph.nodes.length,
+          ...items_list_for_relation[0],
+        };
+        this.graph.nodes.push(node);
+        this.graph.links.push({
+          source: this.graph.nodes[0],
+          target: this.graph.nodes[node.pos],
+        });
+      }
+    });
+  }
+
+  renderRelatedMap(root_itemId: AtomID, feedStore: FeedStore): void {
+    const root_item = feedStore.getItemFromAnywhere(root_itemId);
+    if (root_item === undefined) {
+      return;
+    }
+
+    if (feedStore.getRelated(root_itemId) === undefined) {
+      feedStore.fetchRelated(root_item.id, root_item.title).then(() => {
+        this.setRelatedMap(root_itemId, feedStore);
+      });
+    } else if (root_itemId !== this.$rootItemId) {
+      this.setRelatedMap(root_itemId, feedStore);
+    }
+  }
+
+  runSimulation(width: number, height: number): void {
+    const forceColideRadius = width_node * 0.9;
+    const forceLinkDistance = width_node * 1.1;
     const forceIterations = 10;
     const forceAlphaMin = 0.001; //0.001 working well
 
-    this.getGraphDataItem(itemID, title)
-      .then(
-        action((items: IAtom[]) => {
-          if (items === undefined) {
-            return;
-          }
-          const graph = this.buildGraphItemWithGroup(
-            items,
-            width / 2,
-            height / 2
-          );
-          this.setGraph(graph);
+    //Deep Copy, all other solutions didn't worked!
+    const nodesClone = this.graph.nodes.map((el) => {
+      return { ...el };
+    });
 
-          const nodes = graph.nodes;
-          const links = graph.links;
+    const linksClone = this.graph.links.map((link: ILink) => {
+      return {
+        source: nodesClone[link.source.pos],
+        target: nodesClone[link.target.pos],
+      };
+    });
 
-          let self = this;
-          const simulation = forceSimulation(nodes)
-            .force("center", forceCenter(width / 2, height / 2).strength(0.8))
-            .force(
-              "collision",
-              forceCollide()
-                .radius(forceColiideRadius)
-                .iterations(forceIterations)
-            )
-            // .force("charge", forceManyBody().strength(-50))
-            .force(
-              "link",
-              forceLink(links)
-                .distance(forceLinkDistance)
-                .strength(0.7)
-                .iterations(forceIterations)
-            )
-            .on("tick", function () {
-              self.setGraph({ nodes: nodes, links: links });
-            })
-            .alphaMin(forceAlphaMin) //To converge quickly, default is 0.001
-            // .alphaDecay(0.08);
-            .alphaDecay(0.05);
+    // let self = this;
+
+    // let tick_count = 0;
+    forceSimulation(nodesClone)
+      .force("center", forceCenter(width, height).strength(1.5))
+      .force(
+        "collision",
+        forceCollide()
+          .radius(forceColideRadius)
+          .strength(0.5)
+          .iterations(forceIterations)
+      )
+      // .force("charge", forceManyBody().strength(-50))
+      .force(
+        "link",
+        forceLink(linksClone)
+          .distance(forceLinkDistance)
+          .strength(0.5)
+          .iterations(forceIterations)
+      )
+      .on(
+        // "tick",
+        "end",
+        action(() => {
+          // tick_count = tick_count + 1;
+          // if (tick_count % 10 === 0) {
+          this.$graph.nodes = nodesClone;
+          this.$graph.links = linksClone.map((link: ILink) => {
+            return {
+              source: this.$graph.nodes[link.source.pos],
+              target: this.$graph.nodes[link.target.pos],
+            };
+          });
+          // }
         })
       )
-      .catch((error) => {
-        console.log(error);
-      });
+      .alphaMin(forceAlphaMin) //To converge quickly, default is 0.001
+      .alphaDecay(0.1);
+    // .alphaDecay(0.05);
   }
 
-  //Important: graph[0] doit toujours avoir le RootItem!
-  async getGraphDataItem(itemID: AtomID, title: string): Promise<IAtom[]> {
-    const items_wikipedia: IAtom[] = await _getRelatedFromWikipediaFromWeb(
-      itemID,
-      title
-    );
-    const items_wikidata: IAtom[] = await _getRelatedFromWikidataFromWeb(
-      itemID
-    );
-
-    const items = items_wikidata.concat(items_wikipedia);
-
-    // const items = items_all.filter((item) => {
-    //   const filter =
-    //     !item.title_en.includes("Category:") && !item.title_en.includes("Wiki");
-    //   return filter;
-    // });
-
-    const rootItemList: IAtom[] = await _getItemsFromTitlesFromWeb(title);
-    const rootItem = rootItemList[0];
-
-    if (rootItem !== undefined) {
-      //add root at the beginning
-      items.unshift(rootItem);
-    } else {
-      console.log("graph broken!");
+  renderGraph(
+    root_itemId: AtomID,
+    feedStore: FeedStore,
+    width: number,
+    height: number
+  ): void {
+    const root_item = feedStore.getItemFromAnywhere(root_itemId);
+    if (root_item === undefined) {
+      return;
     }
 
-    return items;
-  }
-
-  buildGraphItemSimple(items: IAtom[], x0: number, y0: number): IGraph {
-    const nodes: INode[] = items.map((item) => {
-      return {
-        x: x0,
-        y: y0,
-        ...item,
-      };
-    });
-    const links: ILink[] = [];
-
-    //nodes.slice(1) exclude the first item which is the node_root
-    nodes.slice(1).forEach((node_item) => {
-      links.push({
-        source: nodes[0],
-        target: node_item,
-      });
-    });
-
-    return { nodes: nodes, links: links };
-  }
-
-  buildGraphItemWithGroup(items: IAtom[], x0: number, y0: number): IGraph {
-    const graph_map = new Map<string, INode[]>();
-    const items_INode: INode[] = items.map((item) => {
-      return {
-        x: x0,
-        y: y0,
-        ...item,
-      };
-    });
-    const node_root = items_INode[0];
-
-    //nodes.slice(1) exclude the first item which is the node_root
-    items_INode.slice(1).forEach((node) => {
-      const key = node.related;
-
-      if (!graph_map.has(key)) {
-        graph_map.set(key, [node]);
-      } else {
-        const nodes_list: INode[] = graph_map.get(key);
-        nodes_list.push(node);
-        graph_map.set(key, nodes_list);
-      }
-    });
-    const nodes: INode[] = [node_root];
-    const links: ILink[] = [];
-
-    graph_map.forEach((nodes_list_prop, key) => {
-      //NodeGroup Element
-      const node_prop: INode = {
-        x: 0,
-        y: 0,
-        ...newAtom(key),
-      };
-      node_prop["title"] = key.split("|")[1];
-      node_prop["related"] = "group_prop";
-
-      if (nodes_list_prop.length > 1) {
-        // if (true) {
-        nodes.push(node_prop);
-        links.push({
-          source: nodes[0],
-          target: node_prop,
-        });
-
-        nodes_list_prop.forEach((node) => {
-          nodes.push(node);
-          links.push({
-            source: node_prop,
-            target: node,
-          });
-        });
-      } else {
-        const node = nodes_list_prop[0];
-        nodes.push(node);
-        links.push({
-          source: nodes[0],
-          target: node,
-        });
-      }
-    });
-    return { nodes: nodes, links: links };
+    if (feedStore.getRelated(root_itemId) === undefined) {
+      feedStore
+        .fetchRelated(root_item.id, root_item.title)
+        .then(
+          action(() => {
+            this.setGraph(root_item, feedStore, width / 2, height / 2);
+          })
+        )
+        .then(
+          action(() => {
+            this.runSimulation(width / 2, height / 2);
+          })
+        );
+    } else if (root_itemId !== this.$rootItemId) {
+      this.setGraph(root_item, feedStore, width / 2, height / 2);
+      this.runSimulation(width / 2, height / 2);
+    }
   }
 }
