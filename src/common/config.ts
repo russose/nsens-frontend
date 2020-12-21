@@ -25,6 +25,8 @@ const CONFIG_GUI = {
       HOME: { label: "Accueil", icon: "workflow-status-all", path: "/" },
       KNOWBOOKS: { label: "Carnets", icon: "folder", path: "/Knowbooks" },
       LOGIN: { label: "User", icon: "person", path: "/User" },
+      SAVE: { label: "Sauver", icon: "angled-pin", path: "" },
+      EDIT: { label: "Modifier", icon: "edit", path: "" },
       VIZS: { label: "Vizs", icon: "compass", path: "" },
       ARTICLE: {
         label: "Article",

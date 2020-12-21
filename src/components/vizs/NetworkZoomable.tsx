@@ -20,6 +20,8 @@ const size_factor = 4;
 const max_nodes_network = USER_DISPLAY.max_nodes_network;
 const max_width_network = USER_DISPLAY.max_width_network;
 
+const ParentSize_ = observer(ParentSize);
+
 const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   props
 ) => {
@@ -38,14 +40,14 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
     },
     0
   );
-  function displayConditionNetwork(width: number): boolean {
+  function networkNodeDisplayed(width: number): boolean {
     if (width === 0) {
       return undefined;
     }
     return width > max_width_network && amount_nodes < max_nodes_network;
   }
   return (
-    <ParentSize>
+    <ParentSize_>
       {(parent) => (
         <>
           {graphStore.renderGraph(
@@ -55,7 +57,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
             size_factor * parent.height
           )}
           <>
-            {displayConditionNetwork(parent.width) ? (
+            {networkNodeDisplayed(parent.width) ? (
               <MyZoom
                 width={parent.width - margin}
                 height={parent.height - margin}
@@ -87,7 +89,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
           </>
         </>
       )}
-    </ParentSize>
+    </ParentSize_>
   );
 };
 

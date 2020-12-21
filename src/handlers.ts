@@ -1,6 +1,5 @@
 import { FeedStore } from "./stores/FeedStore";
 import { UserStore } from "./stores/UserStore";
-import { GraphStore } from "./stores/GraphStore";
 import { SavedStore } from "./stores/SavedStore";
 import { KnowbookID, AtomID, ButtonIDType } from "./common/types";
 import { IItemDisplayMode, UIStore } from "./stores/UIStore";
@@ -59,7 +58,7 @@ export const onSearchHomeKeyboard = (
   }
 };
 
-/*******************Save atom card*************************** */
+/*******************Save Items*************************** */
 
 export const onSaved = (
   savedStore: SavedStore,
@@ -80,16 +79,6 @@ export const onSaved = (
   }
 };
 
-export const isItemSavedActivated = (knowbookStore: KnowkookStore) => (
-  itemID: AtomID
-) => {
-  if (knowbookStore.IsItemInAnyKnowbook(itemID)) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
 export const isItemSaved = (savedStore: SavedStore) => (itemID: AtomID) => {
   if (savedStore.saved.has(itemID) === undefined) {
     return false;
@@ -98,6 +87,16 @@ export const isItemSaved = (savedStore: SavedStore) => (itemID: AtomID) => {
     return true;
   } else {
     return false;
+  }
+};
+
+export const isItemSavedActivated = (knowbookStore: KnowkookStore) => (
+  itemID: AtomID
+) => {
+  if (knowbookStore.IsItemInAnyKnowbook(itemID)) {
+    return false;
+  } else {
+    return true;
   }
 };
 
@@ -282,7 +281,7 @@ export const onMenuButtonPath = (uiStore: UIStore, userStore: UserStore) => (
   }
 };
 
-export const onMenuButtonClick = (uiStore: UIStore) => (
+export const onDisplayModeClick = (uiStore: UIStore) => (
   buttonId: ButtonIDType
 ) => () => {
   let mode;

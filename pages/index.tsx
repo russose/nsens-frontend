@@ -17,16 +17,14 @@ const Home: React.FunctionComponent = (props) => {
     feedStore,
   } = useStores();
   return (
-    <>
-      <CardAtomGrid
-        id="home"
-        atoms={feedStore.getFeedList()}
-        isItemSaved_handler={isItemSaved(savedStore)}
-        isItemSavedActionable_handler={isItemSavedActivated(knowbookStore)}
-        saved_handler={onSaved(savedStore, userStore, knowbookStore, feedStore)}
-        edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
-      />
-    </>
+    <CardAtomGrid
+      id="home"
+      atoms={feedStore.getFeedList()}
+      isItemSaved_handler={isItemSaved(savedStore)}
+      isItemSavedActionable_handler={isItemSavedActivated(knowbookStore)}
+      saved_handler={onSaved(savedStore, userStore, knowbookStore, feedStore)}
+      edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
+    />
   );
 };
 

@@ -34,29 +34,33 @@ export class SavedStore {
     }
 
     const item = feedStore.getItemFromAnywhere(itemId);
+
     if (item === undefined) {
       console.log("impossible to save, not item found");
       return;
     }
 
-    this.$saved.set(item.id, item); //to not freeze UI
+    // this.$saved.set(item.id, item); //to not freeze UI
+    this.setSaved([item]); //to not freeze UI
 
     feedStore
       .fetchRelated(item.id, item.title) //take time
       .then(() => {
         item.related = JSON.stringify(feedStore.getRelated(itemId));
+        return item;
       })
-      .then(
-        action(() => {
-          this.$saved.set(item.id, item);
-        })
-      )
-      .then(() => {
+      // .then(
+      //   action(() => {
+      //     this.$saved.set(item.id, item);
+      //   })
+      // )
+      .then((item) => {
         _save(item);
       })
       .catch(
-        action(() => {
+        action((e) => {
           this.$saved.delete(itemId);
+          console.log(e);
           console.log("error in saving item");
         })
       );

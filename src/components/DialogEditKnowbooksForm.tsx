@@ -1,7 +1,8 @@
 import { Box, IconButton, Modal, TextField } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { AtomID } from "../common/types";
-import { JsCheckbox, JsText } from "./js_components";
+import { JsCheckbox, JsText } from "./_js_components";
+import { iconColorDefault } from "./_Button";
 
 export interface ICheckboxes {
   label: string;
@@ -67,7 +68,7 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
             accessibilityLabel="ok"
             icon="cancel"
             bgColor="transparent"
-            iconColor="darkGray"
+            iconColor={iconColorDefault}
             size="md"
             onClick={props.handler_cancel}
           />
@@ -75,7 +76,7 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
             accessibilityLabel="ok"
             icon="check-circle"
             bgColor="transparent"
-            iconColor="darkGray"
+            iconColor={iconColorDefault}
             size="md"
             onClick={props.handler_confirm(props.id)}
           />

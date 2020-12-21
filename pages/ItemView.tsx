@@ -14,6 +14,8 @@ const ItemView: React.FunctionComponent = (props) => {
   const item_title = router.query.title as string;
   const item_id = router.query.id as string;
 
+  uiStore.setSelectedAtomId(item_id);
+
   const article = (
     <Box padding={2}>
       <Article item_title={item_title} uiStore={uiStore} />
@@ -32,7 +34,6 @@ const ItemView: React.FunctionComponent = (props) => {
 
   let page;
   if (uiStore.itemDisplayMode === IItemDisplayMode.Network) {
-    // if (true) {
     page = network;
   } else {
     page = article;

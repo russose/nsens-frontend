@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { JsText } from "./js_components";
+import { JsText } from "./_js_components";
 import { Image, Box, Mask } from "gestalt";
 import { AtomID } from "../common/types";
 import { USER_DISPLAY } from "../common/config";

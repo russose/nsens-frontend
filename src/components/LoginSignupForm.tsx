@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button } from "gestalt";
-import { JsText } from "./js_components";
+import { JsText } from "./_js_components";
 
 interface ILoginSignupFormProps {
   title: string;

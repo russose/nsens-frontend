@@ -1,4 +1,4 @@
-import { JsText } from "../js_components";
+import { JsText } from "../_js_components";
 import { Box } from "gestalt";
 import { USER_DISPLAY } from "../../common/config";
 import { observer } from "mobx-react-lite";

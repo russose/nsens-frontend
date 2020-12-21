@@ -1,6 +1,7 @@
 import { KnowkookStore } from "./KnowkookStore";
 import { observable, action, makeObservable } from "mobx";
 import { AtomID, KnowbookID } from "../common/types";
+
 export enum IItemDisplayMode {
   Article = "Article",
   Network = "Network",
@@ -27,6 +28,7 @@ export class UIStore {
     makeObservable<
       UIStore,
       | "$searchPattern"
+      | "$selectedAtomId"
       | "$articleContent"
       | "$itemDisplayMode"
       | "$editKnowbookOpened"
@@ -38,6 +40,7 @@ export class UIStore {
       | "$loginScreenPassword"
     >(this, {
       $searchPattern: observable,
+      $selectedAtomId: observable,
       $articleContent: observable,
       $itemDisplayMode: observable,
       setItemDisplayMode: action,

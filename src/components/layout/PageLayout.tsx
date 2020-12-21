@@ -3,10 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import React from "react";
 import { USER_DISPLAY, USER_GUI_CONFIG } from "../../common/config";
-import { ButtonIDType } from "../../common/types";
 import {
-  onMenuButtonClick,
-  onMenuButtonPath,
   onSearchHomeKeyboard,
   onSearchHomeSubmit,
   onSearchHomeText,
@@ -14,66 +11,66 @@ import {
 import { initializeApp } from "../../initialization";
 import { useStores } from "../../stores/_RootStoreHook";
 import Dialogs from "../Dialogs";
-import { JsHeading } from "../js_components";
-import MenuBarButton from "../MenuBarButton";
-import MenuBarLink from "../MenuBarLink";
+import { JsHeading } from "../_js_components";
+import MenuBarDisplay from "../MenuBarDisplay";
 import SearchBar from "../SearchBar";
+import MenuBarNavigation from "../MenuBarNavigation";
 
 const header_size = USER_DISPLAY.header_size;
 const color_menu = USER_DISPLAY.colors.menu;
 const color_headers = USER_DISPLAY.colors.headers as any;
-// const buttons = USER_GUI_CONFIG.buttons;
 
-const DefaultLayout: React.FunctionComponent = (props) => {
-  const {
-    savedStore,
-    uiStore,
-    userStore,
-    knowbookStore,
-    feedStore,
-  } = useStores();
+const PageLayout: React.FunctionComponent = (props) => {
+  const stores = useStores();
   const router = useRouter();
 
-  if (userStore.user === null) {
-    initializeApp(savedStore, userStore, knowbookStore, feedStore);
+  if (stores.userStore.user === null) {
+    initializeApp(
+      stores.savedStore,
+      stores.userStore,
+      stores.knowbookStore,
+      stores.feedStore
+    );
   }
 
-  const navigationButtonsIds: ButtonIDType[] = [
-    ButtonIDType.HOME,
-    ButtonIDType.KNOWBOOKS,
-    // ButtonIDType.VIZS,
-    ButtonIDType.LOGIN,
-  ];
+  // const navigationButtonsIds: ButtonIDType[] = [
+  //   ButtonIDType.HOME,
+  //   ButtonIDType.KNOWBOOKS,
+  //   // ButtonIDType.VIZS,
+  //   ButtonIDType.LOGIN,
+  // ];
   const navigationMenu = (
-    <Box color="white" padding={1} display="block">
-      <MenuBarLink
-        name="NavigationMenuBar"
-        buttonsIds={navigationButtonsIds}
-        color={color_menu}
-        path_handler={onMenuButtonPath(uiStore, userStore)}
-      />
-    </Box>
+    <MenuBarNavigation name="NavigationMenuBar" color={color_menu} />
+    // <Box color="white" padding={1} display="block">
+    //   <MenuBarLink
+    //     name="NavigationMenuBar"
+    //     buttonsIds={navigationButtonsIds}
+    //     color={color_menu}
+    //     path_handler={onMenuButtonPath(stores.uiStore, stores.userStore)}
+    //   />
+    // </Box>
   );
 
   const displayMenuDisplayed = router.pathname.includes("ItemView");
   const displayMenu = displayMenuDisplayed && (
-    <Box color="white" padding={1} display="block">
-      <MenuBarButton
-        name="displayMenuBar"
-        buttonsIds={[ButtonIDType.ARTICLE, ButtonIDType.VIZS]}
-        color={color_menu}
-        onClick_handler={onMenuButtonClick(uiStore)}
-      />
-    </Box>
+    <MenuBarDisplay name="MenuBarDisplay" color={color_menu} />
   );
 
   const searchbar = (
     <SearchBar
       placeholder={USER_GUI_CONFIG.searchBar}
-      handlerText={onSearchHomeText(uiStore)}
-      handlerSubmit={onSearchHomeSubmit(feedStore, uiStore, userStore)}
-      handlerKeyboard={onSearchHomeKeyboard(feedStore, uiStore, userStore)}
-      value={uiStore.searchPattern}
+      handlerText={onSearchHomeText(stores.uiStore)}
+      handlerSubmit={onSearchHomeSubmit(
+        stores.feedStore,
+        stores.uiStore,
+        stores.userStore
+      )}
+      handlerKeyboard={onSearchHomeKeyboard(
+        stores.feedStore,
+        stores.uiStore,
+        stores.userStore
+      )}
+      value={stores.uiStore.searchPattern}
     />
   );
 
@@ -105,9 +102,9 @@ const DefaultLayout: React.FunctionComponent = (props) => {
   if (router.pathname === "/" || router.pathname === "/index") {
     header = searchbar;
   } else if (router.pathname === "/User") {
-    if (userStore.isLogged) {
+    if (stores.userStore.isLogged) {
       header = headerText(
-        userStore.user === null ? "" : userStore.user.username
+        stores.userStore.user === null ? "" : stores.userStore.user.username
       );
     } else {
       header = headerText(USER_GUI_CONFIG.loginSignup.title);
@@ -214,5 +211,4 @@ const DefaultLayout: React.FunctionComponent = (props) => {
   );
 };
 
-export default observer(DefaultLayout);
-// export default DefaultLayout;
+export default observer(PageLayout);

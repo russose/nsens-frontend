@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { USER_GUI_CONFIG } from "../src/common/config";
 import CardAtomGrid from "../src/components/CardAtomGrid";
-import { JsText } from "../src/components/js_components";
+import { JsText } from "../src/components/_js_components";
 import Separator from "../src/components/Separator";
 import {
   isItemSaved,
@@ -41,10 +41,8 @@ const Knowbook: React.FunctionComponent = (props) => {
         edit_handler={onEditKnowbooks(uiStore, knowbookStore)}
         compact={false}
       />
-
       <Separator />
       <JsText weight="bold">{Related_title}</JsText>
-
       <CardAtomGrid
         id="knowbooks_related"
         atoms={feedStore.getRelatedItemsForItems(

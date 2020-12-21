@@ -4,6 +4,7 @@ import { ParsedUrlQueryInput } from "querystring";
 import { USER_DISPLAY } from "../common/config";
 import { AtomID } from "../common/types";
 import CardGeneric from "./CardGeneric";
+import { iconColorDefault } from "./_Button";
 
 interface ICardAtomProps {
   id: AtomID;
@@ -37,7 +38,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
           <IconButton
             accessibilityLabel="edit"
             icon="edit"
-            iconColor="darkGray"
+            iconColor={iconColorDefault}
             size={size_icon}
             onClick={props.edit_handler}
           />
@@ -47,7 +48,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
         <IconButton
           accessibilityLabel="save"
           icon="angled-pin"
-          iconColor={props.saved_enabled ? "red" : "darkGray"}
+          iconColor={props.saved_enabled ? "red" : iconColorDefault}
           size={size_icon}
           onClick={props.saved_handler}
           disabled={!props.saved_actionable}

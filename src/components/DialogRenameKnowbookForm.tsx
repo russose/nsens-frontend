@@ -1,6 +1,6 @@
 import { Box, Button, Modal, TextField } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { JsText } from "./js_components";
+import { JsText } from "./_js_components";
 
 interface IDialogRenameKnowbookFormProps {
   title: string;

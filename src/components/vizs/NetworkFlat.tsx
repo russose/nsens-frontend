@@ -15,7 +15,7 @@ import { SavedStore } from "../../stores/SavedStore";
 import { UIStore } from "../../stores/UIStore";
 import { UserStore } from "../../stores/UserStore";
 import CardAtomGrid from "../CardAtomGrid";
-import { JsText } from "../js_components";
+import { JsText } from "../_js_components";
 
 export type INetworkFlatProps = {
   rootItemId: AtomID;

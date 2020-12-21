@@ -1,5 +1,5 @@
 import React from "react";
-import { JsText } from "./js_components";
+import { JsText } from "./_js_components";
 import { CONFIG_FETCHING, LANGUAGE, USER_GUI_CONFIG } from "../common/config";
 import { fetchArticle } from "../libs/fetch";
 import { UIStore } from "../stores/UIStore";

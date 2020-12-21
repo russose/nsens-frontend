@@ -1,10 +1,11 @@
 import { observer } from "mobx-react-lite";
-import { JsText } from "./js_components";
+import { JsText } from "./_js_components";
 import { Box, IconButton } from "gestalt";
 import { AtomID } from "../common/types";
 import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
 import { USER_DISPLAY } from "../common/config";
+import { iconColorDefault } from "./_Button";
 
 interface ICardKnowProps {
   id: AtomID;
@@ -39,7 +40,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           <IconButton
             accessibilityLabel="clear"
             icon="clear"
-            iconColor="darkGray"
+            iconColor={iconColorDefault}
             size={size_icon}
             onClick={props.delete_handler}
           />
@@ -51,7 +52,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           <IconButton
             accessibilityLabel="edit"
             icon="edit"
-            iconColor="darkGray"
+            iconColor={iconColorDefault}
             size={size_icon}
             onClick={props.edit_handler}
           />

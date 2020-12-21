@@ -9,6 +9,8 @@ export enum ButtonIDType {
   HOME = "HOME",
   KNOWBOOKS = "KNOWBOOKS",
   LOGIN = "LOGIN",
+  SAVE = "SAVE",
+  EDIT = "EDIT",
   VIZS = "VIZS",
   ARTICLE = "ARTICLE",
 }
