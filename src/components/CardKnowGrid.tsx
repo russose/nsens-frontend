@@ -1,4 +1,5 @@
 import { observer } from "mobx-react-lite";
+import { paths } from "../common/configPaths";
 import { IKnowbook, KnowbookID } from "../common/types";
 import { entierAleatoire } from "../libs/utils";
 import { KnowkookStore } from "../stores/KnowkookStore";
@@ -15,7 +16,7 @@ interface ICardKnowGridProps {
   knowbookStore: KnowkookStore;
 }
 
-// const image_path = USER_DISPLAY.paths.knowbook_image;
+const path_knowbook = paths.pages.Knowbook;
 
 function getKnowbookImage(
   knowbook: KnowbookID,
@@ -62,7 +63,7 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
                 props.savedStore,
                 props.knowbookStore
               )}
-              pathname={"/Knowbook"}
+              pathname={path_knowbook}
               queryObject={{ title: item.name }}
               amount={item.items.length}
               edit_handler={props.edit_handler(item.name)}

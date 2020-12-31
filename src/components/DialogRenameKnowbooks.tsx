@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { USER_GUI_CONFIG } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import {
   onCancel,
   onChangeInputValueRenameKnowbook,
@@ -14,10 +14,10 @@ const DialogRenameKnowbooks: React.FunctionComponent = (props) => {
     <>
       {uiStore.renameKnowbookOpened && (
         <DialogRenameKnowbookForm
-          title={USER_GUI_CONFIG.renameDeleteKnowbook.title}
+          title={GUI_CONFIG.language.renameDeleteKnowbook.title}
           value={uiStore.renameKnowbookNewName}
-          label_rename={USER_GUI_CONFIG.renameDeleteKnowbook.rename_label}
-          label_cancel={USER_GUI_CONFIG.renameDeleteKnowbook.cancel_label}
+          label_rename={GUI_CONFIG.language.renameDeleteKnowbook.rename_label}
+          label_cancel={GUI_CONFIG.language.renameDeleteKnowbook.cancel_label}
           handler_rename={onRenameKnowbook(uiStore, knowbookStore)}
           handler_cancel={onCancel(uiStore)}
           handler_inputValue={onChangeInputValueRenameKnowbook(uiStore)}

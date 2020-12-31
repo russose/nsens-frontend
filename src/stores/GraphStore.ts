@@ -6,7 +6,7 @@ import {
   forceSimulation,
 } from "d3-force";
 import { action, makeObservable, observable } from "mobx";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import {
   AtomID,
   IAtom,
@@ -17,7 +17,7 @@ import {
 } from "../common/types";
 import { FeedStore } from "./FeedStore";
 
-const width_node = USER_DISPLAY.atom_compact_sizes.width;
+const width_node = GUI_CONFIG.display.atom_compact_sizes.width;
 
 interface IGraph {
   nodes: INode[];

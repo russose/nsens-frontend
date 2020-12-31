@@ -1,4 +1,21 @@
+import { ParentSize } from "@visx/responsive";
+import { observer } from "mobx-react-lite";
 import Router from "next/router";
+import { paths } from "../common/configPaths";
+
+export const ParentSize_ = observer(ParentSize);
+
+export function goHome() {
+  Router.push({
+    pathname: paths.pages.Home,
+  });
+}
+
+export function goLanding() {
+  Router.push({
+    pathname: paths.pages.Landing,
+  });
+}
 
 export function findUndefined(list: Object[]) {
   list.forEach((item) => {
@@ -7,18 +24,6 @@ export function findUndefined(list: Object[]) {
         console.log(item);
       }
     });
-  });
-}
-
-export function goHome() {
-  Router.push({
-    pathname: "/",
-  });
-}
-
-export function goLogin() {
-  Router.push({
-    pathname: "/User",
   });
 }
 

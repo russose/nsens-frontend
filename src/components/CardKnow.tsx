@@ -1,10 +1,9 @@
 import { observer } from "mobx-react-lite";
-import { JsText } from "./_js_components";
-import { Box, IconButton } from "gestalt";
+import { Box, IconButton, Text } from "gestalt";
 import { AtomID } from "../common/types";
 import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import { iconColorDefault } from "./_Button";
 
 interface ICardKnowProps {
@@ -18,9 +17,9 @@ interface ICardKnowProps {
   delete_handler: any;
 }
 
-const card_sizes = USER_DISPLAY.knowbook_sizes;
-const color_image = USER_DISPLAY.colors.knowbook_color_image;
-const size_icon: any = USER_DISPLAY.size_icon;
+const card_sizes = GUI_CONFIG.display.knowbook_sizes;
+const color_image = GUI_CONFIG.display.colors.knowbook_color_image;
+const size_icon: any = GUI_CONFIG.display.size_icon;
 
 const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
   const display_edit_icon = props.edit_handler === undefined ? false : true;
@@ -59,9 +58,9 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
         )}
       </Box>
       <Box paddingX={2}>
-        <JsText align="center" size="sm" weight="bold">
+        <Text align="center" size="sm" weight="bold">
           {props.amount}
-        </JsText>
+        </Text>
       </Box>
     </CardGeneric>
   );

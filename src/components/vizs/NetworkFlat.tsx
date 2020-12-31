@@ -8,49 +8,37 @@ import {
   onEditKnowbooks,
   onSaved,
 } from "../../handlers";
-import { FeedStore } from "../../stores/FeedStore";
-import { GraphStore } from "../../stores/GraphStore";
-import { KnowkookStore } from "../../stores/KnowkookStore";
-import { SavedStore } from "../../stores/SavedStore";
-import { UIStore } from "../../stores/UIStore";
-import { UserStore } from "../../stores/UserStore";
+import { IStores } from "../../stores/_RootStore";
 import CardAtomGrid from "../CardAtomGrid";
-import { JsText } from "../_js_components";
+import { Text } from "gestalt";
 
 export type INetworkFlatProps = {
   rootItemId: AtomID;
-  graphStore: GraphStore;
-  savedStore: SavedStore;
-  userStore: UserStore;
-  knowbookStore: KnowkookStore;
-  feedStore: FeedStore;
-  uiStore: UIStore;
+  stores: IStores;
 };
 
 const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
-  const graphMap = props.graphStore.graphMap;
+  const graphMap = props.stores.graphStore.graphMap;
   return (
     <Box>
       {Array.from(graphMap).map((key_value) => {
         return (
           <>
             <Box padding={3}>
-              <JsText weight="bold">{key_value[0]}</JsText>
+              <Text weight="bold">{key_value[0]}</Text>
             </Box>
             <CardAtomGrid
               id="NetworkFlat"
               atoms={key_value[1]}
-              isItemSaved_handler={isItemSaved(props.savedStore)}
+              isItemSaved_handler={isItemSaved(props.stores.savedStore)}
               isItemSavedActionable_handler={isItemSavedActivated(
-                props.knowbookStore
+                props.stores.knowbookStore
               )}
-              saved_handler={onSaved(
-                props.savedStore,
-                props.userStore,
-                props.knowbookStore,
-                props.feedStore
+              saved_handler={onSaved(props.stores)}
+              edit_handler={onEditKnowbooks(
+                props.stores.uiStore,
+                props.stores.knowbookStore
               )}
-              edit_handler={onEditKnowbooks(props.uiStore, props.knowbookStore)}
               compact={false}
             />
           </>

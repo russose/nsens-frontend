@@ -3,7 +3,7 @@ import { Box, IconButton } from "gestalt";
 import { AtomID } from "../common/types";
 import CardGenericCompact from "./CardGenericCompact";
 import { ParsedUrlQueryInput } from "querystring";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import { iconColorDefault } from "./_Button";
 
 interface ICardAtomCompactProps {
@@ -18,9 +18,9 @@ interface ICardAtomCompactProps {
   edit_handler: any;
 }
 
-const card_sizes = USER_DISPLAY.atom_compact_sizes;
-const size_icon: any = USER_DISPLAY.size_icon;
-const color_image = USER_DISPLAY.colors.item_color_image;
+const card_sizes = GUI_CONFIG.display.atom_compact_sizes;
+const size_icon: any = GUI_CONFIG.display.size_icon;
+const color_image = GUI_CONFIG.display.colors.item_color_image;
 
 const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
   props

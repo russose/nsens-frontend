@@ -3,6 +3,7 @@ import { IconButton } from "gestalt";
 import { ButtonIDType } from "../common/types";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
+import { paths } from "../common/configPaths";
 
 export interface IButton {
   Id: ButtonIDType;
@@ -23,15 +24,16 @@ interface IButtonProps {
 }
 
 const icon_size = "sm";
+const path_empty = paths.pages.empty;
 
 const _Button: React.FunctionComponent<IButtonProps> = (props) => {
-  const path_ = props.path === undefined ? "" : props.path;
+  const path_ = props.path === undefined ? path_empty : props.path;
   const iconColor_ =
     props.iconColor === undefined ? iconColorDefault : props.iconColor;
   const disabled_ = props.disabled === undefined ? false : props.disabled;
   const onClick_ = props.onClick === undefined ? null : props.onClick;
 
-  return path_ === "" ? (
+  return path_ === path_empty ? (
     <IconButton
       accessibilityLabel={props.label}
       icon={props.icon}

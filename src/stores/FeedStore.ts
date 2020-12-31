@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from "mobx";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import {
   AtomID,
   empty_value_atom,
@@ -18,7 +18,7 @@ import {
 import { SavedStore } from "./SavedStore";
 import { UserStore } from "./UserStore";
 
-const amount_item_displayed = USER_DISPLAY.amount_item_displayed;
+const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
 
 function shuffleSized(array: any[]): any[] {
   const shuffled = shuffleArray(array);
@@ -98,7 +98,7 @@ export class FeedStore {
       })
       .catch((error) => {});
   }
-  setFeedFromSearch(searchPattern: string, userStore: UserStore): void {
+  setFeedFromSearch(searchPattern: string): void {
     if (searchPattern === undefined) {
       return;
     }
@@ -108,9 +108,9 @@ export class FeedStore {
         this.setFeed(atoms);
       })
       .then(() => {
-        if (userStore.isLogged) {
-          _log(LogActionType.search, searchPattern);
-        }
+        // if (userStore.isLogged) {
+        _log(LogActionType.search, searchPattern);
+        // }
       })
       .catch((error) => {
         // console.log("error in seach from pattern");

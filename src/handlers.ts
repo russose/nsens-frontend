@@ -1,15 +1,14 @@
-import { FeedStore } from "./stores/FeedStore";
 import { UserStore } from "./stores/UserStore";
 import { SavedStore } from "./stores/SavedStore";
 import { KnowbookID, AtomID, ButtonIDType } from "./common/types";
 import { IItemDisplayMode, UIStore } from "./stores/UIStore";
 import { _login, _signup, _logout } from "./_api";
-import { initializeUserData } from "./initialization";
-import { goHome, goLogin } from "./libs/utils";
-import { USER_GUI_CONFIG } from "./common/config";
+import { goHome, goLanding } from "./libs/utils";
+import { GUI_CONFIG } from "./common/config";
 import { KnowkookStore } from "./stores/KnowkookStore";
+import { IStores } from "./stores/_RootStore";
 
-const buttons = USER_GUI_CONFIG.buttons;
+const buttons = GUI_CONFIG.language.buttons;
 
 // interface IonInput {
 //   value: string;
@@ -31,51 +30,54 @@ export const onSearchHomeText = (uiStore: UIStore) => (input: {
 };
 
 export const onSearchHomeSubmit = (
-  feedStore: FeedStore,
-  uiStore: UIStore,
-  userStore: UserStore
+  // feedStore: FeedStore,
+  // uiStore: UIStore,
+  // userStore: UserStore
+  stores: IStores
 ) => (): void => {
-  if (uiStore.searchPattern.length > 0) {
-    feedStore.setFeedFromSearch(uiStore.searchPattern, userStore);
+  if (stores.uiStore.searchPattern.length > 0) {
+    stores.feedStore.setFeedFromSearch(stores.uiStore.searchPattern);
   } else {
     //feedStore.setFeedFromRandom();
   }
 };
 
 export const onSearchHomeKeyboard = (
-  feedStore: FeedStore,
-  uiStore: UIStore,
-  userStore: UserStore
+  // feedStore: FeedStore,
+  // uiStore: UIStore,
+  // userStore: UserStore
+  stores: IStores
 ) => (input: { event: any; value: string }): void => {
   if (input.event.key === "Enter") {
-    if (uiStore.searchPattern.length === 0) {
-      feedStore.setFeedFromRelated();
+    if (stores.uiStore.searchPattern.length === 0) {
+      stores.feedStore.setFeedFromRelated();
     } else {
-      onSearchHomeSubmit(feedStore, uiStore, userStore)();
+      onSearchHomeSubmit(stores)();
     }
   } else if (input.event.key === "Escape") {
-    uiStore.setSearchPattern("");
+    stores.uiStore.setSearchPattern("");
   }
 };
 
 /*******************Save Items*************************** */
 
 export const onSaved = (
-  savedStore: SavedStore,
-  userStore: UserStore,
-  knowbookStore: KnowkookStore,
-  feedStore: FeedStore
+  // savedStore: SavedStore,
+  // userStore: UserStore,
+  // knowbookStore: KnowkookStore,
+  // feedStore: FeedStore
+  stores: IStores
 ) => (itemID: AtomID) => (): void => {
-  if (!userStore.isLogged) {
-    goLogin();
-  }
+  // if (!userStore.isLogged) {
+  //   goLogin();
+  // }
   if (
-    savedStore.saved.has(itemID) === undefined ||
-    savedStore.saved.has(itemID) === false
+    stores.savedStore.saved.has(itemID) === undefined ||
+    stores.savedStore.saved.has(itemID) === false
   ) {
-    savedStore.addSaved(itemID, feedStore);
+    stores.savedStore.addSaved(itemID, stores.feedStore);
   } else {
-    savedStore.removeSaved(itemID, knowbookStore);
+    stores.savedStore.removeSaved(itemID, stores.knowbookStore);
   }
 };
 
@@ -115,10 +117,6 @@ export const onEditKnowbooks = (
   uiStore.initKnowbookEditionElements(itemId, knowbookStore);
   uiStore.setEditKnowbookOpened(true);
 };
-
-// export const onCancelEditKnowbooks = (uiStore: UIStore) => (): void => {
-//   uiStore.setEditKnowbookOpened(false);
-// };
 
 export const onChangeInputValueEditKnowbooks = (uiStore: UIStore) => (input: {
   value: string;
@@ -212,40 +210,37 @@ export const onChangeUsernamePassword = (uiStore: UIStore) => (
   // console.log(input.value);
 };
 
-export const onLogout = (
-  savedStore: SavedStore,
-  userStore: UserStore,
-  knowbookStore: KnowkookStore
-) => (): void => {
+export const onLogout = (stores: IStores) => (): void => {
   _logout()
     .then(() => {
-      userStore.setUser({ username: "" });
-      savedStore.clearSaved();
-      knowbookStore.clearKnowbooks();
+      stores.userStore.setUser({ username: "" });
+      stores.savedStore.clearSaved();
+      stores.knowbookStore.clearKnowbooks();
     })
     .then(() => {
-      goHome();
+      goLanding();
     })
     .catch(function (error) {
       console.log("error in logout...");
     });
 };
 
-export const onSubmitLoginSignup = (
-  uiStore: UIStore,
-  savedStore: SavedStore,
-  userStore: UserStore,
-  knowbookStore: KnowkookStore,
-  feedStore: FeedStore
-) => (type: string) => (): void => {
+export const onSubmitLoginSignup = (stores: IStores) => (
+  type: string
+) => (): void => {
   if (type === "login") {
-    _login(uiStore.loginScreenUsername, uiStore.loginScreenPassword)
+    _login(
+      stores.uiStore.loginScreenUsername,
+      stores.uiStore.loginScreenPassword
+    )
       .then(() => {
-        userStore.setUser({ username: uiStore.loginScreenUsername });
+        stores.userStore.setUser({
+          username: stores.uiStore.loginScreenUsername,
+        });
         // console.log("logged successfully!");
       })
       .then(() => {
-        initializeUserData(savedStore, userStore, knowbookStore, feedStore);
+        stores.userStore.initializeUserData(stores);
         goHome();
       })
       .catch(function (error) {
@@ -253,13 +248,18 @@ export const onSubmitLoginSignup = (
         console.log("error in login...");
       });
   } else if (type === "signup") {
-    _signup(uiStore.loginScreenUsername, uiStore.loginScreenPassword)
+    _signup(
+      stores.uiStore.loginScreenUsername,
+      stores.uiStore.loginScreenPassword
+    )
       .then(() => {
-        userStore.setUser({ username: uiStore.loginScreenUsername });
+        stores.userStore.setUser({
+          username: stores.uiStore.loginScreenUsername,
+        });
         // console.log("signed successfully!");
       })
       .then(() => {
-        initializeUserData(savedStore, userStore, knowbookStore, feedStore);
+        stores.userStore.initializeUserData(stores);
         goHome();
       })
       .catch(function (error) {

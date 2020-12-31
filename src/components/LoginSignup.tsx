@@ -1,40 +1,28 @@
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores/_RootStoreHook";
-import { USER_GUI_CONFIG } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import LoginSignupForm from "./LoginSignupForm";
 import { onChangeUsernamePassword, onSubmitLoginSignup } from "../handlers";
 
 const LoginSignup: React.FunctionComponent = (props) => {
-  const {
-    savedStore,
-    uiStore,
-    userStore,
-    knowbookStore,
-    feedStore,
-  } = useStores();
+  const stores = useStores();
   return (
     // <Box>
     <>
       {true && (
         <LoginSignupForm
           title="Really necessary?"
-          description={USER_GUI_CONFIG.loginSignup.desciption}
+          description={GUI_CONFIG.language.loginSignup.desciption}
           placeholder_username={
-            USER_GUI_CONFIG.loginSignup.username_placeholder
+            GUI_CONFIG.language.loginSignup.username_placeholder
           }
           placeholder_password={
-            USER_GUI_CONFIG.loginSignup.password_placeholder
+            GUI_CONFIG.language.loginSignup.password_placeholder
           }
-          label_login={USER_GUI_CONFIG.loginSignup.login_label}
-          label_signup={USER_GUI_CONFIG.loginSignup.signup_label}
-          handler_button={onSubmitLoginSignup(
-            uiStore,
-            savedStore,
-            userStore,
-            knowbookStore,
-            feedStore
-          )}
-          handler_text={onChangeUsernamePassword(uiStore)}
+          label_login={GUI_CONFIG.language.loginSignup.login_label}
+          label_signup={GUI_CONFIG.language.loginSignup.signup_label}
+          handler_button={onSubmitLoginSignup(stores)}
+          handler_text={onChangeUsernamePassword(stores.uiStore)}
         />
       )}
     </>

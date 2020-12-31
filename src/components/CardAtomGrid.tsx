@@ -1,9 +1,10 @@
-import { ParentSize } from "@visx/responsive";
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
+import { paths } from "../common/configPaths";
 import { IAtom } from "../common/types";
+import { ParentSize_ } from "../libs/utils";
 import CardAtom from "./CardAtom";
 import CardAtomCompact from "./CardAtomCompact";
 
@@ -17,12 +18,12 @@ interface ICardAtomGridProps {
   compact?: boolean;
 }
 
-const card_sizes = USER_DISPLAY.atom_sizes;
-const card_sizes_compact = USER_DISPLAY.atom_compact_sizes;
-const card_compact_width = USER_DISPLAY.atom_compact_sizes.width;
-const tbd = USER_DISPLAY.tbd;
+const card_sizes = GUI_CONFIG.display.atom_sizes;
+const card_sizes_compact = GUI_CONFIG.display.atom_compact_sizes;
+const card_compact_width = GUI_CONFIG.display.atom_compact_sizes.width;
+const amount_card_compact_width = GUI_CONFIG.display.amount_card_compact_width;
 
-const ParentSize_ = observer(ParentSize);
+const path_Itemview = paths.pages.Item;
 
 function displayCompacted(width: number, compact: boolean): boolean {
   if (width === 0) {
@@ -32,7 +33,7 @@ function displayCompacted(width: number, compact: boolean): boolean {
     return false;
   } else if (compact === true) {
     return true;
-  } else if (width < tbd * card_compact_width * 1.3) {
+  } else if (width < amount_card_compact_width * card_compact_width * 1.3) {
     return true;
   } else {
     return false;
@@ -53,7 +54,7 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
           {(parent) =>
             displayCompacted(parent.width, props.compact) ? (
               <Box
-                color="white"
+                // color="white"
                 wrap={true}
                 display="flex"
                 direction="row"
@@ -73,8 +74,7 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                         id={item.id}
                         title={item.title}
                         image_url={item.image_url}
-                        // pathname={"/Article"}
-                        pathname={"/ItemView"}
+                        pathname={path_Itemview}
                         queryObject={{ title: item.title, id: item.id }}
                         saved_enabled={props.isItemSaved_handler(item.id)}
                         saved_actionable={props.isItemSavedActionable_handler(
@@ -89,7 +89,7 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
               </Box>
             ) : (
               <Box
-                color="white"
+                // color="white"
                 wrap={true}
                 display="flex"
                 direction="row"
@@ -113,8 +113,7 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                         id={item.id}
                         title={item.title}
                         image_url={item.image_url}
-                        // pathname={"/Article"}
-                        pathname={"/ItemView"}
+                        pathname={path_Itemview}
                         queryObject={{ title: item.title, id: item.id }}
                         saved_enabled={props.isItemSaved_handler(item.id)}
                         saved_actionable={props.isItemSavedActionable_handler(

@@ -1,17 +1,17 @@
 import { observer } from "mobx-react-lite";
 import { Box } from "gestalt";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 
 interface IGridKnowProps {
   items: any[];
 }
 
-const card_sizes = USER_DISPLAY.knowbook_sizes;
+const card_sizes = GUI_CONFIG.display.knowbook_sizes;
 
 const GridKnow: React.FunctionComponent<IGridKnowProps> = (props) => {
   return (
     <Box
-      color="white"
+      // color="white"
       wrap={true}
       display="flex"
       direction="row"

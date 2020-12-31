@@ -3,7 +3,8 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { USER_DISPLAY } from "../../common/config";
+import { GUI_CONFIG } from "../../common/config";
+import { paths } from "../../common/configPaths";
 import {
   isItemSaved,
   isItemSavedActivated,
@@ -25,19 +26,14 @@ export type INetworkWithGroupProps = {
   margin?: { top: number; right: number; bottom: number; left: number };
 };
 
-const node_dx = USER_DISPLAY.atom_compact_sizes.width;
-const node_dy = USER_DISPLAY.atom_compact_sizes.height;
+const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
+const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
+const path_Itemview = paths.pages.Item;
 
 const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   props
 ) => {
-  const {
-    savedStore,
-    uiStore,
-    userStore,
-    knowbookStore,
-    feedStore,
-  } = useStores();
+  const stores = useStores();
   let node;
   if (props.node.related === "group") {
     node = (
@@ -63,18 +59,17 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
           id={props.node.id}
           title={props.node.title}
           image_url={props.node.thumbnail_url}
-          // pathname={"/Article"}
-          pathname={"/ItemView"}
+          pathname={path_Itemview}
           queryObject={{ title: props.node.title, id: props.node.id }}
-          saved_enabled={isItemSaved(savedStore)(props.node.id)}
-          saved_actionable={isItemSavedActivated(knowbookStore)(props.node.id)}
-          saved_handler={onSaved(
-            savedStore,
-            userStore,
-            knowbookStore,
-            feedStore
+          saved_enabled={isItemSaved(stores.savedStore)(props.node.id)}
+          saved_actionable={isItemSavedActivated(stores.knowbookStore)(
+            props.node.id
+          )}
+          saved_handler={onSaved(stores)(props.node.id)}
+          edit_handler={onEditKnowbooks(
+            stores.uiStore,
+            stores.knowbookStore
           )(props.node.id)}
-          edit_handler={onEditKnowbooks(uiStore, knowbookStore)(props.node.id)}
         />
       </foreignObject>
     );

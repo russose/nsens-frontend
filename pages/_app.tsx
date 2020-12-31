@@ -3,7 +3,6 @@ import { configure } from "mobx";
 import { enableStaticRendering } from "mobx-react-lite";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import PageLayout from "../src/components/layout/PageLayout";
 import rootStore from "../src/stores/_RootStore";
 import { ContextStores } from "../src/stores/_RootStoreHook";
 import "../styles.css";
@@ -51,9 +50,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       {head}
       <ContextStores.Provider value={{ rootStore: rootStore }}>
-        <PageLayout>
-          <Component {...pageProps} />
-        </PageLayout>
+        {/* <AppLayout> */}
+        <Component {...pageProps} />
+        {/* </AppLayout> */}
       </ContextStores.Provider>
     </>
   );

@@ -10,13 +10,14 @@ import {
 } from "../src/handlers";
 import { useStores } from "../src/stores/_RootStoreHook";
 
-const Home: React.FunctionComponent = (props) => {
+const KnowbookSpecialNone: React.FunctionComponent = (props) => {
   const stores = useStores();
+
   return (
     <AppLayout>
       <CardAtomGrid
-        id="Home"
-        atoms={stores.feedStore.getFeedList()}
+        id="None"
+        atoms={stores.knowbookStore.ItemsInNoKnowbook(stores.savedStore)}
         isItemSaved_handler={isItemSaved(stores.savedStore)}
         isItemSavedActionable_handler={isItemSavedActivated(
           stores.knowbookStore
@@ -28,22 +29,4 @@ const Home: React.FunctionComponent = (props) => {
   );
 };
 
-// (Home as any).getLayoutMobile = (page: NextPage) => (
-//   <MobileIndexLayout>{page}</MobileIndexLayout>
-// );
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const query_search = context.query.q as string | undefined;
-//   const query_action = context.query.a as string | undefined;
-
-//   const output: ISyncBackFrontProps = await indexSyncServerClientBack(
-//     query_search,
-//     query_action
-//   );
-
-//   return {
-//     props: output,
-//   };
-// };
-
-export default observer(Home);
+export default observer(KnowbookSpecialNone);

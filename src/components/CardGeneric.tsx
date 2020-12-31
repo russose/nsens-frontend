@@ -1,8 +1,7 @@
 import { observer } from "mobx-react-lite";
-import { JsText } from "./_js_components";
-import { Image, Box, Mask } from "gestalt";
+import { Image, Box, Mask, Text } from "gestalt";
 import { AtomID } from "../common/types";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
 
@@ -22,8 +21,9 @@ interface ICardGenericProps {
   queryObject?: ParsedUrlQueryInput;
 }
 
-const title_card_size = USER_DISPLAY.title_card_size;
-const path_empty_image = USER_DISPLAY.paths.item_empty_image;
+const title_card_size: any = GUI_CONFIG.display.title_card_size;
+const path_empty_image = GUI_CONFIG.paths.item_empty_image;
+const color_card: any = GUI_CONFIG.display.colors.card;
 
 const rounding = 3;
 
@@ -37,10 +37,12 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     <Box height={props.sizes.height}>
       <Box
         height="100%"
-        borderSize="lg"
+        borderStyle="shadow"
+        // borderStyle="lg"
         rounding={rounding}
         display="flex"
         direction="column"
+        color={color_card}
       >
         <Box height={props.sizes.image_ratio} width="100%">
           <Mask rounding={rounding} height="100%" width="100%">
@@ -76,9 +78,9 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
             padding={0}
           >
             <Box padding={1} width="85%">
-              <JsText size={title_card_size} align="left" weight="bold">
+              <Text size={title_card_size} align="left" weight="bold">
                 {title}
-              </JsText>
+              </Text>
             </Box>
 
             <Box

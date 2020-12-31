@@ -1,6 +1,6 @@
-import { Box, Button, Modal, TextField } from "gestalt";
+import { Box, Button, Modal, TextField, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { JsText } from "./_js_components";
+import { GUI_CONFIG } from "../common/config";
 
 interface IDialogRenameKnowbookFormProps {
   title: string;
@@ -12,7 +12,10 @@ interface IDialogRenameKnowbookFormProps {
   handler_inputValue: any;
 }
 
-const title_size = "md";
+// const title_size = "md";
+const title_size: any = GUI_CONFIG.display.dialogs.title_size;
+const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
+const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
 
 const DialogRenameKnowbookForm: React.FunctionComponent<IDialogRenameKnowbookFormProps> = (
   props
@@ -22,11 +25,12 @@ const DialogRenameKnowbookForm: React.FunctionComponent<IDialogRenameKnowbookFor
       accessibilityModalLabel={props.title}
       onDismiss={props.handler_cancel}
     >
-      <Box color="white" rounding={3} padding={2}>
+      {/* <Box color="white" rounding={3} padding={2}> */}
+      <Box rounding={3} padding={2}>
         <Box padding={1}>
-          <JsText align="center" size={title_size} weight="bold">
+          <Text align="center" size={title_size} weight="bold">
             {props.title}
-          </JsText>
+          </Text>
         </Box>
 
         <Box padding={1}>
@@ -36,23 +40,23 @@ const DialogRenameKnowbookForm: React.FunctionComponent<IDialogRenameKnowbookFor
             value={props.value}
             // placeholder={props.input_placeholder}
             type="text"
-            size="md"
+            size={texfield_size}
           />
         </Box>
 
         <Box padding={1} display="flex" direction="row" justifyContent="around">
           <Button
-            accessibilityLabel="rename knowbook"
-            text={props.label_rename}
-            size="sm"
-            onClick={props.handler_rename}
+            accessibilityLabel="cancel"
+            text={props.label_cancel}
+            size={button_icon_size}
+            onClick={props.handler_cancel}
             inline
           />
           <Button
-            accessibilityLabel="cancel"
-            text={props.label_cancel}
-            size="sm"
-            onClick={props.handler_cancel}
+            accessibilityLabel="rename knowbook"
+            text={props.label_rename}
+            size={button_icon_size}
+            onClick={props.handler_rename}
             inline
           />
         </Box>

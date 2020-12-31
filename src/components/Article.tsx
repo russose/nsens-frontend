@@ -1,10 +1,10 @@
 import React from "react";
-import { JsText } from "./_js_components";
-import { CONFIG_FETCHING, LANGUAGE, USER_GUI_CONFIG } from "../common/config";
+import { CONFIG_FETCHING, LANGUAGE, GUI_CONFIG } from "../common/config";
 import { fetchArticle } from "../libs/fetch";
 import { UIStore } from "../stores/UIStore";
 import { observer } from "mobx-react-lite";
 import Separator from "./Separator";
+import { Text } from "gestalt";
 
 interface IArticleProps {
   item_title: string;
@@ -12,7 +12,7 @@ interface IArticleProps {
 }
 
 const language = LANGUAGE;
-const last_section_header = USER_GUI_CONFIG.WIKI_LAST_SECTION_HEADER.replaceAll(
+const last_section_header = GUI_CONFIG.language.WIKI_LAST_SECTION_HEADER.replaceAll(
   " ",
   "\\s"
 );
@@ -44,7 +44,7 @@ const path = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_REST;
 // const path = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA;
 const Article: React.FunctionComponent<IArticleProps> = (props) => {
   if (props.item_title === undefined) {
-    return <JsText>{"..."}</JsText>;
+    return <Text>{"..."}</Text>;
   }
 
   // const title = props.item_title;
@@ -69,9 +69,9 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
   return (
     // <Box>
     <>
-      <JsText>{article}</JsText>
+      <Text>{article}</Text>
       <Separator />
-      <JsText>Source: Wikipedia</JsText>
+      <Text>Source: Wikipedia</Text>
     </>
     //  </Box>
   );

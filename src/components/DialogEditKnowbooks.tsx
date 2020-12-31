@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { USER_GUI_CONFIG } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import {
   onCancel,
   onChangeInputValueEditKnowbooks,
@@ -16,8 +16,8 @@ const DialogEditKnowbooks: React.FunctionComponent = (props) => {
       {uiStore.editKnowbookOpened && (
         <DialogEditKnowbooksForm
           id={uiStore.selectedAtomId}
-          title={USER_GUI_CONFIG.editKnowbook.title}
-          input_placeholder={USER_GUI_CONFIG.editKnowbook.input_placeholder}
+          title={GUI_CONFIG.language.editKnowbook.title}
+          input_placeholder={GUI_CONFIG.language.editKnowbook.input_placeholder}
           checkboxes={Array.from(uiStore.editKnowbookMembers)
             .sort()
             .map(([key, value]) => {

@@ -1,7 +1,7 @@
 import { Box, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { ParsedUrlQueryInput } from "querystring";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 import { AtomID } from "../common/types";
 import CardGeneric from "./CardGeneric";
 import { iconColorDefault } from "./_Button";
@@ -18,9 +18,9 @@ interface ICardAtomProps {
   edit_handler: any;
 }
 
-const card_sizes = USER_DISPLAY.atom_sizes;
-const size_icon: any = USER_DISPLAY.size_icon;
-const color_image = USER_DISPLAY.colors.item_color_image;
+const card_sizes = GUI_CONFIG.display.atom_sizes;
+const size_icon: any = GUI_CONFIG.display.size_icon;
+const color_image = GUI_CONFIG.display.colors.item_color_image;
 
 const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
   return (

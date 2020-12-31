@@ -1,7 +1,7 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { USER_GUI_CONFIG } from "../../common/config";
+import { GUI_CONFIG } from "../../common/config";
 import { onMenuButtonPath } from "../../handlers";
 import { useStores } from "../../stores/_RootStoreHook";
 import _Button, { IButton } from "../_Button";
@@ -12,21 +12,22 @@ interface IMenuBarButtonLayoutProps {
   buttons: IButton[];
 }
 
-const buttons_all = USER_GUI_CONFIG.buttons;
+const buttons_all = GUI_CONFIG.language.buttons;
 
 const MenuBarButtonLayout: React.FunctionComponent<IMenuBarButtonLayoutProps> = (
   props
 ) => {
   const stores = useStores();
   return (
-    <Box color="white" padding={1} display="block">
+    // <Box color="white" padding={1} display="block">
+    <Box padding={1} display="block">
       <Box
         padding={1}
         display="flex"
         alignItems="center"
         justifyContent="around"
         color={props.color}
-        borderSize="lg"
+        borderStyle="lg"
         rounding={2}
       >
         {props.buttons.map((button) => {

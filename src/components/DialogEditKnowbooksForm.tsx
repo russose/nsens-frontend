@@ -1,8 +1,9 @@
-import { Box, IconButton, Modal, TextField } from "gestalt";
+import { Box, IconButton, Modal, TextField, Text, Checkbox } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { AtomID } from "../common/types";
-import { JsCheckbox, JsText } from "./_js_components";
 import { iconColorDefault } from "./_Button";
+import React from "react";
+import { GUI_CONFIG } from "../common/config";
 
 export interface ICheckboxes {
   label: string;
@@ -20,7 +21,10 @@ interface IDialogEditKnowbooksFormProps {
   handler_inputTags: any;
 }
 
-const title_size = "md";
+const title_size: any = GUI_CONFIG.display.dialogs.title_size;
+const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
+const item_checkbox_size: any = GUI_CONFIG.display.dialogs.item_size;
+const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
 
 const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormProps> = (
   props
@@ -30,11 +34,12 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
       accessibilityModalLabel={props.title}
       onDismiss={props.handler_cancel}
     >
-      <Box color="white" rounding={3} padding={2}>
+      {/* <Box color="white" rounding={3} padding={2}> */}
+      <Box rounding={3} padding={2}>
         <Box padding={1}>
-          <JsText align="center" size={title_size} weight="bold">
+          <Text align="center" size={title_size} weight="bold">
             {props.title}
-          </JsText>
+          </Text>
         </Box>
 
         <Box padding={1}>
@@ -43,7 +48,7 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
             onChange={props.handler_inputValue}
             placeholder={props.input_placeholder}
             type="text"
-            size="md"
+            size={texfield_size}
           />
         </Box>
 
@@ -51,10 +56,10 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
           {props.checkboxes.map((item) => {
             return (
               <Box padding={2} key={item.label}>
-                <JsCheckbox
+                <Checkbox
                   id={item.label}
                   checked={item.activated}
-                  size="sm"
+                  size={item_checkbox_size}
                   label={item.label}
                   onChange={props.handler_inputTags(item.label)}
                 />
@@ -69,15 +74,15 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
             icon="cancel"
             bgColor="transparent"
             iconColor={iconColorDefault}
-            size="md"
+            size={button_icon_size}
             onClick={props.handler_cancel}
-          />
+          />{" "}
           <IconButton
             accessibilityLabel="ok"
             icon="check-circle"
             bgColor="transparent"
             iconColor={iconColorDefault}
-            size="md"
+            size={button_icon_size}
             onClick={props.handler_confirm(props.id)}
           />
         </Box>

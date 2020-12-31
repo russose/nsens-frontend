@@ -35,12 +35,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     },
     {
       Id: ButtonIDType.SAVE,
-      onClick: onSaved(
-        stores.savedStore,
-        stores.userStore,
-        stores.knowbookStore,
-        stores.feedStore
-      )(stores.uiStore.selectedAtomId),
+      onClick: onSaved(stores)(stores.uiStore.selectedAtomId),
       disabled: !isItemSavedActivated(stores.knowbookStore)(
         stores.uiStore.selectedAtomId
       ),

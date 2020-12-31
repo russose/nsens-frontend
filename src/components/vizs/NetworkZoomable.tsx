@@ -1,8 +1,8 @@
 import { Group } from "@visx/group";
-import { ParentSize } from "@visx/responsive";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { USER_DISPLAY } from "../../common/config";
+import { GUI_CONFIG } from "../../common/config";
+import { ParentSize_ } from "../../libs/utils";
 import { GraphStore } from "../../stores/GraphStore";
 import { useStores } from "../../stores/_RootStoreHook";
 import MyZoom from "./MyZoom";
@@ -17,24 +17,17 @@ export type INetworkZoomableProps = {
 
 const margin = 5;
 const size_factor = 4;
-const max_nodes_network = USER_DISPLAY.max_nodes_network;
-const max_width_network = USER_DISPLAY.max_width_network;
+const max_nodes_network = GUI_CONFIG.display.max_nodes_network;
+const max_width_network = GUI_CONFIG.display.max_width_network;
 
-const ParentSize_ = observer(ParentSize);
+// const ParentSize_ = observer(ParentSize);
 
 const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   props
 ) => {
-  const {
-    uiStore,
-    feedStore,
-    graphStore,
-    savedStore,
-    knowbookStore,
-    userStore,
-  } = useStores();
+  const stores = useStores();
 
-  const amount_nodes = Array.from(graphStore.graphMap.values()).reduce(
+  const amount_nodes = Array.from(stores.graphStore.graphMap.values()).reduce(
     (acc, value) => {
       return acc + value.length;
     },
@@ -50,9 +43,9 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
     <ParentSize_>
       {(parent) => (
         <>
-          {graphStore.renderGraph(
+          {stores.graphStore.renderGraph(
             props.itemId,
-            feedStore,
+            stores.feedStore,
             size_factor * parent.width,
             size_factor * parent.height
           )}
@@ -76,15 +69,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
                 </Group>
               </MyZoom>
             ) : (
-              <NetworkFlat
-                rootItemId={props.itemId}
-                graphStore={graphStore}
-                savedStore={savedStore}
-                userStore={userStore}
-                knowbookStore={knowbookStore}
-                feedStore={feedStore}
-                uiStore={uiStore}
-              />
+              <NetworkFlat rootItemId={props.itemId} stores={stores} />
             )}
           </>
         </>

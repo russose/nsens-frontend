@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Avatar } from "gestalt";
 import Link from "next/link";
-import { USER_DISPLAY } from "../common/config";
+import { GUI_CONFIG } from "../common/config";
 
 interface IAvatarLinkProps {
   username: string;
@@ -12,7 +12,7 @@ interface IAvatarLinkProps {
 }
 
 const icon_size = "sm";
-const image_path = USER_DISPLAY.paths.user_image;
+const image_path = GUI_CONFIG.paths.user_image;
 
 const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
   return (

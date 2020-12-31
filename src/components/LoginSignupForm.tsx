@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Box, TextField, Button } from "gestalt";
-import { JsText } from "./_js_components";
+import { Box, TextField, Button, Text } from "gestalt";
 
 interface ILoginSignupFormProps {
   title: string;
@@ -19,12 +18,13 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
   return (
     <Box>
       <Box padding={5}>
-        <JsText align="justify" size="lg" weight="bold">
+        <Text align="justify" size="lg" weight="bold">
           {props.description}
-        </JsText>
+        </Text>
       </Box>
 
-      <Box color="white" rounding={3} borderSize="lg" padding={1}>
+      {/* <Box color="white" rounding={3} borderSize="lg" padding={1}> */}
+      <Box rounding={3} borderStyle="lg" padding={1}>
         <Box
           padding={1}
           display="flex"
