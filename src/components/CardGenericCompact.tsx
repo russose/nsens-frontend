@@ -16,35 +16,35 @@ interface ICardGenericCompactProps {
   id: AtomID;
   title: string;
   image_url: string;
+  color: any;
   color_image: string;
   sizes: ICardSizes;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
 }
 
-const title_card_size: any = GUI_CONFIG.display.title_card_size;
-const path_empty_image = GUI_CONFIG.paths.item_empty_image;
-
-const rounding = 3;
-
 const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
   props
 ) => {
+  const title_card_size: any = GUI_CONFIG.display.title_card_size;
+  const path_empty_image = GUI_CONFIG.paths.item_empty_image;
+  const rounding = 3;
   const max_title_size = props.sizes.max_title_size;
   let title = props.title;
   if (title.length > max_title_size) {
     title = props.title.substring(0, max_title_size) + "...";
   }
   return (
-    // <Box height={props.sizes.height} width={props.sizes.width} color="white">
-    <Box height={props.sizes.height} width={props.sizes.width}>
+    <Box height={props.sizes.height} width={props.sizes.width} color="white">
+      {/* <Box height={props.sizes.height} width={props.sizes.width}> */}
       <Box
         height="100%"
-        borderStyle="shadow"
-        // borderStyle="lg"
+        // borderStyle="shadow"
+        borderStyle="lg"
         rounding={rounding}
         display="flex"
         direction="column"
+        color={props.color}
       >
         <Box
           display="flex"

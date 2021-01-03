@@ -11,6 +11,7 @@ import {
 import { IStores } from "../../stores/_RootStore";
 import CardAtomGrid from "../CardAtomGrid";
 import { Text } from "gestalt";
+import { capitalizeFirstLetter } from "../../libs/utils";
 
 export type INetworkFlatProps = {
   rootItemId: AtomID;
@@ -23,12 +24,14 @@ const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
     <Box>
       {Array.from(graphMap).map((key_value) => {
         return (
-          <>
-            <Box padding={3}>
-              <Text weight="bold">{key_value[0]}</Text>
+          <Box key={`NetworkFlat-box0-${key_value[0]}`}>
+            <Box key={`NetworkFlat-box1-${key_value[0]}`} padding={3}>
+              <Text key={`NetworkFlat-text-${key_value[0]}`} weight="bold">
+                {capitalizeFirstLetter(key_value[0]) + " :"}
+              </Text>
             </Box>
             <CardAtomGrid
-              id="NetworkFlat"
+              id={`NetworkFlat-${key_value[0]}`}
               atoms={key_value[1]}
               isItemSaved_handler={isItemSaved(props.stores.savedStore)}
               isItemSavedActionable_handler={isItemSavedActivated(
@@ -39,9 +42,9 @@ const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
                 props.stores.uiStore,
                 props.stores.knowbookStore
               )}
-              compact={false}
+              compact={true}
             />
-          </>
+          </Box>
         );
       })}
     </Box>

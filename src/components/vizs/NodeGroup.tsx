@@ -7,7 +7,7 @@ export interface INodeGroupProps {
 }
 
 // const node_size = USER_DISPLAY.network.node_size;
-const title_card_size = GUI_CONFIG.display.title_card_size;
+const title_card_size: any = GUI_CONFIG.display.title_card_size;
 const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
 const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
 const max_title_size = GUI_CONFIG.display.atom_compact_sizes.max_title_size;
@@ -24,13 +24,13 @@ const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
   return (
     <Box
       borderStyle="lg"
-      // color="white"
+      color="white"
       rounding={3}
       padding={1}
       width={node_dx}
       height={node_dy * 0.5}
     >
-      <Text size={title_card_size} align="center" weight="normal">
+      <Text size={title_card_size} align="center" weight="bold">
         {title}
       </Text>
     </Box>

@@ -26,7 +26,7 @@ export const Lang_fr = {
     knowbooks_title: "Carnets de connaissance (Knowbooks)",
     AllSaved_title: "Sauvés (tous)",
     None_Title: "Aucun Carnet",
-    Related_title: "Related:",
+    Related_title: "Related :",
   },
   editKnowbook: {
     title: "Mise à jour des carnets",

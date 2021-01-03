@@ -14,18 +14,15 @@ const KnowbookSpecialNone: React.FunctionComponent = (props) => {
   const stores = useStores();
 
   return (
-    <AppLayout>
-      <CardAtomGrid
-        id="None"
-        atoms={stores.knowbookStore.ItemsInNoKnowbook(stores.savedStore)}
-        isItemSaved_handler={isItemSaved(stores.savedStore)}
-        isItemSavedActionable_handler={isItemSavedActivated(
-          stores.knowbookStore
-        )}
-        saved_handler={onSaved(stores)}
-        edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-      />
-    </AppLayout>
+    <CardAtomGrid
+      id="None"
+      atoms={stores.knowbookStore.ItemsInNoKnowbook(stores.savedStore)}
+      isItemSaved_handler={isItemSaved(stores.savedStore)}
+      isItemSavedActionable_handler={isItemSavedActivated(stores.knowbookStore)}
+      saved_handler={onSaved(stores)}
+      edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
+      compact={false}
+    />
   );
 };
 

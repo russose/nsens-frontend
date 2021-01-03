@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton, Text } from "gestalt";
 import { AtomID } from "../common/types";
-import CardGeneric from "./CardGeneric";
 import { ParsedUrlQueryInput } from "querystring";
 import { GUI_CONFIG } from "../common/config";
 import { iconColorDefault } from "./_Button";
 import { paths } from "../common/configPaths";
+import CardGenericCompact from "./CardGenericCompact";
 
-export interface ICardKnowProps {
+interface ICardKnowCompactProps {
   id: AtomID;
   title: string;
   image_url: string;
@@ -18,8 +18,10 @@ export interface ICardKnowProps {
   delete_handler: any;
 }
 
-const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
-  const card_sizes = GUI_CONFIG.display.knowbook_sizes;
+const CardKnowCompact: React.FunctionComponent<ICardKnowCompactProps> = (
+  props
+) => {
+  const card_sizes: any = GUI_CONFIG.display.knowbook_compact_sizes;
   const color = GUI_CONFIG.display.colors.knowbook_color;
   const color_image = GUI_CONFIG.display.colors.knowbook_color_image;
   const size_icon: any = GUI_CONFIG.display.size_icon_card;
@@ -28,7 +30,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
   const display_delete_icon =
     props.amount === 0 && props.pathname !== pathKnowbookSaved ? true : false;
   return (
-    <CardGeneric
+    <CardGenericCompact
       id={props.id}
       title={props.title}
       color={color}
@@ -66,8 +68,8 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           {props.amount}
         </Text>
       </Box>
-    </CardGeneric>
+    </CardGenericCompact>
   );
 };
 
-export default observer(CardKnow);
+export default observer(CardKnowCompact);

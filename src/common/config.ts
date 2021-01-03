@@ -25,7 +25,8 @@ export const CONFIG_FETCHING = {
 
 export const GUI_CONFIG = {
   general: {
-    max_width_mobile: 600,
+    max_width_mobile: 640,
+    large_screen_breakpoint: 2000,
   },
   language: Lang_fr,
   display: displayDesktop,

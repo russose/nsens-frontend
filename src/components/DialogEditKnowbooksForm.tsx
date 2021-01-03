@@ -21,18 +21,18 @@ interface IDialogEditKnowbooksFormProps {
   handler_inputTags: any;
 }
 
-const title_size: any = GUI_CONFIG.display.dialogs.title_size;
-const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
-const item_checkbox_size: any = GUI_CONFIG.display.dialogs.item_size;
-const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
-
 const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormProps> = (
   props
 ) => {
+  const title_size: any = GUI_CONFIG.display.dialogs.title_size;
+  const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
+  const item_checkbox_size: any = GUI_CONFIG.display.dialogs.item_size;
+  const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
   return (
     <Modal
       accessibilityModalLabel={props.title}
       onDismiss={props.handler_cancel}
+      size="sm"
     >
       {/* <Box color="white" rounding={3} padding={2}> */}
       <Box rounding={3} padding={2}>
@@ -52,7 +52,14 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
           />
         </Box>
 
-        <Box padding={1}>
+        <Box
+          padding={0}
+          display="flex"
+          direction="column"
+          height="30vh"
+          justifyContent="between"
+          overflow="auto"
+        >
           {props.checkboxes.map((item) => {
             return (
               <Box padding={2} key={item.label}>

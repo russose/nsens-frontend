@@ -3,7 +3,6 @@ import { useStores } from "../src/stores/_RootStoreHook";
 import { Button, Box } from "gestalt";
 import { onLogout } from "../src/handlers";
 import React from "react";
-import AppLayout from "../src/components/layout/AppLayout";
 
 const User: React.FunctionComponent = (props) => {
   const stores = useStores();
@@ -38,20 +37,18 @@ const User: React.FunctionComponent = (props) => {
   );
 
   return (
-    <AppLayout>
-      <Box display="flex" justifyContent="center">
-        <Box
-          padding={2}
-          display="inlineBlock"
-          column={12}
-          smColumn={12}
-          mdColumn={8}
-          lgColumn={6}
-        >
-          {content}
-        </Box>
+    <Box display="flex" justifyContent="center">
+      <Box
+        padding={2}
+        display="inlineBlock"
+        column={12}
+        smColumn={12}
+        mdColumn={8}
+        lgColumn={6}
+      >
+        {content}
       </Box>
-    </AppLayout>
+    </Box>
   );
 };
 

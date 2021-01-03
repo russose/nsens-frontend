@@ -4,25 +4,6 @@ import { fetchRelatedWikipedia, fetch_data } from "./fetch";
 
 const amount_data_fetched_images = CONFIG_FETCHING.amount_data_fetched_images;
 
-export function my_sparqlQuery_related_old(
-  itemId: string,
-  wikidata_language: string
-): string {
-  return `SELECT ?propLabel ?EntityLabel ?Entity (count (*) as ?EntityClasseLabel) WHERE {
-
-    BIND(wd:${itemId} AS ?var).
-
-    #?var wdt:P31 ?Classe.
-    ?var ?p ?Entity.
-    ?Entity wdt:P31 ?EntityClasse.
-
-    #To get Label of the prop
-    ?prop wikibase:directClaim ?p.
-
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],${wikidata_language}". }
-  } group by ?propLabel ?EntityLabel ?Entity order by desc(?propLabel)`;
-}
-
 export function my_sparqlQuery_related(
   itemId: string,
   wikidata_language: string
@@ -37,6 +18,8 @@ export function my_sparqlQuery_related(
     
     #To get Label of the prop
     ?prop wikibase:directClaim ?p.
+
+    MINUS {?Entity wdt:P31 wd:Q4167836.}
     
     ?Entity rdfs:label ?EntityLabel
     FILTER (LANG(?EntityLabel) = "${wikidata_language}" && ?prop not in (wd:P31,wd:P910,wd:P5008,wd:P735,wd:P5125,wd:P485,wd:P1343,wd:P1424,wd:P21) )

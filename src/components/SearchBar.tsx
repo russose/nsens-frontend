@@ -13,6 +13,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
     <Box flex="grow" alignItems="center">
       <TextField
         id="searchField"
+        // size="lg"
         onChange={props.handlerText}
         onBlur={props.handlerSubmit}
         placeholder={props.placeholder}

@@ -15,24 +15,25 @@ interface ICardGenericProps {
   id: AtomID;
   title: string;
   image_url: string;
+  color: any;
   color_image: string;
   sizes: ICardSizes;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
 }
 
-const title_card_size: any = GUI_CONFIG.display.title_card_size;
-const path_empty_image = GUI_CONFIG.paths.item_empty_image;
-const color_card: any = GUI_CONFIG.display.colors.card;
-
-const rounding = 3;
-
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
+  const title_card_size: any = GUI_CONFIG.display.title_card_size;
+  const path_empty_image = GUI_CONFIG.paths.item_empty_image;
+  // const color_card: any = GUI_CONFIG.display.colors.card;
+  const rounding = 3;
+
   const max_title_size = props.sizes.max_title_size;
   let title = props.title;
   if (title.length > max_title_size) {
     title = props.title.substring(0, max_title_size) + "...";
   }
+
   return (
     <Box height={props.sizes.height}>
       <Box
@@ -42,7 +43,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         rounding={rounding}
         display="flex"
         direction="column"
-        color={color_card}
+        color={props.color}
       >
         <Box height={props.sizes.image_ratio} width="100%">
           <Mask rounding={rounding} height="100%" width="100%">

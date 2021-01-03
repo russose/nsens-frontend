@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import React from "react";
 import Article from "../src/components/Article";
-import AppLayout from "../src/components/layout/AppLayout";
 import NetworkZoomable from "../src/components/vizs/NetworkZoomable";
 import { IItemDisplayMode } from "../src/stores/UIStore";
 import { useStores } from "../src/stores/_RootStoreHook";
@@ -18,7 +17,7 @@ const ItemView: React.FunctionComponent = (props) => {
   stores.uiStore.setSelectedAtomId(item_id);
 
   const article = (
-    <Box padding={2}>
+    <Box padding={1}>
       <Article item_title={item_title} uiStore={stores.uiStore} />
     </Box>
   );
@@ -40,7 +39,7 @@ const ItemView: React.FunctionComponent = (props) => {
     page = article;
   }
 
-  return <AppLayout> {page}</AppLayout>;
+  return page;
 };
 
 export default observer(ItemView);

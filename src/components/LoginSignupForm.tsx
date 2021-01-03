@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button, Text } from "gestalt";
+import { GUI_CONFIG } from "../common/config";
 
 interface ILoginSignupFormProps {
   title: string;
@@ -15,6 +16,9 @@ interface ILoginSignupFormProps {
 const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
   props
 ) => {
+  const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
+  const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
+
   return (
     <Box>
       <Box padding={5}>
@@ -39,7 +43,7 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
               // errorMessage="this is a test"
               onChange={props.handler_text("username")}
               type="email"
-              size="md"
+              size={texfield_size}
             />
           </Box>
           <Box padding={3}>
@@ -49,7 +53,7 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
               placeholder={props.placeholder_password}
               onChange={props.handler_text("password")}
               type="password"
-              size="md"
+              size={texfield_size}
             />
           </Box>
         </Box>
@@ -58,14 +62,14 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
           <Button
             accessibilityLabel="login"
             text={props.label_login}
-            size="sm"
+            size={button_icon_size}
             onClick={props.handler_button("login")}
             inline
           />
           <Button
             accessibilityLabel="signup"
             text={props.label_signup}
-            size="sm"
+            size={button_icon_size}
             onClick={props.handler_button("signup")}
             inline
           />

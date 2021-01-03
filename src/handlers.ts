@@ -1,4 +1,3 @@
-import { UserStore } from "./stores/UserStore";
 import { SavedStore } from "./stores/SavedStore";
 import { KnowbookID, AtomID, ButtonIDType } from "./common/types";
 import { IItemDisplayMode, UIStore } from "./stores/UIStore";
@@ -270,15 +269,16 @@ export const onSubmitLoginSignup = (stores: IStores) => (
 
 /*******************Navigation*************************** */
 
-export const onMenuButtonPath = (uiStore: UIStore, userStore: UserStore) => (
+export const onMenuButtonPath = (uiStore: UIStore) => (
   buttonId: ButtonIDType
 ): string => {
   uiStore.setItemDisplayMode(IItemDisplayMode.Article);
-  if (!userStore.isLogged && buttonId !== ButtonIDType.HOME) {
-    return buttons[ButtonIDType.LOGIN].path;
-  } else {
-    return buttons[buttonId].path;
-  }
+  // if (!userStore.isLogged && buttonId !== ButtonIDType.HOME) {
+  //   return buttons[ButtonIDType.LOGIN].path;
+  // } else {
+  //   return buttons[buttonId].path;
+  // }
+  return buttons[buttonId].path;
 };
 
 export const onDisplayModeClick = (uiStore: UIStore) => (

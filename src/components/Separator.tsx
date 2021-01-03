@@ -1,11 +1,21 @@
 import React from "react";
 import { Box, Divider } from "gestalt";
 
-const Separator: React.FunctionComponent<{}> = (props) => {
+export type ISeparatorProps = {
+  with_line: boolean;
+};
+
+const Separator: React.FunctionComponent<ISeparatorProps> = (props) => {
   return (
-    <Box padding={5}>
-      <Divider />
-    </Box>
+    <>
+      {props.with_line ? (
+        <Box padding={3}>
+          <Divider />
+        </Box>
+      ) : (
+        <Box padding={5}></Box>
+      )}
+    </>
   );
 };
 

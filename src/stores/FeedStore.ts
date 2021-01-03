@@ -7,7 +7,11 @@ import {
   IRelatedAtom,
   LogActionType,
 } from "../common/types";
-import { makeArrayFlat, removeDuplicates, shuffleArray } from "../libs/utils";
+import {
+  makeArrayFlat,
+  removeDuplicatesItems,
+  shuffleArray,
+} from "../libs/utils";
 import {
   _getRelatedFromWikidataFromWeb,
   _getRelatedFromWikipediaFromWeb,
@@ -16,7 +20,6 @@ import {
   _searchFromWeb,
 } from "../_api";
 import { SavedStore } from "./SavedStore";
-import { UserStore } from "./UserStore";
 
 const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
 
@@ -156,7 +159,7 @@ export class FeedStore {
     const related_items: IAtom[] = related.map((item) => {
       return item.item;
     });
-    return removeDuplicates(related_items);
+    return removeDuplicatesItems(related_items);
   }
 
   getRelatedItemsForItems(itemIds: AtomID[]): IAtom[] {
@@ -169,7 +172,8 @@ export class FeedStore {
     });
 
     let related_flat: IAtom[] = makeArrayFlat(related_list);
-    related_flat = removeDuplicates(related_flat);
+    related_flat = removeDuplicatesItems(related_flat);
+
     const result: IAtom[] = shuffleSized(related_flat);
 
     return result;
@@ -182,7 +186,7 @@ export class FeedStore {
       all = all.concat(related_items);
     });
 
-    return removeDuplicates(all);
+    return removeDuplicatesItems(all);
   }
 
   async fetchRelated(itemId: AtomID, title: string): Promise<void> {
@@ -203,6 +207,14 @@ export class FeedStore {
     );
 
     const relatedItems = relatedItems_wikidata.concat(relatedItems_wikipedia);
+
+    // Filter remove some of them (eg containing category)
+    // let relatedItems_filtered: IRelatedAtom[] = relatedItems.filter((item) => {
+    //   const exclusion_condition: boolean = item.item.title_en.includes(
+    //     "Category:"
+    //   );
+    //   return !exclusion_condition;
+    // });
 
     this.$related.set(itemId, relatedItems);
   }

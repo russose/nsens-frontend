@@ -28,6 +28,7 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     <MenuBarButtonLayout
       name={props.name}
       color={props.color}
+      direction="row"
       buttons={buttons}
     />
   );

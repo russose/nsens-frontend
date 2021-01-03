@@ -4,6 +4,7 @@ import { ButtonIDType } from "../common/types";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { paths } from "../common/configPaths";
+import { GUI_CONFIG } from "../common/config";
 
 export interface IButton {
   Id: ButtonIDType;
@@ -23,10 +24,9 @@ interface IButtonProps {
   onClick?: () => {};
 }
 
-const icon_size = "sm";
-const path_empty = paths.pages.empty;
-
 const _Button: React.FunctionComponent<IButtonProps> = (props) => {
+  const icon_size: any = GUI_CONFIG.display.size_icon_menu;
+  const path_empty = paths.pages.empty;
   const path_ = props.path === undefined ? path_empty : props.path;
   const iconColor_ =
     props.iconColor === undefined ? iconColorDefault : props.iconColor;

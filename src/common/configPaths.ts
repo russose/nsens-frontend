@@ -5,8 +5,8 @@ export const paths = {
   // knowbook_image: "",
   user_image: "/icon_user.jpg",
   pages: {
-    Home: "/",
     Landing: "/Landing",
+    Home: "/",
     Knowbooks: "/Knowbooks",
     Knowbook: "/Knowbook",
     KnowbookSaved: "KnowbookSpecialSaved",

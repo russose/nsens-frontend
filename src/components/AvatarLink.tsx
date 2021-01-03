@@ -11,10 +11,9 @@ interface IAvatarLinkProps {
   // queryObject?: ParsedUrlQueryInput;
 }
 
-const icon_size = "sm";
-const image_path = GUI_CONFIG.paths.user_image;
-
 const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
+  const icon_size = "sm";
+  const image_path = GUI_CONFIG.paths.user_image;
   return (
     <Box padding={0} display="flex" direction="column" alignItems="center">
       {/* <Box> */}

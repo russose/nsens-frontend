@@ -1,12 +1,14 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Box, Sticky } from "gestalt";
-import { IPageLayoutProps } from "./PagesLayout";
+import { IPageLayoutProps } from "./AppLayout";
 import { GUI_CONFIG } from "../../common/config";
 
-const color_background: any = GUI_CONFIG.display.colors.background;
+const PageLayoutDesktop: React.FunctionComponent<IPageLayoutProps> = (
+  props
+) => {
+  const color_background: any = GUI_CONFIG.display.colors.background;
 
-const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
   return (
     <>
       <Box
@@ -36,7 +38,6 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
                   alignItems="center"
                   // justifyContent="start"
                 >
-                  {props.displayMenu}
                   {props.header}
                 </Box>
               </Box>
@@ -67,17 +68,17 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
             </Box> */}
             </Box>
           </Sticky>
+          <Sticky top={0}>
+            <Box display="flex">{props.displayMenu}</Box>
+          </Sticky>
 
           <Box
-            // color="white"
             padding={0}
             display="flex"
             direction="column"
             height="90vh"
-            width="100"
             justifyContent="between"
             overflow="auto"
-            //overflow="scrollY"
           >
             {props.children}
           </Box>
@@ -98,4 +99,4 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
   );
 };
 
-export default observer(PageLayoutHybrid);
+export default observer(PageLayoutDesktop);

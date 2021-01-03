@@ -98,9 +98,9 @@ export class KnowkookStore {
       // console.log("undefined values");
       return;
     }
-    //We do not check that atomId is in saved since it is blocked by the UI and the back check it by construction
+
     if (this.knowbooks.has(knowbookID)) {
-      let knowbook_updated = this.knowbooks.get(knowbookID);
+      const knowbook_updated = this.knowbooks.get(knowbookID);
       if (knowbook_updated !== undefined) {
         if (knowbook_updated.items.includes(atomId)) {
           return;
@@ -112,11 +112,11 @@ export class KnowkookStore {
         _addItemInKnowbook(knowbookID, atomId)
           .then(
             action(() => {
-              if (knowbook_updated !== undefined) {
-                this.knowbooks.set(knowbookID, knowbook_updated);
-                // console.log("item added in knowbook successfully");
-                // return;
-              }
+              // if (knowbook_updated !== undefined) {
+              this.knowbooks.set(knowbookID, knowbook_updated);
+              // console.log("item added in knowbook successfully");
+              // return;
+              // }
             })
           )
           .catch((error) => {
@@ -124,6 +124,8 @@ export class KnowkookStore {
             console.log("error in adding item in knowbook");
             // return;
           });
+      } else {
+        // console.log("error");
       }
     } else {
       const newKnowbook: IKnowbook = {
@@ -134,24 +136,25 @@ export class KnowkookStore {
       // this.knowbooks.set(knowbookID, newKnowbook);
       _addKnowbook(knowbookID)
         .then(() => {
-          _addItemInKnowbook(knowbookID, atomId)
-            .then(
-              action(() => {
-                this.knowbooks.set(knowbookID, newKnowbook);
-                // console.log(
-                //   "knowbook created, item added in knowbook successfully"
-                // );
-                return;
-              })
-            )
-            .catch(() => {
-              console.log("error in adding item in knowbook");
-            });
+          _addItemInKnowbook(knowbookID, atomId);
         })
+        .then(
+          action(() => {
+            this.knowbooks.set(knowbookID, newKnowbook);
+            // console.log(
+            //   "knowbook created, item added in knowbook successfully"
+            // );
+            // return;
+          })
+        )
+        //     .catch(() => {
+        //       console.log("error in adding item in knowbook");
+        //     });
+        // })
         .catch(() => {
           // this.knowbooks.delete(knowbookID);
-          console.log("error in creating knowbook");
-          return;
+          console.log("error in creating knowbook and adding item");
+          // return;
         });
     }
   }
@@ -201,17 +204,17 @@ export class KnowkookStore {
     knowbookID: KnowbookID,
     savedStore: SavedStore
   ): IAtom[] {
-    let my_knowbook: IKnowbook | undefined;
-
-    if (this.knowbooks.has(knowbookID)) {
-      my_knowbook = this.knowbooks.get(knowbookID);
-
-      return my_knowbook !== undefined
-        ? savedStore.getSavedAtomsFromIds(my_knowbook.items)
-        : [];
-    } else {
+    if (!this.knowbooks.has(knowbookID)) {
       // console.log("impossible to provide Atoms List from knowbook");
       return [];
+    } else {
+      const my_knowbook = this.knowbooks.get(knowbookID);
+      if (my_knowbook !== undefined) {
+        return savedStore.getSavedAtomsFromIds(my_knowbook.items);
+      } else {
+        // console.log("impossible to provide Atoms List from knowbook");
+        return [];
+      }
     }
   }
 

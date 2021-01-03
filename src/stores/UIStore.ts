@@ -2,6 +2,7 @@ import { KnowkookStore } from "./KnowkookStore";
 import { observable, action, makeObservable } from "mobx";
 import { AtomID, KnowbookID } from "../common/types";
 import { GUI_CONFIG } from "../common/config";
+import { hasTouchScreen } from "../libs/utils";
 
 export enum IItemDisplayMode {
   Article = "Article",
@@ -93,17 +94,33 @@ export class UIStore {
   get screen() {
     return this.$screen;
   }
-
-  setScreen(width: number, height: number) {
-    if (width === this.$screen.width && height === this.$screen.height) {
-      return;
+  setScreen() {
+    let width;
+    let height;
+    let isMobile;
+    if (process.browser) {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      isMobile = hasTouchScreen(window);
     }
-    const isMobile = width < max_width_mobile;
-    this.$screen = {
-      width: width,
-      height: height,
-      isMobile: isMobile,
-    };
+
+    // const isMobile = width < max_width_mobile;
+
+    if (
+      width !== undefined &&
+      height !== undefined &&
+      (width !== this.$screen.width ||
+        height !== this.$screen.height ||
+        isMobile !== this.$screen.isMobile)
+    ) {
+      this.$screen = {
+        width: width,
+        height: height,
+        isMobile: isMobile,
+      };
+      // console.log(window.innerWidth, window.innerHeight);
+      // console.log(isMobile);
+    }
   }
 
   get selectedKnowbookIdName() {

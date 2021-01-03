@@ -12,14 +12,12 @@ interface IDialogRenameKnowbookFormProps {
   handler_inputValue: any;
 }
 
-// const title_size = "md";
-const title_size: any = GUI_CONFIG.display.dialogs.title_size;
-const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
-const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
-
 const DialogRenameKnowbookForm: React.FunctionComponent<IDialogRenameKnowbookFormProps> = (
   props
 ) => {
+  const title_size: any = GUI_CONFIG.display.dialogs.title_size;
+  const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
+  const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
   return (
     <Modal
       accessibilityModalLabel={props.title}

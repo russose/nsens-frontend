@@ -18,18 +18,19 @@ interface ICardAtomCompactProps {
   edit_handler: any;
 }
 
-const card_sizes = GUI_CONFIG.display.atom_compact_sizes;
-const size_icon: any = GUI_CONFIG.display.size_icon;
-const color_image = GUI_CONFIG.display.colors.item_color_image;
-
 const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
   props
 ) => {
+  const card_sizes = GUI_CONFIG.display.atom_compact_sizes;
+  const size_icon: any = GUI_CONFIG.display.size_icon_card;
+  const color_item = GUI_CONFIG.display.colors.item_color;
+  const color_image = GUI_CONFIG.display.colors.item_color_image;
   return (
     <CardGenericCompact
       id={props.id}
       title={props.title}
       image_url={props.image_url}
+      color={color_item}
       color_image={color_image}
       sizes={card_sizes}
       pathname={props.pathname}

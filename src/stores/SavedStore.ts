@@ -22,7 +22,9 @@ export class SavedStore {
     return Array.from(this.saved.values());
   }
   setSaved(atoms: IAtom[]): void {
-    atoms.forEach((item) => this.$saved.set(item.id, item));
+    atoms.forEach((item) => {
+      this.$saved.set(item.id, item);
+    });
   }
   clearSaved(): void {
     this.$saved.clear();
@@ -96,12 +98,13 @@ export class SavedStore {
       if (this.$saved.has(id)) {
         return this.$saved.get(id);
       } else {
+        // console.log("not in saved", id);
         return undefined;
       }
     });
-    const result_no_undefined = result.filter((item) => {
+    const result_no_undefined: IAtom[] = result.filter((item) => {
       return item !== undefined;
-    }) as IAtom[];
+    });
 
     return result_no_undefined;
   }

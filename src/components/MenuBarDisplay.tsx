@@ -53,10 +53,18 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     },
   ];
 
+  let direction;
+  if (stores.uiStore.screen.isMobile) {
+    direction = "column";
+  } else {
+    direction = "row";
+  }
+
   return (
     <MenuBarButtonLayout
       name={props.name}
       color={props.color}
+      direction={direction}
       buttons={buttons}
     />
   );
