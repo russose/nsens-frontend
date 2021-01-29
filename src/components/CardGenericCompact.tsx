@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { Image, Box, Mask, Text } from "gestalt";
-import { AtomID } from "../common/types";
-import { GUI_CONFIG } from "../common/config";
+import { AtomID, ColorT, RoundingT, SizeT } from "../common/types";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
+import { IStores } from "../stores/_RootStore";
 
 interface ICardSizes {
   height: number;
@@ -14,9 +14,10 @@ interface ICardSizes {
 
 interface ICardGenericCompactProps {
   id: AtomID;
+  stores: IStores;
   title: string;
   image_url: string;
-  color: any;
+  color: ColorT;
   color_image: string;
   sizes: ICardSizes;
   pathname?: string;
@@ -26,9 +27,11 @@ interface ICardGenericCompactProps {
 const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
   props
 ) => {
-  const title_card_size: any = GUI_CONFIG.display.title_card_size;
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
   const path_empty_image = GUI_CONFIG.paths.item_empty_image;
-  const rounding = 3;
+  // const rounding = 3;
+  const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const max_title_size = props.sizes.max_title_size;
   let title = props.title;
   if (title.length > max_title_size) {
@@ -58,7 +61,14 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
           <Box padding={1} height="100%" width="100%">
             <Mask rounding={rounding} height="100%" width="100%">
               <Link
-                href={{ pathname: props.pathname, query: props.queryObject }}
+                href={{
+                  // pathname: props.pathname, query: props.queryObject
+                  pathname: props.stores.userStore.rootPath + props.pathname,
+                  query: {
+                    ...props.stores.userStore.paramsPage,
+                    ...props.queryObject,
+                  },
+                }}
                 passHref
               >
                 <a>

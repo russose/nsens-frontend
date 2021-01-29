@@ -1,33 +1,44 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
-import { AtomID } from "../common/types";
+import { AtomID, ButtonIDType, handlerT, IconT } from "../common/types";
 import CardGenericCompact from "./CardGenericCompact";
 import { ParsedUrlQueryInput } from "querystring";
-import { GUI_CONFIG } from "../common/config";
 import { iconColorDefault } from "./_Button";
+import { IStores } from "../stores/_RootStore";
 
 interface ICardAtomCompactProps {
   id: AtomID;
+  stores: IStores;
   title: string;
   image_url: string;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
   saved_actionable: boolean;
   saved_enabled: boolean;
-  saved_handler: any;
-  edit_handler: any;
+  saved_handler: handlerT;
+  edit_handler: handlerT;
+  forVizs?: boolean;
 }
 
 const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
   props
 ) => {
-  const card_sizes = GUI_CONFIG.display.atom_compact_sizes;
-  const size_icon: any = GUI_CONFIG.display.size_icon_card;
-  const color_item = GUI_CONFIG.display.colors.item_color;
-  const color_image = GUI_CONFIG.display.colors.item_color_image;
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
+  const color_item = GUI_CONFIG.general.colors.item_color;
+  const color_image = GUI_CONFIG.general.colors.item_color_image;
+  let card_sizes;
+  if (props.forVizs === true) {
+    card_sizes = GUI_CONFIG.display.atom_compact_vizs_sizes;
+  } else {
+    card_sizes = GUI_CONFIG.display.atom_compact_sizes;
+  }
+  const buttons_all = GUI_CONFIG.language.buttons;
+
   return (
     <CardGenericCompact
       id={props.id}
+      stores={props.stores}
       title={props.title}
       image_url={props.image_url}
       color={color_item}
@@ -37,25 +48,25 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
       queryObject={props.queryObject}
     >
       <Box paddingX={0}>
-        {props.saved_enabled && (
-          <IconButton
-            accessibilityLabel="edit"
-            icon="edit"
-            iconColor={iconColorDefault}
-            size={size_icon}
-            onClick={props.edit_handler}
-          />
-        )}
-      </Box>
-      <Box paddingX={0}>
         <IconButton
           accessibilityLabel="save"
-          icon="angled-pin"
+          icon={buttons_all[ButtonIDType.SAVE].icon as IconT}
           iconColor={props.saved_enabled ? "red" : iconColorDefault}
           size={size_icon}
           onClick={props.saved_handler}
           disabled={!props.saved_actionable}
         />
+      </Box>
+      <Box paddingX={0}>
+        {props.saved_enabled && (
+          <IconButton
+            accessibilityLabel="edit"
+            icon={buttons_all[ButtonIDType.EDIT].icon as IconT}
+            iconColor={iconColorDefault}
+            size={size_icon}
+            onClick={props.edit_handler}
+          />
+        )}
       </Box>
     </CardGenericCompact>
   );

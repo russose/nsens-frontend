@@ -1,20 +1,26 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { GUI_CONFIG } from "../common/config";
-import { paths } from "../common/configPaths";
-import { IKnowbook, KnowbookID } from "../common/types";
+import {
+  handlerT,
+  IKnowbook,
+  KnowbookID,
+  PaddingT,
+  SizeT,
+} from "../common/types";
 import { entierAleatoire } from "../libs/utils";
 import { KnowkookStore } from "../stores/KnowkookStore";
 import { SavedStore } from "../stores/SavedStore";
+import { IStores } from "../stores/_RootStore";
 import CardKnow from "./CardKnow";
 import CardKnowCompact from "./CardKnowCompact";
 
 interface ICardKnowGridProps {
   id: string;
+  stores: IStores;
   knowbooks: IKnowbook[];
-  edit_handler: any;
-  delete_handler: any;
+  edit_handler: handlerT;
+  delete_handler: handlerT;
   savedStore: SavedStore;
   knowbookStore: KnowkookStore;
   compact: boolean;
@@ -43,9 +49,10 @@ function getKnowbookImage(
 }
 
 const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
   const card_sizes_compact = GUI_CONFIG.display.knowbook_compact_sizes;
-  const path_knowbook = paths.pages.Knowbook;
+  const path_knowbook = GUI_CONFIG.paths.pages.Knowbook;
   if (
     props.knowbooks === undefined ||
     props.knowbooks === null ||
@@ -57,25 +64,25 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
       <Box>
         {props.compact ? (
           <Box
-            // color="white"
             wrap={true}
             display="flex"
             direction="row"
-            padding={1}
+            padding={0}
             justifyContent="around"
           >
             {props.knowbooks.map((item) => {
               return (
                 <Box
-                  lgPadding={card_sizes_compact.lgPadding as any}
-                  mdPadding={card_sizes_compact.mdPadding as any}
-                  smPadding={card_sizes_compact.smPadding as any}
-                  padding={card_sizes_compact.padding as any}
+                  lgPadding={card_sizes_compact.lgPadding as PaddingT}
+                  mdPadding={card_sizes_compact.mdPadding as PaddingT}
+                  smPadding={card_sizes_compact.smPadding as PaddingT}
+                  padding={card_sizes_compact.padding as PaddingT}
                   key={`Box-cardKnowbookGridCompact-${props.id}-${item.id}`}
                 >
                   <CardKnowCompact
                     key={`cardKnowbookGridCompact-${props.id}-${item.name}`}
                     id={item.name}
+                    stores={props.stores}
                     title={item.name}
                     // image_url={image_path}
                     image_url={getKnowbookImage(
@@ -95,29 +102,29 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
           </Box>
         ) : (
           <Box
-            // color="white"
             wrap={true}
             display="flex"
             direction="row"
-            padding={1}
+            padding={0}
             justifyContent="around"
           >
             {props.knowbooks.map((item) => {
               return (
                 <Box
-                  lgColumn={card_sizes.lgColumn as any}
-                  mdColumn={card_sizes.mdColumn as any}
-                  smColumn={card_sizes.smColumn as any}
-                  column={card_sizes.column as any}
-                  lgPadding={card_sizes.lgPadding as any}
-                  mdPadding={card_sizes.mdPadding as any}
-                  smPadding={card_sizes.smPadding as any}
-                  padding={card_sizes.padding as any}
+                  lgColumn={card_sizes.lgColumn as SizeT}
+                  mdColumn={card_sizes.mdColumn as SizeT}
+                  smColumn={card_sizes.smColumn as SizeT}
+                  column={card_sizes.column as SizeT}
+                  lgPadding={card_sizes.lgPadding as PaddingT}
+                  mdPadding={card_sizes.mdPadding as PaddingT}
+                  smPadding={card_sizes.smPadding as PaddingT}
+                  padding={card_sizes.padding as PaddingT}
                   key={`Box-cardKnowbookGrid-${props.id}-${item.id}`}
                 >
                   <CardKnow
                     key={`cardKnowbookGrid-${props.id}-${item.name}`}
                     id={item.name}
+                    stores={props.stores}
                     title={item.name}
                     // image_url={image_path}
                     image_url={getKnowbookImage(

@@ -1,12 +1,14 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType } from "../common/types";
+import { ButtonIDType, ColorT } from "../common/types";
+import { IStores } from "../stores/_RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import _Button, { IButton } from "./_Button";
 
 interface IMenuBarNavigationProps {
+  stores: IStores;
   name: string;
-  color: any;
+  color: ColorT;
 }
 
 const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
@@ -26,6 +28,7 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
 
   return (
     <MenuBarButtonLayout
+      stores={props.stores}
       name={props.name}
       color={props.color}
       direction="row"

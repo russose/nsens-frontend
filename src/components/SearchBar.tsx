@@ -1,16 +1,17 @@
 import { Box, TextField } from "gestalt";
+import { handlerT } from "../common/types";
 
 interface ISearchBarProps {
   placeholder: string;
-  handlerText: any;
-  handlerSubmit: any;
-  handlerKeyboard: any;
+  handlerText: handlerT;
+  handlerSubmit: handlerT;
+  handlerKeyboard: handlerT;
   value: string;
 }
 
 const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
   return (
-    <Box flex="grow" alignItems="center">
+    <Box padding={0} flex="grow" alignItems="center">
       <TextField
         id="searchField"
         // size="lg"

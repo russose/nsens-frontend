@@ -1,8 +1,45 @@
 import Router from "next/router";
-import { GUI_CONFIG } from "../common/config";
 import { paths } from "../common/configPaths";
-import { IAtom } from "../common/types";
+import { ConfigDisplay } from "../common/types";
 import { IStores } from "../stores/_RootStore";
+
+// export function redirectHomeIfLogged(stores: IStores) {
+//   if (process.browser) {
+//     if (stores.userStore.isLogged) {
+//       // Already Logged
+//       goHome();
+//     }
+//   }
+// }
+
+// export function redirectLandingIfNotLogged(stores: IStores) {
+//   if (process.browser) {
+//     if (!stores.userStore.isLogged) {
+//       // Not Logged
+//       goLanding();
+//     }
+//   }
+// }
+
+// export function goHome() {
+//   Router.push({
+//     pathname: paths.pages.Home,
+//   });
+// }
+
+// export function goLanding() {
+//   Router.push({
+//     pathname: paths.pages.Landing,
+//   });
+// }
+
+export function isMobile(GUI_CONFIG_id: string): boolean {
+  const result: boolean =
+    GUI_CONFIG_id.includes(ConfigDisplay.small) ||
+    GUI_CONFIG_id.includes(ConfigDisplay.mobile);
+
+  return result;
+}
 
 export function hasTouchScreen(window: any): boolean {
   //https://developer.mozilla.org/fr/docs/Web/API/Navigator
@@ -25,43 +62,15 @@ export function hasTouchScreen(window: any): boolean {
         /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA);
     }
   }
-  // console.log("hasTouchScreen:", hasTouchScreen);
   return hasTouchScreen;
-  // return true;
 }
 
-export function displayCompactedGridCondition(stores: IStores): boolean {
-  const amount_card_compact_width =
-    GUI_CONFIG.display.amount_card_compact_width;
-
-  // return true;
-
-  // if (width < amount_card_compact_width * card_compact_width * 1.3) {
-  //   return true;
-  // } else {
-  //   return false;
-  // }
-
-  if (
-    stores.uiStore.screen.isMobile === undefined ||
-    stores.uiStore.screen.isMobile === true
-  ) {
+export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {
+  if (isMobile(GUI_CONFIG_id)) {
     return true;
   } else {
     return false;
   }
-}
-
-export function goHome() {
-  Router.push({
-    pathname: paths.pages.Home,
-  });
-}
-
-export function goLanding() {
-  Router.push({
-    pathname: paths.pages.Landing,
-  });
 }
 
 export function findUndefined(list: Object[]) {
@@ -83,23 +92,18 @@ export function entierAleatoire(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
-export function removeDuplicates(array: string[]): any[] {
-  return Array.from(new Set(array));
-}
+// export function removeDuplicates(array: string[]): any[] {
+//   return Array.from(new Set(array));
+// }
 
-export function removeDuplicatesItems(array: IAtom[]): IAtom[] {
-  // const list_id: AtomID[] = array.map((item) => {
-  //   return item.id;
-  // });
-  // const list_id_unique = removeDuplicates(list_id);
-  // const array_unique =
-  const array_Map = new Map();
-  array.forEach((item) => {
-    array_Map.set(item.id, item);
-  });
+// export function removeDuplicatesItems(array: IAtom[]): IAtom[] {
+//   const array_Map = new Map();
+//   array.forEach((item) => {
+//     array_Map.set(item.id, item);
+//   });
 
-  return Array.from(array_Map.values());
-}
+//   return Array.from(array_Map.values());
+// }
 
 export function shuffleArray(array: any[]): any[] {
   for (let i = array.length - 1; i > 0; i--) {

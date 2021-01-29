@@ -1,27 +1,28 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { GUI_CONFIG } from "../common/config";
-import { paths } from "../common/configPaths";
-import { IAtom } from "../common/types";
+import { handlerT, IAtom, PaddingT, SizeT } from "../common/types";
+import { IStores } from "../stores/_RootStore";
 import CardAtom from "./CardAtom";
 import CardAtomCompact from "./CardAtomCompact";
 
 interface ICardAtomGridProps {
   id: string;
+  stores: IStores;
   atoms: IAtom[];
-  isItemSaved_handler: any;
-  isItemSavedActionable_handler: any;
-  saved_handler: any;
-  edit_handler: any;
+  isItemSaved_handler: handlerT;
+  isItemSavedActionable_handler: handlerT;
+  saved_handler: handlerT;
+  edit_handler: handlerT;
   compact: boolean;
 }
 
 const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
   const card_sizes_compact = GUI_CONFIG.display.atom_compact_sizes;
 
-  const path_Itemview = paths.pages.Item;
+  const path_Itemview = GUI_CONFIG.paths.pages.Item;
 
   if (
     props.atoms === undefined ||
@@ -34,25 +35,24 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
       <Box>
         {props.compact ? (
           <Box
-            // color="white"
             wrap={true}
             display="flex"
             direction="row"
-            padding={1}
             justifyContent="around"
           >
             {props.atoms.map((item) => {
               return (
                 <Box
-                  lgPadding={card_sizes_compact.lgPadding as any}
-                  mdPadding={card_sizes_compact.mdPadding as any}
-                  smPadding={card_sizes_compact.smPadding as any}
-                  padding={card_sizes_compact.padding as any}
+                  lgPadding={card_sizes_compact.lgPadding as PaddingT}
+                  mdPadding={card_sizes_compact.mdPadding as PaddingT}
+                  smPadding={card_sizes_compact.smPadding as PaddingT}
+                  padding={card_sizes_compact.padding as PaddingT}
                   key={`Box-cardAtomGrid_Compact-${props.id}-${item.id}`}
                 >
                   <CardAtomCompact
                     key={`cardAtomGrid_Compact-${props.id}-${item.id}`}
                     id={item.id}
+                    stores={props.stores}
                     title={item.title}
                     image_url={item.image_url}
                     pathname={path_Itemview}
@@ -70,29 +70,28 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
           </Box>
         ) : (
           <Box
-            // color="white"
             wrap={true}
             display="flex"
             direction="row"
-            padding={1}
             justifyContent="around"
           >
             {props.atoms.map((item) => {
               return (
                 <Box
-                  lgColumn={card_sizes.lgColumn as any}
-                  mdColumn={card_sizes.mdColumn as any}
-                  smColumn={card_sizes.smColumn as any}
-                  column={card_sizes.column as any}
-                  lgPadding={card_sizes.lgPadding as any}
-                  mdPadding={card_sizes.mdPadding as any}
-                  smPadding={card_sizes.smPadding as any}
-                  padding={card_sizes.padding as any}
+                  lgColumn={card_sizes.lgColumn as SizeT}
+                  mdColumn={card_sizes.mdColumn as SizeT}
+                  smColumn={card_sizes.smColumn as SizeT}
+                  column={card_sizes.column as SizeT}
+                  lgPadding={card_sizes.lgPadding as PaddingT}
+                  mdPadding={card_sizes.mdPadding as PaddingT}
+                  smPadding={card_sizes.smPadding as PaddingT}
+                  padding={card_sizes.padding as PaddingT}
                   key={`Box-cardAtomGrid-${props.id}-${item.id}`}
                 >
                   <CardAtom
                     key={`cardAtomGrid-${props.id}-${item.id}`}
                     id={item.id}
+                    stores={props.stores}
                     title={item.title}
                     image_url={item.image_url}
                     pathname={path_Itemview}

@@ -1,32 +1,33 @@
 import React from "react";
 import { IconButton } from "gestalt";
-import { ButtonIDType } from "../common/types";
+import { ButtonIDType, ColorT, handlerT, IconT, SizeT } from "../common/types";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import { paths } from "../common/configPaths";
-import { GUI_CONFIG } from "../common/config";
+import { IStores } from "../stores/_RootStore";
 
 export interface IButton {
   Id: ButtonIDType;
-  iconColor?: any; //handler
+  iconColor?: IconT; //handler
   disabled?: boolean;
-  onClick?: any; //handler
+  onClick?: handlerT; //handler
 }
 
 export const iconColorDefault = "darkGray";
 
 interface IButtonProps {
-  icon: any;
+  stores: IStores;
+  icon: IconT;
   label: string;
   path: string;
-  iconColor?: any;
+  iconColor?: ColorT;
   disabled?: boolean;
   onClick?: () => {};
 }
 
 const _Button: React.FunctionComponent<IButtonProps> = (props) => {
-  const icon_size: any = GUI_CONFIG.display.size_icon_menu;
-  const path_empty = paths.pages.empty;
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const icon_size: SizeT = GUI_CONFIG.display.size_icon_menu;
+  const path_empty = GUI_CONFIG.paths.pages.empty;
   const path_ = props.path === undefined ? path_empty : props.path;
   const iconColor_ =
     props.iconColor === undefined ? iconColorDefault : props.iconColor;
@@ -43,7 +44,13 @@ const _Button: React.FunctionComponent<IButtonProps> = (props) => {
       disabled={disabled_}
     />
   ) : (
-    <Link href={{ pathname: props.path }} passHref>
+    <Link
+      href={{
+        pathname: props.stores.userStore.rootPath + props.path,
+        query: props.stores.userStore.paramsPage as any,
+      }}
+      passHref
+    >
       <a>
         <IconButton
           accessibilityLabel={props.label}

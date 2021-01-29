@@ -1,16 +1,12 @@
 import "gestalt/dist/gestalt.css";
+import "../styles.css";
 import { configure } from "mobx";
 import { enableStaticRendering } from "mobx-react-lite";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React from "react";
-import { paths } from "../src/common/configPaths";
-import Dialogs from "../src/components/Dialogs";
-import AppLayout from "../src/components/layout/AppLayout";
 import rootStore from "../src/stores/_RootStore";
 import { ContextStores } from "../src/stores/_RootStoreHook";
-import "../styles.css";
 
 // enable MobX strict mode
 configure({ enforceActions: "observed" });
@@ -51,24 +47,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   enableStaticRendering(isServer);
   //MobX
 
-  const router = useRouter();
-  let isLanding = false;
-  if (router.pathname === paths.pages.Landing) {
-    isLanding = true;
-  }
-
   return (
     <>
       {head}
       <ContextStores.Provider value={{ rootStore: rootStore }}>
-        {isLanding ? (
-          <Component {...pageProps} />
-        ) : (
-          <AppLayout>
-            <Component {...pageProps} />
-            <Dialogs />
-          </AppLayout>
-        )}
+        <Component {...pageProps} />
       </ContextStores.Provider>
     </>
   );

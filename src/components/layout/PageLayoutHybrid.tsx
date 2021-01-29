@@ -1,0 +1,85 @@
+import React from "react";
+import { observer } from "mobx-react-lite";
+import { Box, Sticky } from "gestalt";
+import { ColorT, reactComponentT } from "../../common/types";
+import { IStores } from "../../stores/_RootStore";
+
+interface IPageLayoutProps {
+  stores: IStores;
+  top: reactComponentT;
+  bottom?: reactComponentT;
+}
+
+const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const color_background: ColorT = GUI_CONFIG.general.colors.background;
+
+  return (
+    <>
+      <Box
+        padding={0}
+        display="flex"
+        alignItems="center"
+        justifyContent="between"
+        direction="column"
+        height="100vh"
+        color={color_background}
+        overflow="auto"
+      >
+        <Box column={12} smColumn={12} mdColumn={12} lgColumn={12}>
+          <Sticky top={0}>
+            <Box
+              padding={1}
+              color={color_background}
+              display="flex"
+              flex="grow"
+              alignItems="center"
+            >
+              {props.top}
+            </Box>
+          </Sticky>
+
+          <Box
+            display="flex"
+            direction="column"
+            justifyContent="between"
+            overflow="auto"
+          >
+            {props.children}
+          </Box>
+        </Box>
+        {props.bottom !== undefined ? (
+          <Sticky bottom={100}>
+            <Box width={220}>{props.bottom}</Box>
+          </Sticky>
+        ) : (
+          <></>
+        )}
+      </Box>
+    </>
+  );
+};
+
+export default observer(PageLayoutHybrid);
+
+// {props.bottom !== undefined ? (
+//   <Sticky bottom={0}>
+//     <Box color="blue" width="100%">
+//       <Box
+//         // color={color_background}
+//         display="flex"
+//         direction="column"
+//         flex="grow"
+//         alignItems="center"
+//         // color="green"
+//         // width="300"
+//       >
+//         {/* <Box color="blue" column={12}> */}
+//         {props.bottom}
+//         {/* </Box> */}
+//       </Box>
+//     </Box>
+//   </Sticky>
+// ) : (
+//   <></>
+// )}

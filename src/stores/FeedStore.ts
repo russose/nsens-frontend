@@ -1,5 +1,4 @@
 import { action, makeObservable, observable } from "mobx";
-import { GUI_CONFIG } from "../common/config";
 import {
   AtomID,
   empty_value_atom,
@@ -7,11 +6,7 @@ import {
   IRelatedAtom,
   LogActionType,
 } from "../common/types";
-import {
-  makeArrayFlat,
-  removeDuplicatesItems,
-  shuffleArray,
-} from "../libs/utils";
+import { makeArrayFlat, shuffleArray } from "../libs/utils";
 import {
   _getRelatedFromWikidataFromWeb,
   _getRelatedFromWikipediaFromWeb,
@@ -21,9 +16,7 @@ import {
 } from "../_api";
 import { SavedStore } from "./SavedStore";
 
-const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
-
-function shuffleSized(array: any[]): any[] {
+function shuffleSized(array: any[], amount_item_displayed: number): any[] {
   const shuffled = shuffleArray(array);
   const shuffled_sized = shuffled.slice(0, amount_item_displayed);
   return shuffled_sized;
@@ -32,7 +25,9 @@ function shuffleSized(array: any[]): any[] {
 export class FeedStore {
   private $feed = observable.map<AtomID, IAtom>();
   private $history = observable.map<AtomID, IAtom>();
+
   private $related = observable.map<AtomID, IRelatedAtom[]>();
+  private $relatedAll = observable.map<AtomID, IAtom>();
 
   constructor() {
     makeObservable<FeedStore>(this, {
@@ -41,7 +36,8 @@ export class FeedStore {
       setFeedFromRandom: action,
       setFeedFromSearch: action,
       setFeedFromRelated: action,
-      initialyzeRelatedFromSaved: action,
+      initialyzeRelatedAndRelatedAllFromSaved: action,
+      addAllRelatedItemsInAllRelated: action,
       fetchRelated: action,
     });
   }
@@ -119,15 +115,13 @@ export class FeedStore {
         // console.log("error in seach from pattern");
       });
   }
-  setFeedFromRelated(): void {
+  setFeedFromRelated(amount_item_displayed: number): void {
     const related: IAtom[] = this.getAllRelatedItems();
 
     if (related.length === 0) {
       this.setFeedFromRandom();
     } else {
-      // const related_shuffled = shuffleArray(related);
-      // this.setFeed(related_shuffled.slice(0, amount_item_displayed));
-      this.setFeed(shuffleSized(related));
+      this.setFeed(shuffleSized(related, amount_item_displayed));
     }
   }
 
@@ -135,12 +129,24 @@ export class FeedStore {
   Related
   */
 
-  initialyzeRelatedFromSaved(savedStore: SavedStore): void {
+  initialyzeRelatedAndRelatedAllFromSaved(savedStore: SavedStore): void {
     savedStore.getSavedList().forEach((item: IAtom) => {
       if (item.related !== empty_value_atom) {
         const related: IRelatedAtom[] = JSON.parse(item.related);
+        //related
         this.$related.set(item.id, related);
+        //relatedAll
+        this.addAllRelatedItemsInAllRelated(item.id);
       }
+    });
+  }
+
+  addAllRelatedItemsInAllRelated(itemId: AtomID): void {
+    if (itemId === undefined) {
+      return;
+    }
+    this.getRelatedItems(itemId).forEach((related_item: IAtom) => {
+      this.$relatedAll.set(related_item.id, related_item);
     });
   }
 
@@ -156,13 +162,20 @@ export class FeedStore {
       return [];
     }
     const related: IRelatedAtom[] = this.$related.get(itemId);
+    if (related === undefined) {
+      return [];
+    }
     const related_items: IAtom[] = related.map((item) => {
       return item.item;
     });
-    return removeDuplicatesItems(related_items);
+    //No duplicates since they are removed in fetchRelated
+    return related_items;
   }
 
-  getRelatedItemsForItems(itemIds: AtomID[]): IAtom[] {
+  getRelatedItemsForItems(
+    itemIds: AtomID[],
+    amount_item_displayed: number
+  ): IAtom[] {
     if (itemIds === undefined) {
       return [];
     }
@@ -171,35 +184,40 @@ export class FeedStore {
       return this.getRelatedItems(id);
     });
 
-    let related_flat: IAtom[] = makeArrayFlat(related_list);
-    related_flat = removeDuplicatesItems(related_flat);
+    const related_flat: IAtom[] = makeArrayFlat(related_list);
 
-    const result: IAtom[] = shuffleSized(related_flat);
+    const related_shuffledSized: IAtom[] = shuffleSized(
+      related_flat,
+      amount_item_displayed
+    );
 
-    return result;
+    //Remove duplicated items since related from different items could overlap
+    const related_shuffledSized_no_doubles = new Map();
+    related_shuffledSized.forEach((item: IAtom) => {
+      related_shuffledSized_no_doubles.set(item.id, item);
+    });
+
+    const related_shuffledSized_no_doubles_array: IAtom[] = Array.from(
+      related_shuffledSized_no_doubles.values()
+    );
+
+    return related_shuffledSized_no_doubles_array;
   }
 
   getAllRelatedItems(): IAtom[] {
-    let all: IAtom[] = [];
-    Array.from(this.$related.keys()).forEach((itemId: AtomID) => {
-      const related_items: IAtom[] = this.getRelatedItems(itemId);
-      all = all.concat(related_items);
-    });
-
-    return removeDuplicatesItems(all);
+    return Array.from(this.$relatedAll.values());
   }
 
   async fetchRelated(itemId: AtomID, title: string): Promise<void> {
     if (
       itemId === undefined ||
       title === undefined ||
-      this.$related.has(itemId)
+      (this.$related.has(itemId) && this.$related.get(itemId) !== undefined)
     ) {
       return;
     }
 
     const relatedItems_wikipedia: IRelatedAtom[] = await _getRelatedFromWikipediaFromWeb(
-      // itemId,
       title
     );
     const relatedItems_wikidata: IRelatedAtom[] = await _getRelatedFromWikidataFromWeb(
@@ -207,6 +225,16 @@ export class FeedStore {
     );
 
     const relatedItems = relatedItems_wikidata.concat(relatedItems_wikipedia);
+
+    //Remove duplicated items
+    const relatedItems_no_doubles = new Map();
+    relatedItems.forEach((related) => {
+      relatedItems_no_doubles.set(related.item.id, related);
+    });
+
+    const relatedItems_no_doubles_array: IRelatedAtom[] = Array.from(
+      relatedItems_no_doubles.values()
+    );
 
     // Filter remove some of them (eg containing category)
     // let relatedItems_filtered: IRelatedAtom[] = relatedItems.filter((item) => {
@@ -216,7 +244,9 @@ export class FeedStore {
     //   return !exclusion_condition;
     // });
 
-    this.$related.set(itemId, relatedItems);
+    //With no duplicates by construction
+    this.$related.set(itemId, relatedItems_no_doubles_array);
+    this.addAllRelatedItemsInAllRelated(itemId);
   }
 
   getItemFromAnyRelated(itemId: AtomID): IAtom | undefined {

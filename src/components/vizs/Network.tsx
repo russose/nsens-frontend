@@ -3,15 +3,14 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { GUI_CONFIG } from "../../common/config";
-import { paths } from "../../common/configPaths";
 import {
   isItemSaved,
   isItemSavedActivated,
   onEditKnowbooks,
   onSaved,
 } from "../../handlers";
-import { GraphStore } from "../../stores/GraphStore";
+import { group_name } from "../../stores/GraphStore";
+import { IStores } from "../../stores/_RootStore";
 import { useStores } from "../../stores/_RootStoreHook";
 import CardAtomCompact from "../CardAtomCompact";
 import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
@@ -20,22 +19,22 @@ import NodeGroup from "./NodeGroup";
 export type INetworkWithGroupProps = {
   title: string;
   itemId: string;
-  graphStore: GraphStore;
+  stores: IStores;
   width: number;
   height: number;
   margin?: { top: number; right: number; bottom: number; left: number };
 };
 
-const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
-const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
-const path_Itemview = paths.pages.Item;
-
 const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   props
 ) => {
   const stores = useStores();
+  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
+  const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
+  const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
+  const path_Itemview = GUI_CONFIG.paths.pages.Item;
   let node;
-  if (props.node.related === "group") {
+  if (props.node.relation_name === group_name) {
     node = (
       <foreignObject
         x={-node_dx / 2}
@@ -43,7 +42,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
         width={node_dx}
         height={node_dy}
       >
-        <NodeGroup title={props.node.title} />
+        <NodeGroup stores={stores} title={props.node.title} />
       </foreignObject>
     );
   } else {
@@ -57,8 +56,9 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
         <CardAtomCompact
           key={`cardAtomNetwork-${props.node.id}`}
           id={props.node.id}
+          stores={stores}
           title={props.node.title}
-          image_url={props.node.thumbnail_url}
+          image_url={props.node.image_url}
           pathname={path_Itemview}
           queryObject={{ title: props.node.title, id: props.node.id }}
           saved_enabled={isItemSaved(stores.savedStore)(props.node.id)}
@@ -70,6 +70,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
             stores.uiStore,
             stores.knowbookStore
           )(props.node.id)}
+          forVizs={true}
         />
       </foreignObject>
     );
@@ -81,8 +82,8 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
 const NetworkNode = observer(NetworkNode_);
 
 const Network: React.FunctionComponent<INetworkWithGroupProps> = (props) => {
-  const nodes = props.graphStore.graph.nodes;
-  const links = props.graphStore.graph.links;
+  const nodes = props.stores.graphStore.graph.nodes;
+  const links = props.stores.graphStore.graph.links;
 
   return props.width < 10 ? null : (
     <svg width={props.width} height={props.height}>

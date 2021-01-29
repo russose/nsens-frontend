@@ -1,31 +1,36 @@
 import { Box, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { ParsedUrlQueryInput } from "querystring";
-import { GUI_CONFIG } from "../common/config";
-import { AtomID } from "../common/types";
+import { AtomID, ButtonIDType, handlerT, IconT } from "../common/types";
+import { IStores } from "../stores/_RootStore";
 import CardGeneric from "./CardGeneric";
 import { iconColorDefault } from "./_Button";
 
 interface ICardAtomProps {
   id: AtomID;
+  stores: IStores;
   title: string;
   image_url: string;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
   saved_actionable: boolean;
   saved_enabled: boolean;
-  saved_handler: any;
-  edit_handler: any;
+  saved_handler: handlerT;
+  edit_handler: handlerT;
 }
 
 const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
-  const size_icon: any = GUI_CONFIG.display.size_icon_card;
-  const color_item = GUI_CONFIG.display.colors.item_color;
-  const color_image = GUI_CONFIG.display.colors.item_color_image;
+  const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
+  const color_item = GUI_CONFIG.general.colors.item_color;
+  const color_image = GUI_CONFIG.general.colors.item_color_image;
+  const buttons_all = GUI_CONFIG.language.buttons;
+
   return (
     <CardGeneric
       id={props.id}
+      stores={props.stores}
       title={props.title}
       image_url={props.image_url}
       color={color_item}
@@ -38,7 +43,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
         {props.saved_enabled && (
           <IconButton
             accessibilityLabel="edit"
-            icon="edit"
+            icon={buttons_all[ButtonIDType.EDIT].icon as IconT}
             iconColor={iconColorDefault}
             size={size_icon}
             onClick={props.edit_handler}
@@ -48,7 +53,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
       <Box paddingX={0}>
         <IconButton
           accessibilityLabel="save"
-          icon="angled-pin"
+          icon={buttons_all[ButtonIDType.SAVE].icon as IconT}
           iconColor={props.saved_enabled ? "red" : iconColorDefault}
           size={size_icon}
           onClick={props.saved_handler}

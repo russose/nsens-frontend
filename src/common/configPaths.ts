@@ -6,13 +6,17 @@ export const paths = {
   user_image: "/icon_user.jpg",
   pages: {
     Landing: "/Landing",
-    Home: "/",
+    Home: "/Home",
     Knowbooks: "/Knowbooks",
     Knowbook: "/Knowbook",
-    KnowbookSaved: "KnowbookSpecialSaved",
-    KnowbookNone: "KnowbookSpecialNone",
+    KnowbookSaved: "/KnowbookSpecialSaved",
+    KnowbookNone: "/KnowbookSpecialNone",
     Item: "/ItemView",
     User: "/User",
     empty: "",
+  },
+  landing: {
+    image_main: "/500px-Book_closed_template_small.svg.png",
+    images_feature: ["/3phase-rmf-180f-airopt.gif", "", "", ""],
   },
 };

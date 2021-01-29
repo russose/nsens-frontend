@@ -1,51 +1,47 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { GUI_CONFIG } from "../../common/config";
+import { ColorT, DirectionT, RoundingT } from "../../common/types";
 import { onMenuButtonPath } from "../../handlers";
-import { useStores } from "../../stores/_RootStoreHook";
+import { IStores } from "../../stores/_RootStore";
 import _Button, { IButton } from "../_Button";
 
 interface IMenuBarButtonLayoutProps {
+  stores: IStores;
   name: string;
-  color: any;
-  direction: any;
+  color: ColorT;
+  direction: DirectionT;
   buttons: IButton[];
 }
-
-const buttons_all = GUI_CONFIG.language.buttons;
 
 const MenuBarButtonLayout: React.FunctionComponent<IMenuBarButtonLayoutProps> = (
   props
 ) => {
-  const stores = useStores();
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const buttons_all = GUI_CONFIG.language.buttons;
+  const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
+
   return (
-    // <Box color="white" padding={1} display="block">
-    <Box padding={1} display="block">
+    <Box padding={1}>
       <Box
-        padding={1}
+        padding={0}
+        color={props.color}
         display="flex"
-        // direction="column"
         direction={props.direction}
         alignItems="center"
         justifyContent="around"
-        color={props.color}
         borderStyle="lg"
-        rounding={2}
+        rounding={rounding_menu}
       >
         {props.buttons.map((button) => {
           return (
-            <Box
-              key={`'box'-${props.name}-${button.Id}`}
-              padding={0}
-              alignItems="center"
-            >
+            <Box key={`'box'-${props.name}-${button.Id}`} alignItems="center">
               <_Button
                 key={`${props.name}-${button.Id}`}
-                // key={(props.name + button.Id).toString()}
+                stores={props.stores}
                 icon={buttons_all[button.Id].icon}
                 label={buttons_all[button.Id].label}
-                path={onMenuButtonPath(stores.uiStore)(button.Id)}
+                path={onMenuButtonPath(props.stores)(button.Id)}
                 iconColor={button.iconColor}
                 disabled={button.disabled}
                 onClick={button.onClick}

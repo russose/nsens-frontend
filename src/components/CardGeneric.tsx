@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { Image, Box, Mask, Text } from "gestalt";
-import { AtomID } from "../common/types";
-import { GUI_CONFIG } from "../common/config";
+import { AtomID, ColorT, RoundingT, SizeT } from "../common/types";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
+import { IStores } from "../stores/_RootStore";
 
 interface ICardSizes {
   height: number;
@@ -13,26 +13,69 @@ interface ICardSizes {
 
 interface ICardGenericProps {
   id: AtomID;
+  stores: IStores;
   title: string;
   image_url: string;
-  color: any;
-  color_image: string;
+  color: ColorT;
+  color_image?: string;
   sizes: ICardSizes;
-  pathname?: string;
+  pathname: string;
   queryObject?: ParsedUrlQueryInput;
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
-  const title_card_size: any = GUI_CONFIG.display.title_card_size;
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
   const path_empty_image = GUI_CONFIG.paths.item_empty_image;
-  // const color_card: any = GUI_CONFIG.display.colors.card;
-  const rounding = 3;
+  const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
+  // const title_card_size: SizeT = props.config.display.title_card_size;
+  // const path_empty_image = props.config.paths.item_empty_image;
+  // const rounding: RoundingT = props.config.display.rounding_item;
 
   const max_title_size = props.sizes.max_title_size;
   let title = props.title;
   if (title.length > max_title_size) {
     title = props.title.substring(0, max_title_size) + "...";
   }
+
+  const color_image =
+    props.color_image === undefined || props.image_url === ""
+      ? "white"
+      : props.color_image;
+
+  const image_only = (
+    <Image
+      key={props.id}
+      alt="image"
+      color={color_image}
+      fit="cover"
+      naturalHeight={1}
+      naturalWidth={1}
+      loading="auto"
+      src={
+        props.image_url === "" || props.image_url === undefined
+          ? path_empty_image
+          : props.image_url
+      }
+      // src=""
+    ></Image>
+  );
+
+  const image_with_link = (
+    <Link
+      href={{
+        // pathname: props.pathname, query: props.queryObject
+        pathname: props.stores.userStore.rootPath + props.pathname,
+        query: { ...props.stores.userStore.paramsPage, ...props.queryObject },
+      }}
+      passHref
+    >
+      <a>{image_only}</a>
+    </Link>
+  );
+
+  const hasLink: boolean =
+    props.pathname !== undefined && props.pathname !== "";
 
   return (
     <Box height={props.sizes.height}>
@@ -47,49 +90,36 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       >
         <Box height={props.sizes.image_ratio} width="100%">
           <Mask rounding={rounding} height="100%" width="100%">
-            <Link
+            {/* <Link
               href={{ pathname: props.pathname, query: props.queryObject }}
               passHref
             >
-              <a>
-                <Image
-                  alt="image"
-                  color={props.image_url === "" ? props.color_image : "white"}
-                  fit="cover"
-                  naturalHeight={1}
-                  naturalWidth={1}
-                  loading="auto"
-                  src={
-                    props.image_url === "" || props.image_url === undefined
-                      ? path_empty_image
-                      : props.image_url
-                  }
-                  // src=""
-                ></Image>
-              </a>
-            </Link>
+              <a>{image_only}</a>
+            </Link> */}
+            {hasLink ? image_with_link : image_only}
           </Mask>
+
           <Box display="flex" direction="row" height="2%"></Box>
 
           <Box
             display="flex"
             direction="row"
             justifyContent="between"
-            alignItems="center"
+            alignItems="start"
             padding={0}
           >
-            <Box padding={1} width="85%">
+            <Box padding={1} width="65%">
               <Text size={title_card_size} align="left" weight="bold">
                 {title}
               </Text>
             </Box>
-
             <Box
               display="flex"
               direction="row"
               justifyContent="end"
               alignItems="center"
               padding={0}
+              wrap={true}
             >
               {props.children}
             </Box>

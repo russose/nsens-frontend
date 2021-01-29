@@ -2,14 +2,17 @@ import { LinkProvidedProps } from "@visx/network/lib/types";
 import { LinkVerticalLine } from "@visx/shape";
 import { Text } from "@visx/text";
 import { observer } from "mobx-react-lite";
+import { group_name } from "../../stores/GraphStore";
 
 const black = "#000000";
 
 const NetworkLinkWithLabel: React.FunctionComponent<LinkProvidedProps<any>> = (
   props
 ) => {
-  const link_label = props.link.target.related.split("|")[1];
-  const displayCondition = props.link.source.related !== "group_prop";
+  const link_label = props.link.target.relation_name;
+  const displayCondition =
+    props.link.target.relation_name !== group_name &&
+    props.link.target.relation_name !== "";
   let x = 0;
   let y = 0;
 
@@ -30,8 +33,14 @@ const NetworkLinkWithLabel: React.FunctionComponent<LinkProvidedProps<any>> = (
       props.link.source.x;
     y = a * (x - props.link.target.x) + props.link.target.y;
   }
+
+  const X = (props.link.source.x + props.link.target.x) * 0.5;
+  const Y = (props.link.source.y + props.link.target.y) * 0.5;
+  // x = props.link.target.x;
+  // y = props.link.target.y;
+
   const Label = displayCondition && (
-    <Text textAnchor="middle" dy={y} dx={x} fontSize={12}>
+    <Text textAnchor="middle" dy={Y} dx={X} fontSize={12}>
       {link_label}
     </Text>
   );

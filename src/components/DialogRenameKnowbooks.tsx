@@ -1,5 +1,4 @@
 import { observer } from "mobx-react-lite";
-import { GUI_CONFIG } from "../common/config";
 import {
   onCancel,
   onChangeInputValueRenameKnowbook,
@@ -9,18 +8,23 @@ import { useStores } from "../stores/_RootStoreHook";
 import DialogRenameKnowbookForm from "./DialogRenameKnowbookForm";
 
 const DialogRenameKnowbooks: React.FunctionComponent = (props) => {
-  const { knowbookStore, uiStore } = useStores();
+  const stores = useStores();
+  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
   return (
     <>
-      {uiStore.renameKnowbookOpened && (
+      {stores.uiStore.renameKnowbookOpened && (
         <DialogRenameKnowbookForm
+          stores={stores}
           title={GUI_CONFIG.language.renameDeleteKnowbook.title}
-          value={uiStore.renameKnowbookNewName}
+          value={stores.uiStore.renameKnowbookNewName}
           label_rename={GUI_CONFIG.language.renameDeleteKnowbook.rename_label}
           label_cancel={GUI_CONFIG.language.renameDeleteKnowbook.cancel_label}
-          handler_rename={onRenameKnowbook(uiStore, knowbookStore)}
-          handler_cancel={onCancel(uiStore)}
-          handler_inputValue={onChangeInputValueRenameKnowbook(uiStore)}
+          handler_rename={onRenameKnowbook(
+            stores.uiStore,
+            stores.knowbookStore
+          )}
+          handler_cancel={onCancel(stores.uiStore)}
+          handler_inputValue={onChangeInputValueRenameKnowbook(stores.uiStore)}
         />
       )}
     </>

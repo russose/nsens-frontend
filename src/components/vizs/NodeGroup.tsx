@@ -1,18 +1,20 @@
 import { Box, Text } from "gestalt";
-import { GUI_CONFIG } from "../../common/config";
 import { observer } from "mobx-react-lite";
+import { RoundingT, SizeT } from "../../common/types";
+import { IStores } from "../../stores/_RootStore";
 
 export interface INodeGroupProps {
+  stores: IStores;
   title: string;
 }
 
-// const node_size = USER_DISPLAY.network.node_size;
-const title_card_size: any = GUI_CONFIG.display.title_card_size;
-const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
-const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
-const max_title_size = GUI_CONFIG.display.atom_compact_sizes.max_title_size;
-
 const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
+  const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
+  const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
+  const max_title_size = GUI_CONFIG.display.atom_compact_sizes.max_title_size;
+  const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   let title = props.title;
   if (title === undefined) {
     return <Box />;
@@ -25,14 +27,21 @@ const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
     <Box
       borderStyle="lg"
       color="white"
-      rounding={3}
+      rounding={rounding}
       padding={1}
       width={node_dx}
-      height={node_dy * 0.5}
+      height={node_dy * 0.4}
     >
-      <Text size={title_card_size} align="center" weight="bold">
-        {title}
-      </Text>
+      <Box
+        height="100%"
+        display="flex"
+        direction="column"
+        justifyContent="center"
+      >
+        <Text size={title_card_size} align="center" weight="bold">
+          {title}
+        </Text>
+      </Box>
     </Box>
   );
 };

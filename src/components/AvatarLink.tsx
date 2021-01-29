@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, Avatar } from "gestalt";
 import Link from "next/link";
-import { GUI_CONFIG } from "../common/config";
+import { IStores } from "../stores/_RootStore";
 
 interface IAvatarLinkProps {
+  stores: IStores;
   username: string;
   pathname: string;
   logged: boolean;
@@ -13,12 +14,20 @@ interface IAvatarLinkProps {
 
 const AvatarLink: React.FunctionComponent<IAvatarLinkProps> = (props) => {
   const icon_size = "sm";
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const image_path = GUI_CONFIG.paths.user_image;
   return (
     <Box padding={0} display="flex" direction="column" alignItems="center">
       {/* <Box> */}
       <>
-        <Link href={{ pathname: props.pathname }} passHref>
+        <Link
+          href={{
+            // pathname: props.pathname
+            pathname: props.stores.userStore.rootPath + props.pathname,
+            query: props.stores.userStore.paramsPage as any,
+          }}
+          passHref
+        >
           <a>
             <Avatar
               size={icon_size}

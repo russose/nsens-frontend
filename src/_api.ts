@@ -18,6 +18,8 @@ const url_wikipedia_action = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_ACTION;
 const url_wikipedia_rest = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_REST;
 const amount_related = CONFIG_FETCHING.amount_related;
 
+export const issue_text: string = "issue in loging or network";
+
 /**
  * From Web (Client side directly)
  */
@@ -161,7 +163,7 @@ export async function _getUser(): Promise<string> {
     return res.data;
   } catch (error) {
     // console.log(error);
-    return "error";
+    return issue_text;
   }
 }
 
@@ -169,42 +171,43 @@ export async function _login(
   username: string,
   password: string
 ): Promise<string> {
-  try {
-    const res = await _api("post", "/auth/login", {
-      username: username,
-      password: password,
-    });
-    return res;
-  } catch (error) {
-    // console.log(error);
-    return error;
-  }
+  // try {
+  const res = await _api("post", "/auth/login", {
+    username: username,
+    password: password,
+  });
+  return res;
+  // } catch (error) {
+  //   console.log("err");
+  //   // console.log(error);
+  //   return issue_text;
+  // }
 }
 
 export async function _signup(
   username: string,
   password: string
 ): Promise<string> {
-  try {
-    const res = await _api("post", "/auth/signup", {
-      username: username,
-      password: password,
-    });
-    return res;
-  } catch (error) {
-    // console.log(error);
-    return error;
-  }
+  // try {
+  const res = await _api("post", "/auth/signup", {
+    username: username,
+    password: password,
+  });
+  return res;
+  // } catch (error) {
+  //   // console.log(error);
+  //   return issue_text;
+  // }
 }
 
 export async function _logout(): Promise<string> {
-  try {
-    const res = await _api("post", "/auth/logout", {});
-    return res;
-  } catch (error) {
-    // console.log(error);
-    return error;
-  }
+  // try {
+  const res = await _api("post", "/auth/logout", {});
+  return res;
+  // } catch (error) {
+  //   // console.log(error);
+  //   return issue_text;
+  // }
 }
 
 /**
@@ -261,7 +264,7 @@ export async function _addKnowbook(name: string): Promise<string> {
     return res.data;
   } catch (error) {
     // console.log(error);
-    return error;
+    return issue_text;
   }
 }
 
@@ -278,7 +281,7 @@ export async function _renameKnowbook(
     return res.data;
   } catch (error) {
     // console.log(error);
-    return error;
+    return issue_text;
   }
 }
 
@@ -288,7 +291,7 @@ export async function _removeKnowbook(name: string): Promise<string> {
     return res.data;
   } catch (error) {
     // console.log(error);
-    return error;
+    return issue_text;
   }
 }
 

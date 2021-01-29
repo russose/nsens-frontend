@@ -2,13 +2,12 @@ import {
   forceCenter,
   forceCollide,
   forceLink,
-  // forceManyBody,
   forceSimulation,
 } from "d3-force";
 import { action, makeObservable, observable } from "mobx";
-import { GUI_CONFIG } from "../common/config";
 import {
   AtomID,
+  GUI_CONFIG_T,
   IAtom,
   ILink,
   INode,
@@ -16,18 +15,20 @@ import {
   newAtom,
 } from "../common/types";
 import { FeedStore } from "./FeedStore";
-
-const width_node = GUI_CONFIG.display.atom_compact_sizes.width;
+import { IStores } from "./_RootStore";
 
 interface IGraph {
   nodes: INode[];
   links: ILink[];
 }
 
+export const group_name = "group";
+
 export class GraphStore {
   private $rootItemId: AtomID = undefined;
   private $graph: IGraph = { nodes: [], links: [] };
-  private $relatedMap = observable.map<AtomID, IAtom[]>();
+  private $relatedMap = observable.map<string, IAtom[]>();
+  // private $relatedMap = observable.map<AtomID, IAtom[]>();
 
   constructor() {
     makeObservable<GraphStore, "$rootItemId" | "$graph">(this, {
@@ -61,7 +62,8 @@ export class GraphStore {
       return;
     }
 
-    const relatedMap_local = new Map<AtomID, IAtom[]>();
+    // const relatedMap_local = new Map<AtomID, IAtom[]>();
+    const relatedMap_local = new Map<string, IAtom[]>();
 
     related.forEach((el) => {
       const key = el.relation;
@@ -113,6 +115,7 @@ export class GraphStore {
       x: x0,
       y: y0,
       pos: 0,
+      relation_name: "",
       ...root_item,
     };
 
@@ -126,10 +129,11 @@ export class GraphStore {
           x: x0,
           y: y0,
           pos: this.graph.nodes.length,
+          relation_name: group_name,
           ...newAtom(key),
         };
         node_group.title = key;
-        node_group.related = "group";
+        // node_group.related = "group";
 
         this.graph.nodes.push(node_group);
         this.graph.links.push({
@@ -142,9 +146,11 @@ export class GraphStore {
             x: x0,
             y: y0,
             pos: this.graph.nodes.length,
+            relation_name: "",
             ...item,
           };
           this.graph.nodes.push(node);
+
           this.graph.links.push({
             source: this.graph.nodes[node_group.pos],
             target: this.graph.nodes[node.pos],
@@ -156,6 +162,7 @@ export class GraphStore {
           x: x0,
           y: y0,
           pos: this.graph.nodes.length,
+          relation_name: key,
           ...items_list_for_relation[0],
         };
         this.graph.nodes.push(node);
@@ -182,7 +189,9 @@ export class GraphStore {
     }
   }
 
-  runSimulation(width: number, height: number): void {
+  runSimulation(width: number, height: number, GUI_CONFIG: GUI_CONFIG_T): void {
+    const width_node = GUI_CONFIG.display.atom_compact_sizes.width;
+
     const forceColideRadius = width_node * 0.9;
     const forceLinkDistance = width_node * 1.1;
     const forceIterations = 10;
@@ -243,10 +252,11 @@ export class GraphStore {
 
   renderGraph(
     root_itemId: AtomID,
-    feedStore: FeedStore,
+    stores: IStores,
     width: number,
     height: number
   ): void {
+    const feedStore = stores.feedStore;
     const root_item = feedStore.getItemFromAnywhere(root_itemId);
     if (root_item === undefined) {
       return;
@@ -262,12 +272,16 @@ export class GraphStore {
         )
         .then(
           action(() => {
-            this.runSimulation(width / 2, height / 2);
+            this.runSimulation(
+              width / 2,
+              height / 2,
+              stores.userStore.GUI_CONFIG
+            );
           })
         );
     } else if (root_itemId !== this.$rootItemId) {
       this.setGraph(root_item, feedStore, width / 2, height / 2);
-      this.runSimulation(width / 2, height / 2);
+      this.runSimulation(width / 2, height / 2, stores.userStore.GUI_CONFIG);
     }
   }
 }

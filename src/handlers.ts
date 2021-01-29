@@ -1,39 +1,30 @@
 import { SavedStore } from "./stores/SavedStore";
-import { KnowbookID, AtomID, ButtonIDType } from "./common/types";
+import { KnowbookID, AtomID, ButtonIDType, eventT } from "./common/types";
 import { IItemDisplayMode, UIStore } from "./stores/UIStore";
 import { _login, _signup, _logout } from "./_api";
-import { goHome, goLanding } from "./libs/utils";
-import { GUI_CONFIG } from "./common/config";
 import { KnowkookStore } from "./stores/KnowkookStore";
 import { IStores } from "./stores/_RootStore";
 
-const buttons = GUI_CONFIG.language.buttons;
-
 // interface IonInput {
 //   value: string;
-//   syntheticEvent: any;
+//   syntheticEvent: eventT;
 // }
 // interface IonChecked {
 //   checked: boolean;
-//   syntheticEvent: any;
+//   syntheticEvent: eventT;
 // }
 
 /*******************Searchbar*************************** */
 
 export const onSearchHomeText = (uiStore: UIStore) => (input: {
   value: string;
-  syntheticEvent: any;
+  syntheticEvent: eventT;
 }): void => {
   uiStore.setSearchPattern(input.value);
   // console.log(uiStore.searchPattern);
 };
 
-export const onSearchHomeSubmit = (
-  // feedStore: FeedStore,
-  // uiStore: UIStore,
-  // userStore: UserStore
-  stores: IStores
-) => (): void => {
+export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   if (stores.uiStore.searchPattern.length > 0) {
     stores.feedStore.setFeedFromSearch(stores.uiStore.searchPattern);
   } else {
@@ -41,15 +32,15 @@ export const onSearchHomeSubmit = (
   }
 };
 
-export const onSearchHomeKeyboard = (
-  // feedStore: FeedStore,
-  // uiStore: UIStore,
-  // userStore: UserStore
-  stores: IStores
-) => (input: { event: any; value: string }): void => {
+export const onSearchHomeKeyboard = (stores: IStores) => (input: {
+  event: eventT;
+  value: string;
+}): void => {
   if (input.event.key === "Enter") {
     if (stores.uiStore.searchPattern.length === 0) {
-      stores.feedStore.setFeedFromRelated();
+      const amount_item_displayed =
+        stores.userStore.GUI_CONFIG.display.amount_item_displayed;
+      stores.feedStore.setFeedFromRelated(amount_item_displayed);
     } else {
       onSearchHomeSubmit(stores)();
     }
@@ -119,14 +110,14 @@ export const onEditKnowbooks = (
 
 export const onChangeInputValueEditKnowbooks = (uiStore: UIStore) => (input: {
   value: string;
-  syntheticEvent: any;
+  syntheticEvent: eventT;
 }): void => {
   uiStore.setEditKnowbookNewValue(input.value);
 };
 
 export const onChangeKnwobooksInclusionEditKnowbooks = (uiStore: UIStore) => (
   tag: KnowbookID
-) => (input: { checked: boolean; syntheticEvent: any }): void => {
+) => (input: { checked: boolean; syntheticEvent: eventT }): void => {
   uiStore.setEditKnowbookMembers(tag, input.checked);
 };
 
@@ -173,7 +164,7 @@ export const onOpenRenameKnowbook = (uiStore: UIStore) => (
 
 export const onChangeInputValueRenameKnowbook = (uiStore: UIStore) => (input: {
   value: string;
-  syntheticEvent: any;
+  syntheticEvent: eventT;
 }): void => {
   uiStore.setRenameKnowbookNewName(input.value);
 };
@@ -200,7 +191,7 @@ export const onDeleteKnowbook = (
 
 export const onChangeUsernamePassword = (uiStore: UIStore) => (
   type: string
-) => (input: { value: string; syntheticEvent: any }): void => {
+) => (input: { value: string; syntheticEvent: eventT }): void => {
   if (type === "username") {
     uiStore.setLoginScreenUsername(input.value);
   } else if (type === "password") {
@@ -217,7 +208,10 @@ export const onLogout = (stores: IStores) => (): void => {
       stores.knowbookStore.clearKnowbooks();
     })
     .then(() => {
-      goLanding();
+      stores.userStore.goPage(
+        stores.userStore.paramsPage,
+        stores.userStore.GUI_CONFIG.paths.pages.Landing
+      );
     })
     .catch(function (error) {
       console.log("error in logout...");
@@ -233,6 +227,7 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       stores.uiStore.loginScreenPassword
     )
       .then(() => {
+        console.log("ok");
         stores.userStore.setUser({
           username: stores.uiStore.loginScreenUsername,
         });
@@ -240,7 +235,11 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       })
       .then(() => {
         stores.userStore.initializeUserData(stores);
-        goHome();
+        //Go Home
+        stores.userStore.goPage(
+          stores.userStore.paramsPage,
+          stores.userStore.GUI_CONFIG.paths.pages.Home
+        );
       })
       .catch(function (error) {
         // console.log(error);
@@ -259,7 +258,11 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       })
       .then(() => {
         stores.userStore.initializeUserData(stores);
-        goHome();
+        //Go Home
+        stores.userStore.goPage(
+          stores.userStore.paramsPage,
+          stores.userStore.GUI_CONFIG.paths.pages.Home
+        );
       })
       .catch(function (error) {
         console.log("error in signing...");
@@ -269,10 +272,11 @@ export const onSubmitLoginSignup = (stores: IStores) => (
 
 /*******************Navigation*************************** */
 
-export const onMenuButtonPath = (uiStore: UIStore) => (
+export const onMenuButtonPath = (stores: IStores) => (
   buttonId: ButtonIDType
 ): string => {
-  uiStore.setItemDisplayMode(IItemDisplayMode.Article);
+  // stores.uiStore.setItemDisplayMode(IItemDisplayMode.Article);
+  const buttons = stores.userStore.GUI_CONFIG.language.buttons;
   // if (!userStore.isLogged && buttonId !== ButtonIDType.HOME) {
   //   return buttons[ButtonIDType.LOGIN].path;
   // } else {

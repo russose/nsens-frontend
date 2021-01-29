@@ -1,6 +1,28 @@
 import { paths } from "./configPaths";
 
 export const Lang_fr = {
+  landing: {
+    slogan: "Transformer l'information libre en connaissances",
+    features_title: "Fonctionalités",
+    loginSignup: {
+      username_placeholder: "Email",
+      password_placeholder: "Mot de passe",
+      login_label: "Connexion",
+      signup_label: "Enregistrement",
+    },
+    features: [
+      {
+        title: "Explorer visuellement l'information librement disponible",
+        icon: "search",
+      },
+      { title: "Enregistrer et retrouver ses élements", icon: "angled-pin" },
+      { title: "Organiser dans des carnets", icon: "folder" },
+      {
+        title: "Découvrir les éléments associés et leur contexte",
+        icon: "compass",
+      },
+    ],
+  },
   buttons: {
     HOME: {
       label: "Accueil",
@@ -23,7 +45,7 @@ export const Lang_fr = {
     },
   },
   knowbooks: {
-    knowbooks_title: "Carnets de connaissance (Knowbooks)",
+    knowbooks_title: "Carnets de connaissance",
     AllSaved_title: "Sauvés (tous)",
     None_Title: "Aucun Carnet",
     Related_title: "Related :",
@@ -37,15 +59,7 @@ export const Lang_fr = {
     rename_label: "Renommer",
     cancel_label: "Annuler",
   },
-  loginSignup: {
-    // title: "Connexion et enregistrement",
-    desciption:
-      "Créer un compte permet de sauvegarder et d'organiser les éléments dans des carnets, pour les visualiser en contexte.",
-    username_placeholder: "Email",
-    password_placeholder: "Mot de passe",
-    login_label: "Connexion",
-    signup_label: "Enregistrement",
-  },
+
   searchBar: "Rechercher...",
   WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
   USER_WIKIDATA_LANG: "fr",

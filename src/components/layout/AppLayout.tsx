@@ -1,95 +1,54 @@
-import { Box, Heading } from "gestalt";
+import { Box, Heading, Sticky } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { NextRouter, useRouter } from "next/router";
 import React from "react";
-import { GUI_CONFIG } from "../../common/config";
 import {
   onSearchHomeKeyboard,
   onSearchHomeSubmit,
   onSearchHomeText,
 } from "../../handlers";
-import { useStores } from "../../stores/_RootStoreHook";
 import MenuBarDisplay from "../MenuBarDisplay";
 import SearchBar from "../SearchBar";
 import MenuBarNavigation from "../MenuBarNavigation";
-import PageLayoutDesktop from "./PageLayoutDesktop";
 import { IStores } from "../../stores/_RootStore";
-import { displayDesktop } from "../../common/configDesktop";
 import { paths } from "../../common/configPaths";
-import PageLayoutMobile from "./PageLayoutMobile";
-import { displayMobile } from "../../common/configMobile";
-import { goLanding } from "../../libs/utils";
-
-export interface IPageLayoutProps {
-  displayMenu: any;
-  navigationMenu: any;
-  header: any;
-}
+import PageLayoutHybrid from "./PageLayoutHybrid";
+import {
+  handlerT,
+  reactComponentT,
+  RoundingT,
+  SizeT,
+} from "../../common/types";
+import Dialogs from "../Dialogs";
+import { useStores } from "../../stores/_RootStoreHook";
+import { isMobile } from "../../libs/utils";
 
 const AppLayout: React.FunctionComponent = (props) => {
   const stores = useStores();
   const router = useRouter();
 
-  stores.uiStore.setScreen();
+  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
+  const header_size: SizeT = GUI_CONFIG.display.header_size;
+  const color_menu = GUI_CONFIG.general.colors.menu;
+  const color_headers = GUI_CONFIG.general.colors.headers as handlerT;
+  const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
 
-  //when username==="", it means the user is not logged!
-  //When username===null, it means the App is not initialyzed
-  if (stores.userStore.user === null) {
-    stores.userStore.initializeApp(stores);
-    return <></>;
-  }
+  const isDisplayMenuDisplayed: boolean = router.pathname.includes(
+    paths.pages.Item
+  );
 
-  if (!stores.userStore.isLogged) {
-    // Not Logged
-    if (process.browser) {
-      goLanding();
-    }
-  }
-
-  if (stores.uiStore.screen.isMobile) {
-    GUI_CONFIG.display = displayMobile;
-    //Minimum of 3 card compact
-    if (
-      stores.uiStore.screen.width <
-      3 * (GUI_CONFIG.display.atom_compact_sizes.width + 20)
-    ) {
-      const dim = stores.uiStore.screen.width / 3.0 - 20;
-      GUI_CONFIG.display.atom_compact_sizes.width = dim;
-      GUI_CONFIG.display.atom_compact_sizes.width = dim;
-    }
-  } else {
-    GUI_CONFIG.display = displayDesktop;
-    if (
-      stores.uiStore.screen.width > GUI_CONFIG.general.large_screen_breakpoint
-    ) {
-      GUI_CONFIG.display.atom_sizes.lgColumn = 1;
-      GUI_CONFIG.display.knowbook_sizes.lgColumn = 1;
-    }
-  }
-
-  const header_size: any = GUI_CONFIG.display.header_size;
-  const color_menu = GUI_CONFIG.display.colors.menu;
-  const color_headers = GUI_CONFIG.display.colors.headers as any;
-
-  // const navigationMenu = () => {
-  //   return
   const navigationMenu = (
-    <MenuBarNavigation name="NavigationMenuBar" color={color_menu} />
+    <MenuBarNavigation
+      stores={stores}
+      name="NavigationMenuBar"
+      color={color_menu}
+    />
   );
-  // };
 
-  // const displayMenu = (displayMenuDisplayed: boolean) => {
-  //   return (
-  //     displayMenuDisplayed && (
   const displayMenu = (
-    <MenuBarDisplay name="MenuBarDisplay" color={color_menu} />
+    <MenuBarDisplay stores={stores} name="MenuBarDisplay" color={color_menu} />
   );
-  //     )
-  //   );
-  // };
 
-  // const searchbar = (stores: IStores) => {
-  //   return (
   const searchbar = (
     <SearchBar
       placeholder={GUI_CONFIG.language.searchBar}
@@ -99,17 +58,15 @@ const AppLayout: React.FunctionComponent = (props) => {
       value={stores.uiStore.searchPattern}
     />
   );
-  //   );
-  // };
 
-  const headerText = (title: string) => {
+  const titleText = (title: string) => {
     return (
       <Box
         color={color_headers}
         borderStyle="lg"
         flex="grow"
-        rounding={2}
-        padding={2}
+        rounding={rounding_menu}
+        padding={1}
       >
         <Heading size={header_size} align="center" overflow="normal">
           {title}
@@ -119,70 +76,88 @@ const AppLayout: React.FunctionComponent = (props) => {
   };
 
   const header = (stores: IStores, router: NextRouter) => {
-    let header: any;
-    if (router.pathname === paths.pages.Home) {
-      // header = searchbar(stores);
+    let header: reactComponentT | handlerT;
+    if (router.pathname.includes(paths.pages.Home)) {
       header = searchbar;
-    } else if (router.pathname === paths.pages.User) {
-      // if (stores.userStore.isLogged) {
-      //   header = headerText(
-      //     stores.userStore.user === null ? "" : stores.userStore.user.username
-      //   );
-      // } else {
-      //   header = headerText(GUI_CONFIG.language.loginSignup.title);
-      // }
-      header = headerText(
+    } else if (router.pathname.includes(paths.pages.User)) {
+      header = titleText(
         stores.userStore.user === null ? "" : stores.userStore.user.username
       );
-    } else if (router.pathname === paths.pages.Knowbooks) {
-      header = headerText(GUI_CONFIG.language.knowbooks.knowbooks_title);
-    } else if (router.pathname === "/" + paths.pages.KnowbookSaved) {
-      header = headerText(GUI_CONFIG.language.knowbooks.AllSaved_title);
-    } else if (router.pathname === "/" + paths.pages.KnowbookNone) {
-      header = headerText(GUI_CONFIG.language.knowbooks.None_Title);
+    } else if (router.pathname.includes(paths.pages.Knowbooks)) {
+      header = titleText(GUI_CONFIG.language.knowbooks.knowbooks_title);
+    } else if (router.pathname.includes(paths.pages.KnowbookSaved)) {
+      header = titleText(GUI_CONFIG.language.knowbooks.AllSaved_title);
+    } else if (router.pathname.includes(paths.pages.KnowbookNone)) {
+      header = titleText(GUI_CONFIG.language.knowbooks.None_Title);
     } else {
-      header = headerText(router.query.title as string);
+      header = titleText(router.query.title as string);
     }
 
     return header;
   };
 
+  const top_mobile = (
+    <>
+      <Box column={12}>
+        <Box display="flex" flex="grow" alignItems="center">
+          {header(stores, router)}
+        </Box>
+      </Box>
+    </>
+  );
+
+  const top_desktop = (
+    <>
+      <Box column={8} smColumn={8} mdColumn={8} lgColumn={10}>
+        <Box display="flex" flex="grow" alignItems="center">
+          {header(stores, router)}
+        </Box>
+      </Box>
+
+      <Box column={4} smColumn={4} mdColumn={4} lgColumn={2}>
+        {navigationMenu}
+      </Box>
+    </>
+  );
+
+  const bottom_mobile = navigationMenu;
+
+  let top;
+  let bottom;
+  let displayMenuWithLayout;
+  if (isMobile(GUI_CONFIG.id)) {
+    top = top_mobile;
+    bottom = bottom_mobile;
+    displayMenuWithLayout = <Box column={12}>{displayMenu}</Box>;
+    bottom = navigationMenu;
+    // navigationMenu_mobile = (
+    //   <>
+    //     <Box
+    //       padding={0}
+    //       borderStyle="lg"
+    //       rounding={rounding_menu}
+    //       color="lightGray"
+    //     >
+    //       {navigationMenu}
+    //     </Box>
+    //   </>
+    // );
+  } else {
+    top = top_desktop;
+    displayMenuWithLayout = (
+      <Box column={4} smColumn={3} mdColumn={3} lgColumn={2}>
+        {displayMenu}
+      </Box>
+    );
+  }
+
   return (
     <>
-      {stores.uiStore.screen.isMobile ? (
-        <PageLayoutMobile
-          displayMenu={router.pathname.includes("ItemView") && displayMenu}
-          navigationMenu={navigationMenu}
-          header={header(stores, router)}
-        >
-          {props.children}
-        </PageLayoutMobile>
-      ) : (
-        <PageLayoutDesktop
-          displayMenu={router.pathname.includes("ItemView") && displayMenu}
-          navigationMenu={navigationMenu}
-          header={header(stores, router)}
-        >
-          {props.children}
-        </PageLayoutDesktop>
-      )}
-      {/* {stores.uiStore.screen.isMobile ? (
-        <PageLayoutMobile
-          displayMenu={displayMenu(router.pathname.includes("ItemView"))}
-          navigationMenu={navigationMenu()}
-          header={header(stores, router)}
-        >
-          {props.children}
-        </PageLayoutMobile>
-      ) : (
-        <PageLayoutDesktop
-          displayMenu={displayMenu(router.pathname.includes("ItemView"))}
-          navigationMenu={navigationMenu()}
-          header={header(stores, router)}
-        >
-          {props.children}
-        </PageLayoutDesktop>
-      )} */}
+      <PageLayoutHybrid stores={stores} top={top} bottom={bottom}>
+        {isDisplayMenuDisplayed && displayMenuWithLayout}
+        {props.children}
+      </PageLayoutHybrid>
+      <Dialogs />
     </>
   );
 };

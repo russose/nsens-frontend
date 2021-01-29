@@ -1,5 +1,5 @@
 import { CONFIG_FETCHING, LANGUAGE } from "../common/config";
-import { IAtom, IRelatedAtom } from "../common/types";
+import { IAtom, IRelatedAtom, JSONDataT } from "../common/types";
 import { fetch_data_wikidata } from "./fetch";
 import {
   buildListStringSeparated,
@@ -122,7 +122,7 @@ export async function ItemsFromWikidata(
     const mapping_prop = new Map<string, string>();
     const mapping_label_prop = new Map<string, string>();
 
-    Object.values(result).forEach((item: any) => {
+    Object.values(result).forEach((item: JSONDataT) => {
       if (
         item["Entity"] !== undefined &&
         item["EntityLabel"] !== undefined &&

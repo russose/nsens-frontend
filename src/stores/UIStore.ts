@@ -1,24 +1,14 @@
 import { KnowkookStore } from "./KnowkookStore";
 import { observable, action, makeObservable } from "mobx";
 import { AtomID, KnowbookID } from "../common/types";
-import { GUI_CONFIG } from "../common/config";
-import { hasTouchScreen } from "../libs/utils";
 
 export enum IItemDisplayMode {
   Article = "Article",
   Network = "Network",
 }
 
-type IScreen = {
-  width: number;
-  height: number;
-  isMobile: boolean;
-};
-
-const max_width_mobile = GUI_CONFIG.general.max_width_mobile;
-
 export class UIStore {
-  private $screen: IScreen = { width: 0, height: 0, isMobile: true };
+  // private $screen: IScreen = { width: 0, height: 0, isMobile: true };
 
   private $searchPattern: string = "";
   private $selectedAtomId: AtomID = "";
@@ -39,7 +29,7 @@ export class UIStore {
   constructor() {
     makeObservable<
       UIStore,
-      | "$screen"
+      // | "$screen"
       | "$searchPattern"
       | "$selectedAtomId"
       | "$articleContent"
@@ -52,7 +42,7 @@ export class UIStore {
       | "$loginScreenUsername"
       | "$loginScreenPassword"
     >(this, {
-      $screen: observable,
+      // $screen: observable,
       $searchPattern: observable,
       $selectedAtomId: observable,
       $articleContent: observable,
@@ -66,7 +56,7 @@ export class UIStore {
       $renameKnowbookOpened: observable,
       $renameKnowbookNewName: observable,
       // searchPattern: computed,
-      setScreen: action,
+      // setScreen: action,
       setSearchPattern: action,
       // selectedAtomId: computed,
       setSelectedAtomId: action,
@@ -91,37 +81,9 @@ export class UIStore {
     });
   }
 
-  get screen() {
-    return this.$screen;
-  }
-  setScreen() {
-    let width;
-    let height;
-    let isMobile;
-    if (process.browser) {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      isMobile = hasTouchScreen(window);
-    }
-
-    // const isMobile = width < max_width_mobile;
-
-    if (
-      width !== undefined &&
-      height !== undefined &&
-      (width !== this.$screen.width ||
-        height !== this.$screen.height ||
-        isMobile !== this.$screen.isMobile)
-    ) {
-      this.$screen = {
-        width: width,
-        height: height,
-        isMobile: isMobile,
-      };
-      // console.log(window.innerWidth, window.innerHeight);
-      // console.log(isMobile);
-    }
-  }
+  // get screen() {
+  //   return this.$screen;
+  // }
 
   get selectedKnowbookIdName() {
     return this.$selectedKnowbookIdName;
@@ -216,14 +178,4 @@ export class UIStore {
       );
     });
   }
-
-  // @computed
-  // get spinnerState() {
-  //   return this.$spinnerState;
-  // }
-
-  // @action
-  // setSpinnerState(state: boolean): void {
-  //   this.$spinnerState = state;
-  // }
 }

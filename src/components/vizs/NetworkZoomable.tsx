@@ -1,56 +1,51 @@
 import { Group } from "@visx/group";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { GUI_CONFIG } from "../../common/config";
-import { GraphStore } from "../../stores/GraphStore";
-import { useStores } from "../../stores/_RootStoreHook";
+import { IStores } from "../../stores/_RootStore";
 import MyZoom from "./MyZoom";
 import Network from "./Network";
 import NetworkFlat from "./NetworkFlat";
 
 export type INetworkZoomableProps = {
   itemId: string;
+  stores: IStores;
   title: string;
-  graphStore: GraphStore;
+  width: number;
+  height: number;
 };
-
-// const ParentSize_ = observer(ParentSize);
 
 const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   props
 ) => {
   const margin = 5;
   const size_factor = 4;
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const max_nodes_network = GUI_CONFIG.display.max_nodes_network;
-  const deltaScreenViewport = GUI_CONFIG.display.deltaScreenViewport;
+  // const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;
 
-  const stores = useStores();
-  const width = stores.uiStore.screen.width * 0.98;
-  const height = stores.uiStore.screen.height - deltaScreenViewport;
+  const width = props.width * 0.95 - margin;
+  const height = props.height * 0.95 - margin;
 
-  const amount_nodes = Array.from(stores.graphStore.graphMap.values()).reduce(
-    (acc, value) => {
-      return acc + value.length;
-    },
-    0
-  );
+  const amount_nodes = Array.from(
+    props.stores.graphStore.graphMap.values()
+  ).reduce((acc, value) => {
+    return acc + value.length;
+  }, 0);
   function networkNodeDisplayed(): boolean {
     return amount_nodes < max_nodes_network;
   }
 
   return (
-    // <ParentSize_>
-    //   {(parent) => (
     <>
-      {stores.graphStore.renderGraph(
+      {props.stores.graphStore.renderGraph(
         props.itemId,
-        stores.feedStore,
+        props.stores,
         size_factor * width,
         size_factor * height
       )}
       <>
         {networkNodeDisplayed() ? (
-          <MyZoom width={width - margin} height={height - margin}>
+          <MyZoom width={width} height={height}>
             <Group
               left={(-width * (size_factor - 1)) / 2}
               top={(-height * (size_factor - 1)) / 2}
@@ -60,17 +55,15 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
                 height={size_factor * height}
                 itemId={props.itemId}
                 title={props.title}
-                graphStore={props.graphStore}
+                stores={props.stores}
               />
             </Group>
           </MyZoom>
         ) : (
-          <NetworkFlat rootItemId={props.itemId} stores={stores} />
+          <NetworkFlat rootItemId={props.itemId} stores={props.stores} />
         )}
       </>
     </>
-    //   )}
-    // </ParentSize_>
   );
 };
 

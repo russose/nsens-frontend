@@ -1,8 +1,16 @@
-import { LANGUAGE } from "./config";
+import { GUI_CONFIG, LANGUAGE } from "./config";
+import { displayMobile } from "./configMobile";
 
-export enum ConfigDataLanguage {
+export enum ConfigLanguage {
   fr = "fr",
   en = "en",
+}
+
+export enum ConfigDisplay {
+  small = "Small",
+  mobile = "Mobile",
+  desktop = "Desktop",
+  large = "Large",
 }
 
 export enum ButtonIDType {
@@ -91,6 +99,7 @@ export enum LogActionType {
 export interface INode extends IAtom {
   x: number;
   y: number;
+  relation_name: string;
   pos: number;
 }
 
@@ -98,3 +107,26 @@ export interface ILink {
   source: INode;
   target: INode;
 }
+
+export interface IFeature {
+  title: string;
+  image_url: string;
+  icon: IconT;
+}
+
+export type GUI_CONFIG_T = typeof GUI_CONFIG;
+// export type GUI_CONFIG_T = any;
+export type GUI_CONFIG_display_T = typeof displayMobile;
+
+export type IconT = any;
+export type ColorT = any;
+export type SizeT = any;
+export type RoundingT = any;
+export type DirectionT = any;
+export type PaddingT = any;
+export type handlerT = any;
+export type eventT = any;
+
+export type reactComponentT = any;
+
+export type JSONDataT = any;

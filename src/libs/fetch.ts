@@ -1,5 +1,6 @@
 import { CONFIG_FETCHING } from "../common/config";
 import { CONFIG_OPS } from "../common/config_env";
+import { JSONDataT } from "../common/types";
 
 /************************************** */
 //Temporary when using self signed certificate
@@ -28,7 +29,7 @@ export async function fetch_data(
   ROOT_URL: string,
   PARAMS: Object,
   output_URL: boolean
-): Promise<any> {
+): Promise<JSONDataT> {
   const res = await axios({
     method: "get",
     url: prepare_url(ROOT_URL, PARAMS),
@@ -43,7 +44,9 @@ export async function fetch_data(
   return data;
 }
 
-export async function fetch_data_wikidata(sparqlQuery: string): Promise<any> {
+export async function fetch_data_wikidata(
+  sparqlQuery: string
+): Promise<JSONDataT> {
   const res = await axios({
     method: "get",
     headers: { Accept: "application/sparql-results+json" },
@@ -59,7 +62,7 @@ export async function _api(
   method: string,
   uri: string,
   data: object
-): Promise<any> {
+): Promise<JSONDataT> {
   const res = await axios({
     // httpsAgent: agent,
     withCredentials: true,
@@ -108,54 +111,3 @@ export async function fetchRelatedWikipedia(
 
   return data;
 }
-
-// export async function fetchArticle_old(
-//   pattern: string,
-//   ROOT_URL: string
-// ): Promise<string> {
-//   const PARAMS = {
-//     action: "query",
-//     format: "json",
-//     utf8: 1,
-//     titles: pattern,
-//     prop: "extracts",
-//   };
-//   const data = await fetch_data(ROOT_URL, PARAMS, false);
-
-//   if (data["query"] === undefined || data["query"]["pages"] === undefined) {
-//     return "No article";
-//   }
-
-//   let article: string = "";
-//   Object.values(data["query"]["pages"]).forEach((item: any) => {
-//     article = item["extract"];
-//   });
-
-//   if (article === undefined) {
-//     return "Article not found";
-//   } else {
-//     return article;
-//   }
-// }
-
-// export async function fetch_data_old(
-//   ROOT_URL: string,
-//   PARAMS: Object,
-//   output_URL: boolean
-// ): Promise<any> {
-//   const header = {
-//     headers: {
-//       "User-Agent":
-//         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
-//     },
-//   };
-//   // Fetch data from external API
-//   let res = await fetch(prepare_url(ROOT_URL, PARAMS), header);
-//   const data = await res.json();
-
-//   if (output_URL) {
-//     console.log(prepare_url(ROOT_URL, PARAMS));
-//   }
-
-//   return data;
-// }

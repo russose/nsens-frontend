@@ -1,30 +1,34 @@
 import { Box, Button, Modal, TextField, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { GUI_CONFIG } from "../common/config";
+import { handlerT, RoundingT, SizeT } from "../common/types";
+import { IStores } from "../stores/_RootStore";
 
 interface IDialogRenameKnowbookFormProps {
+  stores: IStores;
   title: string;
   value: string;
   label_rename: string;
   label_cancel: string;
-  handler_rename: any;
-  handler_cancel: any;
-  handler_inputValue: any;
+  handler_rename: handlerT;
+  handler_cancel: handlerT;
+  handler_inputValue: handlerT;
 }
 
 const DialogRenameKnowbookForm: React.FunctionComponent<IDialogRenameKnowbookFormProps> = (
   props
 ) => {
-  const title_size: any = GUI_CONFIG.display.dialogs.title_size;
-  const texfield_size: any = GUI_CONFIG.display.dialogs.texfield_size;
-  const button_icon_size: any = GUI_CONFIG.display.dialogs.button_icon_size;
+  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const title_size: SizeT = GUI_CONFIG.display.dialogs.title_size;
+  const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
+  const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;
+  const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
+
   return (
     <Modal
       accessibilityModalLabel={props.title}
       onDismiss={props.handler_cancel}
     >
-      {/* <Box color="white" rounding={3} padding={2}> */}
-      <Box rounding={3} padding={2}>
+      <Box rounding={rounding} padding={2}>
         <Box padding={1}>
           <Text align="center" size={title_size} weight="bold">
             {props.title}

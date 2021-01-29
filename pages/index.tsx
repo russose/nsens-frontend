@@ -1,46 +1,14 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import CardAtomGrid from "../src/components/CardAtomGrid";
-import {
-  isItemSaved,
-  isItemSavedActivated,
-  onEditKnowbooks,
-  onSaved,
-} from "../src/handlers";
-import { displayCompactedGridCondition } from "../src/libs/utils";
+import { GUI_CONFIG } from "../src/common/config";
+import { IPage } from "../src/libs/utilsConfigGui";
 import { useStores } from "../src/stores/_RootStoreHook";
 
-const Home: React.FunctionComponent = (props) => {
+const Index: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  return (
-    <CardAtomGrid
-      id="Home"
-      atoms={stores.feedStore.getFeedList()}
-      isItemSaved_handler={isItemSaved(stores.savedStore)}
-      isItemSavedActionable_handler={isItemSavedActivated(stores.knowbookStore)}
-      saved_handler={onSaved(stores)}
-      edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-      compact={displayCompactedGridCondition(stores)}
-    />
-  );
+  const GUI_CONFIG_ = GUI_CONFIG;
+  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG_);
+  return <></>;
 };
 
-// (Home as any).getLayoutMobile = (page: NextPage) => (
-//   <MobileIndexLayout>{page}</MobileIndexLayout>
-// );
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const query_search = context.query.q as string | undefined;
-//   const query_action = context.query.a as string | undefined;
-
-//   const output: ISyncBackFrontProps = await indexSyncServerClientBack(
-//     query_search,
-//     query_action
-//   );
-
-//   return {
-//     props: output,
-//   };
-// };
-
-export default observer(Home);
+export default observer(Index);

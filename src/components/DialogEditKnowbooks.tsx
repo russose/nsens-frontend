@@ -1,5 +1,4 @@
 import { observer } from "mobx-react-lite";
-import { GUI_CONFIG } from "../common/config";
 import {
   onCancel,
   onChangeInputValueEditKnowbooks,
@@ -10,23 +9,31 @@ import { useStores } from "../stores/_RootStoreHook";
 import DialogEditKnowbooksForm from "./DialogEditKnowbooksForm";
 
 const DialogEditKnowbooks: React.FunctionComponent = (props) => {
-  const { knowbookStore, uiStore } = useStores();
+  const stores = useStores();
+  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
+
   return (
     <>
-      {uiStore.editKnowbookOpened && (
+      {stores.uiStore.editKnowbookOpened && (
         <DialogEditKnowbooksForm
-          id={uiStore.selectedAtomId}
+          id={stores.uiStore.selectedAtomId}
+          stores={stores}
           title={GUI_CONFIG.language.editKnowbook.title}
           input_placeholder={GUI_CONFIG.language.editKnowbook.input_placeholder}
-          checkboxes={Array.from(uiStore.editKnowbookMembers)
+          checkboxes={Array.from(stores.uiStore.editKnowbookMembers)
             .sort()
             .map(([key, value]) => {
               return { label: key, activated: value };
             })}
-          handler_cancel={onCancel(uiStore)}
-          handler_confirm={onSubmitChangesEditKnowbooks(uiStore, knowbookStore)}
-          handler_inputValue={onChangeInputValueEditKnowbooks(uiStore)}
-          handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(uiStore)}
+          handler_cancel={onCancel(stores.uiStore)}
+          handler_confirm={onSubmitChangesEditKnowbooks(
+            stores.uiStore,
+            stores.knowbookStore
+          )}
+          handler_inputValue={onChangeInputValueEditKnowbooks(stores.uiStore)}
+          handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(
+            stores.uiStore
+          )}
         />
       )}
     </>

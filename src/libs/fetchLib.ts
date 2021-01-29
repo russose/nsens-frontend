@@ -1,5 +1,5 @@
 import { CONFIG_FETCHING } from "../common/config";
-import { IAtom, newAtom, empty_value_atom } from "../common/types";
+import { IAtom, newAtom, empty_value_atom, JSONDataT } from "../common/types";
 import { fetchRelatedWikipedia, fetch_data } from "./fetch";
 
 const amount_data_fetched_images = CONFIG_FETCHING.amount_data_fetched_images;
@@ -72,13 +72,16 @@ export async function ItemsRelatedFromWikipediaRaw(
   }
 
   try {
-    const data: any = await fetchRelatedWikipedia(title, ROOT_URL_REST_API);
+    const data: JSONDataT = await fetchRelatedWikipedia(
+      title,
+      ROOT_URL_REST_API
+    );
     if (data["pages"] === undefined) {
       return [];
     }
 
     const list_of_PageIds_: string[] = Object.values(data["pages"]).map(
-      (item: any) => {
+      (item: JSONDataT) => {
         if (item["pageid"] !== undefined) {
           return String(item["pageid"]);
         } else {
@@ -186,7 +189,7 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
 
     let list_of_Pages_list: string[];
     if (mode === "search") {
-      list_of_Pages_list = data["query"]["search"].map((item: any) => {
+      list_of_Pages_list = data["query"]["search"].map((item: JSONDataT) => {
         if (item["pageid"] !== undefined) {
           return item["pageid"];
         } else {
@@ -194,7 +197,7 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
         }
       });
     } else if (mode === "random") {
-      list_of_Pages_list = data["query"]["random"].map((item: any) => {
+      list_of_Pages_list = data["query"]["random"].map((item: JSONDataT) => {
         if (item["id"] !== undefined) {
           return item["id"];
         } else {
@@ -204,7 +207,7 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
     } else {
       //mode === "titles"
       list_of_Pages_list = Object.values(data["query"]["pages"]).map(
-        (item: any) => {
+        (item: JSONDataT) => {
           if (item["pageid"] !== undefined) {
             return item["pageid"];
           } else {
@@ -250,7 +253,7 @@ export async function getAtomsFromWikipedia(
 
     //Extract relevant information to keep
     const list_information_atoms: IAtom[] = [];
-    Object.values(data2["query"]["pages"]).forEach((item: any) => {
+    Object.values(data2["query"]["pages"]).forEach((item: JSONDataT) => {
       if (item["pageprops"] !== undefined) {
         const id = item["pageprops"]["wikibase_item"];
         const atom = newAtom(id);
@@ -355,7 +358,7 @@ export async function enrichImagesBatchFromWikipediaEN(
       return list_information_atoms;
     }
     const atoms_where_image_found: IAtom[] = [];
-    Object.values(data["query"]["pages"]).forEach((item: any) => {
+    Object.values(data["query"]["pages"]).forEach((item: JSONDataT) => {
       //Find the atom to update in list_information_atoms
       const atom = list_information_atoms.filter((atom) => {
         return atom.title_en === item["title"];
@@ -492,7 +495,7 @@ export async function enrichOneImageFromWikiCommonPedia(
     if (data["query"] !== undefined) {
       //https://commons.wikimedia.org/w/api.php?origin=*&action=query&format=json&prop=pageimages%7Cimageinfo&utf8=1&titles=proton&generator=images&redirects=1&piprop=thumbnail&pilicense=free&iiprop=url%7Csize%7Cmediatype%7Cdimensions&gimlimit=20
 
-      const images: any[] = Object.values(data["query"]["pages"]);
+      const images: JSONDataT[] = Object.values(data["query"]["pages"]);
 
       for (const image of images) {
         if (image["imageinfo"] !== undefined) {

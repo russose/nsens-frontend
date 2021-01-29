@@ -1,6 +1,27 @@
+body {
+  background-color: rgb(255, 255, 255);
+}
+
 button::-moz-focus-inner,
 input[type="reset"]::-moz-focus-inner,
 input[type="button"]::-moz-focus-inner,
 input[type="submit"]::-moz-focus-inner {
   border: none;
+}
+
+/* https://medium.com/developer-rants/what-if-height-100vh-is-bigger-than-your-screen-7f39c62ac170 */
+body,
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.full-screen-div {
+  width: 100vw;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType } from "../common/types";
+import { ButtonIDType, ColorT } from "../common/types";
 import {
   isItemSaved,
   isItemSavedActivated,
@@ -8,20 +8,20 @@ import {
   onEditKnowbooks,
   onSaved,
 } from "../handlers";
-import { useStores } from "../stores/_RootStoreHook";
+import { IStores } from "../stores/_RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import _Button, { IButton, iconColorDefault } from "./_Button";
 
 interface IMenuBarDisplayProps {
+  stores: IStores;
   name: string;
-  color: any;
+  color: ColorT;
 }
 
 const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
   props
 ) => {
-  const stores = useStores();
-
+  const stores = props.stores;
   const buttons: IButton[] = [
     {
       Id: ButtonIDType.ARTICLE,
@@ -53,15 +53,11 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     },
   ];
 
-  let direction;
-  if (stores.uiStore.screen.isMobile) {
-    direction = "column";
-  } else {
-    direction = "row";
-  }
+  const direction = "row";
 
   return (
     <MenuBarButtonLayout
+      stores={stores}
       name={props.name}
       color={props.color}
       direction={direction}
