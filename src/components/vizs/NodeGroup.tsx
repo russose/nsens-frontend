@@ -10,7 +10,9 @@ export interface INodeGroupProps {
 
 const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
-  const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
+  // const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
+  const title_card_size: SizeT =
+    GUI_CONFIG.display.atom_compact_sizes.title_card_size;
   const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
   const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
   const max_title_size = GUI_CONFIG.display.atom_compact_sizes.max_title_size;

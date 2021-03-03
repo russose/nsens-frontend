@@ -66,11 +66,12 @@ export function hasTouchScreen(window: any): boolean {
 }
 
 export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {
-  if (isMobile(GUI_CONFIG_id)) {
-    return true;
-  } else {
-    return false;
-  }
+  // if (isMobile(GUI_CONFIG_id)) {
+  //   return true;
+  // } else {
+  //   return false;
+  // }
+  return false;
 }
 
 export function findUndefined(list: Object[]) {

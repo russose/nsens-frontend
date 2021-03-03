@@ -263,6 +263,7 @@ export class GraphStore {
     }
 
     if (feedStore.getRelated(root_itemId) === undefined) {
+      stores.uiStore.setShowLoading(true);
       feedStore
         .fetchRelated(root_item.id, root_item.title)
         .then(
@@ -277,11 +278,14 @@ export class GraphStore {
               height / 2,
               stores.userStore.GUI_CONFIG
             );
+            stores.uiStore.setShowLoading(false);
           })
         );
     } else if (root_itemId !== this.$rootItemId) {
       this.setGraph(root_item, feedStore, width / 2, height / 2);
       this.runSimulation(width / 2, height / 2, stores.userStore.GUI_CONFIG);
+      // stores.uiStore.setShowLoading(false);
     }
+    // stores.uiStore.setShowLoading(false);
   }
 }

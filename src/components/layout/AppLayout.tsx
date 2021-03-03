@@ -1,41 +1,24 @@
-import { Box, Heading, Sticky } from "gestalt";
+import { Box, Image } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { NextRouter, useRouter } from "next/router";
 import React from "react";
 import {
   onSearchHomeKeyboard,
   onSearchHomeSubmit,
   onSearchHomeText,
 } from "../../handlers";
-import MenuBarDisplay from "../MenuBarDisplay";
 import SearchBar from "../SearchBar";
 import MenuBarNavigation from "../MenuBarNavigation";
-import { IStores } from "../../stores/_RootStore";
-import { paths } from "../../common/configPaths";
 import PageLayoutHybrid from "./PageLayoutHybrid";
-import {
-  handlerT,
-  reactComponentT,
-  RoundingT,
-  SizeT,
-} from "../../common/types";
 import Dialogs from "../Dialogs";
 import { useStores } from "../../stores/_RootStoreHook";
 import { isMobile } from "../../libs/utils";
 
 const AppLayout: React.FunctionComponent = (props) => {
   const stores = useStores();
-  const router = useRouter();
 
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
-  const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_menu = GUI_CONFIG.general.colors.menu;
-  const color_headers = GUI_CONFIG.general.colors.headers as handlerT;
-  const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
-
-  const isDisplayMenuDisplayed: boolean = router.pathname.includes(
-    paths.pages.Item
-  );
+  const path_logo_image = GUI_CONFIG.paths.image_logo;
 
   const navigationMenu = (
     <MenuBarNavigation
@@ -43,10 +26,6 @@ const AppLayout: React.FunctionComponent = (props) => {
       name="NavigationMenuBar"
       color={color_menu}
     />
-  );
-
-  const displayMenu = (
-    <MenuBarDisplay stores={stores} name="MenuBarDisplay" color={color_menu} />
   );
 
   const searchbar = (
@@ -59,48 +38,23 @@ const AppLayout: React.FunctionComponent = (props) => {
     />
   );
 
-  const titleText = (title: string) => {
-    return (
-      <Box
-        color={color_headers}
-        borderStyle="lg"
-        flex="grow"
-        rounding={rounding_menu}
-        padding={1}
-      >
-        <Heading size={header_size} align="center" overflow="normal">
-          {title}
-        </Heading>
-      </Box>
-    );
-  };
-
-  const header = (stores: IStores, router: NextRouter) => {
-    let header: reactComponentT | handlerT;
-    if (router.pathname.includes(paths.pages.Home)) {
-      header = searchbar;
-    } else if (router.pathname.includes(paths.pages.User)) {
-      header = titleText(
-        stores.userStore.user === null ? "" : stores.userStore.user.username
-      );
-    } else if (router.pathname.includes(paths.pages.Knowbooks)) {
-      header = titleText(GUI_CONFIG.language.knowbooks.knowbooks_title);
-    } else if (router.pathname.includes(paths.pages.KnowbookSaved)) {
-      header = titleText(GUI_CONFIG.language.knowbooks.AllSaved_title);
-    } else if (router.pathname.includes(paths.pages.KnowbookNone)) {
-      header = titleText(GUI_CONFIG.language.knowbooks.None_Title);
-    } else {
-      header = titleText(router.query.title as string);
-    }
-
-    return header;
-  };
-
   const top_mobile = (
     <>
-      <Box column={12}>
+      <Box height="100%" padding={1} column={2}>
+        <Image
+          alt="image"
+          color="transparent"
+          fit="contain"
+          naturalHeight={1}
+          naturalWidth={1}
+          loading="lazy"
+          src={path_logo_image}
+        ></Image>
+      </Box>
+
+      <Box column={8}>
         <Box display="flex" flex="grow" alignItems="center">
-          {header(stores, router)}
+          {searchbar}
         </Box>
       </Box>
     </>
@@ -108,14 +62,43 @@ const AppLayout: React.FunctionComponent = (props) => {
 
   const top_desktop = (
     <>
-      <Box column={8} smColumn={8} mdColumn={8} lgColumn={10}>
-        <Box display="flex" flex="grow" alignItems="center">
-          {header(stores, router)}
-        </Box>
+      <Box
+        height="100%"
+        padding={1}
+        column={3}
+        smColumn={3}
+        mdColumn={2}
+        lgColumn={1}
+      >
+        <Image
+          alt="image"
+          color="transparent"
+          fit="contain"
+          naturalHeight={1}
+          naturalWidth={1}
+          loading="auto"
+          src={path_logo_image}
+        ></Image>
       </Box>
 
-      <Box column={4} smColumn={4} mdColumn={4} lgColumn={2}>
-        {navigationMenu}
+      <Box
+        display="flex"
+        // justifyContent="end"
+        alignItems="center"
+        column={8}
+        smColumn={8}
+        mdColumn={6}
+        lgColumn={4}
+      >
+        <Box column={6} smColumn={6} mdColumn={8} lgColumn={8}>
+          <Box display="flex" flex="grow" alignItems="center">
+            {searchbar}
+          </Box>
+        </Box>
+
+        <Box column={6} smColumn={6} mdColumn={4} lgColumn={4}>
+          {navigationMenu}
+        </Box>
       </Box>
     </>
   );
@@ -124,37 +107,17 @@ const AppLayout: React.FunctionComponent = (props) => {
 
   let top;
   let bottom;
-  let displayMenuWithLayout;
   if (isMobile(GUI_CONFIG.id)) {
     top = top_mobile;
     bottom = bottom_mobile;
-    displayMenuWithLayout = <Box column={12}>{displayMenu}</Box>;
     bottom = navigationMenu;
-    // navigationMenu_mobile = (
-    //   <>
-    //     <Box
-    //       padding={0}
-    //       borderStyle="lg"
-    //       rounding={rounding_menu}
-    //       color="lightGray"
-    //     >
-    //       {navigationMenu}
-    //     </Box>
-    //   </>
-    // );
   } else {
     top = top_desktop;
-    displayMenuWithLayout = (
-      <Box column={4} smColumn={3} mdColumn={3} lgColumn={2}>
-        {displayMenu}
-      </Box>
-    );
   }
 
   return (
     <>
       <PageLayoutHybrid stores={stores} top={top} bottom={bottom}>
-        {isDisplayMenuDisplayed && displayMenuWithLayout}
         {props.children}
       </PageLayoutHybrid>
       <Dialogs />

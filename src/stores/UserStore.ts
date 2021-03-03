@@ -134,7 +134,9 @@ export class UserStore {
     try {
       const user = await _getUser();
       this.setUser({ username: user });
+      stores.uiStore.setShowLoading(true);
       await this.initializeUserData(stores);
+      stores.uiStore.setShowLoading(false);
     } catch (error) {
       // console.log(error);
     }

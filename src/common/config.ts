@@ -32,11 +32,16 @@ export const GUI_CONFIG = {
     tiny_screen_breakpoint: 320,
     colors: {
       //https://www.rapidtables.com/web/color/RGB_Color.html
-      background: "white",
-      menu: "lightGray",
-      headers: "lightGray",
-      item_color: "white",
-      knowbook_color: "lightGray",
+      top: "green",
+      background: "navy",
+      item_color: "olive",
+      knowbook_color: "olive",
+      menu: "white",
+
+      // features: "green",
+      item_compact_color: "white",
+      dialog: "white",
+      headers: "white",
       item_color_image: "rgb(220, 220, 220)",
       knowbook_color_image: "rgb(245, 245, 245)",
     },
@@ -45,3 +50,8 @@ export const GUI_CONFIG = {
   display: displayMobile,
   paths: paths,
 };
+
+// --g-green: var(--color1);
+// --g-navy: var(--color2);
+// --g-olive: var(--color3);
+// --g-pine: var(--color4);

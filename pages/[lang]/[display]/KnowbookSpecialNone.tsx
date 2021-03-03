@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import {
   isItemSaved,
@@ -21,9 +22,11 @@ const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
   stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  const title = GUI_CONFIG.language.knowbooks.None_Title;
 
   return (
     <AppLayout>
+      <HeaderTitle stores={stores} title={title} />
       <CardAtomGrid
         id="None"
         stores={stores}

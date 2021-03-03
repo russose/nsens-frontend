@@ -21,14 +21,10 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
   const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const color_background: ColorT = GUI_CONFIG.general.colors.background;
+  const color_dialog: ColorT = GUI_CONFIG.general.colors.dialog;
 
   return (
-    <Box
-      rounding={rounding}
-      borderStyle="lg"
-      padding={1}
-      color={color_background}
-    >
+    <Box rounding={rounding} borderStyle="lg" padding={1} color={color_dialog}>
       <Box
         padding={0}
         display="flex"
@@ -64,7 +60,8 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
           text={props.label_signup}
           size={button_icon_size}
           onClick={props.handler_button("signup")}
-          color="red"
+          // color="red"
+          color="gray"
           inline
         />
         <Button
@@ -72,7 +69,8 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
           text={props.label_login}
           size={button_icon_size}
           onClick={props.handler_button("login")}
-          color="blue"
+          // color="blue"
+          color="gray"
           inline
         />
       </Box>

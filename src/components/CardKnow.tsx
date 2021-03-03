@@ -39,6 +39,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
       sizes={card_sizes}
       pathname={props.pathname}
       queryObject={props.queryObject}
+      full={false}
     >
       <Box paddingX={0}>
         {display_delete_icon && (

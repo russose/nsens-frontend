@@ -6,6 +6,7 @@ import { paths } from "../../../src/common/configPaths";
 import { ICardKnowProps } from "../../../src/components/CardKnow";
 import CardKnowGrid from "../../../src/components/CardKnowGrid";
 import CardKnowGridSpecial from "../../../src/components/CardKnowGridSpecial";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { onDeleteKnowbook, onOpenRenameKnowbook } from "../../../src/handlers";
 import { displayCompactedGridCondition } from "../../../src/libs/utils";
@@ -27,6 +28,7 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   const knowbook_none_image = GUI_CONFIG.paths.knowbook_none_image;
   const pathKnowbookSaved = paths.pages.KnowbookSaved;
   const pathKnowbookNone = paths.pages.KnowbookNone;
+  const title = GUI_CONFIG.language.knowbooks.knowbooks_title;
 
   const cardKnowPropsSavedNone: ICardKnowProps[] = [
     {
@@ -60,6 +62,7 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   return (
     <AppLayout>
       <Box>
+        <HeaderTitle stores={stores} title={title} />
         <CardKnowGrid
           id="knowbooks"
           stores={stores}

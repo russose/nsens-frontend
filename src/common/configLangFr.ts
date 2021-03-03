@@ -2,7 +2,8 @@ import { paths } from "./configPaths";
 
 export const Lang_fr = {
   landing: {
-    slogan: "Transformer l'information libre en connaissances",
+    // slogan: "Transformer l'information en connaissance universelle",
+    slogan: "Expérience multidimensionnelle d'apprentissage universel",
     features_title: "Fonctionalités",
     loginSignup: {
       username_placeholder: "Email",
@@ -12,13 +13,12 @@ export const Lang_fr = {
     },
     features: [
       {
-        title: "Explorer visuellement l'information librement disponible",
+        title: "Explorer l'information libre",
         icon: "search",
       },
-      { title: "Enregistrer et retrouver ses élements", icon: "angled-pin" },
-      { title: "Organiser dans des carnets", icon: "folder" },
+      { title: "Rassembler ses découvertes", icon: "folder" },
       {
-        title: "Découvrir les éléments associés et leur contexte",
+        title: "Mettre en relation et explorer",
         icon: "compass",
       },
     ],
@@ -48,7 +48,7 @@ export const Lang_fr = {
     knowbooks_title: "Carnets de connaissance",
     AllSaved_title: "Sauvés (tous)",
     None_Title: "Aucun Carnet",
-    Related_title: "Related :",
+    Related_title: "Associés :",
   },
   editKnowbook: {
     title: "Mise à jour des carnets",

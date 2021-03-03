@@ -10,11 +10,14 @@ import {
 } from "../../../src/libs/utilsConfigGui";
 import { GetStaticPaths, GetStaticProps } from "next";
 import AppLayout from "../../../src/components/layout/AppLayout";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 
 const User: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
   stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  const title =
+    stores.userStore.user === null ? "" : stores.userStore.user.username;
 
   const content = (
     <Box padding={10}>
@@ -30,6 +33,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout>
+      <HeaderTitle stores={stores} title={title} />
       <Box display="flex" justifyContent="center">
         <Box
           padding={2}

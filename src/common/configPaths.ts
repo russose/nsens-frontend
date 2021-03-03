@@ -4,6 +4,7 @@ export const paths = {
   knowbook_none_image: "/The_Scientific_Universe_small.png",
   // knowbook_image: "",
   user_image: "/icon_user.jpg",
+  image_logo: "/logo2_W.png",
   pages: {
     Landing: "/Landing",
     Home: "/Home",
@@ -16,7 +17,8 @@ export const paths = {
     empty: "",
   },
   landing: {
-    image_main: "/500px-Book_closed_template_small.svg.png",
-    images_feature: ["/3phase-rmf-180f-airopt.gif", "", "", ""],
+    // image_background: "/background_4_large.jpg",
+    image_background: "/Polygon Luminary 0.svg",
+    images_feature: ["/capture11.png", "/capture21.png", "/capture3.png"],
   },
 };

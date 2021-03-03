@@ -16,14 +16,17 @@ import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { GetStaticPaths, GetStaticProps } from "next";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 
 const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
   stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  const title = GUI_CONFIG.language.knowbooks.AllSaved_title;
 
   return (
     <AppLayout>
+      <HeaderTitle stores={stores} title={title} />
       <CardAtomGrid
         id="Saved"
         stores={stores}

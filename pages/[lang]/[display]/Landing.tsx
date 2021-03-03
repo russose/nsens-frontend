@@ -20,7 +20,9 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
 
   const slogan = GUI_CONFIG.language.landing.slogan;
   const features_title = GUI_CONFIG.language.landing.features_title;
-  const path_main_image = GUI_CONFIG.paths.landing.image_main;
+  const path_background_image = GUI_CONFIG.paths.landing.image_background;
+  const path_logo_image = GUI_CONFIG.paths.image_logo;
+  const ratio_page = GUI_CONFIG.display.landing.ratio_page;
   const ratio_main = GUI_CONFIG.display.landing.ratio_main;
   const ratio_image = GUI_CONFIG.display.landing.ratio_image;
   const loginSignup = <LoginSignup />;
@@ -41,9 +43,11 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
         stores={stores}
         slogan={slogan}
         features_title={features_title}
-        path_main_image={path_main_image}
+        path_background_image={path_background_image}
+        path_logo_image={path_logo_image}
         loginSignup={loginSignup}
         features={features}
+        ratio_page={ratio_page}
         ratio_main={ratio_main}
         ratio_image={ratio_image}
       ></LandingLayoutHybrid>

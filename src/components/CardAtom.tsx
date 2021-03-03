@@ -24,7 +24,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
   const card_sizes = GUI_CONFIG.display.atom_sizes;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
   const color_item = GUI_CONFIG.general.colors.item_color;
-  const color_image = GUI_CONFIG.general.colors.item_color_image;
+  // const color_image = GUI_CONFIG.general.colors.item_color_image;
   const buttons_all = GUI_CONFIG.language.buttons;
 
   return (
@@ -34,7 +34,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
       title={props.title}
       image_url={props.image_url}
       color={color_item}
-      color_image={color_image}
+      // color_image={color_image}
       sizes={card_sizes}
       pathname={props.pathname}
       queryObject={props.queryObject}

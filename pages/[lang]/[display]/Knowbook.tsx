@@ -1,4 +1,4 @@
-import { Box, Text } from "gestalt";
+import { Box, Heading, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
@@ -19,6 +19,7 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/utilsConfigGui";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -33,46 +34,47 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout>
-      <Box padding={1}>
-        <CardAtomGrid
-          id="knowbooks"
-          stores={stores}
-          atoms={stores.knowbookStore.getKnowbookAtomsList(
-            selected_knowbook,
-            stores.savedStore
-          )}
-          isItemSaved_handler={isItemSaved(stores.savedStore)}
-          isItemSavedActionable_handler={isItemSavedActivated(
-            stores.knowbookStore
-          )}
-          saved_handler={onSaved(stores)}
-          edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-          compact={displayCompactedGridCondition(GUI_CONFIG.id)}
-        />
-        <Separator with_line={false} />
-        <Separator with_line={true} />
-        <Text weight="bold">{Related_title}</Text>
-        <Separator with_line={false} />
-        <CardAtomGrid
-          id="knowbooks_related"
-          stores={stores}
-          atoms={stores.feedStore.getRelatedItemsForItems(
-            stores.knowbookStore
-              .getKnowbookAtomsList(selected_knowbook, stores.savedStore)
-              .map((item) => {
-                return item.id;
-              }),
-            amount_item_displayed
-          )}
-          isItemSaved_handler={isItemSaved(stores.savedStore)}
-          isItemSavedActionable_handler={isItemSavedActivated(
-            stores.knowbookStore
-          )}
-          saved_handler={onSaved(stores)}
-          edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-          compact={true}
-        />
+      <HeaderTitle stores={stores} title={selected_knowbook} />
+      <CardAtomGrid
+        id="knowbooks"
+        stores={stores}
+        atoms={stores.knowbookStore.getKnowbookAtomsList(
+          selected_knowbook,
+          stores.savedStore
+        )}
+        isItemSaved_handler={isItemSaved(stores.savedStore)}
+        isItemSavedActionable_handler={isItemSavedActivated(
+          stores.knowbookStore
+        )}
+        saved_handler={onSaved(stores)}
+        edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
+        compact={displayCompactedGridCondition(GUI_CONFIG.id)}
+      />
+      <Separator with_line={false} />
+      <Separator with_line={true} />
+      <Box padding={3}>
+        <Heading size="md">{Related_title}</Heading>
       </Box>
+      {/* <Separator with_line={false} /> */}
+      <CardAtomGrid
+        id="knowbooks_related"
+        stores={stores}
+        atoms={stores.feedStore.getRelatedItemsForItems(
+          stores.knowbookStore
+            .getKnowbookAtomsList(selected_knowbook, stores.savedStore)
+            .map((item) => {
+              return item.id;
+            }),
+          amount_item_displayed
+        )}
+        isItemSaved_handler={isItemSaved(stores.savedStore)}
+        isItemSavedActionable_handler={isItemSavedActivated(
+          stores.knowbookStore
+        )}
+        saved_handler={onSaved(stores)}
+        edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
+        compact={false}
+      />
     </AppLayout>
   );
 };

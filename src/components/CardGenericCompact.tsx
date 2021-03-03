@@ -10,6 +10,7 @@ interface ICardSizes {
   width: number;
   // image_ratio: string;
   max_title_size: number;
+  title_card_size: string;
 }
 
 interface ICardGenericCompactProps {
@@ -18,7 +19,7 @@ interface ICardGenericCompactProps {
   title: string;
   image_url: string;
   color: ColorT;
-  color_image: string;
+  color_image?: string;
   sizes: ICardSizes;
   pathname?: string;
   queryObject?: ParsedUrlQueryInput;
@@ -28,17 +29,20 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
-  const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
   const path_empty_image = GUI_CONFIG.paths.item_empty_image;
   // const rounding = 3;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const max_title_size = props.sizes.max_title_size;
+
+  // const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
+  const title_card_size: SizeT = props.sizes.title_card_size;
+
   let title = props.title;
   if (title.length > max_title_size) {
     title = props.title.substring(0, max_title_size) + "...";
   }
   return (
-    <Box height={props.sizes.height} width={props.sizes.width} color="white">
+    <Box height={props.sizes.height} width={props.sizes.width}>
       {/* <Box height={props.sizes.height} width={props.sizes.width}> */}
       <Box
         height="100%"
@@ -74,11 +78,15 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
                 <a>
                   <Image
                     alt="image"
-                    color={props.image_url === "" ? props.color_image : "white"}
+                    color={
+                      props.image_url === "" && props.color_image !== undefined
+                        ? props.color_image
+                        : "white"
+                    }
                     fit="cover"
                     naturalHeight={1}
                     naturalWidth={1}
-                    loading="auto"
+                    loading="lazy"
                     src={
                       props.image_url === "" || props.image_url === undefined
                         ? path_empty_image
@@ -96,7 +104,7 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
           </Box>
         </Box>
 
-        <Box padding={1}>
+        <Box padding={2}>
           <Text size={title_card_size} align="left" weight="bold">
             {title}
           </Text>

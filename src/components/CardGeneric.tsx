@@ -1,6 +1,12 @@
 import { observer } from "mobx-react-lite";
 import { Image, Box, Mask, Text } from "gestalt";
-import { AtomID, ColorT, RoundingT, SizeT } from "../common/types";
+import {
+  AtomID,
+  ColorT,
+  reactComponentT,
+  RoundingT,
+  SizeT,
+} from "../common/types";
 import { ParsedUrlQueryInput } from "querystring";
 import Link from "next/link";
 import { IStores } from "../stores/_RootStore";
@@ -9,6 +15,7 @@ interface ICardSizes {
   height: number;
   image_ratio: string;
   max_title_size: number;
+  title_card_size: string;
 }
 
 interface ICardGenericProps {
@@ -21,110 +28,142 @@ interface ICardGenericProps {
   sizes: ICardSizes;
   pathname: string;
   queryObject?: ParsedUrlQueryInput;
+  full?: boolean;
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
-  const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
   const path_empty_image = GUI_CONFIG.paths.item_empty_image;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
-  // const title_card_size: SizeT = props.config.display.title_card_size;
-  // const path_empty_image = props.config.paths.item_empty_image;
-  // const rounding: RoundingT = props.config.display.rounding_item;
-
   const max_title_size = props.sizes.max_title_size;
+  const title_card_size: SizeT = props.sizes.title_card_size;
+
   let title = props.title;
   if (title.length > max_title_size) {
     title = props.title.substring(0, max_title_size) + "...";
   }
 
   const color_image =
-    props.color_image === undefined || props.image_url === ""
-      ? "white"
-      : props.color_image;
+    props.image_url === "" && props.color_image !== undefined
+      ? props.color_image
+      : "transparent";
 
-  const image_only = (
-    <Image
-      key={props.id}
-      alt="image"
-      color={color_image}
-      fit="cover"
-      naturalHeight={1}
-      naturalWidth={1}
-      loading="auto"
-      src={
-        props.image_url === "" || props.image_url === undefined
-          ? path_empty_image
-          : props.image_url
-      }
-      // src=""
-    ></Image>
-  );
-
-  const image_with_link = (
-    <Link
-      href={{
-        // pathname: props.pathname, query: props.queryObject
-        pathname: props.stores.userStore.rootPath + props.pathname,
-        query: { ...props.stores.userStore.paramsPage, ...props.queryObject },
-      }}
-      passHref
-    >
-      <a>{image_only}</a>
-    </Link>
-  );
+  const image_only = (component: reactComponentT) => {
+    return (
+      <Image
+        key={props.id}
+        alt="image"
+        color={color_image}
+        // color="transparent"
+        fit="cover"
+        naturalHeight={1}
+        naturalWidth={1}
+        loading="lazy"
+        src={
+          props.image_url === "" || props.image_url === undefined
+            ? path_empty_image
+            : props.image_url
+        }
+      >
+        <Box
+          display="flex"
+          direction="column"
+          height="100%"
+          justifyContent="end"
+          alignItems="center"
+          padding={0}
+        >
+          {component}
+        </Box>
+      </Image>
+    );
+  };
+  const image_with_link = (component: reactComponentT) => {
+    return (
+      <Link
+        href={{
+          // pathname: props.pathname, query: props.queryObject
+          pathname: props.stores.userStore.rootPath + props.pathname,
+          query: { ...props.stores.userStore.paramsPage, ...props.queryObject },
+        }}
+        passHref
+      >
+        <a>{image_only(component)}</a>
+      </Link>
+    );
+  };
 
   const hasLink: boolean =
     props.pathname !== undefined && props.pathname !== "";
 
-  return (
-    <Box height={props.sizes.height}>
+  // const ratio_list = props.sizes.image_ratio.split("%");
+  // const ratio = (100 - Number(ratio_list[0])).toString();
+
+  let c_width: string;
+  let c_rounding: any;
+  let c_marginBottom: any;
+
+  if (props.full === false) {
+    c_width = "80%";
+    c_rounding = 3;
+    c_marginBottom = 3;
+  } else {
+    c_width = "100%";
+    c_rounding = 0;
+    c_marginBottom = 7;
+  }
+
+  const content: reactComponentT = (
+    <Box
+      display="flex"
+      direction="row"
+      // height={ratio + "%"}
+      justifyContent="between"
+      alignItems="center"
+      color={props.color}
+      padding={0}
+      //
+      width={c_width}
+      rounding={c_rounding}
+      marginBottom={c_marginBottom}
+      //
+    >
+      <Box padding={2} width="55%">
+        <Text
+          size={title_card_size}
+          align="left"
+          // color="white"
+          weight="bold"
+        >
+          {title}
+        </Text>
+      </Box>
       <Box
-        height="100%"
-        borderStyle="shadow"
-        // borderStyle="lg"
-        rounding={rounding}
         display="flex"
-        direction="column"
-        color={props.color}
+        direction="row"
+        justifyContent="end"
+        alignItems="center"
+        padding={0}
+        wrap={true}
       >
-        <Box height={props.sizes.image_ratio} width="100%">
-          <Mask rounding={rounding} height="100%" width="100%">
-            {/* <Link
-              href={{ pathname: props.pathname, query: props.queryObject }}
-              passHref
-            >
-              <a>{image_only}</a>
-            </Link> */}
-            {hasLink ? image_with_link : image_only}
-          </Mask>
+        {props.children}
+      </Box>
+    </Box>
+  );
 
-          <Box display="flex" direction="row" height="2%"></Box>
-
-          <Box
-            display="flex"
-            direction="row"
-            justifyContent="between"
-            alignItems="start"
-            padding={0}
-          >
-            <Box padding={1} width="65%">
-              <Text size={title_card_size} align="left" weight="bold">
-                {title}
-              </Text>
-            </Box>
-            <Box
-              display="flex"
-              direction="row"
-              justifyContent="end"
-              alignItems="center"
-              padding={0}
-              wrap={true}
-            >
-              {props.children}
-            </Box>
-          </Box>
-        </Box>
+  return (
+    <Box
+      height={props.sizes.height}
+      borderStyle="shadow"
+      // borderStyle="lg"
+      rounding={rounding}
+      display="flex"
+      direction="column"
+    >
+      <Box height="100%" width="100%">
+        <Mask rounding={rounding} height="100%" width="100%">
+          {hasLink ? image_with_link(content) : image_only(content)}
+        </Mask>
       </Box>
     </Box>
   );

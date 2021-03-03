@@ -30,6 +30,10 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   } else {
     //feedStore.setFeedFromRandom();
   }
+  stores.userStore.goPage(
+    stores.userStore.paramsPage,
+    stores.userStore.GUI_CONFIG.paths.pages.Home
+  );
 };
 
 export const onSearchHomeKeyboard = (stores: IStores) => (input: {
@@ -57,7 +61,7 @@ export const onSaved = (
   // knowbookStore: KnowkookStore,
   // feedStore: FeedStore
   stores: IStores
-) => (itemID: AtomID) => (): void => {
+) => (itemID: AtomID) => (input: { event: eventT }): void => {
   // if (!userStore.isLogged) {
   //   goLogin();
   // }
@@ -69,6 +73,7 @@ export const onSaved = (
   } else {
     stores.savedStore.removeSaved(itemID, stores.knowbookStore);
   }
+  input.event.preventDefault();
 };
 
 export const isItemSaved = (savedStore: SavedStore) => (itemID: AtomID) => {
@@ -102,10 +107,11 @@ export const onCancel = (uiStore: UIStore) => (): void => {
 export const onEditKnowbooks = (
   uiStore: UIStore,
   knowbookStore: KnowkookStore
-) => (itemId: AtomID) => (): void => {
+) => (itemId: AtomID) => (input: { event: eventT }): void => {
   uiStore.setSelectedAtomId(itemId);
   uiStore.initKnowbookEditionElements(itemId, knowbookStore);
   uiStore.setEditKnowbookOpened(true);
+  input.event.preventDefault();
 };
 
 export const onChangeInputValueEditKnowbooks = (uiStore: UIStore) => (input: {
@@ -156,10 +162,11 @@ export const onSubmitChangesEditKnowbooks = (
 
 export const onOpenRenameKnowbook = (uiStore: UIStore) => (
   name: KnowbookID
-) => (): void => {
+) => (input: { event: eventT }): void => {
   uiStore.setSelectedKnowbookIdName(name);
   uiStore.setRenameKnowbookNewName(name);
   uiStore.setRenameKnowbookOpened(true);
+  input.event.preventDefault();
 };
 
 export const onChangeInputValueRenameKnowbook = (uiStore: UIStore) => (input: {
@@ -183,8 +190,9 @@ export const onRenameKnowbook = (
 export const onDeleteKnowbook = (
   savedStore: SavedStore,
   knowbookStore: KnowkookStore
-) => (name: KnowbookID) => (): void => {
+) => (name: KnowbookID) => (input: { event: eventT }): void => {
   knowbookStore.deleteKnowbook(name, savedStore);
+  input.event.preventDefault();
 };
 
 /*******************Login and Signup*************************** */

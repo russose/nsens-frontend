@@ -26,6 +26,8 @@ export class UIStore {
   private $loginScreenUsername: string = "";
   private $loginScreenPassword: string = "";
 
+  private $showLoading: boolean = false;
+
   constructor() {
     makeObservable<
       UIStore,
@@ -41,6 +43,7 @@ export class UIStore {
       | "$renameKnowbookNewName"
       | "$loginScreenUsername"
       | "$loginScreenPassword"
+      | "$showLoading"
     >(this, {
       // $screen: observable,
       $searchPattern: observable,
@@ -55,6 +58,7 @@ export class UIStore {
       $selectedKnowbookIdName: observable,
       $renameKnowbookOpened: observable,
       $renameKnowbookNewName: observable,
+      $showLoading: observable,
       // searchPattern: computed,
       // setScreen: action,
       setSearchPattern: action,
@@ -78,6 +82,7 @@ export class UIStore {
       // loginScreenPassword: computed,
       setLoginScreenPassword: action,
       initKnowbookEditionElements: action,
+      setShowLoading: action,
     });
   }
 
@@ -160,6 +165,12 @@ export class UIStore {
   }
   setLoginScreenPassword(value: string): void {
     this.$loginScreenPassword = value;
+  }
+  get showLoading() {
+    return this.$showLoading;
+  }
+  setShowLoading(show: boolean): void {
+    this.$showLoading = show;
   }
 
   /******************************************************* */

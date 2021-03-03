@@ -12,6 +12,7 @@ interface IPageLayoutProps {
 
 const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const color_top: ColorT = GUI_CONFIG.general.colors.top;
   const color_background: ColorT = GUI_CONFIG.general.colors.background;
 
   return (
@@ -30,16 +31,19 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
           <Sticky top={0}>
             <Box
               padding={1}
-              color={color_background}
+              color={color_top}
+              height={60}
               display="flex"
               flex="grow"
               alignItems="center"
+              justifyContent="between"
             >
               {props.top}
             </Box>
           </Sticky>
 
           <Box
+            color={color_background}
             display="flex"
             direction="column"
             justifyContent="between"
@@ -49,7 +53,7 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
           </Box>
         </Box>
         {props.bottom !== undefined ? (
-          <Sticky bottom={100}>
+          <Sticky bottom={60}>
             <Box width={220}>{props.bottom}</Box>
           </Sticky>
         ) : (
@@ -61,25 +65,3 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
 };
 
 export default observer(PageLayoutHybrid);
-
-// {props.bottom !== undefined ? (
-//   <Sticky bottom={0}>
-//     <Box color="blue" width="100%">
-//       <Box
-//         // color={color_background}
-//         display="flex"
-//         direction="column"
-//         flex="grow"
-//         alignItems="center"
-//         // color="green"
-//         // width="300"
-//       >
-//         {/* <Box color="blue" column={12}> */}
-//         {props.bottom}
-//         {/* </Box> */}
-//       </Box>
-//     </Box>
-//   </Sticky>
-// ) : (
-//   <></>
-// )}

@@ -25,7 +25,7 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
 ) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
-  const color_item = GUI_CONFIG.general.colors.item_color;
+  const color_item = GUI_CONFIG.general.colors.item_compact_color;
   const color_image = GUI_CONFIG.general.colors.item_color_image;
   let card_sizes;
   if (props.forVizs === true) {

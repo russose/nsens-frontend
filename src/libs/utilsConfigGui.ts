@@ -5,6 +5,7 @@ import { Lang_fr } from "../common/configLangFr";
 import { paths } from "../common/configPaths";
 import { ConfigLanguage, ConfigDisplay, GUI_CONFIG_T } from "../common/types";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { configSpecialScreen } from "../common/configSpecialScreen";
 
 export interface IPage {
   guiConfigData: GUI_CONFIG_T;
@@ -37,7 +38,8 @@ function getGuiConfigData(params: any): GUI_CONFIG_T {
   } else if (display === ConfigDisplay.mobile) {
     //nothing to do
   } else if (display === ConfigDisplay.small) {
-    const dim = 100;
+    // const dim = 100;
+    const dim = configSpecialScreen.small.atom_compact_sizes_dim;
     GUI_CONFIG__.display.atom_compact_sizes.width = dim;
     GUI_CONFIG__.display.atom_compact_sizes.height = dim;
     GUI_CONFIG__.display.knowbook_compact_sizes.width = dim;
@@ -46,9 +48,12 @@ function getGuiConfigData(params: any): GUI_CONFIG_T {
     GUI_CONFIG__.display = displayDesktop;
   } else if (display === ConfigDisplay.large) {
     GUI_CONFIG__.display = displayDesktop;
-    GUI_CONFIG__.display.landing.sizes.lgColumn = 1;
-    GUI_CONFIG__.display.atom_sizes.lgColumn = 1;
-    GUI_CONFIG__.display.knowbook_sizes.lgColumn = 1;
+    GUI_CONFIG__.display.landing.sizes.lgColumn =
+      configSpecialScreen.large.landing_sizes_column;
+    GUI_CONFIG__.display.atom_sizes.lgColumn =
+      configSpecialScreen.large.atom_sizes_column;
+    GUI_CONFIG__.display.knowbook_sizes.lgColumn =
+      configSpecialScreen.large.atom_sizes_column;
   }
 
   const guiConfigData = {

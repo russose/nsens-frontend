@@ -1,6 +1,7 @@
 import { Group } from "@visx/group";
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { isMobile } from "../../libs/utils";
 import { IStores } from "../../stores/_RootStore";
 import MyZoom from "./MyZoom";
 import Network from "./Network";
@@ -32,7 +33,8 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
     return acc + value.length;
   }, 0);
   function networkNodeDisplayed(): boolean {
-    return amount_nodes < max_nodes_network;
+    // return amount_nodes < max_nodes_network;
+    return !isMobile(GUI_CONFIG.id) && amount_nodes < max_nodes_network;
   }
 
   return (
