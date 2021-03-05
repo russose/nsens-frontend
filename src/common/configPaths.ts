@@ -4,7 +4,9 @@ export const paths = {
   knowbook_none_image: "/The_Scientific_Universe_small.png",
   // knowbook_image: "",
   user_image: "/icon_user.jpg",
-  image_logo: "/logo2_W.png",
+  image_logo_W: "/logo2_W.png",
+  image_logo_B: "/logo2_B.png",
+  image_landing: "/landing.png",
   pages: {
     Landing: "/Landing",
     Home: "/Home",
@@ -16,9 +18,9 @@ export const paths = {
     User: "/User",
     empty: "",
   },
-  landing: {
-    // image_background: "/background_4_large.jpg",
-    image_background: "/Polygon Luminary 0.svg",
-    images_feature: ["/capture11.png", "/capture21.png", "/capture3.png"],
-  },
+  // landing: {
+  //   // image_background: "/background_4_large.jpg",
+  //   // image_background: "/Polygon Luminary 0.svg",
+  //   images_feature: ["/capture11.png", "/capture21.png", "/capture3.png"],
+  // },
 };

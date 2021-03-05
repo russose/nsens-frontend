@@ -235,7 +235,6 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       stores.uiStore.loginScreenPassword
     )
       .then(() => {
-        console.log("ok");
         stores.userStore.setUser({
           username: stores.uiStore.loginScreenUsername,
         });

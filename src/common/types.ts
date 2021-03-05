@@ -7,7 +7,7 @@ export enum ConfigLanguage {
 }
 
 export enum ConfigDisplay {
-  small = "Small",
+  // small = "Small",
   mobile = "Mobile",
   desktop = "Desktop",
   large = "Large",
@@ -110,7 +110,8 @@ export interface ILink {
 
 export interface IFeature {
   title: string;
-  image_url: string;
+  description: string;
+  // image_url: string;
   icon: IconT;
 }
 

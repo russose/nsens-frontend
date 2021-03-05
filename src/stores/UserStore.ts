@@ -173,13 +173,13 @@ export class UserStore {
 
       let paramsPage_display;
       if (isMobile) {
-        if (
-          this.$screen.width < this.$GUI_CONFIG.general.tiny_screen_breakpoint
-        ) {
-          paramsPage_display = ConfigDisplay.small;
-        } else {
-          paramsPage_display = ConfigDisplay.mobile;
-        }
+        // if (
+        //   this.$screen.width < this.$GUI_CONFIG.general.tiny_screen_breakpoint
+        // ) {
+        //   paramsPage_display = ConfigDisplay.small;
+        // } else {
+        paramsPage_display = ConfigDisplay.mobile;
+        // }
       } else {
         if (
           this.$screen.width > this.$GUI_CONFIG.general.large_screen_breakpoint

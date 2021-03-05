@@ -3,7 +3,7 @@ import { paths } from "./configPaths";
 export const Lang_fr = {
   landing: {
     // slogan: "Transformer l'information en connaissance universelle",
-    slogan: "Expérience multidimensionnelle d'apprentissage universel",
+    slogan: "Expérience de voyage universel",
     features_title: "Fonctionalités",
     loginSignup: {
       username_placeholder: "Email",
@@ -13,12 +13,18 @@ export const Lang_fr = {
     },
     features: [
       {
-        title: "Explorer l'information libre",
+        title: "Trouver",
+        description: "Trouver l'information libre",
         icon: "search",
       },
-      { title: "Rassembler ses découvertes", icon: "folder" },
       {
-        title: "Mettre en relation et explorer",
+        title: "Rassembler",
+        description: "Rassembler ses découvertes",
+        icon: "folder",
+      },
+      {
+        title: "Voyager",
+        description: "Mettre en relation et découvrir de nouveaux horizons",
         icon: "compass",
       },
     ],

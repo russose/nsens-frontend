@@ -1,6 +1,9 @@
-const card_size = 250;
-const card_compact_size = card_size * 0.8;
-const card_compact_vizs_size = card_size * 0.5;
+const card_size = "20vh";
+const card_compact_size = "20vh";
+const card_compact_vizs_size = 120;
+// const card_size_ = 250;
+// const card_compact_size = card_size_ * 0.8;
+// const card_compact_vizs_size = card_size_ * 0.5;
 
 export const displayMobile = {
   //card_height: 250,
@@ -79,25 +82,35 @@ export const displayMobile = {
     max_title_size: 33,
   },
   landing: {
-    sizes: {
-      height: 350,
-      image_ratio: "70%",
+    // sizes: {
+    //   height: 350,
+    //   image_ratio: "70%",
+    //   lgColumn: 12,
+    //   mdColumn: 12,
+    //   smColumn: 12,
+    //   column: 12,
+    //   lgPadding: 2,
+    //   mdPadding: 2,
+    //   smPadding: 2,
+    //   padding: 2,
+    //   title_card_size: "lg",
+    //   max_title_size: 99,
+    // },
+    ratio_page: "150vh",
+    // ratio_main: "75vh",
+    ratio_logo: "10vh",
+    ratio_image: "30vh",
+    header_size: "sm",
+    features: {
       lgColumn: 12,
       mdColumn: 12,
       smColumn: 12,
       column: 12,
-      lgPadding: 2,
-      mdPadding: 2,
-      smPadding: 2,
-      padding: 2,
-      title_card_size: "lg",
-      max_title_size: 99,
+      title_size: "md",
+      desciption_size: "md",
     },
-    ratio_page: "200vh",
-    ratio_main: "75vh",
-    ratio_image: "20vh",
-    header_size: "md",
-    size_icon_card: "lg",
+    // feature_desciption_size: "md",
+    // size_icon_card: "lg",
     // features_color: ["red", "green", "red", "green"],
   },
 };

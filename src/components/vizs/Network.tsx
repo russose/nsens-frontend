@@ -30,8 +30,8 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
 ) => {
   const stores = useStores();
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
-  const node_dx = GUI_CONFIG.display.atom_compact_sizes.width;
-  const node_dy = GUI_CONFIG.display.atom_compact_sizes.height;
+  const node_dx = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
+  const node_dy = GUI_CONFIG.display.atom_compact_vizs_sizes.height;
   const path_Itemview = GUI_CONFIG.paths.pages.Item;
   let node;
   if (props.node.relation_name === group_name) {

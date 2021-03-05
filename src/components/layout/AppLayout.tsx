@@ -18,7 +18,7 @@ const AppLayout: React.FunctionComponent = (props) => {
 
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
   const color_menu = GUI_CONFIG.general.colors.menu;
-  const path_logo_image = GUI_CONFIG.paths.image_logo;
+  const path_logo_image = GUI_CONFIG.paths.image_logo_W;
 
   const navigationMenu = (
     <MenuBarNavigation

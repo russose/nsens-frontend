@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from "gestalt";
+import { Box, Heading } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";

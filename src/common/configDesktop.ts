@@ -1,8 +1,12 @@
 import { GUI_CONFIG_display_T } from "./types";
 
-const card_size = 250;
-const card_compact_size = card_size * 0.8;
-const card_compact_vizs_size = card_size * 0.5;
+const card_size = "10vh";
+const card_compact_size = "10vh";
+const card_compact_vizs_size = 120;
+
+// const card_size = 250;
+// const card_compact_size = card_size * 0.8;
+// const card_compact_vizs_size = card_size * 0.5;
 
 export const displayDesktop: GUI_CONFIG_display_T = {
   //card_height: 250,
@@ -81,25 +85,35 @@ export const displayDesktop: GUI_CONFIG_display_T = {
     max_title_size: 20,
   },
   landing: {
-    sizes: {
-      height: 500,
-      image_ratio: "90%",
+    // sizes_feature: {
+    //   height: 500,
+    //   image_ratio: "90%",
+    //   lgColumn: 3,
+    //   mdColumn: 3,
+    //   smColumn: 6,
+    //   column: 6,
+    //   lgPadding: 2,
+    //   mdPadding: 2,
+    //   smPadding: 2,
+    //   padding: 2,
+    //   title_card_size: "lg",
+    //   max_title_size: 99,
+    // },
+    ratio_page: "95vh",
+    // ratio_main: "25vh",
+    ratio_logo: "5vh",
+    ratio_image: "35vh",
+    header_size: "lg",
+    features: {
       lgColumn: 3,
       mdColumn: 3,
-      smColumn: 6,
-      column: 6,
-      lgPadding: 2,
-      mdPadding: 2,
-      smPadding: 2,
-      padding: 2,
-      title_card_size: "lg",
-      max_title_size: 99,
+      smColumn: 5,
+      column: 5,
+      title_size: "lg",
+      desciption_size: "lg",
     },
-    ratio_page: "100vh",
-    ratio_main: "60vh",
-    ratio_image: "15vh",
-    header_size: "lg",
-    size_icon_card: "xl",
+
+    // size_icon_card: "xl",
     // features_color: ["red", "green", "red", "green"],
   },
 };

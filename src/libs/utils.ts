@@ -35,7 +35,7 @@ import { IStores } from "../stores/_RootStore";
 
 export function isMobile(GUI_CONFIG_id: string): boolean {
   const result: boolean =
-    GUI_CONFIG_id.includes(ConfigDisplay.small) ||
+    // GUI_CONFIG_id.includes(ConfigDisplay.small) ||
     GUI_CONFIG_id.includes(ConfigDisplay.mobile);
 
   return result;

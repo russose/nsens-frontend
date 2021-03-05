@@ -13,7 +13,7 @@ export interface IPage {
 
 function getAllGuiConfig() {
   const guiConfigList = [
-    { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.small } },
+    // { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.small } },
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.mobile } },
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.desktop } },
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.large } },
@@ -37,19 +37,21 @@ function getGuiConfigData(params: any): GUI_CONFIG_T {
     //nothing to do
   } else if (display === ConfigDisplay.mobile) {
     //nothing to do
-  } else if (display === ConfigDisplay.small) {
-    // const dim = 100;
-    const dim = configSpecialScreen.small.atom_compact_sizes_dim;
-    GUI_CONFIG__.display.atom_compact_sizes.width = dim;
-    GUI_CONFIG__.display.atom_compact_sizes.height = dim;
-    GUI_CONFIG__.display.knowbook_compact_sizes.width = dim;
-    GUI_CONFIG__.display.knowbook_compact_sizes.height = dim;
-  } else if (display === ConfigDisplay.desktop) {
+  }
+  // else if (display === ConfigDisplay.small) {
+  //   // const dim = 100;
+  //   const dim = configSpecialScreen.small.atom_compact_sizes_dim;
+  //   GUI_CONFIG__.display.atom_compact_sizes.width = dim;
+  //   GUI_CONFIG__.display.atom_compact_sizes.height = dim;
+  //   GUI_CONFIG__.display.knowbook_compact_sizes.width = dim;
+  //   GUI_CONFIG__.display.knowbook_compact_sizes.height = dim;
+  // }
+  else if (display === ConfigDisplay.desktop) {
     GUI_CONFIG__.display = displayDesktop;
   } else if (display === ConfigDisplay.large) {
     GUI_CONFIG__.display = displayDesktop;
-    GUI_CONFIG__.display.landing.sizes.lgColumn =
-      configSpecialScreen.large.landing_sizes_column;
+    GUI_CONFIG__.display.landing.features.lgColumn =
+      configSpecialScreen.large.landing_features_column;
     GUI_CONFIG__.display.atom_sizes.lgColumn =
       configSpecialScreen.large.atom_sizes_column;
     GUI_CONFIG__.display.knowbook_sizes.lgColumn =

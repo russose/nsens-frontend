@@ -1,7 +1,3 @@
-body {
-  background-color: var(--color2);
-}
-
 button::-moz-focus-inner,
 input[type="reset"]::-moz-focus-inner,
 input[type="button"]::-moz-focus-inner,
@@ -26,37 +22,14 @@ html {
   overflow-y: hidden;
 }
 
+body {
+  background-color: #ffffff;
+}
+
 :root {
-  --color-p1-1: #ffffff;
-  --color-p1-2: #005b96;
-
-  --color-p2-1: #ffffff;
-  --color-p2-2: #3500d3;
-
-  --color-p3-1: #ffffff;
-  --color-p3-2: #116466;
-
-  --color-p4-1: #ffffff;
-  --color-p4-2: #8860d0;
-
-  --color-p5-1: #ffffff;
-  --color-p5-2: #29648a;
-
+  /* --color-p1-1: #3490de; */
   --color-p1-1: #21209c;
-  --color-p1-2: #ffffff;
-  --color-p1-3: #ffffff;
-  /* --color-p1-4: #40bad5; */
-  /* --color-p1-5: #d1e8e2; */
-
   --color1: var(--color-p1-1);
-  --color2: var(--color-p1-2);
-  --color3: var(--color-p1-3);
-  /* --color4: var(--color-p1-4); */
-  /* --p5-color: #9fe61c; */
-
-  /* top: "green",
-  background: "navy",
-  item_color: "olive",*/
 
   --g-colorRed0: #ff5247;
   --g-colorRed100: #e60023;
@@ -68,16 +41,11 @@ html {
   --g-colorGray300: #111;
   --g-colorGray400: #000;
   --g-blue: #0074e8;
-  /* --g-green: #0fa573;
+  /* --g-green: #0fa573;*/
+  --g-green: var(--color1);
   --g-pine: #0a6955;
   --g-olive: #364a4c;
-  --g-navy: #004b91; */
-
-  --g-green: var(--color1);
-  --g-navy: var(--color2);
-  --g-olive: var(--color3);
-  --g-pine: var(--color4);
-
+  --g-navy: #004b91;
   --g-midnight: #133a5e;
   --g-purple: #b469eb;
   --g-orchid: #8046a5;

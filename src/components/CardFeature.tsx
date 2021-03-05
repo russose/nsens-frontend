@@ -1,49 +1,73 @@
-import { Box, IconButton } from "gestalt";
+import { Box, Icon, Module, Text, TextField } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { ParsedUrlQueryInput } from "querystring";
 import React from "react";
-import { ColorT, IconT } from "../common/types";
+import { ColorT, IconT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
-import CardGeneric from "./CardGeneric";
-import { iconColorDefault } from "./_Button";
 
 interface ICardFeatureProps {
   // id: AtomID;
   stores: IStores;
   title: string;
-  image_url: string;
-  color: ColorT;
+  description: string;
   icon: IconT;
-  pathname?: string;
-  queryObject?: ParsedUrlQueryInput;
+  // image_url?: string;
+  // color?: ColorT;
+  // pathname?: string;
+  // queryObject?: ParsedUrlQueryInput;
 }
 
 const CardFeature: React.FunctionComponent<ICardFeatureProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
-  const card_sizes = GUI_CONFIG.display.landing.sizes;
-  const size_icon: IconT = GUI_CONFIG.display.landing.size_icon_card;
-  const color_item = props.color;
+  const feature_desciption_size: SizeT =
+    GUI_CONFIG.display.landing.features.desciption_size;
+  const feature_title_size: SizeT =
+    GUI_CONFIG.display.landing.features.title_size;
+  const features_color: ColorT = GUI_CONFIG.general.colors.features;
+
   return (
-    <CardGeneric
-      stores={props.stores}
-      id={props.title}
-      title={props.title}
-      image_url={props.image_url}
-      color={color_item}
-      sizes={card_sizes}
-      pathname={undefined}
-      full={true}
-    >
-      <Box paddingX={0}>
-        <IconButton
-          accessibilityLabel={props.title}
-          icon={props.icon}
-          iconColor={iconColorDefault}
-          size={size_icon}
-          onClick={() => {}}
-        />
+    <>
+      {/* <Module
+        id={props.title}
+        title={props.title}
+        icon={props.icon}
+        // iconAccessibilityLabel="Module Locked - check permission settings"
+      >
+        <Text size={feature_desciption_size}>{props.description}</Text>
+      </Module> */}
+
+      <Box rounding={2} borderStyle="shadow" padding={2}>
+        {/* <Box
+          padding={0}
+          display="flex"
+          direction="column"
+          // flex="grow"
+          justifyContent="between"
+        > */}
+        <Box
+          display="flex"
+          direction="row"
+          alignItems="center"
+          justifyContent="start"
+          padding={0}
+          // color="darkGray"
+        >
+          <Box padding={2}>
+            <Icon
+              icon={props.icon}
+              accessibilityLabel={props.icon}
+              color={features_color}
+            />
+          </Box>
+          <Text size={feature_title_size} weight="bold">
+            {props.title}
+          </Text>
+        </Box>
+        <Box padding={5}>
+          <Text size={feature_desciption_size}>{props.description}</Text>
+        </Box>
       </Box>
-    </CardGeneric>
+      {/* </Box> */}
+    </>
   );
 };
 

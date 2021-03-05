@@ -24,7 +24,12 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
   const color_dialog: ColorT = GUI_CONFIG.general.colors.dialog;
 
   return (
-    <Box rounding={rounding} borderStyle="lg" padding={1} color={color_dialog}>
+    <Box
+      rounding={rounding}
+      borderStyle="shadow"
+      padding={1}
+      color={color_dialog}
+    >
       <Box
         padding={0}
         display="flex"

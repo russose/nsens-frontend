@@ -4,6 +4,6 @@ export const configSpecialScreen = {
   },
   large: {
     atom_sizes_column: 1,
-    landing_sizes_column: 2,
+    landing_features_column: 2,
   },
 };

@@ -12,7 +12,7 @@ import Link from "next/link";
 import { IStores } from "../stores/_RootStore";
 
 interface ICardSizes {
-  height: number;
+  height: number | string;
   image_ratio: string;
   max_title_size: number;
   title_card_size: string;
@@ -110,7 +110,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   } else {
     c_width = "100%";
     c_rounding = 0;
-    c_marginBottom = 7;
+    c_marginBottom = 2;
   }
 
   const content: reactComponentT = (
@@ -121,14 +121,16 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       justifyContent="between"
       alignItems="center"
       color={props.color}
+      opacity={0.9}
       padding={0}
+      borderStyle="none"
       //
       width={c_width}
       rounding={c_rounding}
       marginBottom={c_marginBottom}
       //
     >
-      <Box padding={2} width="55%">
+      <Box padding={1} width="60%">
         <Text
           size={title_card_size}
           align="left"

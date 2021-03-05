@@ -6,8 +6,8 @@ import Link from "next/link";
 import { IStores } from "../stores/_RootStore";
 
 interface ICardSizes {
-  height: number;
-  width: number;
+  height: number | string;
+  width: number | string;
   // image_ratio: string;
   max_title_size: number;
   title_card_size: string;

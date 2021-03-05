@@ -190,7 +190,7 @@ export class GraphStore {
   }
 
   runSimulation(width: number, height: number, GUI_CONFIG: GUI_CONFIG_T): void {
-    const width_node = GUI_CONFIG.display.atom_compact_sizes.width;
+    const width_node = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
 
     const forceColideRadius = width_node * 0.9;
     const forceLinkDistance = width_node * 1.1;
