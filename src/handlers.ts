@@ -250,7 +250,10 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       })
       .catch(function (error) {
         // console.log(error);
-        console.log("error in login...");
+        // console.log("error in login...");
+        stores.uiStore.setLoginScreenError(
+          stores.userStore.GUI_CONFIG.language.landing.loginSignup.login_error
+        );
       });
   } else if (type === "signup") {
     _signup(
@@ -272,7 +275,10 @@ export const onSubmitLoginSignup = (stores: IStores) => (
         );
       })
       .catch(function (error) {
-        console.log("error in signing...");
+        // console.log("error in signing...");
+        stores.uiStore.setLoginScreenError(
+          stores.userStore.GUI_CONFIG.language.landing.loginSignup.signup_error
+        );
       });
   }
 };

@@ -1,11 +1,7 @@
 import { observable, action, computed, makeObservable } from "mobx";
 import Router from "next/router";
-import {
-  ConfigDisplay,
-  ConfigLanguage,
-  GUI_CONFIG_T,
-  IUser,
-} from "../common/types";
+import { GUI_CONFIG_T } from "../common/configGUI";
+import { ConfigDisplay, ConfigLanguage, IUser } from "../common/types";
 import { hasTouchScreen } from "../libs/utils";
 import {
   issue_text,

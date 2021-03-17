@@ -1,9 +1,9 @@
-import { GUI_CONFIG } from "../common/config";
+import { GUI_CONFIG, GUI_CONFIG_T } from "../common/configGUI";
 import { displayDesktop } from "../common/configDesktop";
 import { displayMobile } from "../common/configMobile";
 import { Lang_fr } from "../common/configLangFr";
 import { paths } from "../common/configPaths";
-import { ConfigLanguage, ConfigDisplay, GUI_CONFIG_T } from "../common/types";
+import { ConfigLanguage, ConfigDisplay } from "../common/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { configSpecialScreen } from "../common/configSpecialScreen";
 

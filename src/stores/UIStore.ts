@@ -25,6 +25,7 @@ export class UIStore {
 
   private $loginScreenUsername: string = "";
   private $loginScreenPassword: string = "";
+  private $loginScreenError: string = "";
 
   private $showLoading: boolean = false;
 
@@ -43,6 +44,7 @@ export class UIStore {
       | "$renameKnowbookNewName"
       | "$loginScreenUsername"
       | "$loginScreenPassword"
+      | "$loginScreenError"
       | "$showLoading"
     >(this, {
       // $screen: observable,
@@ -55,6 +57,7 @@ export class UIStore {
       $editKnowbookNewValue: observable,
       $loginScreenUsername: observable,
       $loginScreenPassword: observable,
+      $loginScreenError: observable,
       $selectedKnowbookIdName: observable,
       $renameKnowbookOpened: observable,
       $renameKnowbookNewName: observable,
@@ -81,6 +84,7 @@ export class UIStore {
       setLoginScreenUsername: action,
       // loginScreenPassword: computed,
       setLoginScreenPassword: action,
+      setLoginScreenError: action,
       initKnowbookEditionElements: action,
       setShowLoading: action,
     });
@@ -154,17 +158,23 @@ export class UIStore {
     this.editKnowbookMembers.set(knowbookId, value);
   }
 
-  get loginScreenUsername() {
-    return this.$loginScreenUsername;
+  get loginScreenError() {
+    return this.$loginScreenError;
   }
-  setLoginScreenUsername(value: string): void {
-    this.$loginScreenUsername = value;
+  setLoginScreenError(value: string): void {
+    this.$loginScreenError = value;
   }
   get loginScreenPassword() {
     return this.$loginScreenPassword;
   }
   setLoginScreenPassword(value: string): void {
     this.$loginScreenPassword = value;
+  }
+  get loginScreenUsername() {
+    return this.$loginScreenUsername;
+  }
+  setLoginScreenUsername(value: string): void {
+    this.$loginScreenUsername = value;
   }
   get showLoading() {
     return this.$showLoading;

@@ -2,7 +2,7 @@ import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import React from "react";
-import { GUI_CONFIG_T } from "../common/types";
+import { GUI_CONFIG_T } from "../common/configGUI";
 import { isMobile } from "../libs/utils";
 import { IItemDisplayMode } from "../stores/UIStore";
 import { IStores } from "../stores/_RootStore";

@@ -1,6 +1,8 @@
-import { GUI_CONFIG_display_T } from "./types";
+import { displayMobile } from "./configMobile";
 
-const card_size = "10vh";
+export type GUI_CONFIG_display_T = typeof displayMobile;
+
+const card_size = "15vh";
 const card_compact_size = "10vh";
 const card_compact_vizs_size = 120;
 

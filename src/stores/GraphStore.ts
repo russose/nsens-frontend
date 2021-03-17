@@ -5,9 +5,9 @@ import {
   forceSimulation,
 } from "d3-force";
 import { action, makeObservable, observable } from "mobx";
+import { GUI_CONFIG_T } from "../common/configGUI";
 import {
   AtomID,
-  GUI_CONFIG_T,
   IAtom,
   ILink,
   INode,

@@ -1,5 +1,4 @@
-import { GUI_CONFIG, LANGUAGE } from "./config";
-import { displayMobile } from "./configMobile";
+import { LANGUAGE } from "./config";
 
 export enum ConfigLanguage {
   fr = "fr",
@@ -114,10 +113,6 @@ export interface IFeature {
   // image_url: string;
   icon: IconT;
 }
-
-export type GUI_CONFIG_T = typeof GUI_CONFIG;
-// export type GUI_CONFIG_T = any;
-export type GUI_CONFIG_display_T = typeof displayMobile;
 
 export type IconT = any;
 export type ColorT = any;

@@ -10,6 +10,9 @@ export const Lang_fr = {
       password_placeholder: "Mot de passe",
       login_label: "Connexion",
       signup_label: "Enregistrement",
+      login_error: "nom d'utilisateur ou mot de passe incorect",
+      signup_error:
+        "impossible de créer le compte, utilisateur déjà enregistré",
     },
     features: [
       {

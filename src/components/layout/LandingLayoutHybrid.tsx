@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Box, Image, Heading } from "gestalt";
+import { Box, Image, Heading, Badge } from "gestalt";
 import CardFeatureGrid from "../CardFeatureGrid";
 import {
   ColorT,
@@ -71,7 +71,7 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
             align="center"
             overflow="normal"
           >
-            {props.slogan}
+            {props.slogan} <Badge position="top" text="beta" />
           </Heading>
         </Box>
 

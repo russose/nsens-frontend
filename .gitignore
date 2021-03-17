@@ -1,4 +1,5 @@
 .next
+frontend-static/
 .idea/
 .vscode/
 node_modules/
