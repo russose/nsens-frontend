@@ -1,11 +1,5 @@
 import { action, makeObservable, observable } from "mobx";
-import {
-  AtomID,
-  empty_value_atom,
-  IAtom,
-  IRelatedAtom,
-  LogActionType,
-} from "../common/types";
+import { AtomID, empty_value_atom, IAtom, IRelatedAtom } from "../common/types";
 import { makeArrayFlat, shuffleArray } from "../libs/utils";
 import {
   _getRelatedFromWikidataFromWeb,
@@ -15,6 +9,7 @@ import {
   _searchFromWeb,
 } from "../_api";
 import { SavedStore } from "./SavedStore";
+import { IStores } from "./_RootStore";
 
 function shuffleSized(array: any[], amount_item_displayed: number): any[] {
   const shuffled = shuffleArray(array);
@@ -42,19 +37,32 @@ export class FeedStore {
     });
   }
 
-  getItemFromAnywhere(itemId: AtomID): IAtom | undefined {
+  getItemFromAnywhere(itemId: AtomID, stores: IStores): IAtom | undefined {
     if (itemId === undefined) {
       return undefined;
     }
 
     let item: IAtom;
-    if (this.history.has(itemId)) {
+    if (stores.savedStore.saved.get(itemId) !== undefined) {
+      item = stores.savedStore.saved.get(itemId);
+    } else if (this.history.has(itemId)) {
       item = this.history.get(itemId);
     } else {
       item = this.getItemFromAnyRelated(itemId);
     }
 
     return item;
+  }
+
+  getRandomItemIdFromAnywhere(stores: IStores): AtomID {
+    const history_ids = Array.from(this.$history.keys());
+    const relatedAll_ids = Array.from(this.$relatedAll.keys());
+    const saved_ids = Array.from(stores.savedStore.saved.keys());
+    const all_ids: AtomID[] = history_ids
+      .concat(relatedAll_ids)
+      .concat(saved_ids);
+
+    return shuffleSized(all_ids, 1)[0];
   }
 
   /*
@@ -106,11 +114,10 @@ export class FeedStore {
       .then((atoms) => {
         this.setFeed(atoms);
       })
-      .then(() => {
-        // if (userStore.isLogged) {
-        _log(LogActionType.search, searchPattern);
-        // }
-      })
+      // .then(() => {
+      //   //LOG SEARCHED ITEM, DISABLED
+      //   _log(LogActionType.search, searchPattern);
+      // })
       .catch((error) => {
         // console.log("error in seach from pattern");
       });
@@ -236,16 +243,19 @@ export class FeedStore {
       relatedItems_no_doubles.values()
     );
 
-    // Filter remove some of them (eg containing category)
-    // let relatedItems_filtered: IRelatedAtom[] = relatedItems.filter((item) => {
-    //   const exclusion_condition: boolean = item.item.title_en.includes(
-    //     "Category:"
-    //   );
-    //   return !exclusion_condition;
-    // });
+    // Remove items containing ":" for Portal or other generic item (main filtered in wikidata fetching)
+    const relatedItems_no_generic_item: IRelatedAtom[] = relatedItems_no_doubles_array.filter(
+      (relatedItem) => {
+        const exclusion_condition: boolean = relatedItem.item.title.includes(
+          ":"
+        );
+        return !exclusion_condition;
+      }
+    );
 
     //With no duplicates by construction
-    this.$related.set(itemId, relatedItems_no_doubles_array);
+    // this.$related.set(itemId, relatedItems_no_doubles_array);
+    this.$related.set(itemId, relatedItems_no_generic_item);
     this.addAllRelatedItemsInAllRelated(itemId);
   }
 

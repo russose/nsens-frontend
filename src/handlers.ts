@@ -1,9 +1,11 @@
 import { SavedStore } from "./stores/SavedStore";
 import { KnowbookID, AtomID, ButtonIDType, eventT } from "./common/types";
-import { IItemDisplayMode, UIStore } from "./stores/UIStore";
+import { UIStore } from "./stores/UIStore";
 import { _login, _signup, _logout } from "./_api";
 import { KnowkookStore } from "./stores/KnowkookStore";
 import { IStores } from "./stores/_RootStore";
+import { loginDuration, successMessage } from "./common/config";
+import { GUI_CONFIG_T } from "./common/configGUI";
 
 // interface IonInput {
 //   value: string;
@@ -13,6 +15,23 @@ import { IStores } from "./stores/_RootStore";
 //   checked: boolean;
 //   syntheticEvent: eventT;
 // }
+
+/*******************Logo*************************** */
+export const onTapLogo = (
+  stores: IStores,
+  GUI_CONFIG: GUI_CONFIG_T
+) => (input: { event: eventT }): void => {
+  const itemId = stores.feedStore.getRandomItemIdFromAnywhere(stores);
+  const item = stores.feedStore.getItemFromAnywhere(itemId, stores);
+
+  //Go Article Page
+  stores.userStore.goPageArticle(
+    stores.userStore.paramsPage,
+    itemId,
+    item.title,
+    GUI_CONFIG
+  );
+};
 
 /*******************Searchbar*************************** */
 
@@ -55,13 +74,9 @@ export const onSearchHomeKeyboard = (stores: IStores) => (input: {
 
 /*******************Save Items*************************** */
 
-export const onSaved = (
-  // savedStore: SavedStore,
-  // userStore: UserStore,
-  // knowbookStore: KnowkookStore,
-  // feedStore: FeedStore
-  stores: IStores
-) => (itemID: AtomID) => (input: { event: eventT }): void => {
+export const onSaved = (stores: IStores) => (itemID: AtomID) => (input: {
+  event: eventT;
+}): void => {
   // if (!userStore.isLogged) {
   //   goLogin();
   // }
@@ -69,7 +84,7 @@ export const onSaved = (
     stores.savedStore.saved.has(itemID) === undefined ||
     stores.savedStore.saved.has(itemID) === false
   ) {
-    stores.savedStore.addSaved(itemID, stores.feedStore);
+    stores.savedStore.addSaved(itemID, stores);
   } else {
     stores.savedStore.removeSaved(itemID, stores.knowbookStore);
   }
@@ -108,7 +123,7 @@ export const onEditKnowbooks = (
   uiStore: UIStore,
   knowbookStore: KnowkookStore
 ) => (itemId: AtomID) => (input: { event: eventT }): void => {
-  uiStore.setSelectedAtomId(itemId);
+  uiStore.setSelectedAtom(itemId, "title");
   uiStore.initKnowbookEditionElements(itemId, knowbookStore);
   uiStore.setEditKnowbookOpened(true);
   input.event.preventDefault();
@@ -202,6 +217,17 @@ export const onChangeUsernamePassword = (uiStore: UIStore) => (
 ) => (input: { value: string; syntheticEvent: eventT }): void => {
   if (type === "username") {
     uiStore.setLoginScreenUsername(input.value);
+    if (uiStore.loginScreenUsername.length === 1) {
+      uiStore.setLoginScreenUsername_("");
+    }
+    if (
+      uiStore.loginScreenUsername.length === 2 &&
+      uiStore.loginScreenUsername_ === ""
+    ) {
+      setTimeout(() => {
+        uiStore.setLoginScreenUsername_(successMessage);
+      }, loginDuration);
+    }
   } else if (type === "password") {
     uiStore.setLoginScreenPassword(input.value);
   }
@@ -220,6 +246,7 @@ export const onLogout = (stores: IStores) => (): void => {
         stores.userStore.paramsPage,
         stores.userStore.GUI_CONFIG.paths.pages.Landing
       );
+      stores.uiStore.setLoginScreenUsername_("");
     })
     .catch(function (error) {
       console.log("error in logout...");
@@ -256,8 +283,13 @@ export const onSubmitLoginSignup = (stores: IStores) => (
         );
       });
   } else if (type === "signup") {
+    if (stores.uiStore.loginScreenUsername_ !== successMessage) {
+      return;
+    }
+
     _signup(
       stores.uiStore.loginScreenUsername,
+      stores.uiStore.loginScreenUsername_,
       stores.uiStore.loginScreenPassword
     )
       .then(() => {
@@ -288,24 +320,19 @@ export const onSubmitLoginSignup = (stores: IStores) => (
 export const onMenuButtonPath = (stores: IStores) => (
   buttonId: ButtonIDType
 ): string => {
-  // stores.uiStore.setItemDisplayMode(IItemDisplayMode.Article);
   const buttons = stores.userStore.GUI_CONFIG.language.buttons;
-  // if (!userStore.isLogged && buttonId !== ButtonIDType.HOME) {
-  //   return buttons[ButtonIDType.LOGIN].path;
-  // } else {
-  //   return buttons[buttonId].path;
-  // }
-  return buttons[buttonId].path;
+  const path = buttons[buttonId].path;
+  return path;
 };
 
-export const onDisplayModeClick = (uiStore: UIStore) => (
-  buttonId: ButtonIDType
-) => () => {
-  let mode;
-  if (buttonId === ButtonIDType.ARTICLE) {
-    mode = IItemDisplayMode.Article;
-  } else {
-    mode = IItemDisplayMode.Network;
-  }
-  uiStore.setItemDisplayMode(mode);
-};
+// export const onDisplayModeClick = (uiStore: UIStore) => (
+//   buttonId: ButtonIDType
+// ) => () => {
+//   let mode;
+//   if (buttonId === ButtonIDType.ARTICLE) {
+//     mode = IItemDisplayMode.Article;
+//   } else {
+//     mode = IItemDisplayMode.Network;
+//   }
+//   uiStore.setItemDisplayMode(mode);
+// };

@@ -15,31 +15,34 @@ interface IArticleProps {
 const path = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_REST;
 
 const Article: React.FunctionComponent<IArticleProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  // const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   // const language = GUI_CONFIG.general.language;
-  const last_section_header = GUI_CONFIG.language.WIKI_LAST_SECTION_HEADER.replaceAll(
-    " ",
-    "\\s"
-  );
+  // const last_section_header = GUI_CONFIG.language.WIKI_LAST_SECTION_HEADER.replaceAll(
+  //   " ",
+  //   "\\s"
+  // );
   // References
 
   function prepareArticle(article: string): string {
+    const href_with_including_a_regex = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/gi;
     const link_open_regex = /<\s*a[^>]*>/gi;
     const link_close_regex = /<\s*\/a[^>]*>/gi;
-    const sections_ending_including_body = new RegExp(
-      "<section(.)*" + last_section_header + "(.|\n)*</body>",
-      "gi"
-    );
+
+    // const sections_ending_including_body = new RegExp(
+    //   "<section(.)*" + last_section_header + "(.|\n)*</body>",
+    //   "gi"
+    // );
 
     // const base_url = "//" + language + ".wikipedia.org/";
 
     const article_clean = article
-      // .replaceAll(base, "") //remove base to not destroy navigation...
-      // .replaceAll('href="/', 'href="' + base_url) //add path to relative link of stylesheet
-      // .replaceAll(sections_ending_including_body, "</body>") //remove end of article
-      .replaceAll(link_open_regex, "") //remove links
-      .replaceAll(link_close_regex, "")
-      .replaceAll('"//', '"https://');
+      .replace(href_with_including_a_regex, "<a") //Remove complex href, cf article "tenseur de Ricci"
+      .replace(link_open_regex, "") //remove links
+      .replace(link_close_regex, "");
+    // .replaceAll('"//', '"https://');
+    // .replaceAll(base, "") //remove base to not destroy navigation...
+    // .replaceAll('href="/', 'href="' + base_url) //add path to relative link of stylesheet
+    // .replaceAll(sections_ending_including_body, "</body>") //remove end of article
 
     return article_clean;
   }
@@ -48,12 +51,9 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
     return <Text>{"..."}</Text>;
   }
 
-  // const title = props.item_title;
-  const title = props.item_title.replaceAll(" ", "_");
-
   props.stores.uiStore.setShowLoading(true);
 
-  fetchArticle(title, path)
+  fetchArticle(props.item_title, path)
     .then((value) => {
       props.stores.uiStore.setArticleContent(prepareArticle(value));
       props.stores.uiStore.setShowLoading(false);

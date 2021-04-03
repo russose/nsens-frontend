@@ -1,7 +1,7 @@
 import { observable, action, computed, makeObservable } from "mobx";
 import Router from "next/router";
 import { GUI_CONFIG_T } from "../common/configGUI";
-import { ConfigDisplay, ConfigLanguage, IUser } from "../common/types";
+import { AtomID, ConfigDisplay, ConfigLanguage, IUser } from "../common/types";
 import { hasTouchScreen } from "../libs/utils";
 import {
   issue_text,
@@ -107,6 +107,20 @@ export class UserStore {
     }
   }
 
+  goPageArticle(
+    paramsPage: IparamsPage,
+    itemId: AtomID,
+    itemTitle: string,
+    GUI_CONFIG: GUI_CONFIG_T
+  ) {
+    if (process.browser) {
+      Router.push({
+        pathname: this.rootPath + GUI_CONFIG.paths.pages.ItemArticle,
+        query: { ...paramsPage, ...{ title: itemTitle, id: itemId } },
+      });
+    }
+  }
+
   async initializeUserData(stores: IStores) {
     try {
       if (this.isLogged) {
@@ -205,88 +219,4 @@ export class UserStore {
       }
     }
   }
-
-  // redirectHomeIfLogged(stores: IStores) {
-  //   if (process.browser) {
-  //     if (stores.userStore.isLogged) {
-  //       // Already Logged
-  //       goHome();
-  //     }
-  //   }
-  // }
-
-  // redirectLandingIfNotLogged(stores: IStores) {
-  //   if (process.browser) {
-  //     if (!stores.userStore.isLogged) {
-  //       // Not Logged
-  //       goLanding();
-  //     }
-  //   }
-  // }
-
-  // goHome() {
-  //   Router.push({
-  //     pathname: paths.pages.Home,
-  //   });
-  // }
-
-  // goLanding() {
-  //   Router.push({
-  //     pathname: paths.pages.Landing,
-  //   });
-  // }
-
-  // initializeAppAndDisplay(
-  //   stores: IStores,
-  //   GUI_CONFIG: GUI_CONFIG_T
-  //   // isLanding: boolean = false
-  // ): void {
-
-  //   //Already initialyzed
-  //   if (this.user !== null) {
-  //     if (GUI_CONFIG.id !== this.GUI_CONFIG.id) {
-  //       this.set_ParamsPage_GUI_CONFIG(GUI_CONFIG);
-  //     }
-  //     // console.log("app ALREADY initialyzed");
-  //     return;
-  //   }
-
-  //   // console.log("app initialyzed");
-  //   this.set_ParamsPage_GUI_CONFIG(GUI_CONFIG);
-  //   this.initializeApp(stores);
-
-  //   if (process.browser) {
-  //     this.$screen = {
-  //       width: window.innerWidth,
-  //       height: window.innerHeight,
-  //     };
-  //   }
-
-  //   // if (process.browser) {
-  //   //   this.$screen = {
-  //   //     width: window.innerWidth,
-  //   //     height: window.innerHeight,
-  //   //   };
-
-  //   //   const max_width_mobile = this.$GUI_CONFIG.general.max_width_mobile;
-  //   //   this.$paramsPage.lang = ConfigLanguage.fr;
-
-  //   //   const isMobile: boolean =
-  //   //     hasTouchScreen(window) || window.innerWidth < max_width_mobile;
-
-  //   //   if (isMobile) {
-  //   //     if (this.$screen.width < GUI_CONFIG.general.tiny_screen_breakpoint) {
-  //   //       this.$paramsPage.display = ConfigDisplay.small;
-  //   //     } else {
-  //   //       this.$paramsPage.display = ConfigDisplay.mobile;
-  //   //     }
-  //   //   } else {
-  //   //     if (this.$screen.width > GUI_CONFIG.general.large_screen_breakpoint) {
-  //   //       this.$paramsPage.display = ConfigDisplay.large;
-  //   //     } else {
-  //   //       this.$paramsPage.display = ConfigDisplay.desktop;
-  //   //     }
-  //   //   }
-  //   // }
-  // }
 }

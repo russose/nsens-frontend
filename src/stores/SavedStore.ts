@@ -1,8 +1,8 @@
 import { action, makeObservable, observable } from "mobx";
 import { AtomID, IAtom } from "../common/types";
 import { _save, _unsave } from "../_api";
-import { FeedStore } from "./FeedStore";
 import { KnowkookStore } from "./KnowkookStore";
+import { IStores } from "./_RootStore";
 
 export class SavedStore {
   private $saved = observable.map<AtomID, IAtom>();
@@ -30,25 +30,24 @@ export class SavedStore {
     this.$saved.clear();
   }
 
-  addSaved(itemId: AtomID, feedStore: FeedStore): void {
+  addSaved(itemId: AtomID, stores: IStores): void {
     if (itemId === undefined) {
       return;
     }
 
-    const item = feedStore.getItemFromAnywhere(itemId);
+    const item = stores.feedStore.getItemFromAnywhere(itemId, stores);
 
     if (item === undefined) {
       console.log("impossible to save, not item found");
       return;
     }
 
-    // this.$saved.set(item.id, item); //to not freeze UI
     this.setSaved([item]); //to not freeze UI
 
-    feedStore
+    stores.feedStore
       .fetchRelated(item.id, item.title) //take time
       .then(() => {
-        item.related = JSON.stringify(feedStore.getRelated(itemId));
+        item.related = JSON.stringify(stores.feedStore.getRelated(itemId));
         return item;
       })
       // .then(
@@ -69,7 +68,6 @@ export class SavedStore {
   }
 
   removeSaved(itemId: AtomID, knowbookStore: KnowkookStore): void {
-    // if (itemId === undefined || !this.isLogged) {
     if (itemId === undefined) {
       return;
     }

@@ -10,6 +10,7 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/utilsConfigGui";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 
 const Landing: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -42,6 +43,11 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <>
+      <HeaderTitle
+        stores={stores}
+        title={"Explorer, Comprendre, Agir"}
+        hidden={true}
+      />
       <LandingLayoutHybrid
         stores={stores}
         slogan={slogan}

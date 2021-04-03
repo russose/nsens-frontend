@@ -54,7 +54,6 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         key={props.id}
         alt="image"
         color={color_image}
-        // color="transparent"
         fit="cover"
         naturalHeight={1}
         naturalWidth={1}
@@ -82,7 +81,6 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     return (
       <Link
         href={{
-          // pathname: props.pathname, query: props.queryObject
           pathname: props.stores.userStore.rootPath + props.pathname,
           query: { ...props.stores.userStore.paramsPage, ...props.queryObject },
         }}
@@ -131,12 +129,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       //
     >
       <Box padding={1} width="60%">
-        <Text
-          size={title_card_size}
-          align="left"
-          // color="white"
-          weight="bold"
-        >
+        <Text size={title_card_size} align="left" weight="bold">
           {title}
         </Text>
       </Box>

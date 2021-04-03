@@ -1,45 +1,45 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType, ColorT } from "../common/types";
+import { ButtonIDType } from "../common/types";
 import {
   isItemSaved,
   isItemSavedActivated,
-  onDisplayModeClick,
   onEditKnowbooks,
   onSaved,
 } from "../handlers";
 import { IStores } from "../stores/_RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import _Button, { IButton, iconColorDefault } from "./_Button";
+import { Box } from "gestalt";
 
 interface IMenuBarDisplayProps {
   stores: IStores;
-  name: string;
-  color: ColorT;
+  isMobile: boolean;
 }
 
 const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
   props
 ) => {
   const stores = props.stores;
+  const color_menu = stores.userStore.GUI_CONFIG.general.colors.menu;
   const buttons: IButton[] = [
     {
       Id: ButtonIDType.ARTICLE,
-      onClick: onDisplayModeClick(stores.uiStore)(ButtonIDType.ARTICLE),
-      disabled: false,
+      // onClick: onDisplayModeClick(stores.uiStore)(ButtonIDType.ARTICLE),
+      // disabled: false,
     },
     {
       Id: ButtonIDType.VIZS,
-      onClick: onDisplayModeClick(stores.uiStore)(ButtonIDType.VIZS),
-      disabled: false,
+      // onClick: onDisplayModeClick(stores.uiStore)(ButtonIDType.VIZS),
+      // disabled: false,
     },
     {
       Id: ButtonIDType.SAVE,
-      onClick: onSaved(stores)(stores.uiStore.selectedAtomId),
+      onClick: onSaved(stores)(stores.uiStore.selectedAtom.id),
       disabled: !isItemSavedActivated(stores.knowbookStore)(
-        stores.uiStore.selectedAtomId
+        stores.uiStore.selectedAtom.id
       ),
-      iconColor: isItemSaved(stores.savedStore)(stores.uiStore.selectedAtomId)
+      iconColor: isItemSaved(stores.savedStore)(stores.uiStore.selectedAtom.id)
         ? "red"
         : iconColorDefault,
     },
@@ -48,21 +48,33 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
       onClick: onEditKnowbooks(
         stores.uiStore,
         stores.knowbookStore
-      )(stores.uiStore.selectedAtomId),
-      disabled: !isItemSaved(stores.savedStore)(stores.uiStore.selectedAtomId),
+      )(stores.uiStore.selectedAtom.id),
+      disabled: !isItemSaved(stores.savedStore)(stores.uiStore.selectedAtom.id),
     },
   ];
 
-  const direction = "row";
-
-  return (
+  const menuBarButton = (
     <MenuBarButtonLayout
       stores={stores}
-      name={props.name}
-      color={props.color}
-      direction={direction}
+      name="MenuBarDisplay"
+      color={color_menu}
+      direction="row"
       buttons={buttons}
     />
+  );
+
+  return (
+    <>
+      {props.isMobile ? (
+        <Box column={12}>{menuBarButton}</Box>
+      ) : (
+        <Box display="flex" direction="column" flex="grow" alignItems="end">
+          <Box padding={0} column={4} smColumn={3} mdColumn={3} lgColumn={2}>
+            {menuBarButton}
+          </Box>
+        </Box>
+      )}
+    </>
   );
 };
 

@@ -186,11 +186,13 @@ export async function _login(
 
 export async function _signup(
   username: string,
+  username_: string,
   password: string
 ): Promise<string> {
   // try {
   const res = await _api("post", "/auth/signup", {
     username: username,
+    username_: username_,
     password: password,
   });
   return res;

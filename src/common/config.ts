@@ -1,3 +1,8 @@
+import { getEmail } from "../libs/utils";
+
+export const successMessage = "you can now login...";
+export const loginDuration = 4000;
+
 export const LANGUAGE = "fr";
 
 export const CONFIG_FETCHING = {
@@ -10,11 +15,11 @@ export const CONFIG_FETCHING = {
     ROOT_URL_WIKIDATA: "https://query.wikidata.org/sparql",
     ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
   },
-  amount_data_fetched_items: 50,
+  userAgent: "n.Sens/1.0 (https://www.nsens.org; " + getEmail() + ")",
+  amount_data_fetched_items: 30,
   max_size_chunk_api: 40,
   amount_related: 10,
   amount_data_fetched_images: 10,
   max_width_image: 1300,
   min_width_image: 400,
-  // search_min_length_search: 4,
 };

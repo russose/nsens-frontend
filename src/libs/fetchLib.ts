@@ -295,7 +295,8 @@ export function removeBadImages(list_information_atoms: IAtom[]): IAtom[] {
     const item_updated = item;
     if (
       item.image_url === empty_value_atom ||
-      item.image_width > 2 * CONFIG_FETCHING.max_width_image ||
+      // item.image_width > 2 * CONFIG_FETCHING.max_width_image ||
+      item.image_width > CONFIG_FETCHING.max_width_image ||
       !["jpg", "JPG", "png", "PNG", "tif", "TIF", "svg", "SVG"].includes(
         item.image_url.slice(-3)
       )

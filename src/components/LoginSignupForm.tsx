@@ -1,7 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button } from "gestalt";
-import { ColorT, handlerT, RoundingT, SizeT } from "../common/types";
+import { ColorT, eventT, handlerT, RoundingT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
+import { getUserNameDisplay } from "../libs/utils";
 
 interface ILoginSignupFormProps {
   stores: IStores;
@@ -20,7 +21,6 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
   const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
   const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
-  const color_background: ColorT = GUI_CONFIG.general.colors.background;
   const color_dialog: ColorT = GUI_CONFIG.general.colors.dialog;
 
   return (
@@ -36,10 +36,9 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
         direction="column"
         justifyContent="around"
       >
-        <Box padding={2}>
+        <Box padding={1}>
           <TextField
             id="username"
-            // label={props.placeholder_username}
             placeholder={props.placeholder_username}
             errorMessage={props.stores.uiStore.loginScreenError}
             onChange={props.handler_text("username")}
@@ -47,10 +46,23 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
             size={texfield_size}
           />
         </Box>
-        <Box padding={2}>
+        <Box display={getUserNameDisplay() as any}>
+          <Box padding={1}>
+            <TextField
+              id="username*"
+              errorMessage={props.stores.uiStore.loginScreenUsername_}
+              label="username*"
+              onChange={(input: { event: eventT; value: string }): void => {
+                props.stores.uiStore.setLoginScreenUsername_(input.value);
+              }}
+              type="text"
+              size={texfield_size}
+            />
+          </Box>
+        </Box>
+        <Box padding={1}>
           <TextField
             id="password"
-            // label={props.placeholder_password}
             placeholder={props.placeholder_password}
             onChange={props.handler_text("password")}
             type="password"
@@ -59,7 +71,7 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
         </Box>
       </Box>
 
-      <Box padding={3} display="flex" direction="row" justifyContent="around">
+      <Box padding={1} display="flex" direction="row" justifyContent="around">
         <Button
           accessibilityLabel="signup"
           text={props.label_signup}

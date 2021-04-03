@@ -22,7 +22,7 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
   const card_sizes = GUI_CONFIG.display.atom_sizes;
   const card_sizes_compact = GUI_CONFIG.display.atom_compact_sizes;
 
-  const path_Itemview = GUI_CONFIG.paths.pages.Item;
+  const path_Itemview = GUI_CONFIG.paths.pages.ItemArticle;
 
   if (
     props.atoms === undefined ||

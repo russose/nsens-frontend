@@ -1,10 +1,11 @@
-import { Box, Image } from "gestalt";
+import { Box, Image, TapArea } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import {
   onSearchHomeKeyboard,
   onSearchHomeSubmit,
   onSearchHomeText,
+  onTapLogo,
 } from "../../handlers";
 import SearchBar from "../SearchBar";
 import MenuBarNavigation from "../MenuBarNavigation";
@@ -17,16 +18,9 @@ const AppLayout: React.FunctionComponent = (props) => {
   const stores = useStores();
 
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
-  const color_menu = GUI_CONFIG.general.colors.menu;
   const path_logo_image = GUI_CONFIG.paths.image_logo_W;
 
-  const navigationMenu = (
-    <MenuBarNavigation
-      stores={stores}
-      name="NavigationMenuBar"
-      color={color_menu}
-    />
-  );
+  const navigationMenu = <MenuBarNavigation stores={stores} />;
 
   const searchbar = (
     <SearchBar
@@ -38,24 +32,28 @@ const AppLayout: React.FunctionComponent = (props) => {
     />
   );
 
+  const logo_with_tap = (
+    <TapArea fullHeight={true} onTap={onTapLogo(stores, GUI_CONFIG)}>
+      <Image
+        alt="image"
+        color="transparent"
+        fit="contain"
+        naturalHeight={1}
+        naturalWidth={1}
+        loading="lazy"
+        src={path_logo_image}
+      ></Image>
+    </TapArea>
+  );
+
   const top_mobile = (
     <>
-      <Box height="100%" padding={1} column={2}>
-        <Image
-          alt="image"
-          color="transparent"
-          fit="contain"
-          naturalHeight={1}
-          naturalWidth={1}
-          loading="lazy"
-          src={path_logo_image}
-        ></Image>
+      <Box height="100%" padding={1} column={3}>
+        {logo_with_tap}
       </Box>
-
-      <Box column={8}>
-        <Box display="flex" flex="grow" alignItems="center">
-          {searchbar}
-        </Box>
+      <Box padding={2} />
+      <Box display="flex" flex="grow" alignItems="center" justifyContent="end">
+        {searchbar}
       </Box>
     </>
   );
@@ -64,38 +62,27 @@ const AppLayout: React.FunctionComponent = (props) => {
     <>
       <Box
         height="100%"
-        padding={1}
-        column={3}
-        smColumn={3}
+        padding={2}
+        column={2}
+        smColumn={2}
         mdColumn={2}
         lgColumn={1}
       >
-        <Image
-          alt="image"
-          color="transparent"
-          fit="contain"
-          naturalHeight={1}
-          naturalWidth={1}
-          loading="auto"
-          src={path_logo_image}
-        ></Image>
+        {logo_with_tap}
       </Box>
 
-      <Box
-        display="flex"
-        // justifyContent="end"
-        alignItems="center"
-        column={8}
-        smColumn={8}
-        mdColumn={6}
-        lgColumn={4}
-      >
+      <Box display="flex" column={9} smColumn={9} mdColumn={7} lgColumn={5}>
         <Box column={6} smColumn={6} mdColumn={8} lgColumn={8}>
-          <Box display="flex" flex="grow" alignItems="center">
+          <Box
+            display="flex"
+            flex="grow"
+            alignItems="center"
+            justifyContent="start"
+          >
             {searchbar}
           </Box>
         </Box>
-
+        <Box padding={3} />
         <Box column={6} smColumn={6} mdColumn={4} lgColumn={4}>
           {navigationMenu}
         </Box>

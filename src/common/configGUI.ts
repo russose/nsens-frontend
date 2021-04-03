@@ -11,7 +11,7 @@ export const GUI_CONFIG = {
   general: {
     language: LANGUAGE,
     max_width_mobile: 640,
-    large_screen_breakpoint: 2000,
+    large_screen_breakpoint: 1400,
     // tiny_screen_breakpoint: 320,
     colors: {
       //https://www.rapidtables.com/web/color/RGB_Color.html

@@ -1,4 +1,4 @@
-const card_size = "20vh";
+const card_size = "25vh";
 const card_compact_size = "20vh";
 const card_compact_vizs_size = 120;
 // const card_size_ = 250;
@@ -7,7 +7,7 @@ const card_compact_vizs_size = 120;
 
 export const displayMobile = {
   //card_height: 250,
-  amount_item_displayed: 100,
+  amount_item_displayed: 20,
   max_nodes_network: 1,
   // min_width_network: 500,
   heightTopAndBottom: 190,
@@ -25,8 +25,8 @@ export const displayMobile = {
   atom_sizes: {
     height: card_size,
     image_ratio: "75%",
-    lgColumn: 12,
-    mdColumn: 12,
+    lgColumn: 6,
+    mdColumn: 6,
     smColumn: 12,
     column: 12,
     lgPadding: 3,
@@ -96,16 +96,17 @@ export const displayMobile = {
     //   title_card_size: "lg",
     //   max_title_size: 99,
     // },
-    ratio_page: "150vh",
+    ratio_page: "180vh",
     // ratio_main: "75vh",
     ratio_logo: "10vh",
     ratio_image: "30vh",
     header_size: "sm",
     features: {
-      lgColumn: 12,
-      mdColumn: 12,
-      smColumn: 12,
-      column: 12,
+      lgColumn: 5,
+      mdColumn: 5,
+      smColumn: 11,
+      column: 11,
+      padding: 4,
       title_size: "md",
       desciption_size: "md",
     },

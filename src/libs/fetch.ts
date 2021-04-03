@@ -2,20 +2,10 @@ import { CONFIG_FETCHING } from "../common/config";
 import { CONFIG_OPS } from "../common/config_env";
 import { JSONDataT } from "../common/types";
 
-/************************************** */
-//Temporary when using self signed certificate
-// To be remove when in production
-// import * as https from "https";
-// import { CONFIG_OPS } from "./config_env";
-
-// const agent = new https.Agent({
-//   rejectUnauthorized: false,
-// });
-/************************************** */
-
 const wikidata_url = CONFIG_FETCHING.URLs.ROOT_URL_WIKIDATA;
+const userAgentString = CONFIG_FETCHING.userAgent;
 
-const axios = require("axios");
+const axios = require("axios").default;
 
 export function prepare_url(root_url: string, params: Object): string {
   let query: string = "";
@@ -31,6 +21,7 @@ export async function fetch_data(
   output_URL: boolean
 ): Promise<JSONDataT> {
   const res = await axios({
+    headers: { "User-Agent": userAgentString },
     method: "get",
     url: prepare_url(ROOT_URL, PARAMS),
   });
@@ -49,7 +40,9 @@ export async function fetch_data_wikidata(
 ): Promise<JSONDataT> {
   const res = await axios({
     method: "get",
-    headers: { Accept: "application/sparql-results+json" },
+    headers: {
+      Accept: "application/sparql-results+json",
+    },
     url: wikidata_url + "?query=" + encodeURIComponent(sparqlQuery),
   });
 
@@ -64,10 +57,11 @@ export async function _api(
   data: object
 ): Promise<JSONDataT> {
   const res = await axios({
-    // httpsAgent: agent,
     withCredentials: true,
     method: method,
-    url: CONFIG_OPS.BACK_URL + uri,
+    // url: CONFIG_OPS.BACK_URL + uri,
+    baseURL: CONFIG_OPS.BACK_URL,
+    url: uri,
     data: data,
   });
 
@@ -80,9 +74,7 @@ export async function fetchArticle(
 ): Promise<string> {
   const res = await axios({
     method: "get",
-    headers: {
-      Accept: "text/html",
-    },
+    headers: { Accept: "text/html" },
     // baseURL: ROOT_URL + "html/",  //DSKTOP
     baseURL: ROOT_URL + "mobile-html/", //MOBILE
     url: title + "?redirect=true",
@@ -99,9 +91,7 @@ export async function fetchRelatedWikipedia(
 ): Promise<string> {
   const res = await axios({
     method: "get",
-    headers: {
-      Accept: "text/html",
-    },
+    headers: { Accept: "text/html" },
     baseURL: ROOT_URL + "related/",
     url: encodeURI(title),
   });

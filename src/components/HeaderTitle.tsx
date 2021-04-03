@@ -6,6 +6,7 @@ import { IStores } from "../stores/_RootStore";
 interface IHeaderTitleProps {
   stores: IStores;
   title: string;
+  hidden?: boolean;
 }
 
 const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
@@ -13,35 +14,41 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_headers = GUI_CONFIG.general.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
+  const display_ =
+    props.hidden === undefined || props.hidden === false
+      ? "block"
+      : "visuallyHidden";
   return (
     <>
-      <Box padding={2}></Box>
-      <Box
-        display="flex"
-        direction="column"
-        flex="grow"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box display={display_}>
+        <Box padding={2}></Box>
         <Box
-          column={10}
-          smColumn={10}
-          mdColumn={6}
-          lgColumn={4}
-          padding={2}
-          // paddingX={5}
-          // paddingY={2}
-          color={color_headers}
-          borderStyle="lg"
+          display="flex"
+          direction="column"
+          flex="grow"
           alignItems="center"
-          rounding={rounding_menu}
+          justifyContent="center"
         >
-          <Heading size={header_size} align="center" overflow="normal">
-            {props.title}
-          </Heading>
+          <Box
+            column={10}
+            smColumn={10}
+            mdColumn={6}
+            lgColumn={4}
+            padding={2}
+            // paddingX={5}
+            // paddingY={2}
+            color={color_headers}
+            borderStyle="lg"
+            alignItems="center"
+            rounding={rounding_menu}
+          >
+            <Heading size={header_size} align="center" overflow="normal">
+              {props.title}
+            </Heading>
+          </Box>
         </Box>
+        <Box padding={1}></Box>{" "}
       </Box>
-      <Box padding={1}></Box>
     </>
   );
 };

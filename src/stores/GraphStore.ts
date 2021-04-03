@@ -174,18 +174,18 @@ export class GraphStore {
     });
   }
 
-  renderRelatedMap(root_itemId: AtomID, feedStore: FeedStore): void {
-    const root_item = feedStore.getItemFromAnywhere(root_itemId);
+  renderRelatedMap(root_itemId: AtomID, stores: IStores): void {
+    const root_item = stores.feedStore.getItemFromAnywhere(root_itemId, stores);
     if (root_item === undefined) {
       return;
     }
 
-    if (feedStore.getRelated(root_itemId) === undefined) {
-      feedStore.fetchRelated(root_item.id, root_item.title).then(() => {
-        this.setRelatedMap(root_itemId, feedStore);
+    if (stores.feedStore.getRelated(root_itemId) === undefined) {
+      stores.feedStore.fetchRelated(root_item.id, root_item.title).then(() => {
+        this.setRelatedMap(root_itemId, stores.feedStore);
       });
     } else if (root_itemId !== this.$rootItemId) {
-      this.setRelatedMap(root_itemId, feedStore);
+      this.setRelatedMap(root_itemId, stores.feedStore);
     }
   }
 
@@ -257,7 +257,7 @@ export class GraphStore {
     height: number
   ): void {
     const feedStore = stores.feedStore;
-    const root_item = feedStore.getItemFromAnywhere(root_itemId);
+    const root_item = feedStore.getItemFromAnywhere(root_itemId, stores);
     if (root_item === undefined) {
       return;
     }

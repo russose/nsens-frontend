@@ -2,18 +2,15 @@ import { KnowkookStore } from "./KnowkookStore";
 import { observable, action, makeObservable } from "mobx";
 import { AtomID, KnowbookID } from "../common/types";
 
-export enum IItemDisplayMode {
-  Article = "Article",
-  Network = "Network",
+export interface IparamsAtom {
+  id: AtomID;
+  title: string;
 }
 
 export class UIStore {
-  // private $screen: IScreen = { width: 0, height: 0, isMobile: true };
-
   private $searchPattern: string = "";
-  private $selectedAtomId: AtomID = "";
+  private $selectedAtom: IparamsAtom = { id: "", title: "" };
   private $articleContent: string = "";
-  private $itemDisplayMode: "Article" | "Network" = IItemDisplayMode.Article;
 
   private $editKnowbookOpened: boolean = false;
   private $editKnowbookNewValue: string = "";
@@ -24,6 +21,7 @@ export class UIStore {
   private $renameKnowbookNewName: string = "";
 
   private $loginScreenUsername: string = "";
+  private $loginScreenUsername_: string = "";
   private $loginScreenPassword: string = "";
   private $loginScreenError: string = "";
 
@@ -34,28 +32,27 @@ export class UIStore {
       UIStore,
       // | "$screen"
       | "$searchPattern"
-      | "$selectedAtomId"
+      | "$selectedAtom"
       | "$articleContent"
-      | "$itemDisplayMode"
       | "$editKnowbookOpened"
       | "$editKnowbookNewValue"
       | "$selectedKnowbookIdName"
       | "$renameKnowbookOpened"
       | "$renameKnowbookNewName"
       | "$loginScreenUsername"
+      | "$loginScreenUsername_"
       | "$loginScreenPassword"
       | "$loginScreenError"
       | "$showLoading"
     >(this, {
       // $screen: observable,
       $searchPattern: observable,
-      $selectedAtomId: observable,
+      $selectedAtom: observable,
       $articleContent: observable,
-      $itemDisplayMode: observable,
-      setItemDisplayMode: action,
       $editKnowbookOpened: observable,
       $editKnowbookNewValue: observable,
       $loginScreenUsername: observable,
+      $loginScreenUsername_: observable,
       $loginScreenPassword: observable,
       $loginScreenError: observable,
       $selectedKnowbookIdName: observable,
@@ -65,8 +62,7 @@ export class UIStore {
       // searchPattern: computed,
       // setScreen: action,
       setSearchPattern: action,
-      // selectedAtomId: computed,
-      setSelectedAtomId: action,
+      setSelectedAtom: action,
       // articleContent: computed,
       setArticleContent: action,
       // editKnowbookOpened: computed,
@@ -82,6 +78,7 @@ export class UIStore {
       setRenameKnowbookNewName: action,
       // loginScreenUsername: computed,
       setLoginScreenUsername: action,
+      setLoginScreenUsername_: action,
       // loginScreenPassword: computed,
       setLoginScreenPassword: action,
       setLoginScreenError: action,
@@ -89,10 +86,6 @@ export class UIStore {
       setShowLoading: action,
     });
   }
-
-  // get screen() {
-  //   return this.$screen;
-  // }
 
   get selectedKnowbookIdName() {
     return this.$selectedKnowbookIdName;
@@ -115,23 +108,18 @@ export class UIStore {
     this.$renameKnowbookNewName = value;
   }
 
-  get itemDisplayMode() {
-    return this.$itemDisplayMode;
-  }
-  setItemDisplayMode(mode: IItemDisplayMode): void {
-    this.$itemDisplayMode = mode;
-  }
   get searchPattern() {
     return this.$searchPattern;
   }
   setSearchPattern(searchPattern: string): void {
     this.$searchPattern = searchPattern;
   }
-  get selectedAtomId() {
-    return this.$selectedAtomId;
+  get selectedAtom() {
+    return this.$selectedAtom;
   }
-  setSelectedAtomId(id: AtomID): void {
-    this.$selectedAtomId = id;
+  setSelectedAtom(id: AtomID, title: string): void {
+    this.$selectedAtom.id = id;
+    this.$selectedAtom.title = title;
   }
   get articleContent() {
     return this.$articleContent;
@@ -175,6 +163,12 @@ export class UIStore {
   }
   setLoginScreenUsername(value: string): void {
     this.$loginScreenUsername = value;
+  }
+  get loginScreenUsername_() {
+    return this.$loginScreenUsername_;
+  }
+  setLoginScreenUsername_(value: string): void {
+    this.$loginScreenUsername_ = value;
   }
   get showLoading() {
     return this.$showLoading;

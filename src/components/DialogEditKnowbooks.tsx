@@ -16,7 +16,7 @@ const DialogEditKnowbooks: React.FunctionComponent = (props) => {
     <>
       {stores.uiStore.editKnowbookOpened && (
         <DialogEditKnowbooksForm
-          id={stores.uiStore.selectedAtomId}
+          id={stores.uiStore.selectedAtom.id}
           stores={stores}
           title={GUI_CONFIG.language.editKnowbook.title}
           input_placeholder={GUI_CONFIG.language.editKnowbook.input_placeholder}

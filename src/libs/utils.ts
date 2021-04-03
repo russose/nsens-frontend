@@ -1,37 +1,22 @@
-import Router from "next/router";
-import { paths } from "../common/configPaths";
 import { ConfigDisplay } from "../common/types";
-import { IStores } from "../stores/_RootStore";
 
-// export function redirectHomeIfLogged(stores: IStores) {
-//   if (process.browser) {
-//     if (stores.userStore.isLogged) {
-//       // Already Logged
-//       goHome();
-//     }
-//   }
-// }
+const e = "comvacv_msens";
+export function getEmail(): string {
+  const result: string =
+    e.replace(/_/g, "@").replace(/m/g, "n").replace(/v/g, "t") + ".org";
+  return result;
+}
 
-// export function redirectLandingIfNotLogged(stores: IStores) {
-//   if (process.browser) {
-//     if (!stores.userStore.isLogged) {
-//       // Not Logged
-//       goLanding();
-//     }
-//   }
-// }
+const t = "nwenw";
+export function getTwitter(): string {
+  const result: string = "https://twitter.com/_" + t.replace(/w/g, "s");
+  return result;
+}
 
-// export function goHome() {
-//   Router.push({
-//     pathname: paths.pages.Home,
-//   });
-// }
-
-// export function goLanding() {
-//   Router.push({
-//     pathname: paths.pages.Landing,
-//   });
-// }
+const display_username = "none";
+export function getUserNameDisplay(): string {
+  return display_username;
+}
 
 export function isMobile(GUI_CONFIG_id: string): boolean {
   const result: boolean =

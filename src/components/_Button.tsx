@@ -4,6 +4,7 @@ import { ButtonIDType, ColorT, handlerT, IconT, SizeT } from "../common/types";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { IStores } from "../stores/_RootStore";
+import { IparamsAtom } from "../stores/UIStore";
 
 export interface IButton {
   Id: ButtonIDType;
@@ -34,6 +35,17 @@ const _Button: React.FunctionComponent<IButtonProps> = (props) => {
   const disabled_ = props.disabled === undefined ? false : props.disabled;
   const onClick_ = props.onClick === undefined ? null : props.onClick;
 
+  let query_;
+  if (
+    props.path === GUI_CONFIG.paths.pages.ItemArticle ||
+    props.path === GUI_CONFIG.paths.pages.ItemNetwork
+  ) {
+    const paramsItem: IparamsAtom = props.stores.uiStore.selectedAtom;
+    query_ = { ...props.stores.userStore.paramsPage, ...paramsItem };
+  } else {
+    query_ = props.stores.userStore.paramsPage;
+  }
+
   return path_ === path_empty ? (
     <IconButton
       accessibilityLabel={props.label}
@@ -47,7 +59,8 @@ const _Button: React.FunctionComponent<IButtonProps> = (props) => {
     <Link
       href={{
         pathname: props.stores.userStore.rootPath + props.path,
-        query: props.stores.userStore.paramsPage as any,
+        // query: props.stores.userStore.paramsPage as any,
+        query: query_ as any,
       }}
       passHref
     >

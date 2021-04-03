@@ -11,8 +11,8 @@
     "dev-pm2": "pm2 start next --name Front",
     "build": "next build",
     "start": "next start",
-    "export": "next build && next export -o frontend-static && zip -rq frontend-static.zip frontend-static/",
-    "serve": "serve frontend_static -l 3000",
+    "export": "rm -rf frontend-static/ .next/ && next build && next export -o frontend-static && cp robots.txt frontend-static/ &&zip -rq frontend-static.zip frontend-static/",
+    "serve": "serve frontend-static -l 3000",
     "start-pm2": "pm2 start \"next start\" --name Front",
     "docker_old": "next build && pm2-runtime \"next start\" --name Front",
     "docker": "next build && next start",
@@ -20,32 +20,27 @@
   },
   "keywords": [],
   "dependencies": {
-    "@babel/core": "^7.13.10",
-    "@types/d3-force": "^2.1.1",
-    "@types/gestalt": "^19.2.1",
-    "@types/node": "^14.14.34",
-    "@types/react": "^17.0.3",
-    "@visx/gradient": "^1.7.0",
     "@visx/group": "^1.7.0",
-    "@visx/hierarchy": "^1.7.0",
     "@visx/network": "^1.7.0",
-    "@visx/responsive": "^1.7.0",
     "@visx/shape": "^1.7.0",
     "@visx/text": "^1.7.0",
     "@visx/zoom": "^1.7.0",
     "axios": "^0.21.1",
     "d3-force": "^2.1.1",
-    "gestalt": "^20.1.2",
+    "gestalt": "^21.2.1",
     "mobx": "^6.1.8",
     "mobx-react-lite": "^3.2.0",
     "next": "^10.0.8",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-spring": "^8.0.27",
-    "typescript": "^4.2.3"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "devDependencies": {
-    "serve": "^11.3.2"
+    "@types/d3-force": "^2.1.1",
+    "@types/gestalt": "^20.2.0",
+    "@types/node": "^14.14.34",
+    "@types/react": "^17.0.3",
+    "serve": "^11.3.2",
+    "typescript": "^4.2.3"
   },
   "comments": {
     "next-transpile-modules": "used for amCharts or any lib that needs next.config.js"

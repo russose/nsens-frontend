@@ -1,7 +1,7 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IFeature, SizeT } from "../common/types";
+import { IFeature, PaddingT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
 import CardFeature from "./CardFeature";
 
@@ -34,7 +34,7 @@ const CardFeatureGrid: React.FunctionComponent<ICardFeatureGridProps> = (
         {props.features.map((feature) => {
           return (
             <Box
-              padding={4}
+              padding={features_props.padding as PaddingT}
               lgColumn={features_props.lgColumn as SizeT}
               mdColumn={features_props.mdColumn as SizeT}
               smColumn={features_props.smColumn as SizeT}

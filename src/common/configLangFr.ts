@@ -3,7 +3,7 @@ import { paths } from "./configPaths";
 export const Lang_fr = {
   landing: {
     // slogan: "Transformer l'information en connaissance universelle",
-    slogan: "Expérience de voyage universel",
+    slogan: "Explorer, Comprendre, Agir",
     features_title: "Fonctionalités",
     loginSignup: {
       username_placeholder: "Email",
@@ -17,17 +17,24 @@ export const Lang_fr = {
     features: [
       {
         title: "Trouver",
-        description: "Trouver l'information libre",
+        description:
+          "Trouver des cartes de connaissance de façon ludique et visuelle",
         icon: "search",
       },
       {
+        title: "Comprendre",
+        description: "Comprendre grâce à l'information libre de la Wikipédia",
+        icon: "text-align-left",
+      },
+      {
         title: "Rassembler",
-        description: "Rassembler ses découvertes",
+        description:
+          "Rassembler ses cartes de connaissance dans des carnets personnalisés",
         icon: "folder",
       },
       {
-        title: "Voyager",
-        description: "Mettre en relation et découvrir de nouveaux horizons",
+        title: "Explorer",
+        description: "Etendre ses découvertes grâce aux cartes suggérées",
         icon: "compass",
       },
     ],
@@ -35,7 +42,7 @@ export const Lang_fr = {
   buttons: {
     HOME: {
       label: "Accueil",
-      icon: "search",
+      icon: "workflow-status-all",
       path: paths.pages.Home,
     },
     KNOWBOOKS: {
@@ -46,18 +53,18 @@ export const Lang_fr = {
     LOGIN: { label: "User", icon: "person", path: paths.pages.User },
     SAVE: { label: "Sauver", icon: "angled-pin", path: paths.pages.empty },
     EDIT: { label: "Modifier", icon: "edit", path: paths.pages.empty },
-    VIZS: { label: "Vizs", icon: "compass", path: paths.pages.empty },
     ARTICLE: {
       label: "Article",
       icon: "text-align-left",
-      path: paths.pages.empty,
+      path: paths.pages.ItemArticle,
     },
+    VIZS: { label: "Vizs", icon: "compass", path: paths.pages.ItemNetwork },
   },
   knowbooks: {
     knowbooks_title: "Carnets de connaissance",
     AllSaved_title: "Sauvés (tous)",
     None_Title: "Aucun Carnet",
-    Related_title: "Associés :",
+    Related_title: "Suggérés :",
   },
   editKnowbook: {
     title: "Mise à jour des carnets",
@@ -70,6 +77,9 @@ export const Lang_fr = {
   },
 
   searchBar: "Rechercher...",
+  contact: "Contacts",
+  install_instructions:
+    "Installer pour une meilleure expérience (Chrome/Safari)",
   WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
   USER_WIKIDATA_LANG: "fr",
 };

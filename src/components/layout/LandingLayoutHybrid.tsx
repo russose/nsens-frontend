@@ -71,16 +71,16 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
             align="center"
             overflow="normal"
           >
-            {props.slogan} <Badge position="top" text="beta" />
+            {props.slogan} <Badge position="top" text="beta version" />
           </Heading>
         </Box>
 
-        <Box padding={0} column={10} smColumn={10} mdColumn={6} lgColumn={3}>
+        <Box padding={0} column={10} smColumn={10} mdColumn={5} lgColumn={3}>
           {props.loginSignup}
         </Box>
 
         <Box
-          padding={0}
+          padding={2}
           rounding={rounding}
           height={props.ratio_image}
           width="100%"
@@ -123,7 +123,7 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
             column={12}
             smColumn={12}
             mdColumn={12}
-            lgColumn={10}
+            lgColumn={11}
             overflow="auto"
           >
             <CardFeatureGrid

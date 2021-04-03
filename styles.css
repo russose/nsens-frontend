@@ -24,12 +24,13 @@ html {
 
 body {
   background-color: #ffffff;
+  /* No pull down for PWA */
+  overscroll-behavior-y: contain;
 }
 
 :root {
-  /* --color-p1-1: #3490de; */
-  --color-p1-1: #21209c;
-  --color1: var(--color-p1-1);
+  --color-p1: #3490de;
+  --color1: var(--color-p1);
 
   --g-colorRed0: #ff5247;
   --g-colorRed100: #e60023;

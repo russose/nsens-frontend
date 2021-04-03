@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import {
   isItemSaved,
@@ -24,6 +25,11 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout>
+      <HeaderTitle
+        stores={stores}
+        title={"Explorer, Comprendre, Agir"}
+        hidden={true}
+      />
       <CardAtomGrid
         id="Home"
         stores={stores}
