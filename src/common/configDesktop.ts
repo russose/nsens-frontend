@@ -12,7 +12,7 @@ const card_compact_vizs_size = 120;
 
 export const displayDesktop: GUI_CONFIG_display_T = {
   //card_height: 250,
-  amount_item_displayed: 30,
+  amount_item_displayed: 50,
   max_nodes_network: 110,
   // min_width_network: 500,
   heightTopAndBottom: 200,
@@ -87,8 +87,8 @@ export const displayDesktop: GUI_CONFIG_display_T = {
     max_title_size: 20,
   },
   landing: {
-    ratio_page: "100vh",
-    ratio_logo: "10vh",
+    ratio_page: "93vh",
+    ratio_logo: "8vh",
     ratio_image: "40vh",
     header_size: "md",
     features: {

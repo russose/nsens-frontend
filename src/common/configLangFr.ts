@@ -4,21 +4,26 @@ export const Lang_fr = {
   landing: {
     // slogan: "Transformer l'information en connaissance universelle",
     slogan: "Explorer, Comprendre, Agir",
-    features_title: "Fonctionalités",
+    description:
+      "Entretenir le goût du vrai pour rester libre: \
+      organiser ses connaissances dans des carnets accessibles de partout \
+      et se laisser transporter vers de nouvelles découvertes",
+    // features_title: "Fonctionalités",
     loginSignup: {
       username_placeholder: "Email",
       password_placeholder: "Mot de passe",
       login_label: "Connexion",
       signup_label: "Enregistrement",
-      login_error: "nom d'utilisateur ou mot de passe incorect",
+      login_error: "Nom d'utilisateur ou mot de passe incorect",
       signup_error:
-        "impossible de créer le compte, utilisateur déjà enregistré",
+        "Impossible de créer le compte, utilisateur déjà enregistré",
+      signup_error_duration:
+        "Rafraîchir la page, remplir les champs et attendre quelques secondes avant de s'enregistrer",
     },
     features: [
       {
         title: "Trouver",
-        description:
-          "Trouver des cartes de connaissance de façon ludique et visuelle",
+        description: "Trouver de la connaissance de façon visuelle et ludique",
         icon: "search",
       },
       {
@@ -29,12 +34,13 @@ export const Lang_fr = {
       {
         title: "Rassembler",
         description:
-          "Rassembler ses cartes de connaissance dans des carnets personnalisés",
+          "Rassembler ses trouvailles dans des carnets personnalisés",
         icon: "folder",
       },
       {
         title: "Explorer",
-        description: "Etendre ses découvertes grâce aux cartes suggérées",
+        description:
+          "Explorer de nouveaux horizons et faire des découvertes grâces aux nombreuses suggestions",
         icon: "compass",
       },
     ],
@@ -51,6 +57,7 @@ export const Lang_fr = {
       path: paths.pages.Knowbooks,
     },
     LOGIN: { label: "User", icon: "person", path: paths.pages.User },
+    INFO: { label: "Info", icon: "question-mark", path: paths.pages.Landing },
     SAVE: { label: "Sauver", icon: "angled-pin", path: paths.pages.empty },
     EDIT: { label: "Modifier", icon: "edit", path: paths.pages.empty },
     ARTICLE: {

@@ -249,7 +249,7 @@ export const onLogout = (stores: IStores) => (): void => {
       stores.uiStore.setLoginScreenUsername_("");
     })
     .catch(function (error) {
-      console.log("error in logout...");
+      // console.log("error in logout...");
     });
 };
 
@@ -284,6 +284,10 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       });
   } else if (type === "signup") {
     if (stores.uiStore.loginScreenUsername_ !== successMessage) {
+      stores.uiStore.setLoginScreenError(
+        stores.userStore.GUI_CONFIG.language.landing.loginSignup
+          .signup_error_duration
+      );
       return;
     }
 

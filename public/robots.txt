@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /_next*
+
+# Host
+Host: https://www.nsens.org
+
+# Sitemaps
+Sitemap: https://www.nsens.org/sitemap.xml

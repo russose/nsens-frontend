@@ -38,7 +38,7 @@ export class SavedStore {
     const item = stores.feedStore.getItemFromAnywhere(itemId, stores);
 
     if (item === undefined) {
-      console.log("impossible to save, not item found");
+      // console.log("impossible to save, not item found");
       return;
     }
 
@@ -61,8 +61,8 @@ export class SavedStore {
       .catch(
         action((e) => {
           this.$saved.delete(itemId);
-          console.log(e);
-          console.log("error in saving item");
+          // console.log(e);
+          // console.log("error in saving item");
         })
       );
   }
@@ -80,10 +80,10 @@ export class SavedStore {
           })
         )
         .catch(() => {
-          console.log("network error, error in unsaved");
+          // console.log("network error, error in unsaved");
         });
     } else {
-      console.log("impossible to unsave: Atoms present in Custom Knowbooks");
+      // console.log("impossible to unsave: Atoms present in Custom Knowbooks");
     }
   }
 

@@ -63,7 +63,7 @@ export function findUndefined(list: Object[]) {
   list.forEach((item) => {
     Object.values(item).forEach((value) => {
       if (value === undefined) {
-        console.log(item);
+        // console.log(item);
       }
     });
   });

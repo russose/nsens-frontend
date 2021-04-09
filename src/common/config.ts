@@ -1,7 +1,7 @@
 import { getEmail } from "../libs/utils";
 
 export const successMessage = "you can now login...";
-export const loginDuration = 4000;
+export const loginDuration = 500;
 
 export const LANGUAGE = "fr";
 
@@ -20,6 +20,7 @@ export const CONFIG_FETCHING = {
   max_size_chunk_api: 40,
   amount_related: 10,
   amount_data_fetched_images: 10,
-  max_width_image: 1300,
-  min_width_image: 400,
+  // max_width_image: 1300,
+  max_width_image: 2600,
+  min_width_image: 50,
 };

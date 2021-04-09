@@ -11,6 +11,7 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/utilsConfigGui";
 import HeaderTitle from "../../../src/components/HeaderTitle";
+import AppLayout from "../../../src/components/layout/AppLayout";
 
 const Landing: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -20,7 +21,7 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
   // redirectHomeIfLogged(stores);
 
   const slogan = GUI_CONFIG.language.landing.slogan;
-  const features_title = GUI_CONFIG.language.landing.features_title;
+  const description = GUI_CONFIG.language.landing.description;
   // const path_background_image = GUI_CONFIG.paths.landing.image_background;
   const path_logo = GUI_CONFIG.paths.image_logo_B;
   const path_image = GUI_CONFIG.paths.image_landing;
@@ -41,29 +42,47 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
     }
   );
 
-  return (
-    <>
-      <HeaderTitle
-        stores={stores}
-        title={"Explorer, Comprendre, Agir"}
-        hidden={true}
-      />
-      <LandingLayoutHybrid
-        stores={stores}
-        slogan={slogan}
-        features_title={features_title}
-        // path_background_image={path_background_image}
-        path_logo={path_logo}
-        path_image={path_image}
-        loginSignup={loginSignup}
-        features={features}
-        ratio_page={ratio_page}
-        // ratio_main={ratio_main}
-        ratio_logo={ratio_logo}
-        ratio_image={ratio_image}
-      ></LandingLayoutHybrid>
-    </>
-  );
+  const isLogged = stores.userStore.isLogged;
+  let page;
+  if (!isLogged) {
+    page = (
+      <>
+        <HeaderTitle stores={stores} title={slogan} hidden={true} />
+        <LandingLayoutHybrid
+          stores={stores}
+          slogan={slogan}
+          description={description}
+          path_logo={path_logo}
+          path_image={path_image}
+          loginSignup={loginSignup}
+          features={features}
+          ratio_page={ratio_page}
+          ratio_logo={ratio_logo}
+          ratio_image={ratio_image}
+        ></LandingLayoutHybrid>
+      </>
+    );
+  } else {
+    page = (
+      <AppLayout>
+        <HeaderTitle stores={stores} title={slogan} hidden={true} />
+        <LandingLayoutHybrid
+          stores={stores}
+          slogan={slogan}
+          description={description}
+          path_logo={path_logo}
+          path_image={path_image}
+          // loginSignup={loginSignup}
+          features={features}
+          ratio_page={ratio_page}
+          ratio_logo={ratio_logo}
+          ratio_image={ratio_image}
+        ></LandingLayoutHybrid>
+      </AppLayout>
+    );
+  }
+
+  return <>{page}</>;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {

@@ -23,6 +23,9 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     {
       Id: ButtonIDType.LOGIN,
     },
+    {
+      Id: ButtonIDType.INFO,
+    },
   ];
 
   return (

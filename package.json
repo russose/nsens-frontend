@@ -11,7 +11,7 @@
     "dev-pm2": "pm2 start next --name Front",
     "build": "next build",
     "start": "next start",
-    "export": "rm -rf frontend-static/ .next/ && next build && next export -o frontend-static && cp robots.txt frontend-static/ &&zip -rq frontend-static.zip frontend-static/",
+    "export": "rm -rf frontend-static/ .next/ && next build && next-sitemap && next export -o frontend-static && cp .htaccess frontend-static/ &&zip -rq frontend-static.zip frontend-static/",
     "serve": "serve frontend-static -l 3000",
     "start-pm2": "pm2 start \"next start\" --name Front",
     "docker_old": "next build && pm2-runtime \"next start\" --name Front",
@@ -39,6 +39,7 @@
     "@types/gestalt": "^20.2.0",
     "@types/node": "^14.14.34",
     "@types/react": "^17.0.3",
+    "next-sitemap": "^1.6.20",
     "serve": "^11.3.2",
     "typescript": "^4.2.3"
   },

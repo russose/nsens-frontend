@@ -121,7 +121,7 @@ export class KnowkookStore {
           )
           .catch((error) => {
             // this.knowbooks.set(knowbookID, knowbook_backup);
-            console.log("error in adding item in knowbook");
+            // console.log("error in adding item in knowbook");
             // return;
           });
       } else {
@@ -153,7 +153,7 @@ export class KnowkookStore {
         // })
         .catch(() => {
           // this.knowbooks.delete(knowbookID);
-          console.log("error in creating knowbook and adding item");
+          // console.log("error in creating knowbook and adding item");
           // return;
         });
     }
@@ -162,7 +162,7 @@ export class KnowkookStore {
   //Update both Knowbooks and saved (tags)
   removeItemFromKnowbook(knowbookID: KnowbookID, atomId: AtomID) {
     if (knowbookID === undefined || atomId === undefined) {
-      console.log("undefined values");
+      // console.log("undefined values");
       return;
     }
 
@@ -187,15 +187,15 @@ export class KnowkookStore {
           )
           .catch(() => {
             // this.knowbooks.set(knowbookID, knowbook_backup);
-            console.log("error in removing item from knowbook");
+            // console.log("error in removing item from knowbook");
             return;
           });
       } else {
-        console.log("undefined values");
+        // console.log("undefined values");
         return;
       }
     } else {
-      console.log("impossible to remove from knowbook");
+      // console.log("impossible to remove from knowbook");
       return;
     }
   }
@@ -224,7 +224,7 @@ export class KnowkookStore {
       const knowbookContentId = knowbook.items;
       return knowbookContentId.includes(atomId);
     } else {
-      console.log("knowbook doesn't exist");
+      // console.log("knowbook doesn't exist");
       return false;
     }
   }

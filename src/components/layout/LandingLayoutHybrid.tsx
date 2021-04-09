@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Box, Image, Heading, Badge } from "gestalt";
+import { Box, Image, Heading, Text, Badge } from "gestalt";
 import CardFeatureGrid from "../CardFeatureGrid";
 import {
   ColorT,
@@ -14,11 +14,11 @@ import { IStores } from "../../stores/_RootStore";
 interface ILandingLayoutHybridProps {
   stores: IStores;
   slogan: string;
-  features_title: string;
+  description: string;
   // path_background_image: string;
   path_logo: string;
   path_image: string;
-  loginSignup: reactComponentT;
+  loginSignup?: reactComponentT;
   features: IFeature[];
   ratio_page: string;
   // ratio_main: string;
@@ -44,11 +44,11 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
         display="flex"
         direction="column"
         alignItems="center"
-        justifyContent="evenly"
+        justifyContent="between"
         overflow="hidden"
       >
         <Box
-          padding={0}
+          padding={2}
           rounding={rounding}
           height={props.ratio_logo}
           width="100%"
@@ -64,23 +64,8 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
           ></Image>
         </Box>
 
-        <Box padding={0} column={12}>
-          <Heading
-            // color="white"
-            size={header_size}
-            align="center"
-            overflow="normal"
-          >
-            {props.slogan} <Badge position="top" text="beta version" />
-          </Heading>
-        </Box>
-
-        <Box padding={0} column={10} smColumn={10} mdColumn={5} lgColumn={3}>
-          {props.loginSignup}
-        </Box>
-
         <Box
-          padding={2}
+          padding={0}
           rounding={rounding}
           height={props.ratio_image}
           width="100%"
@@ -97,6 +82,29 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
           ></Image>
         </Box>
 
+        <Box padding={0} column={12}>
+          <Heading
+            // color="white"
+            size={header_size}
+            align="center"
+            overflow="normal"
+          >
+            {props.slogan} <Badge position="top" text="beta" />
+          </Heading>
+        </Box>
+
+        {props.loginSignup !== undefined && (
+          <Box padding={0} column={10} smColumn={10} mdColumn={5} lgColumn={3}>
+            {props.loginSignup}
+          </Box>
+        )}
+
+        <Box padding={0} column={12} smColumn={12} mdColumn={11} lgColumn={9}>
+          <Heading size={header_size} align="center" overflow="normal">
+            {props.description}
+          </Heading>
+        </Box>
+
         <Box
           padding={0}
           column={12}
@@ -108,14 +116,6 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
           alignItems="center"
           rounding={rounding}
         >
-          {/* <Heading
-            // color="white"
-            size={header_size}
-            align="center"
-            overflow="normal"
-          >
-            {props.features_title}
-          </Heading> */}
           <Box
             padding={0}
             display="flex"

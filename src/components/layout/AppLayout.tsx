@@ -13,9 +13,12 @@ import PageLayoutHybrid from "./PageLayoutHybrid";
 import Dialogs from "../Dialogs";
 import { useStores } from "../../stores/_RootStoreHook";
 import { isMobile } from "../../libs/utils";
+import { useRouter } from "next/router";
 
 const AppLayout: React.FunctionComponent = (props) => {
   const stores = useStores();
+
+  const router = useRouter();
 
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
   const path_logo_image = GUI_CONFIG.paths.image_logo_W;
@@ -94,6 +97,7 @@ const AppLayout: React.FunctionComponent = (props) => {
 
   let top;
   let bottom;
+
   if (isMobile(GUI_CONFIG.id)) {
     top = top_mobile;
     bottom = bottom_mobile;
@@ -101,11 +105,21 @@ const AppLayout: React.FunctionComponent = (props) => {
   } else {
     top = top_desktop;
   }
+  let free_space_buttom;
+  if (
+    isMobile(GUI_CONFIG.id) &&
+    !router.pathname.includes(GUI_CONFIG.paths.pages.ItemArticle)
+  ) {
+    free_space_buttom = <Box height="30vh" />;
+  } else {
+    free_space_buttom = <> </>;
+  }
 
   return (
     <>
       <PageLayoutHybrid stores={stores} top={top} bottom={bottom}>
         {props.children}
+        {free_space_buttom}
       </PageLayoutHybrid>
       <Dialogs />
     </>

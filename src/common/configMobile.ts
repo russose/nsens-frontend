@@ -7,7 +7,7 @@ const card_compact_vizs_size = 120;
 
 export const displayMobile = {
   //card_height: 250,
-  amount_item_displayed: 20,
+  amount_item_displayed: 30,
   max_nodes_network: 1,
   // min_width_network: 500,
   heightTopAndBottom: 190,
@@ -96,7 +96,7 @@ export const displayMobile = {
     //   title_card_size: "lg",
     //   max_title_size: 99,
     // },
-    ratio_page: "180vh",
+    ratio_page: "160vh",
     // ratio_main: "75vh",
     ratio_logo: "10vh",
     ratio_image: "30vh",
