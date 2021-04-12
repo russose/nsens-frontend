@@ -4,7 +4,7 @@ import {
   onChangeInputValueEditKnowbooks,
   onChangeKnwobooksInclusionEditKnowbooks,
   onSubmitChangesEditKnowbooks,
-} from "../handlers";
+} from "../handlers/handlers_Knowbooks";
 import { useStores } from "../stores/_RootStoreHook";
 import DialogEditKnowbooksForm from "./DialogEditKnowbooksForm";
 

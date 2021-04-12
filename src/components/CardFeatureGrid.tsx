@@ -16,9 +16,6 @@ const CardFeatureGrid: React.FunctionComponent<ICardFeatureGridProps> = (
 ) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const features_props = GUI_CONFIG.display.landing.features;
-  // const color = GUI_CONFIG.general.colors.item_color;
-  // const card_sizes = props.config.display.landing.sizes;
-  // const color = props.config.general.colors.item_color;
 
   if (props.features === undefined || props.features.length === 0) {
     return <></>;

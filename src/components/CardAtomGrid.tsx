@@ -1,10 +1,13 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
+import dynamic from "next/dynamic";
 import React from "react";
 import { handlerT, IAtom, PaddingT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
 import CardAtom from "./CardAtom";
-import CardAtomCompact from "./CardAtomCompact";
+
+//Compact mode "never" used
+const CardAtomCompact = dynamic(() => import("./CardAtomCompact"));
 
 interface ICardAtomGridProps {
   id: string;

@@ -1,6 +1,6 @@
-import { displayMobile } from "./configMobile";
+import { configGUIMobile } from "./configGUIMobile";
 
-export type GUI_CONFIG_display_T = typeof displayMobile;
+export type GUI_CONFIG_display_T = typeof configGUIMobile;
 
 const card_size = "15vh";
 const card_compact_size = "10vh";
@@ -10,7 +10,7 @@ const card_compact_vizs_size = 120;
 // const card_compact_size = card_size * 0.8;
 // const card_compact_vizs_size = card_size * 0.5;
 
-export const displayDesktop: GUI_CONFIG_display_T = {
+export const configGUIDesktop: GUI_CONFIG_display_T = {
   //card_height: 250,
   amount_item_displayed: 50,
   max_nodes_network: 110,
@@ -89,7 +89,7 @@ export const displayDesktop: GUI_CONFIG_display_T = {
   landing: {
     ratio_page: "93vh",
     ratio_logo: "8vh",
-    ratio_image: "40vh",
+    ratio_image: "30vh",
     header_size: "md",
     features: {
       lgColumn: 2,

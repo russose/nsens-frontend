@@ -1,10 +1,13 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
+import dynamic from "next/dynamic";
 import React from "react";
 import { PaddingT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
 import CardKnow, { ICardKnowProps } from "./CardKnow";
-import CardKnowCompact from "./CardKnowCompact";
+
+//Compact mode "never" used
+const CardKnowCompact = dynamic(() => import("./CardKnowCompact"));
 
 interface ICardKnowGridSpecialProps {
   id: string;

@@ -94,7 +94,7 @@ const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = 
         </Box>
 
         {props.loginSignup !== undefined && (
-          <Box padding={0} column={10} smColumn={10} mdColumn={5} lgColumn={3}>
+          <Box padding={0} column={11} smColumn={11} mdColumn={5} lgColumn={3}>
             {props.loginSignup}
           </Box>
         )}

@@ -1,11 +1,15 @@
 import { Group } from "@visx/group";
 import { observer } from "mobx-react-lite";
+import dynamic from "next/dynamic";
 import React from "react";
 import { isMobile } from "../../libs/utils";
 import { IStores } from "../../stores/_RootStore";
 import MyZoom from "./MyZoom";
-import Network from "./Network";
-import NetworkFlat from "./NetworkFlat";
+// import Network from "./Network";
+// import NetworkFlat from "./NetworkFlat";
+
+const Network = dynamic(() => import("./Network"), { ssr: false });
+const NetworkFlat = dynamic(() => import("./NetworkFlat"), { ssr: false });
 
 export type INetworkZoomableProps = {
   itemId: string;

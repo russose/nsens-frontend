@@ -71,18 +71,6 @@ export class UserStore {
     return this.$GUI_CONFIG;
   }
 
-  set_ParamsPage_GUI_CONFIG(GUI_CONFIG: GUI_CONFIG_T) {
-    if (GUI_CONFIG === undefined) {
-      return;
-    }
-    this.$GUI_CONFIG = GUI_CONFIG;
-    if (GUI_CONFIG.id !== undefined) {
-      const paramsPage: any[] = GUI_CONFIG.id.split("_");
-      this.$paramsPage.lang = paramsPage[0];
-      this.$paramsPage.display = paramsPage[1];
-    }
-  }
-
   setscreenNoSSR(): {
     width: number;
     height: number;
@@ -98,12 +86,15 @@ export class UserStore {
     }
   }
 
-  goPage(paramsPage: IparamsPage, page: string) {
+  goPage(paramsPage: IparamsPage, page: string, reload: boolean = false) {
     if (process.browser) {
       Router.push({
         pathname: this.rootPath + page,
         query: paramsPage as any,
       });
+      if (reload) {
+        Router.reload();
+      }
     }
   }
 
@@ -153,14 +144,15 @@ export class UserStore {
   }
 
   initializeAppAndRedirect(stores: IStores, GUI_CONFIG: GUI_CONFIG_T): void {
-    if (
-      this.GUI_CONFIG === undefined ||
-      this.GUI_CONFIG.id === undefined ||
-      GUI_CONFIG.id !== this.GUI_CONFIG.id
-    ) {
-      this.set_ParamsPage_GUI_CONFIG(GUI_CONFIG);
-    }
+    // if (
+    //   this.GUI_CONFIG === undefined ||
+    //   this.GUI_CONFIG.id === undefined ||
+    //   GUI_CONFIG.id !== this.GUI_CONFIG.id
+    // ) {
+    //   this.set_ParamsPage_GUI_CONFIG(GUI_CONFIG);
+    // }
 
+    this.set_ParamsPage_GUI_CONFIG(GUI_CONFIG);
     if (this.user === null) {
       //Not initialyzed
       this.initializeApp(stores)
@@ -175,30 +167,34 @@ export class UserStore {
 
   redirectAccordingContext() {
     if (process.browser) {
-      const max_width_mobile = this.$GUI_CONFIG.general.max_width_mobile;
-      const isMobile: boolean =
-        hasTouchScreen(window) || window.innerWidth < max_width_mobile;
+      // const max_width_mobile = this.$GUI_CONFIG.general.max_width_mobile;
+      // const isMobile: boolean =
+      //   hasTouchScreen(window) || window.innerWidth < max_width_mobile;
 
-      let paramsPage_lang = ConfigLanguage.fr;
+      // let paramsPage_lang = ConfigLanguage.fr;
 
-      let paramsPage_display;
-      if (isMobile) {
-        // if (
-        //   this.$screen.width < this.$GUI_CONFIG.general.tiny_screen_breakpoint
-        // ) {
-        //   paramsPage_display = ConfigDisplay.small;
-        // } else {
-        paramsPage_display = ConfigDisplay.mobile;
-        // }
-      } else {
-        if (
-          this.$screen.width > this.$GUI_CONFIG.general.large_screen_breakpoint
-        ) {
-          paramsPage_display = ConfigDisplay.large;
-        } else {
-          paramsPage_display = ConfigDisplay.desktop;
-        }
-      }
+      // let paramsPage_display;
+      // if (isMobile) {
+      //   // if (
+      //   //   this.$screen.width < this.$GUI_CONFIG.general.tiny_screen_breakpoint
+      //   // ) {
+      //   //   paramsPage_display = ConfigDisplay.small;
+      //   // } else {
+      //   paramsPage_display = ConfigDisplay.mobile;
+      //   // }
+      // } else {
+      //   if (
+      //     this.$screen.width > this.$GUI_CONFIG.general.large_screen_breakpoint
+      //   ) {
+      //     paramsPage_display = ConfigDisplay.large;
+      //   } else {
+      //     paramsPage_display = ConfigDisplay.desktop;
+      //   }
+      // }
+
+      const paramsPage = this.getParamsPageAccordingContext();
+      const paramsPage_lang = paramsPage.lang;
+      const paramsPage_display = paramsPage.display;
 
       if (!this.isLogged) {
         this.goPage(
@@ -219,4 +215,73 @@ export class UserStore {
       }
     }
   }
+
+  getParamsPageAccordingContext(): IparamsPage {
+    if (process.browser) {
+      const max_width_mobile = this.$GUI_CONFIG.general.max_width_mobile;
+      const isMobile: boolean =
+        hasTouchScreen(window) || window.innerWidth < max_width_mobile;
+
+      let paramsPage_lang = ConfigLanguage.fr;
+
+      let paramsPage_display: ConfigDisplay;
+      if (isMobile) {
+        // if (
+        //   this.$screen.width < this.$GUI_CONFIG.general.tiny_screen_breakpoint
+        // ) {
+        //   paramsPage_display = ConfigDisplay.small;
+        // } else {
+        paramsPage_display = ConfigDisplay.mobile;
+        // }
+      } else {
+        if (
+          this.$screen.width > this.$GUI_CONFIG.general.large_screen_breakpoint
+        ) {
+          paramsPage_display = ConfigDisplay.large;
+        } else {
+          paramsPage_display = ConfigDisplay.desktop;
+        }
+      }
+      return { lang: paramsPage_lang, display: paramsPage_display };
+    }
+    return undefined;
+  }
+
+  set_ParamsPage_GUI_CONFIG(GUI_CONFIG: GUI_CONFIG_T) {
+    if (GUI_CONFIG === undefined) {
+      return;
+    }
+
+    if (
+      this.GUI_CONFIG === undefined ||
+      this.GUI_CONFIG.id === undefined ||
+      GUI_CONFIG.id !== this.GUI_CONFIG.id
+    ) {
+      this.$GUI_CONFIG = GUI_CONFIG;
+      if (GUI_CONFIG.id !== undefined) {
+        const paramsPage: any[] = GUI_CONFIG.id.split("_");
+        this.$paramsPage.lang = paramsPage[0];
+        this.$paramsPage.display = paramsPage[1];
+      }
+    }
+  }
+
+  // initializeAppWithoutDataAndGoPage(
+  //   GUI_CONFIG: GUI_CONFIG_T,
+  //   page: string
+  // ): void {
+  //   this.set_ParamsPage_GUI_CONFIG(GUI_CONFIG);
+  //   if (process.browser) {
+  //     const paramsPage = this.getParamsPageAccordingContext();
+  //     const paramsPage_lang = paramsPage.lang;
+  //     const paramsPage_display = paramsPage.display;
+  //     this.goPage(
+  //       {
+  //         lang: paramsPage_lang,
+  //         display: paramsPage_display,
+  //       },
+  //       page
+  //     );
+  //   }
+  // }
 }

@@ -212,6 +212,28 @@ export async function _logout(): Promise<string> {
   // }
 }
 
+export async function _getValidationNewPassword(
+  username: string
+): Promise<string> {
+  const res = await _api("post", "/auth/reset_password/validationCode", {
+    username: username,
+  });
+  return res;
+}
+
+export async function _setNewPassword(
+  username: string,
+  password: string,
+  checkNumber: string
+): Promise<string> {
+  const res = await _api("post", "/auth/reset_password", {
+    username: username,
+    password: password,
+    checkNumber: checkNumber,
+  });
+  return res;
+}
+
 /**
  * Saved
  */

@@ -4,12 +4,13 @@ import React from "react";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
+import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
 import {
   isItemSaved,
   isItemSavedActivated,
-  onEditKnowbooks,
   onSaved,
-} from "../../../src/handlers";
+} from "../../../src/handlers/handlers_Saved";
+
 import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import {
   IPage,

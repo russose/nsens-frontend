@@ -6,17 +6,18 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/utilsConfigGui";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
-import {
-  isItemSaved,
-  isItemSavedActivated,
-  onEditKnowbooks,
-  onSaved,
-} from "../../../src/handlers";
+
 import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { GetStaticPaths, GetStaticProps } from "next";
 import HeaderTitle from "../../../src/components/HeaderTitle";
+import {
+  isItemSaved,
+  isItemSavedActivated,
+  onSaved,
+} from "../../../src/handlers/handlers_Saved";
+import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
 
 const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();

@@ -2,13 +2,15 @@ import { Box, Divider } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-import { paths } from "../../../src/common/configPaths";
 import { ICardKnowProps } from "../../../src/components/CardKnow";
 import CardKnowGrid from "../../../src/components/CardKnowGrid";
 import CardKnowGridSpecial from "../../../src/components/CardKnowGridSpecial";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
-import { onDeleteKnowbook, onOpenRenameKnowbook } from "../../../src/handlers";
+import {
+  onDeleteKnowbook,
+  onOpenRenameKnowbook,
+} from "../../../src/handlers/handlers_Knowbooks";
 import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import {
   IPage,
@@ -26,8 +28,8 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   const knowbook_none_title = GUI_CONFIG.language.knowbooks.None_Title;
   const knowbook_all_image = GUI_CONFIG.paths.knowbook_all_image;
   const knowbook_none_image = GUI_CONFIG.paths.knowbook_none_image;
-  const pathKnowbookSaved = paths.pages.KnowbookSaved;
-  const pathKnowbookNone = paths.pages.KnowbookNone;
+  const pathKnowbookSaved = GUI_CONFIG.paths.pages.KnowbookSaved;
+  const pathKnowbookNone = GUI_CONFIG.paths.pages.KnowbookNone;
   const title = GUI_CONFIG.language.knowbooks.knowbooks_title;
 
   const cardKnowPropsSavedNone: ICardKnowProps[] = [

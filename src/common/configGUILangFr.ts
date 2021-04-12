@@ -1,17 +1,21 @@
 import { paths } from "./configPaths";
 
 export const Lang_fr = {
+  searchBar: "Rechercher...",
+  // WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
+  // USER_WIKIDATA_LANG: "fr",
   landing: {
     // slogan: "Transformer l'information en connaissance universelle",
     slogan: "Explorer, Comprendre, Agir",
     description:
       "Entretenir le goût du vrai pour rester libre: \
-      organiser ses connaissances dans des carnets accessibles de partout \
-      et se laisser transporter vers de nouvelles découvertes",
+      organiser ses connaissances dans des carnets accessibles partout \
+      et se laisser transporter vers de nouvelles découvertes.",
     // features_title: "Fonctionalités",
     loginSignup: {
       username_placeholder: "Email",
       password_placeholder: "Mot de passe",
+      missing_password_text: "Mot de passe oublié ?",
       login_label: "Connexion",
       signup_label: "Enregistrement",
       login_error: "Nom d'utilisateur ou mot de passe incorect",
@@ -82,11 +86,23 @@ export const Lang_fr = {
     rename_label: "Renommer",
     cancel_label: "Annuler",
   },
-
-  searchBar: "Rechercher...",
-  contact: "Contacts",
-  install_instructions:
-    "Installer pour une meilleure expérience (Chrome/Safari)",
-  WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
-  USER_WIKIDATA_LANG: "fr",
+  changePassword: {
+    title: "Modifier votre mot de passe",
+    password_placeholder: "Nouveau mot de passe",
+    placeholder_validationCode: "Code de vérification reçu par email",
+    label_sendValidationCode: "1-Recevoir code validation",
+    label_changePassword: "2-Changer mot de passe",
+    sendValidationCode_error:
+      "Email incorrect pour l'envoi du code de validation",
+    sendValidationCode_success:
+      "Code de validation envoyé sur votre boite mail",
+    changePassword_error: "Code de validation incorrect ou mot de passe vide",
+  },
+  user: {
+    contact: "Contacts",
+    install_instructions:
+      "Installer pour une meilleure expérience (Chrome/Safari)",
+    deconnexion: "Se déconnecter",
+    changePassword: "Modifier mot de passe",
+  },
 };

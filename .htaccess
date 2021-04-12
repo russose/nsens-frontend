@@ -1,1 +1,6 @@
 Allow from all
+
+#For Tests: Autoriser seulement quelques IP
+#order deny,allow
+#deny from all
+#allow from 84.4.236.83

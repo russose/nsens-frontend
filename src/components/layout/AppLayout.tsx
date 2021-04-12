@@ -1,12 +1,6 @@
 import { Box, Image, TapArea } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import {
-  onSearchHomeKeyboard,
-  onSearchHomeSubmit,
-  onSearchHomeText,
-  onTapLogo,
-} from "../../handlers";
 import SearchBar from "../SearchBar";
 import MenuBarNavigation from "../MenuBarNavigation";
 import PageLayoutHybrid from "./PageLayoutHybrid";
@@ -14,6 +8,12 @@ import Dialogs from "../Dialogs";
 import { useStores } from "../../stores/_RootStoreHook";
 import { isMobile } from "../../libs/utils";
 import { useRouter } from "next/router";
+import {
+  onSearchHomeKeyboard,
+  onSearchHomeSubmit,
+  onSearchHomeText,
+  onTapLogo,
+} from "../../handlers/handlers_Logo_Searchbar";
 
 const AppLayout: React.FunctionComponent = (props) => {
   const stores = useStores();
@@ -21,7 +21,7 @@ const AppLayout: React.FunctionComponent = (props) => {
   const router = useRouter();
 
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
-  const path_logo_image = GUI_CONFIG.paths.image_logo_W;
+  const path_logo_image = GUI_CONFIG.paths.image_logo_W_small;
 
   const navigationMenu = <MenuBarNavigation stores={stores} />;
 

@@ -5,7 +5,7 @@ const card_compact_vizs_size = 120;
 // const card_compact_size = card_size_ * 0.8;
 // const card_compact_vizs_size = card_size_ * 0.5;
 
-export const displayMobile = {
+export const configGUIMobile = {
   //card_height: 250,
   amount_item_displayed: 30,
   max_nodes_network: 1,

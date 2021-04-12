@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import { Button, Box } from "gestalt";
-import { onLogout } from "../../../src/handlers";
 import React from "react";
 import {
   IPage,
@@ -14,6 +13,7 @@ import HeaderTitle from "../../../src/components/HeaderTitle";
 import Contacts from "../../../src/components/Contacts";
 import { getEmail, getTwitter, isMobile } from "../../../src/libs/utils";
 import Installation from "../../../src/components/Installation";
+import { onLogout } from "../../../src/handlers/handlers_LoginSignup";
 
 export function isInstalled(): boolean {
   let result = false;
@@ -41,14 +41,34 @@ const User: React.FunctionComponent<IPage> = (props) => {
   stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
   const title =
     stores.userStore.user === null ? "" : stores.userStore.user.username;
-  const contact = GUI_CONFIG.language.contact;
+  const deconnexion = GUI_CONFIG.language.user.deconnexion;
+  const changePassword = GUI_CONFIG.language.user.changePassword;
+  const contact = GUI_CONFIG.language.user.contact;
+
+  const resetPasswordButton = (
+    <Box column={8} smColumn={6} mdColumn={3} lgColumn={2}>
+      <Button
+        accessibilityLabel="resetPassword"
+        text={changePassword}
+        size="lg"
+        // color="red"
+        onClick={() => {
+          stores.userStore.goPage(
+            stores.userStore.paramsPage,
+            stores.userStore.GUI_CONFIG.paths.pages.ChangePassword
+          );
+        }}
+      />
+    </Box>
+  );
 
   const logoutButton = (
     <Box column={8} smColumn={6} mdColumn={3} lgColumn={2}>
       <Button
         accessibilityLabel="logout"
-        text="Logout"
+        text={deconnexion}
         size="lg"
+        color="red"
         onClick={onLogout(stores)}
       />
     </Box>
@@ -59,7 +79,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
       <Installation
         height="25vh"
         path_image={GUI_CONFIG.paths.image_install}
-        instruction={GUI_CONFIG.language.install_instructions}
+        instruction={GUI_CONFIG.language.user.install_instructions}
       />
     );
 
@@ -84,8 +104,9 @@ const User: React.FunctionComponent<IPage> = (props) => {
           icon_size={32}
           text_size="lg"
         />
-        {installation_instructions}
+        {resetPasswordButton}
         {logoutButton}
+        {installation_instructions}
       </Box>
     </AppLayout>
   );

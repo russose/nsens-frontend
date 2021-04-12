@@ -3,12 +3,12 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
 import {
   isItemSaved,
   isItemSavedActivated,
-  onEditKnowbooks,
   onSaved,
-} from "../../handlers";
+} from "../../handlers/handlers_Saved";
 import { group_name } from "../../stores/GraphStore";
 import { IStores } from "../../stores/_RootStore";
 import { useStores } from "../../stores/_RootStoreHook";

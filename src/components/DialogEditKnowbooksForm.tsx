@@ -86,7 +86,7 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
             iconColor={iconColorDefault}
             size={button_icon_size}
             onClick={props.handler_cancel}
-          />{" "}
+          />
           <IconButton
             accessibilityLabel="ok"
             icon="check-circle"

@@ -1,19 +1,14 @@
-import { Box, Icon, Module, Text, TextField } from "gestalt";
+import { Box, Icon, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { ColorT, IconT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
 
 interface ICardFeatureProps {
-  // id: AtomID;
   stores: IStores;
   title: string;
   description: string;
   icon: IconT;
-  // image_url?: string;
-  // color?: ColorT;
-  // pathname?: string;
-  // queryObject?: ParsedUrlQueryInput;
 }
 
 const CardFeature: React.FunctionComponent<ICardFeatureProps> = (props) => {
@@ -26,30 +21,13 @@ const CardFeature: React.FunctionComponent<ICardFeatureProps> = (props) => {
 
   return (
     <>
-      {/* <Module
-        id={props.title}
-        title={props.title}
-        icon={props.icon}
-        // iconAccessibilityLabel="Module Locked - check permission settings"
-      >
-        <Text size={feature_desciption_size}>{props.description}</Text>
-      </Module> */}
-
       <Box rounding={2} borderStyle="shadow" padding={2}>
-        {/* <Box
-          padding={0}
-          display="flex"
-          direction="column"
-          // flex="grow"
-          justifyContent="between"
-        > */}
         <Box
           display="flex"
           direction="row"
           alignItems="center"
           justifyContent="start"
           padding={0}
-          // color="darkGray"
         >
           <Box padding={2}>
             <Icon
@@ -66,7 +44,6 @@ const CardFeature: React.FunctionComponent<ICardFeatureProps> = (props) => {
           <Text size={feature_desciption_size}>{props.description}</Text>
         </Box>
       </Box>
-      {/* </Box> */}
     </>
   );
 };

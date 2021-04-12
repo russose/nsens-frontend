@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Heading } from "gestalt";
 import { handlerT, RoundingT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
+import Head from "next/head";
 
 interface IHeaderTitleProps {
   stores: IStores;
@@ -14,12 +15,23 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_headers = GUI_CONFIG.general.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
+  const description = GUI_CONFIG.language.landing.description;
+  const title_page = "n.Sens" + " - " + props.title;
+
+  const head = (
+    <Head>
+      <title>{title_page}</title>
+      <meta name="description" content={description} />
+    </Head>
+  );
+
   const display_ =
     props.hidden === undefined || props.hidden === false
       ? "block"
       : "visuallyHidden";
   return (
     <>
+      {head}
       <Box display={display_}>
         <Box padding={2}></Box>
         <Box
@@ -47,7 +59,7 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
             </Heading>
           </Box>
         </Box>
-        <Box padding={1}></Box>{" "}
+        <Box padding={1}></Box>
       </Box>
     </>
   );

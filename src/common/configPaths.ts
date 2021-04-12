@@ -4,8 +4,10 @@ export const paths = {
   knowbook_none_image: "/The_Scientific_Universe_small.webp",
   // knowbook_image: "",
   // user_image: "/icon_user.jpg",
-  image_logo_W: "/logo2_W.webp",
+  // image_logo_W: "/logo2_W.webp",
   image_logo_B: "/logo2_B.webp",
+  image_logo_W_small: "/logo2_W_small.webp",
+  // image_logo_B_small: "/logo2_B_small.webp",
   image_landing: "/landing.webp",
   image_install: "/install.webp",
   pages: {
@@ -18,6 +20,7 @@ export const paths = {
     ItemArticle: "/ItemArticle",
     ItemNetwork: "/ItemNetwork",
     User: "/User",
+    ChangePassword: "/ChangePassword",
     empty: "",
   },
   // landing: {

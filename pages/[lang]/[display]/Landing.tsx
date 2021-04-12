@@ -1,5 +1,4 @@
 import { observer } from "mobx-react-lite";
-import LoginSignup from "../../../src/components/LoginSignup";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import React from "react";
 import LandingLayoutHybrid from "../../../src/components/layout/LandingLayoutHybrid";
@@ -12,13 +11,16 @@ import {
 } from "../../../src/libs/utilsConfigGui";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
+import FormLoginSignup from "../../../src/components/FormLoginSignup";
+import {
+  onChangeUsernamePassword,
+  onSubmitLoginSignup,
+} from "../../../src/handlers/handlers_LoginSignup";
 
 const Landing: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
   stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
-
-  // redirectHomeIfLogged(stores);
 
   const slogan = GUI_CONFIG.language.landing.slogan;
   const description = GUI_CONFIG.language.landing.description;
@@ -29,7 +31,27 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
   // const ratio_main = GUI_CONFIG.display.landing.ratio_main;
   const ratio_logo = GUI_CONFIG.display.landing.ratio_logo;
   const ratio_image = GUI_CONFIG.display.landing.ratio_image;
-  const loginSignup = <LoginSignup />;
+  const placeholder_username =
+    GUI_CONFIG.language.landing.loginSignup.username_placeholder;
+  const password_placeholder =
+    GUI_CONFIG.language.landing.loginSignup.password_placeholder;
+  const missing_password_text =
+    GUI_CONFIG.language.landing.loginSignup.missing_password_text;
+  const login_label = GUI_CONFIG.language.landing.loginSignup.login_label;
+  const signup_label = GUI_CONFIG.language.landing.loginSignup.signup_label;
+
+  const loginSignup = (
+    <FormLoginSignup
+      stores={stores}
+      placeholder_username={placeholder_username}
+      placeholder_password={password_placeholder}
+      missing_password_text={missing_password_text}
+      label_login={login_label}
+      label_signup={signup_label}
+      handler_text={onChangeUsernamePassword(stores.uiStore)}
+      handler_button={onSubmitLoginSignup(stores)}
+    />
+  );
 
   const features: IFeature[] = GUI_CONFIG.language.landing.features.map(
     (item: object, index: number) => {

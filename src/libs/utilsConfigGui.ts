@@ -1,11 +1,9 @@
-import { GUI_CONFIG, GUI_CONFIG_T } from "../common/configGUI";
-import { displayDesktop } from "../common/configDesktop";
-import { displayMobile } from "../common/configMobile";
-import { Lang_fr } from "../common/configLangFr";
+import { GUI_CONFIG_T } from "../common/configGUI";
+import { Lang_fr } from "../common/configGUILangFr";
 import { paths } from "../common/configPaths";
 import { ConfigLanguage, ConfigDisplay } from "../common/types";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { configSpecialScreen } from "../common/configSpecialScreen";
+import { configGUIGeneral } from "../common/configGUIGeneral";
 
 export interface IPage {
   guiConfigData: GUI_CONFIG_T;
@@ -13,7 +11,6 @@ export interface IPage {
 
 function getAllGuiConfig() {
   const guiConfigList = [
-    // { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.small } },
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.mobile } },
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.desktop } },
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.large } },
@@ -22,40 +19,75 @@ function getAllGuiConfig() {
   return guiConfigList;
 }
 
-function getGuiConfigData(params: any): GUI_CONFIG_T {
+async function getGuiConfigData(params: any): Promise<GUI_CONFIG_T> {
   const lang = params.lang;
   const display = params.display;
-  const GUI_CONFIG__: GUI_CONFIG_T = {
-    id: lang + "_" + display,
-    general: GUI_CONFIG.general,
-    language: Lang_fr,
-    display: displayMobile,
-    paths: paths,
-  };
+  const id = lang + "_" + display;
+
+  let GUI_CONFIG__: GUI_CONFIG_T;
+  // GUI_CONFIG__ = {
+  //   id: id,
+  //   general: displayGeneral,
+  //   language: Lang_fr,
+  //   display: displayMobile,
+  //   paths: paths,
+  // };
+
+  // const GUI_CONFIG__: GUI_CONFIG_T = {
+  //   id: id,
+  //   general: GUI_CONFIG.general,
+  //   language: Lang_fr,
+  //   display: displayMobile,
+  //   paths: paths,
+  // };
 
   if (params === undefined) {
-    //nothing to do
+    const configGUIMobile = await import("../common/configGUIMobile");
+    GUI_CONFIG__ = {
+      id: id,
+      general: configGUIGeneral,
+      language: Lang_fr,
+      display: configGUIMobile.configGUIMobile,
+      paths: paths,
+    };
   } else if (display === ConfigDisplay.mobile) {
-    //nothing to do
-  }
-  // else if (display === ConfigDisplay.small) {
-  //   // const dim = 100;
-  //   const dim = configSpecialScreen.small.atom_compact_sizes_dim;
-  //   GUI_CONFIG__.display.atom_compact_sizes.width = dim;
-  //   GUI_CONFIG__.display.atom_compact_sizes.height = dim;
-  //   GUI_CONFIG__.display.knowbook_compact_sizes.width = dim;
-  //   GUI_CONFIG__.display.knowbook_compact_sizes.height = dim;
-  // }
-  else if (display === ConfigDisplay.desktop) {
-    GUI_CONFIG__.display = displayDesktop;
+    const configGUIMobile = await import("../common/configGUIMobile");
+    GUI_CONFIG__ = {
+      id: id,
+      general: configGUIGeneral,
+      language: Lang_fr,
+      display: configGUIMobile.configGUIMobile,
+      paths: paths,
+    };
+  } else if (display === ConfigDisplay.desktop) {
+    const configGUIDesktop = await import("../common/configGUIDesktop");
+    GUI_CONFIG__ = {
+      id: id,
+      general: configGUIGeneral,
+      language: Lang_fr,
+      display: configGUIDesktop.configGUIDesktop,
+      paths: paths,
+    };
+    // GUI_CONFIG__.display = displayDesktop;
   } else if (display === ConfigDisplay.large) {
-    GUI_CONFIG__.display = displayDesktop;
+    const configGUIDesktop = await import("../common/configGUIDesktop");
+    const configGUISpecialScreen = await import(
+      "../common/configGUISpecialScreen"
+    );
+    GUI_CONFIG__ = {
+      id: id,
+      general: configGUIGeneral,
+      language: Lang_fr,
+      display: configGUIDesktop.configGUIDesktop,
+      paths: paths,
+    };
+    // GUI_CONFIG__.display = displayDesktop;
     GUI_CONFIG__.display.landing.features.lgColumn =
-      configSpecialScreen.large.landing_features_column;
+      configGUISpecialScreen.configGUISpecialScreen.large.landing_features_column;
     GUI_CONFIG__.display.atom_sizes.lgColumn =
-      configSpecialScreen.large.atom_sizes_column;
+      configGUISpecialScreen.configGUISpecialScreen.large.atom_sizes_column;
     GUI_CONFIG__.display.knowbook_sizes.lgColumn =
-      configSpecialScreen.large.atom_sizes_column;
+      configGUISpecialScreen.configGUISpecialScreen.large.atom_sizes_column;
   }
 
   const guiConfigData = {
@@ -65,7 +97,7 @@ function getGuiConfigData(params: any): GUI_CONFIG_T {
   return guiConfigData;
 }
 
-export const I_getStaticPaths: GetStaticPaths = async (constext) => {
+export const I_getStaticPaths: GetStaticPaths = async (context) => {
   const paths = getAllGuiConfig();
   return {
     paths,
@@ -74,7 +106,7 @@ export const I_getStaticPaths: GetStaticPaths = async (constext) => {
 };
 
 export const I_getStaticProps: GetStaticProps = async (context) => {
-  const guiConfigData = getGuiConfigData(context.params);
+  const guiConfigData = await getGuiConfigData(context.params);
   if (!guiConfigData) {
     return {
       notFound: true,

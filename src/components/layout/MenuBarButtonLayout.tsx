@@ -2,7 +2,7 @@ import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { ColorT, DirectionT, RoundingT } from "../../common/types";
-import { onMenuButtonPath } from "../../handlers";
+import { onMenuButtonPath } from "../../handlers/handlers_Navigation";
 import { IStores } from "../../stores/_RootStore";
 import _Button, { IButton } from "../_Button";
 

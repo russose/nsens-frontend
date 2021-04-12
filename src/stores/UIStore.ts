@@ -25,12 +25,16 @@ export class UIStore {
   private $loginScreenPassword: string = "";
   private $loginScreenError: string = "";
 
+  private $changePasswordUsername: string = "";
+  private $changePasswordPassword: string = "";
+  private $changePasswordValidationCode: string = "";
+  private $changePasswordError: string = "";
+
   private $showLoading: boolean = false;
 
   constructor() {
     makeObservable<
       UIStore,
-      // | "$screen"
       | "$searchPattern"
       | "$selectedAtom"
       | "$articleContent"
@@ -43,9 +47,12 @@ export class UIStore {
       | "$loginScreenUsername_"
       | "$loginScreenPassword"
       | "$loginScreenError"
+      | "$changePasswordUsername"
+      | "$changePasswordPassword"
+      | "$changePasswordValidationCode"
+      | "$changePasswordError"
       | "$showLoading"
     >(this, {
-      // $screen: observable,
       $searchPattern: observable,
       $selectedAtom: observable,
       $articleContent: observable,
@@ -55,33 +62,31 @@ export class UIStore {
       $loginScreenUsername_: observable,
       $loginScreenPassword: observable,
       $loginScreenError: observable,
+      $changePasswordUsername: observable,
+      $changePasswordPassword: observable,
+      $changePasswordValidationCode: observable,
+      $changePasswordError: observable,
       $selectedKnowbookIdName: observable,
       $renameKnowbookOpened: observable,
       $renameKnowbookNewName: observable,
       $showLoading: observable,
-      // searchPattern: computed,
-      // setScreen: action,
       setSearchPattern: action,
       setSelectedAtom: action,
-      // articleContent: computed,
       setArticleContent: action,
-      // editKnowbookOpened: computed,
       setEditKnowbookOpened: action,
-      // editKnowbookNewValue: computed,
       setEditKnowbookNewValue: action,
-      // editKnowbookMembers: computed,
       setEditKnowbookMembers: action,
-      // renameKnowbookOpened: computed,
       setSelectedKnowbookIdName: action,
       setRenameKnowbookOpened: action,
-      // renameKnowbookNewName: computed,
       setRenameKnowbookNewName: action,
-      // loginScreenUsername: computed,
       setLoginScreenUsername: action,
       setLoginScreenUsername_: action,
-      // loginScreenPassword: computed,
       setLoginScreenPassword: action,
       setLoginScreenError: action,
+      setChangePasswordUsername: action,
+      setChangePasswordPassword: action,
+      setChangePasswordValidationCode: action,
+      setChangePasswordError: action,
       initKnowbookEditionElements: action,
       setShowLoading: action,
     });
@@ -146,18 +151,31 @@ export class UIStore {
     this.editKnowbookMembers.set(knowbookId, value);
   }
 
-  get loginScreenError() {
-    return this.$loginScreenError;
+  get changePasswordUsername() {
+    return this.$changePasswordUsername;
   }
-  setLoginScreenError(value: string): void {
-    this.$loginScreenError = value;
+  setChangePasswordUsername(value: string): void {
+    this.$changePasswordUsername = value;
   }
-  get loginScreenPassword() {
-    return this.$loginScreenPassword;
+  get changePasswordPassword() {
+    return this.$changePasswordPassword;
   }
-  setLoginScreenPassword(value: string): void {
-    this.$loginScreenPassword = value;
+  setChangePasswordPassword(value: string): void {
+    this.$changePasswordPassword = value;
   }
+  get changePasswordValidationCode() {
+    return this.$changePasswordValidationCode;
+  }
+  setChangePasswordValidationCode(value: string): void {
+    this.$changePasswordValidationCode = value;
+  }
+  get changePasswordError() {
+    return this.$changePasswordError;
+  }
+  setChangePasswordError(value: string): void {
+    this.$changePasswordError = value;
+  }
+
   get loginScreenUsername() {
     return this.$loginScreenUsername;
   }
@@ -170,6 +188,19 @@ export class UIStore {
   setLoginScreenUsername_(value: string): void {
     this.$loginScreenUsername_ = value;
   }
+  get loginScreenPassword() {
+    return this.$loginScreenPassword;
+  }
+  setLoginScreenPassword(value: string): void {
+    this.$loginScreenPassword = value;
+  }
+  get loginScreenError() {
+    return this.$loginScreenError;
+  }
+  setLoginScreenError(value: string): void {
+    this.$loginScreenError = value;
+  }
+
   get showLoading() {
     return this.$showLoading;
   }

@@ -3,7 +3,7 @@ import {
   onCancel,
   onChangeInputValueRenameKnowbook,
   onRenameKnowbook,
-} from "../handlers";
+} from "../handlers/handlers_Knowbooks";
 import { useStores } from "../stores/_RootStoreHook";
 import DialogRenameKnowbookForm from "./DialogRenameKnowbookForm";
 

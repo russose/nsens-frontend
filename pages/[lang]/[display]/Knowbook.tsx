@@ -3,12 +3,6 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
 import Separator from "../../../src/components/Separator";
-import {
-  isItemSaved,
-  isItemSavedActivated,
-  onEditKnowbooks,
-  onSaved,
-} from "../../../src/handlers";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import React from "react";
 import { displayCompactedGridCondition } from "../../../src/libs/utils";
@@ -20,6 +14,12 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/utilsConfigGui";
 import HeaderTitle from "../../../src/components/HeaderTitle";
+import {
+  isItemSaved,
+  isItemSavedActivated,
+  onSaved,
+} from "../../../src/handlers/handlers_Saved";
+import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();

@@ -4,12 +4,12 @@ import React from "react";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
+import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
 import {
   isItemSaved,
   isItemSavedActivated,
-  onEditKnowbooks,
   onSaved,
-} from "../../../src/handlers";
+} from "../../../src/handlers/handlers_Saved";
 import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import {
   IPage,
@@ -22,14 +22,11 @@ const Home: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
   stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  const slogan = GUI_CONFIG.language.landing.slogan;
 
   return (
     <AppLayout>
-      <HeaderTitle
-        stores={stores}
-        title={"Explorer, Comprendre, Agir"}
-        hidden={true}
-      />
+      <HeaderTitle stores={stores} title={slogan} hidden={true} />
       <CardAtomGrid
         id="Home"
         stores={stores}

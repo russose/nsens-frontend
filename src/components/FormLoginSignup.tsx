@@ -1,20 +1,23 @@
 import { observer } from "mobx-react-lite";
-import { Box, TextField, Button } from "gestalt";
+import { Box, TextField, Button, Text } from "gestalt";
 import { ColorT, eventT, handlerT, RoundingT, SizeT } from "../common/types";
 import { IStores } from "../stores/_RootStore";
 import { getUserNameDisplay } from "../libs/utils";
+import React from "react";
+import Link from "next/link";
 
-interface ILoginSignupFormProps {
+interface IFormLoginSignupProps {
   stores: IStores;
   placeholder_username: string;
   placeholder_password: string;
+  missing_password_text: string;
   label_login: string;
   label_signup: string;
-  handler_button: handlerT;
   handler_text: handlerT;
+  handler_button: handlerT;
 }
 
-const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
+const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
@@ -69,30 +72,51 @@ const LoginSignupForm: React.FunctionComponent<ILoginSignupFormProps> = (
             size={texfield_size}
           />
         </Box>
+        <Box padding={2}>
+          <Link
+            href={{
+              pathname:
+                props.stores.userStore.rootPath +
+                GUI_CONFIG.paths.pages.ChangePassword,
+              query: { ...props.stores.userStore.paramsPage },
+            }}
+            passHref
+          >
+            <a>
+              <Text size="sm" weight="bold">
+                {props.missing_password_text}
+              </Text>
+            </a>
+          </Link>
+        </Box>
       </Box>
 
       <Box padding={1} display="flex" direction="row" justifyContent="around">
-        <Button
-          accessibilityLabel="signup"
-          text={props.label_signup}
-          size={button_icon_size}
-          onClick={props.handler_button("signup")}
-          // color="red"
-          color="gray"
-          inline
-        />
-        <Button
-          accessibilityLabel="login"
-          text={props.label_login}
-          size={button_icon_size}
-          onClick={props.handler_button("login")}
-          // color="blue"
-          color="gray"
-          inline
-        />
+        <Box paddingX={1}>
+          <Button
+            accessibilityLabel="signup"
+            text={props.label_signup}
+            size={button_icon_size}
+            onClick={props.handler_button("signup")}
+            color="red"
+            // color="gray"
+            inline
+          />
+        </Box>
+        <Box paddingX={1}>
+          <Button
+            accessibilityLabel="login"
+            text={props.label_login}
+            size={button_icon_size}
+            onClick={props.handler_button("login")}
+            color="blue"
+            // color="gray"
+            inline
+          />
+        </Box>
       </Box>
     </Box>
   );
 };
 
-export default observer(LoginSignupForm);
+export default observer(FormLoginSignup);

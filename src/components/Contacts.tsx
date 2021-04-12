@@ -46,14 +46,14 @@ const Contacts: React.FunctionComponent<IContactsProps> = (props) => {
               size={props.icon_size}
             />
           </a>
-          {/* <a href={props.twitter_link} target="_blank">
+          <a href={props.twitter_link} target="_blank">
             <Icon
               accessibilityLabel={"twitter"}
               icon="twitter"
               color="darkGray"
               size={props.icon_size}
             />
-          </a> */}
+          </a>
         </Box>
       </Box>
 
