@@ -13,7 +13,7 @@ interface IFormChangePasswordProps {
   label_changePassword: string;
   handler_text: handlerT;
   handler_button: handlerT;
-  value_username: string;
+  value_username: string | undefined;
 }
 
 const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (

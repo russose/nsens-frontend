@@ -238,7 +238,7 @@ export async function _setNewPassword(
  * Saved
  */
 
-export async function _save(atom: IAtom): Promise<IAtom> {
+export async function _save(atom: IAtom): Promise<IAtom | undefined> {
   try {
     const res = await _api("post", "/saved", atom);
     return res.data;
@@ -248,7 +248,7 @@ export async function _save(atom: IAtom): Promise<IAtom> {
   }
 }
 
-export async function _unsave(itemId: AtomID): Promise<IAtom> {
+export async function _unsave(itemId: AtomID): Promise<IAtom | undefined> {
   try {
     const res = await _api("delete", "/saved" + "/" + itemId, {});
     return res.data;
@@ -322,7 +322,7 @@ export async function _removeKnowbook(name: string): Promise<string> {
 export async function _addItemInKnowbook(
   name: string,
   id: AtomID
-): Promise<IKnowbook> {
+): Promise<IKnowbook | undefined> {
   try {
     const res = await _api("post", "/knowbooks/" + name + "/" + id, {});
     return res.data;
@@ -335,7 +335,7 @@ export async function _addItemInKnowbook(
 export async function _removeItemFromKnowbook(
   name: string,
   id: AtomID
-): Promise<IKnowbook> {
+): Promise<IKnowbook | undefined> {
   try {
     const res = await _api("delete", "/knowbooks/" + name + "/" + id, {});
     return res.data;

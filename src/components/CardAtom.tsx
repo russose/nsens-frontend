@@ -11,7 +11,7 @@ interface ICardAtomProps {
   stores: IStores;
   title: string;
   image_url: string;
-  pathname?: string;
+  pathname: string;
   queryObject?: ParsedUrlQueryInput;
   saved_actionable: boolean;
   saved_enabled: boolean;

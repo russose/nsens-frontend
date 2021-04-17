@@ -46,7 +46,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const height_elements = isMobile(GUI_CONFIG.id) ? "45vh" : "40vh";
 
   let value_username = undefined;
-  if (isLogged) {
+  if (isLogged && stores.userStore.user !== null) {
     value_username = stores.userStore.user.username;
     stores.uiStore.setChangePasswordUsername(stores.userStore.user.username);
   }

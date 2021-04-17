@@ -12,18 +12,22 @@ import { GUI_CONFIG_T } from "../common/configGUI";
 
 /*******************Logo*************************** */
 export const onTapLogo = (
-  stores: IStores,
-  GUI_CONFIG: GUI_CONFIG_T
+  stores: IStores
+  // GUI_CONFIG: GUI_CONFIG_T
 ) => (input: { event: eventT }): void => {
-  const itemId = stores.feedStore.getRandomItemIdFromAnywhere(stores);
-  const item = stores.feedStore.getItemFromAnywhere(itemId, stores);
+  // const itemId = stores.feedStore.getRandomItemIdFromAnywhere(stores);
+  // const item = stores.feedStore.getItemFromAnywhere(itemId, stores);
 
   //Go Article Page
-  stores.userStore.goPageArticle(
+  // stores.userStore.goPageArticle(
+  //   stores.userStore.paramsPage,
+  //   itemId,
+  //   item.title,
+  //   GUI_CONFIG
+  // );
+  stores.userStore.goPage(
     stores.userStore.paramsPage,
-    itemId,
-    item.title,
-    GUI_CONFIG
+    stores.userStore.GUI_CONFIG.paths.pages.Home
   );
 };
 

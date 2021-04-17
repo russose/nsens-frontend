@@ -19,8 +19,7 @@ export const Lang_fr = {
       login_label: "Connexion",
       signup_label: "Enregistrement",
       login_error: "Nom d'utilisateur ou mot de passe incorect",
-      signup_error:
-        "Impossible de créer le compte, utilisateur déjà enregistré",
+      signup_error: "Impossible de créer le compte",
       signup_error_duration:
         "Rafraîchir la page, remplir les champs et attendre quelques secondes avant de s'enregistrer",
     },
@@ -92,10 +91,9 @@ export const Lang_fr = {
     placeholder_validationCode: "Code de vérification reçu par email",
     label_sendValidationCode: "1-Recevoir code validation",
     label_changePassword: "2-Changer mot de passe",
-    sendValidationCode_error:
-      "Email incorrect pour l'envoi du code de validation",
+    sendValidationCode_error: "Email incorrect",
     sendValidationCode_success:
-      "Code de validation envoyé sur votre boite mail",
+      "Code de validation envoyé par mail (vérifier spams)",
     changePassword_error: "Code de validation incorrect ou mot de passe vide",
   },
   user: {

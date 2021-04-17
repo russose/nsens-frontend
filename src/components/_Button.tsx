@@ -33,7 +33,7 @@ const _Button: React.FunctionComponent<IButtonProps> = (props) => {
   const iconColor_ =
     props.iconColor === undefined ? iconColorDefault : props.iconColor;
   const disabled_ = props.disabled === undefined ? false : props.disabled;
-  const onClick_ = props.onClick === undefined ? null : props.onClick;
+  const onClick_ = props.onClick === undefined ? () => {} : props.onClick;
 
   let query_;
   if (

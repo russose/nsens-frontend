@@ -17,11 +17,9 @@ export const onChangeUsernamePassword = (uiStore: UIStore) => (
 ) => (input: { value: string; syntheticEvent: eventT }): void => {
   if (type === "username") {
     uiStore.setLoginScreenUsername(input.value);
-    if (uiStore.loginScreenUsername.length === 1) {
-      uiStore.setLoginScreenUsername_("");
-    }
     if (
-      uiStore.loginScreenUsername.length === 2 &&
+      // uiStore.loginScreenUsername.length === 2 &&
+      uiStore.loginScreenUsername.length !== 0 &&
       uiStore.loginScreenUsername_ === ""
     ) {
       setTimeout(() => {
@@ -46,7 +44,11 @@ export const onLogout = (stores: IStores) => (): void => {
         stores.userStore.paramsPage,
         stores.userStore.GUI_CONFIG.paths.pages.Landing
       );
+      //To do: faire une fonction initLoginScreen
+      stores.uiStore.setLoginScreenUsername("");
       stores.uiStore.setLoginScreenUsername_("");
+      stores.uiStore.setLoginScreenPassword("");
+      stores.uiStore.setLoginScreenError("");
     })
     .catch(function (error) {
       // console.log("error in logout...");

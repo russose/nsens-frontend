@@ -36,7 +36,7 @@ const AppLayout: React.FunctionComponent = (props) => {
   );
 
   const logo_with_tap = (
-    <TapArea fullHeight={true} onTap={onTapLogo(stores, GUI_CONFIG)}>
+    <TapArea fullHeight={true} onTap={onTapLogo(stores)}>
       <Image
         alt="image"
         color="transparent"
