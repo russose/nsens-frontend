@@ -5,16 +5,8 @@ import {
   forceSimulation,
 } from "d3-force";
 import { action, makeObservable, observable } from "mobx";
-import { GUI_CONFIG_T } from "../common/configGUI";
-import {
-  AtomID,
-  IAtom,
-  ILink,
-  INode,
-  IRelatedAtom,
-  newAtom,
-} from "../common/types";
-import { FeedStore } from "./FeedStore";
+import { AtomID, IAtom, ILink, INode, IRelatedAtom } from "../common/globals";
+import { newAtom } from "../libs/utils";
 import { IStores } from "./_RootStore";
 
 interface IGraph {
@@ -52,8 +44,8 @@ export class GraphStore {
     return this.$relatedMap;
   }
 
-  setRelatedMap(root_itemId: AtomID, feedStore: FeedStore): void {
-    const related: IRelatedAtom[] = feedStore.getRelated(root_itemId);
+  setRelatedMap(root_itemId: AtomID, stores: IStores): void {
+    const related: IRelatedAtom[] = stores.feedStore.getRelated(root_itemId);
     if (
       root_itemId === undefined ||
       related === undefined ||
@@ -99,17 +91,12 @@ export class GraphStore {
     this.$rootItemId = root_itemId;
   }
 
-  setGraph(
-    root_item: IAtom,
-    feedStore: FeedStore,
-    x0: number,
-    y0: number
-  ): void {
+  setGraph(root_item: IAtom, stores: IStores, x0: number, y0: number): void {
     if (root_item === undefined) {
       return;
     }
 
-    this.setRelatedMap(root_item.id, feedStore);
+    this.setRelatedMap(root_item.id, stores);
 
     const rootNode: INode = {
       x: x0,
@@ -130,7 +117,7 @@ export class GraphStore {
           y: y0,
           pos: this.graph.nodes.length,
           relation_name: group_name,
-          ...newAtom(key),
+          ...newAtom(key, stores.userStore.paramsPage.lang),
         };
         node_group.title = key;
         // node_group.related = "group";
@@ -181,15 +168,18 @@ export class GraphStore {
     }
 
     if (stores.feedStore.getRelated(root_itemId) === undefined) {
-      stores.feedStore.fetchRelated(root_item.id, root_item.title).then(() => {
-        this.setRelatedMap(root_itemId, stores.feedStore);
-      });
+      stores.feedStore
+        .fetchRelated(stores, root_item.id, root_item.title)
+        .then(() => {
+          this.setRelatedMap(root_itemId, stores);
+        });
     } else if (root_itemId !== this.$rootItemId) {
-      this.setRelatedMap(root_itemId, stores.feedStore);
+      this.setRelatedMap(root_itemId, stores);
     }
   }
 
-  runSimulation(width: number, height: number, GUI_CONFIG: GUI_CONFIG_T): void {
+  runSimulation(width: number, height: number, stores: IStores): void {
+    const GUI_CONFIG = stores.userStore.GUI_CONFIG;
     const width_node = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
 
     const forceColideRadius = width_node * 0.9;
@@ -265,25 +255,21 @@ export class GraphStore {
     if (feedStore.getRelated(root_itemId) === undefined) {
       stores.uiStore.setShowLoading(true);
       feedStore
-        .fetchRelated(root_item.id, root_item.title)
+        .fetchRelated(stores, root_item.id, root_item.title)
         .then(
           action(() => {
-            this.setGraph(root_item, feedStore, width / 2, height / 2);
+            this.setGraph(root_item, stores, width / 2, height / 2);
           })
         )
         .then(
           action(() => {
-            this.runSimulation(
-              width / 2,
-              height / 2,
-              stores.userStore.GUI_CONFIG
-            );
+            this.runSimulation(width / 2, height / 2, stores);
             stores.uiStore.setShowLoading(false);
           })
         );
     } else if (root_itemId !== this.$rootItemId) {
-      this.setGraph(root_item, feedStore, width / 2, height / 2);
-      this.runSimulation(width / 2, height / 2, stores.userStore.GUI_CONFIG);
+      this.setGraph(root_item, stores, width / 2, height / 2);
+      this.runSimulation(width / 2, height / 2, stores);
       // stores.uiStore.setShowLoading(false);
     }
     // stores.uiStore.setShowLoading(false);

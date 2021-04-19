@@ -1,25 +1,25 @@
-import { eventT } from "../common/types";
-import { UIStore } from "../stores/UIStore";
+import { eventT } from "../common/globals";
 import {
   _login,
   _signup,
   _logout,
   _getValidationNewPassword,
   _setNewPassword,
-} from "../_api";
+} from "../libs/_apiUserData";
 import { IStores } from "../stores/_RootStore";
+import { configPaths } from "../common/globals";
 
 /*******************Change Password*************************** */
 
-export const onChangePassword_text = (uiStore: UIStore) => (
+export const onChangePassword_text = (stores: IStores) => (
   type: string
 ) => (input: { value: string; syntheticEvent: eventT }): void => {
   if (type === "username") {
-    uiStore.setChangePasswordUsername(input.value);
+    stores.uiStore.setChangePasswordUsername(input.value);
   } else if (type === "password") {
-    uiStore.setChangePasswordPassword(input.value);
+    stores.uiStore.setChangePasswordPassword(input.value);
   } else if (type === "validationCode") {
-    uiStore.setChangePasswordValidationCode(input.value);
+    stores.uiStore.setChangePasswordValidationCode(input.value);
   }
   // console.log(input.value);
 };
@@ -54,7 +54,7 @@ export const onChangePassword_button = (stores: IStores) => (
       .then(() => {
         stores.userStore.goPage(
           stores.userStore.paramsPage,
-          stores.userStore.GUI_CONFIG.paths.pages.Home,
+          configPaths.pages.Home,
           true
         );
       })

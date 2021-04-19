@@ -1,8 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Box, Sticky } from "gestalt";
-import { ColorT, reactComponentT } from "../../common/types";
+import { ColorT, reactComponentT } from "../../common/globals";
 import { IStores } from "../../stores/_RootStore";
+import { configGeneral } from "../../common/globals";
 
 interface IPageLayoutProps {
   stores: IStores;
@@ -11,9 +12,8 @@ interface IPageLayoutProps {
 }
 
 const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
-  const color_top: ColorT = GUI_CONFIG.general.colors.top;
-  const color_background: ColorT = GUI_CONFIG.general.colors.background;
+  const color_top: ColorT = configGeneral.colors.top;
+  const color_background: ColorT = configGeneral.colors.background;
 
   return (
     <>

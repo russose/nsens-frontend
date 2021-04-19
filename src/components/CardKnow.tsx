@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton, Text } from "gestalt";
-import { AtomID, handlerT, IconT } from "../common/types";
+import { AtomID, handlerT, IconT } from "../common/globals";
 import CardGeneric from "./CardGeneric";
-import { ParsedUrlQueryInput } from "querystring";
-import { iconColorDefault } from "./_Button";
+import { configGeneral, configPaths } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 
 export interface ICardKnowProps {
@@ -12,7 +11,7 @@ export interface ICardKnowProps {
   title: string;
   image_url: string;
   pathname: string;
-  queryObject: ParsedUrlQueryInput;
+  queryObject: any;
   amount: number | string;
   edit_handler: handlerT;
   delete_handler: handlerT;
@@ -21,10 +20,10 @@ export interface ICardKnowProps {
 const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
-  const color = GUI_CONFIG.general.colors.knowbook_color;
-  const color_image = GUI_CONFIG.general.colors.knowbook_color_image;
+  const color = configGeneral.colors.knowbook_color;
+  const color_image = configGeneral.colors.knowbook_color_image;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
-  const pathKnowbookSaved = GUI_CONFIG.paths.pages.KnowbookSaved;
+  const pathKnowbookSaved = configPaths.pages.KnowbookSaved;
   const display_edit_icon = props.edit_handler === undefined ? false : true;
   const display_delete_icon =
     props.amount === 0 && props.pathname !== pathKnowbookSaved ? true : false;
@@ -46,7 +45,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           <IconButton
             accessibilityLabel="clear"
             icon="clear"
-            iconColor={iconColorDefault}
+            iconColor={configGeneral.colors.iconColorDefault as any}
             size={size_icon}
             onClick={props.delete_handler}
           />
@@ -58,7 +57,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           <IconButton
             accessibilityLabel="edit"
             icon="edit"
-            iconColor={iconColorDefault}
+            iconColor={configGeneral.colors.iconColorDefault as any}
             size={size_icon}
             onClick={props.edit_handler}
           />

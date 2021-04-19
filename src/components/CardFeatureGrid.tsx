@@ -1,7 +1,7 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IFeature, PaddingT, SizeT } from "../common/types";
+import { IFeature, PaddingT, SizeT } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 import CardFeature from "./CardFeature";
 

@@ -1,9 +1,9 @@
 import { Box, IconButton, Modal, TextField, Text, Checkbox } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { AtomID, handlerT, RoundingT, SizeT } from "../common/types";
-import { iconColorDefault } from "./_Button";
+import { AtomID, handlerT, RoundingT, SizeT } from "../common/globals";
 import React from "react";
 import { IStores } from "../stores/_RootStore";
+import { configGeneral } from "../common/globals";
 
 export interface ICheckboxes {
   label: string;
@@ -83,7 +83,7 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
             accessibilityLabel="ok"
             icon="cancel"
             bgColor="transparent"
-            iconColor={iconColorDefault}
+            iconColor={configGeneral.colors.iconColorDefault as any}
             size={button_icon_size}
             onClick={props.handler_cancel}
           />
@@ -91,7 +91,7 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
             accessibilityLabel="ok"
             icon="check-circle"
             bgColor="transparent"
-            iconColor={iconColorDefault}
+            iconColor={configGeneral.colors.iconColorDefault as any}
             size={button_icon_size}
             onClick={props.handler_confirm(props.id)}
           />

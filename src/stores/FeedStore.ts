@@ -1,14 +1,11 @@
 import { action, makeObservable, observable } from "mobx";
-import { AtomID, empty_value_atom, IAtom, IRelatedAtom } from "../common/types";
-import { makeArrayFlat, shuffleArray } from "../libs/utils";
+import { AtomID, IAtom, IRelatedAtom } from "../common/globals";
+import { empty_value_atom, makeArrayFlat, shuffleArray } from "../libs/utils";
+import { _randomFromWeb, _searchFromWeb } from "../libs/_apiItems";
 import {
   _getRelatedFromWikidataFromWeb,
   _getRelatedFromWikipediaFromWeb,
-  _log,
-  _randomFromWeb,
-  _searchFromWeb,
-} from "../_api";
-import { SavedStore } from "./SavedStore";
+} from "../libs/_apiRelated";
 import { IStores } from "./_RootStore";
 
 function shuffleSized(array: any[], amount_item_displayed: number): any[] {
@@ -98,19 +95,19 @@ export class FeedStore {
     });
   }
 
-  setFeedFromRandom(): void {
-    _randomFromWeb()
+  setFeedFromRandom(stores: IStores): void {
+    _randomFromWeb(stores.userStore.paramsPage.lang)
       .then((atoms) => {
         this.setFeed(atoms);
       })
       .catch((error) => {});
   }
-  setFeedFromSearch(searchPattern: string): void {
+  setFeedFromSearch(stores: IStores, searchPattern: string): void {
     if (searchPattern === undefined) {
       return;
     }
 
-    _searchFromWeb(searchPattern)
+    _searchFromWeb(searchPattern, stores.userStore.paramsPage.lang)
       .then((atoms) => {
         this.setFeed(atoms);
       })
@@ -122,11 +119,11 @@ export class FeedStore {
         // console.log("error in seach from pattern");
       });
   }
-  setFeedFromRelated(amount_item_displayed: number): void {
+  setFeedFromRelated(stores: IStores, amount_item_displayed: number): void {
     const related: IAtom[] = this.getAllRelatedItems();
 
     if (related.length === 0) {
-      this.setFeedFromRandom();
+      this.setFeedFromRandom(stores);
     } else {
       this.setFeed(shuffleSized(related, amount_item_displayed));
     }
@@ -136,8 +133,8 @@ export class FeedStore {
   Related
   */
 
-  initialyzeRelatedAndRelatedAllFromSaved(savedStore: SavedStore): void {
-    savedStore.getSavedList().forEach((item: IAtom) => {
+  initialyzeRelatedAndRelatedAllFromSaved(stores: IStores): void {
+    stores.savedStore.getSavedList().forEach((item: IAtom) => {
       if (item.related !== empty_value_atom) {
         const related: IRelatedAtom[] = JSON.parse(item.related);
         //related
@@ -215,7 +212,11 @@ export class FeedStore {
     return Array.from(this.$relatedAll.values());
   }
 
-  async fetchRelated(itemId: AtomID, title: string): Promise<void> {
+  async fetchRelated(
+    stores: IStores,
+    itemId: AtomID,
+    title: string
+  ): Promise<void> {
     if (
       itemId === undefined ||
       title === undefined ||
@@ -225,10 +226,12 @@ export class FeedStore {
     }
 
     const relatedItems_wikipedia: IRelatedAtom[] = await _getRelatedFromWikipediaFromWeb(
-      title
+      title,
+      stores.userStore.paramsPage.lang
     );
     const relatedItems_wikidata: IRelatedAtom[] = await _getRelatedFromWikidataFromWeb(
-      itemId
+      itemId,
+      stores.userStore.paramsPage.lang
     );
 
     const relatedItems = relatedItems_wikidata.concat(relatedItems_wikipedia);

@@ -1,14 +1,20 @@
 import { observable, action, computed, makeObservable } from "mobx";
 import Router from "next/router";
-import { GUI_CONFIG_T } from "../common/configGUI";
-import { AtomID, ConfigDisplay, ConfigLanguage, IUser } from "../common/types";
+import { configGeneral, configPaths } from "../common/globals";
+import {
+  AtomID,
+  ConfigDisplay,
+  ConfigLanguage,
+  GUI_CONFIG_T,
+  IUser,
+} from "../common/globals";
 import { hasTouchScreen } from "../libs/utils";
 import {
   issue_text,
   _getKnowbooksList,
   _getSavedList,
   _getUser,
-} from "../_api";
+} from "../libs/_apiUserData";
 import { IStores } from "./_RootStore";
 
 interface IparamsPage {
@@ -27,6 +33,7 @@ export class UserStore {
     width: number;
     height: number;
   } = this.setscreenNoSSR();
+  configGeneral: any;
 
   constructor() {
     makeObservable<UserStore, "$user">(this, {
@@ -101,12 +108,12 @@ export class UserStore {
   goPageArticle(
     paramsPage: IparamsPage,
     itemId: AtomID,
-    itemTitle: string,
-    GUI_CONFIG: GUI_CONFIG_T
+    itemTitle: string
+    // GUI_CONFIG: GUI_CONFIG_T
   ) {
     if (process.browser) {
       Router.push({
-        pathname: this.rootPath + GUI_CONFIG.paths.pages.ItemArticle,
+        pathname: this.rootPath + configPaths.pages.ItemArticle,
         query: { ...paramsPage, ...{ title: itemTitle, id: itemId } },
       });
     }
@@ -117,12 +124,10 @@ export class UserStore {
       if (this.isLogged) {
         const saved = await _getSavedList();
         stores.savedStore.setSaved(saved);
-        stores.feedStore.initialyzeRelatedAndRelatedAllFromSaved(
-          stores.savedStore
-        );
+        stores.feedStore.initialyzeRelatedAndRelatedAllFromSaved(stores);
         const amount_item_displayed = this.GUI_CONFIG.display
           .amount_item_displayed;
-        stores.feedStore.setFeedFromRelated(amount_item_displayed);
+        stores.feedStore.setFeedFromRelated(stores, amount_item_displayed);
         const knowbooks = await _getKnowbooksList();
         stores.knowbookStore.setKnowbooks(knowbooks);
       }
@@ -202,7 +207,7 @@ export class UserStore {
             lang: paramsPage_lang,
             display: paramsPage_display,
           },
-          this.GUI_CONFIG.paths.pages.Landing
+          configPaths.pages.Landing
         );
       } else {
         this.goPage(
@@ -210,7 +215,7 @@ export class UserStore {
             lang: paramsPage_lang,
             display: paramsPage_display,
           },
-          this.GUI_CONFIG.paths.pages.Home
+          configPaths.pages.Home
         );
       }
     }
@@ -218,7 +223,7 @@ export class UserStore {
 
   getParamsPageAccordingContext(): IparamsPage {
     if (process.browser) {
-      const max_width_mobile = this.$GUI_CONFIG.general.max_width_mobile;
+      const max_width_mobile = configGeneral.max_width_mobile;
       const isMobile: boolean =
         hasTouchScreen(window) || window.innerWidth < max_width_mobile;
 
@@ -234,9 +239,7 @@ export class UserStore {
         paramsPage_display = ConfigDisplay.mobile;
         // }
       } else {
-        if (
-          this.$screen.width > this.$GUI_CONFIG.general.large_screen_breakpoint
-        ) {
+        if (this.$screen.width > configGeneral.large_screen_breakpoint) {
           paramsPage_display = ConfigDisplay.large;
         } else {
           paramsPage_display = ConfigDisplay.desktop;

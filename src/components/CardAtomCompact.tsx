@@ -1,10 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
-import { AtomID, ButtonIDType, handlerT, IconT } from "../common/types";
+import { AtomID, ButtonIDType, handlerT, IconT } from "../common/globals";
 import CardGenericCompact from "./CardGenericCompact";
-import { ParsedUrlQueryInput } from "querystring";
-import { iconColorDefault } from "./_Button";
 import { IStores } from "../stores/_RootStore";
+import { configGeneral } from "../common/globals";
 
 interface ICardAtomCompactProps {
   id: AtomID;
@@ -12,7 +11,7 @@ interface ICardAtomCompactProps {
   title: string;
   image_url: string;
   pathname?: string;
-  queryObject?: ParsedUrlQueryInput;
+  queryObject?: any;
   saved_actionable: boolean;
   saved_enabled: boolean;
   saved_handler: handlerT;
@@ -25,8 +24,8 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
 ) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
-  const color_item = GUI_CONFIG.general.colors.item_compact_color;
-  const color_image = GUI_CONFIG.general.colors.item_color_image;
+  const color_item = configGeneral.colors.item_compact_color;
+  const color_image = configGeneral.colors.item_color_image;
   let card_sizes;
   if (props.forVizs === true) {
     card_sizes = GUI_CONFIG.display.atom_compact_vizs_sizes;
@@ -51,7 +50,11 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
         <IconButton
           accessibilityLabel="save"
           icon={buttons_all[ButtonIDType.SAVE].icon as IconT}
-          iconColor={props.saved_enabled ? "red" : iconColorDefault}
+          iconColor={
+            props.saved_enabled
+              ? "red"
+              : (configGeneral.colors.iconColorDefault as any)
+          }
           size={size_icon}
           onClick={props.saved_handler}
           disabled={!props.saved_actionable}
@@ -62,7 +65,7 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
           <IconButton
             accessibilityLabel="edit"
             icon={buttons_all[ButtonIDType.EDIT].icon as IconT}
-            iconColor={iconColorDefault}
+            iconColor={configGeneral.colors.iconColorDefault as any}
             size={size_icon}
             onClick={props.edit_handler}
           />

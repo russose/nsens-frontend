@@ -4,8 +4,8 @@ import React from "react";
 import {
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
-import { IPage } from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
+import { IPage } from "../../../src/libs/getConfigData";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -15,7 +15,7 @@ import AppLayout from "../../../src/components/layout/AppLayout";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 
 const ItemArticleNoSSR = dynamic(
-  () => import("../../../src/components/ItemArticleNoSSR"),
+  () => import("../../../src/components/dynamic/ItemArticleNoSSR"),
   { ssr: false }
 );
 
@@ -31,14 +31,10 @@ const ItemArticle: React.FunctionComponent<IPage> = (props) => {
   stores.uiStore.setSelectedAtom(item_id, item_title);
 
   return (
-    <AppLayout>
+    <AppLayout stores={stores}>
       <HeaderTitle stores={stores} title={item_title} hidden={true} />
       <MenuBarDisplay stores={stores} isMobile={isMobile(GUI_CONFIG.id)} />
-      <ItemArticleNoSSR
-        stores={stores}
-        GUI_CONFIG={GUI_CONFIG}
-        item_title={item_title}
-      />
+      <ItemArticleNoSSR stores={stores} item_title={item_title} />
     </AppLayout>
   );
 };

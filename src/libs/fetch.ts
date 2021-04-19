@@ -1,9 +1,10 @@
-import { CONFIG_FETCHING } from "../common/config";
-import { CONFIG_OPS } from "../common/config_env";
-import { JSONDataT } from "../common/types";
+import { configFetching } from "../common/globals";
+import { CONFIG_ENV } from "../common/globals";
+import { URLs } from "../common/configURLs";
+import { JSONDataT } from "../common/globals";
 
-const wikidata_url = CONFIG_FETCHING.URLs.ROOT_URL_WIKIDATA;
-const userAgentString = CONFIG_FETCHING.userAgent;
+const wikidata_url = URLs.ROOT_URL_WIKIDATA;
+const userAgentString = configFetching.userAgent;
 
 const axios = require("axios").default;
 
@@ -60,7 +61,7 @@ export async function _api(
     withCredentials: true,
     method: method,
     // url: CONFIG_OPS.BACK_URL + uri,
-    baseURL: CONFIG_OPS.BACK_URL,
+    baseURL: CONFIG_ENV.BACK_URL,
     url: uri,
     data: data,
   });

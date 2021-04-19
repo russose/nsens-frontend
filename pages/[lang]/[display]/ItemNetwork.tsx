@@ -4,8 +4,8 @@ import React from "react";
 import {
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
-import { IPage } from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
+import { IPage } from "../../../src/libs/getConfigData";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -15,7 +15,7 @@ import MenuBarDisplay from "../../../src/components/MenuBarDisplay";
 import { isMobile } from "../../../src/libs/utils";
 
 const ItemNetworkNoSSR = dynamic(
-  () => import("../../../src/components/ItemNetworkNoSSR"),
+  () => import("../../../src/components/dynamic/ItemNetworkNoSSR"),
   { ssr: false }
 );
 
@@ -31,12 +31,11 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   // stores.uiStore.setSelectedAtomId(item_id);
 
   return (
-    <AppLayout>
+    <AppLayout stores={stores}>
       <MenuBarDisplay stores={stores} isMobile={isMobile(GUI_CONFIG.id)} />
       <HeaderTitle stores={stores} title={item_title} />
       <ItemNetworkNoSSR
         stores={stores}
-        GUI_CONFIG={GUI_CONFIG}
         item_title={item_title}
         item_id={item_id}
       />

@@ -1,33 +1,32 @@
-import { eventT } from "../common/types";
-import { UIStore } from "../stores/UIStore";
+import { eventT } from "../common/globals";
 import {
   _login,
   _signup,
   _logout,
   _getValidationNewPassword,
   _setNewPassword,
-} from "../_api";
+} from "../libs/_apiUserData";
 import { IStores } from "../stores/_RootStore";
-import { loginDuration, successMessage } from "../common/config";
+import { configPaths, configGeneral } from "../common/globals";
 
 /*******************Login and Signup*************************** */
 
-export const onChangeUsernamePassword = (uiStore: UIStore) => (
+export const onChangeUsernamePassword = (stores: IStores) => (
   type: string
 ) => (input: { value: string; syntheticEvent: eventT }): void => {
   if (type === "username") {
-    uiStore.setLoginScreenUsername(input.value);
+    stores.uiStore.setLoginScreenUsername(input.value);
     if (
       // uiStore.loginScreenUsername.length === 2 &&
-      uiStore.loginScreenUsername.length !== 0 &&
-      uiStore.loginScreenUsername_ === ""
+      stores.uiStore.loginScreenUsername.length !== 0 &&
+      stores.uiStore.loginScreenUsername_ === ""
     ) {
       setTimeout(() => {
-        uiStore.setLoginScreenUsername_(successMessage);
-      }, loginDuration);
+        stores.uiStore.setLoginScreenUsername_(configGeneral.successMessage);
+      }, configGeneral.loginDuration);
     }
   } else if (type === "password") {
-    uiStore.setLoginScreenPassword(input.value);
+    stores.uiStore.setLoginScreenPassword(input.value);
   }
   // console.log(input.value);
 };
@@ -42,7 +41,7 @@ export const onLogout = (stores: IStores) => (): void => {
     .then(() => {
       stores.userStore.goPage(
         stores.userStore.paramsPage,
-        stores.userStore.GUI_CONFIG.paths.pages.Landing
+        configPaths.pages.Landing
       );
       //To do: faire une fonction initLoginScreen
       stores.uiStore.setLoginScreenUsername("");
@@ -74,7 +73,7 @@ export const onSubmitLoginSignup = (stores: IStores) => (
         //Go Home
         stores.userStore.goPage(
           stores.userStore.paramsPage,
-          stores.userStore.GUI_CONFIG.paths.pages.Home
+          configPaths.pages.Home
         );
       })
       .catch(function (error) {
@@ -85,7 +84,7 @@ export const onSubmitLoginSignup = (stores: IStores) => (
         );
       });
   } else if (type === "signup") {
-    if (stores.uiStore.loginScreenUsername_ !== successMessage) {
+    if (stores.uiStore.loginScreenUsername_ !== configGeneral.successMessage) {
       stores.uiStore.setLoginScreenError(
         stores.userStore.GUI_CONFIG.language.landing.loginSignup
           .signup_error_duration
@@ -109,7 +108,7 @@ export const onSubmitLoginSignup = (stores: IStores) => (
         //Go Home
         stores.userStore.goPage(
           stores.userStore.paramsPage,
-          stores.userStore.GUI_CONFIG.paths.pages.Home
+          configPaths.pages.Home
         );
       })
       .catch(function (error) {

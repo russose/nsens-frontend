@@ -6,7 +6,7 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { Box, Button } from "gestalt";
@@ -17,6 +17,7 @@ import {
   onChangePassword_button,
   onChangePassword_text,
 } from "../../../src/handlers/handlers_ChangePassword";
+import { configPaths } from "../../../src/common/globals";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -24,7 +25,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
   // stores.userStore.initializeAppWithoutDataAndGoPage(
   //   GUI_CONFIG,
-  //   GUI_CONFIG.paths.pages.ChangePassword
+  //   paths.pages.ChangePassword
   // );
 
   const title = GUI_CONFIG.language.changePassword.title;
@@ -62,7 +63,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
           onClick={() => {
             stores.userStore.goPage(
               stores.userStore.paramsPage,
-              stores.userStore.GUI_CONFIG.paths.pages.Landing
+              configPaths.pages.Landing
             );
           }}
         />
@@ -89,7 +90,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
           placeholder_validationCode={placeholder_validationCode}
           label_sendValidationCode={label_sendValidationCode}
           label_changePassword={label_changePassword}
-          handler_text={onChangePassword_text(stores.uiStore)}
+          handler_text={onChangePassword_text(stores)}
           handler_button={onChangePassword_button(stores)}
           value_username={value_username}
         />
@@ -109,7 +110,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
     );
   } else {
     page = (
-      <AppLayout>
+      <AppLayout stores={stores}>
         <HeaderTitle stores={stores} title={title} hidden={false} />
         {changePasswordForm}
       </AppLayout>

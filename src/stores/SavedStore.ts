@@ -1,7 +1,6 @@
 import { action, makeObservable, observable } from "mobx";
-import { AtomID, IAtom } from "../common/types";
-import { _save, _unsave } from "../_api";
-import { KnowkookStore } from "./KnowkookStore";
+import { AtomID, IAtom } from "../common/globals";
+import { _save, _unsave } from "../libs/_apiUserData";
 import { IStores } from "./_RootStore";
 
 export class SavedStore {
@@ -45,7 +44,7 @@ export class SavedStore {
     this.setSaved([item]); //to not freeze UI
 
     stores.feedStore
-      .fetchRelated(item.id, item.title) //take time
+      .fetchRelated(stores, item.id, item.title) //take time
       .then(() => {
         item.related = JSON.stringify(stores.feedStore.getRelated(itemId));
         return item;
@@ -67,12 +66,12 @@ export class SavedStore {
       );
   }
 
-  removeSaved(itemId: AtomID, knowbookStore: KnowkookStore): void {
+  removeSaved(itemId: AtomID, stores: IStores): void {
     if (itemId === undefined) {
       return;
     }
 
-    if (!knowbookStore.IsItemInAnyKnowbook(itemId)) {
+    if (!stores.knowbookStore.IsItemInAnyKnowbook(itemId)) {
       _unsave(itemId)
         .then(
           action(() => {

@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { Image, Box, Mask, Text } from "gestalt";
-import { AtomID, ColorT, RoundingT, SizeT } from "../common/types";
-import { ParsedUrlQueryInput } from "querystring";
+import { AtomID, ColorT, RoundingT, SizeT } from "../common/globals";
 import Link from "next/link";
 import { IStores } from "../stores/_RootStore";
+import { configPaths } from "../common/globals";
 
 interface ICardSizes {
   height: number | string;
@@ -22,14 +22,14 @@ interface ICardGenericCompactProps {
   color_image?: string;
   sizes: ICardSizes;
   pathname?: string;
-  queryObject?: ParsedUrlQueryInput;
+  queryObject?: any;
 }
 
 const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
-  const path_empty_image = GUI_CONFIG.paths.item_empty_image;
+  const path_empty_image = configPaths.item_empty_image;
   // const rounding = 3;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const max_title_size = props.sizes.max_title_size;

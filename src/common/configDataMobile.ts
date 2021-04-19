@@ -5,7 +5,7 @@ const card_compact_vizs_size = 120;
 // const card_compact_size = card_size_ * 0.8;
 // const card_compact_vizs_size = card_size_ * 0.5;
 
-export const configGUIMobile = {
+export const configDataMobile = {
   //card_height: 250,
   amount_item_displayed: 30,
   max_nodes_network: 1,
@@ -53,17 +53,6 @@ export const configGUIMobile = {
   atom_compact_sizes: {
     height: card_compact_size,
     width: card_compact_size,
-    lgPadding: 2,
-    mdPadding: 2,
-    smPadding: 1,
-    padding: 1,
-    title_card_size: "sm",
-    max_title_size: 33,
-  },
-  knowbook_compact_sizes: {
-    height: card_compact_size,
-    width: card_compact_size,
-    // image_ratio: "80%",
     lgPadding: 2,
     mdPadding: 2,
     smPadding: 1,

@@ -1,11 +1,6 @@
-import { KnowkookStore } from "./KnowkookStore";
 import { observable, action, makeObservable } from "mobx";
-import { AtomID, KnowbookID } from "../common/types";
-
-export interface IparamsAtom {
-  id: AtomID;
-  title: string;
-}
+import { AtomID, IparamsAtom, KnowbookID } from "../common/globals";
+import { IStores } from "./_RootStore";
 
 export class UIStore {
   private $searchPattern: string = "";
@@ -209,18 +204,15 @@ export class UIStore {
   }
 
   /******************************************************* */
-  initKnowbookEditionElements(
-    atomID: AtomID,
-    knowbookStore: KnowkookStore
-  ): void {
+  initKnowbookEditionElements(atomID: AtomID, stores: IStores): void {
     this.$editKnowbookNewValue = "";
     this.editKnowbookMembers.clear();
 
-    const knowbook_id_list = Array.from(knowbookStore.knowbooks.keys());
+    const knowbook_id_list = Array.from(stores.knowbookStore.knowbooks.keys());
     knowbook_id_list.forEach((knowbookId) => {
       this.editKnowbookMembers.set(
         knowbookId,
-        knowbookStore.isItemInKnowbook(atomID, knowbookId)
+        stores.knowbookStore.isItemInKnowbook(atomID, knowbookId)
       );
     });
   }

@@ -1,14 +1,14 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Spinner, Sticky } from "gestalt";
-import { useStores } from "../stores/_RootStoreHook";
+import { IStores } from "../stores/_RootStore";
 
-// interface IDialogLoadingProps {
-//   stores: IStores;
-// }
+interface IDialogLoadingProps {
+  stores: IStores;
+}
 
-const DialogLoading: React.FunctionComponent = (props) => {
-  const stores = useStores();
+const DialogLoading: React.FunctionComponent<IDialogLoadingProps> = (props) => {
+  const stores = props.stores;
 
   return (
     <>

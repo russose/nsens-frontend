@@ -4,11 +4,17 @@ import {
   onChangeInputValueRenameKnowbook,
   onRenameKnowbook,
 } from "../handlers/handlers_Knowbooks";
-import { useStores } from "../stores/_RootStoreHook";
+import { IStores } from "../stores/_RootStore";
 import DialogRenameKnowbookForm from "./DialogRenameKnowbookForm";
 
-const DialogRenameKnowbooks: React.FunctionComponent = (props) => {
-  const stores = useStores();
+interface IDialogRenameKnowbooksProps {
+  stores: IStores;
+}
+
+const DialogRenameKnowbooks: React.FunctionComponent<IDialogRenameKnowbooksProps> = (
+  props
+) => {
+  const stores = props.stores;
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
   return (
     <>
@@ -19,12 +25,9 @@ const DialogRenameKnowbooks: React.FunctionComponent = (props) => {
           value={stores.uiStore.renameKnowbookNewName}
           label_rename={GUI_CONFIG.language.renameDeleteKnowbook.rename_label}
           label_cancel={GUI_CONFIG.language.renameDeleteKnowbook.cancel_label}
-          handler_rename={onRenameKnowbook(
-            stores.uiStore,
-            stores.knowbookStore
-          )}
-          handler_cancel={onCancel(stores.uiStore)}
-          handler_inputValue={onChangeInputValueRenameKnowbook(stores.uiStore)}
+          handler_rename={onRenameKnowbook(stores)}
+          handler_cancel={onCancel(stores)}
+          handler_inputValue={onChangeInputValueRenameKnowbook(stores)}
         />
       )}
     </>

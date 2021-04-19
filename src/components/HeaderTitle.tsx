@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Heading } from "gestalt";
-import { handlerT, RoundingT, SizeT } from "../common/types";
+import { handlerT, RoundingT, SizeT } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 import Head from "next/head";
+import { configGeneral } from "../common/globals";
 
 interface IHeaderTitleProps {
   stores: IStores;
@@ -13,7 +14,7 @@ interface IHeaderTitleProps {
 const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const header_size: SizeT = GUI_CONFIG.display.header_size;
-  const color_headers = GUI_CONFIG.general.colors.headers as handlerT;
+  const color_headers = configGeneral.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
   const description = GUI_CONFIG.language.landing.description;
   const title_page = "n.Sens" + " - " + props.title;

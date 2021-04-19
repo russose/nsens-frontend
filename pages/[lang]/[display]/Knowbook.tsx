@@ -5,14 +5,13 @@ import CardAtomGrid from "../../../src/components/CardAtomGrid";
 import Separator from "../../../src/components/Separator";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import React from "react";
-import { displayCompactedGridCondition } from "../../../src/libs/utils";
-import { IPage } from "../../../src/libs/utilsConfigGui";
+import { IPage } from "../../../src/libs/getConfigData";
 import { GetStaticPaths, GetStaticProps } from "next";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import {
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import {
   isItemSaved,
@@ -20,6 +19,7 @@ import {
   onSaved,
 } from "../../../src/handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
+import { IAtom } from "../../../src/common/globals";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -33,22 +33,19 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const selected_knowbook = router.query.title as string;
 
   return (
-    <AppLayout>
+    <AppLayout stores={stores}>
       <HeaderTitle stores={stores} title={selected_knowbook} />
       <CardAtomGrid
         id="knowbooks"
         stores={stores}
         atoms={stores.knowbookStore.getKnowbookAtomsList(
           selected_knowbook,
-          stores.savedStore
+          stores
         )}
-        isItemSaved_handler={isItemSaved(stores.savedStore)}
-        isItemSavedActionable_handler={isItemSavedActivated(
-          stores.knowbookStore
-        )}
+        isItemSaved_handler={isItemSaved(stores)}
+        isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}
-        edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-        compact={displayCompactedGridCondition(GUI_CONFIG.id)}
+        edit_handler={onEditKnowbooks(stores)}
       />
       <Separator with_line={false} />
       <Separator with_line={true} />
@@ -61,19 +58,16 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
         stores={stores}
         atoms={stores.feedStore.getRelatedItemsForItems(
           stores.knowbookStore
-            .getKnowbookAtomsList(selected_knowbook, stores.savedStore)
-            .map((item) => {
+            .getKnowbookAtomsList(selected_knowbook, stores)
+            .map((item: IAtom) => {
               return item.id;
             }),
           amount_item_displayed
         )}
-        isItemSaved_handler={isItemSaved(stores.savedStore)}
-        isItemSavedActionable_handler={isItemSavedActivated(
-          stores.knowbookStore
-        )}
+        isItemSaved_handler={isItemSaved(stores)}
+        isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}
-        edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-        compact={false}
+        edit_handler={onEditKnowbooks(stores)}
       />
     </AppLayout>
   );

@@ -6,14 +6,15 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
 import { GetStaticPaths, GetStaticProps } from "next";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import Contacts from "../../../src/components/Contacts";
-import { getEmail, getTwitter, isMobile } from "../../../src/libs/utils";
+import { isMobile } from "../../../src/libs/utils";
 import Installation from "../../../src/components/Installation";
 import { onLogout } from "../../../src/handlers/handlers_LoginSignup";
+import { getEmail, getTwitter, configPaths } from "../../../src/common/globals";
 
 export function isInstalled(): boolean {
   let result = false;
@@ -55,7 +56,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
         onClick={() => {
           stores.userStore.goPage(
             stores.userStore.paramsPage,
-            stores.userStore.GUI_CONFIG.paths.pages.ChangePassword
+            configPaths.pages.ChangePassword
           );
         }}
       />
@@ -78,7 +79,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
     isMobile(GUI_CONFIG.id) && (
       <Installation
         height="25vh"
-        path_image={GUI_CONFIG.paths.image_install}
+        path_image={configPaths.image_install}
         instruction={GUI_CONFIG.language.user.install_instructions}
       />
     );
@@ -86,7 +87,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
   const height_elements = isMobile(GUI_CONFIG.id) ? "70vh" : "30vh";
 
   return (
-    <AppLayout>
+    <AppLayout stores={stores}>
       <HeaderTitle stores={stores} title={title} />
 
       <Box

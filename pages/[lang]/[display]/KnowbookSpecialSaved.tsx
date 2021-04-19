@@ -4,10 +4,9 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
 
-import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { GetStaticPaths, GetStaticProps } from "next";
@@ -26,19 +25,16 @@ const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
   const title = GUI_CONFIG.language.knowbooks.AllSaved_title;
 
   return (
-    <AppLayout>
+    <AppLayout stores={stores}>
       <HeaderTitle stores={stores} title={title} />
       <CardAtomGrid
         id="Saved"
         stores={stores}
         atoms={Array.from(stores.savedStore.saved.values())}
-        isItemSaved_handler={isItemSaved(stores.savedStore)}
-        isItemSavedActionable_handler={isItemSavedActivated(
-          stores.knowbookStore
-        )}
+        isItemSaved_handler={isItemSaved(stores)}
+        isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}
-        edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-        compact={displayCompactedGridCondition(GUI_CONFIG.id)}
+        edit_handler={onEditKnowbooks(stores)}
       />
     </AppLayout>
   );

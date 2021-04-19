@@ -1,10 +1,9 @@
 import { Box, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { ParsedUrlQueryInput } from "querystring";
-import { AtomID, ButtonIDType, handlerT, IconT } from "../common/types";
+import { configGeneral } from "../common/globals";
+import { AtomID, ButtonIDType, handlerT, IconT } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 import CardGeneric from "./CardGeneric";
-import { iconColorDefault } from "./_Button";
 
 interface ICardAtomProps {
   id: AtomID;
@@ -12,7 +11,7 @@ interface ICardAtomProps {
   title: string;
   image_url: string;
   pathname: string;
-  queryObject?: ParsedUrlQueryInput;
+  queryObject?: any;
   saved_actionable: boolean;
   saved_enabled: boolean;
   saved_handler: handlerT;
@@ -23,8 +22,8 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
-  const color_item = GUI_CONFIG.general.colors.item_color;
-  // const color_image = GUI_CONFIG.general.colors.item_color_image;
+  const color_item = configGeneral.colors.item_color;
+  // const color_image = configGeneral.colors.item_color_image;
   const buttons_all = GUI_CONFIG.language.buttons;
 
   return (
@@ -44,7 +43,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
           <IconButton
             accessibilityLabel="edit"
             icon={buttons_all[ButtonIDType.EDIT].icon as IconT}
-            iconColor={iconColorDefault}
+            iconColor={configGeneral.colors.iconColorDefault as any}
             size={size_icon}
             onClick={props.edit_handler}
           />
@@ -54,7 +53,11 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
         <IconButton
           accessibilityLabel="save"
           icon={buttons_all[ButtonIDType.SAVE].icon as IconT}
-          iconColor={props.saved_enabled ? "red" : iconColorDefault}
+          iconColor={
+            props.saved_enabled
+              ? "red"
+              : (configGeneral.colors.iconColorDefault as any)
+          }
           size={size_icon}
           onClick={props.saved_handler}
           disabled={!props.saved_actionable}

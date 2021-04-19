@@ -1,22 +1,17 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
-import dynamic from "next/dynamic";
 import React from "react";
+import { configPaths } from "../common/globals";
 import {
   handlerT,
   IKnowbook,
   KnowbookID,
   PaddingT,
   SizeT,
-} from "../common/types";
+} from "../common/globals";
 import { entierAleatoire } from "../libs/utils";
-import { KnowkookStore } from "../stores/KnowkookStore";
-import { SavedStore } from "../stores/SavedStore";
 import { IStores } from "../stores/_RootStore";
 import CardKnow from "./CardKnow";
-
-//Compact mode "never" used
-const CardKnowCompact = dynamic(() => import("./CardKnowCompact"));
 
 interface ICardKnowGridProps {
   id: string;
@@ -24,18 +19,11 @@ interface ICardKnowGridProps {
   knowbooks: IKnowbook[];
   edit_handler: handlerT;
   delete_handler: handlerT;
-  savedStore: SavedStore;
-  knowbookStore: KnowkookStore;
-  compact: boolean;
 }
 
-function getKnowbookImage(
-  knowbook: KnowbookID,
-  savedStore: SavedStore,
-  knowbookStore: KnowkookStore
-): string {
-  let image_paths_list: string[] = knowbookStore
-    .getKnowbookAtomsList(knowbook, savedStore)
+function getKnowbookImage(knowbook: KnowbookID, stores: IStores): string {
+  let image_paths_list: string[] = stores.knowbookStore
+    .getKnowbookAtomsList(knowbook, stores)
     .map((item) => {
       return item.image_url;
     });
@@ -54,8 +42,7 @@ function getKnowbookImage(
 const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
-  const card_sizes_compact = GUI_CONFIG.display.knowbook_compact_sizes;
-  const path_knowbook = GUI_CONFIG.paths.pages.Knowbook;
+  const path_knowbook = configPaths.pages.Knowbook;
   if (
     props.knowbooks === undefined ||
     props.knowbooks === null ||
@@ -64,89 +51,81 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
     return <> </>;
   } else {
     return (
-      <Box>
-        {props.compact ? (
-          <Box
-            wrap={true}
-            display="flex"
-            direction="row"
-            padding={0}
-            justifyContent="around"
-          >
-            {props.knowbooks.map((item) => {
-              return (
-                <Box
-                  lgPadding={card_sizes_compact.lgPadding as PaddingT}
-                  mdPadding={card_sizes_compact.mdPadding as PaddingT}
-                  smPadding={card_sizes_compact.smPadding as PaddingT}
-                  padding={card_sizes_compact.padding as PaddingT}
-                  key={`Box-cardKnowbookGridCompact-${props.id}-${item.id}`}
-                >
-                  <CardKnowCompact
-                    key={`cardKnowbookGridCompact-${props.id}-${item.name}`}
-                    id={item.name}
-                    stores={props.stores}
-                    title={item.name}
-                    // image_url={image_path}
-                    image_url={getKnowbookImage(
-                      item.name,
-                      props.savedStore,
-                      props.knowbookStore
-                    )}
-                    pathname={path_knowbook}
-                    queryObject={{ title: item.name }}
-                    amount={item.items.length}
-                    edit_handler={props.edit_handler(item.name)}
-                    delete_handler={props.delete_handler(item.name)}
-                  />
-                </Box>
-              );
-            })}
-          </Box>
-        ) : (
-          <Box
-            wrap={true}
-            display="flex"
-            direction="row"
-            padding={0}
-            justifyContent="around"
-          >
-            {props.knowbooks.map((item) => {
-              return (
-                <Box
-                  lgColumn={card_sizes.lgColumn as SizeT}
-                  mdColumn={card_sizes.mdColumn as SizeT}
-                  smColumn={card_sizes.smColumn as SizeT}
-                  column={card_sizes.column as SizeT}
-                  lgPadding={card_sizes.lgPadding as PaddingT}
-                  mdPadding={card_sizes.mdPadding as PaddingT}
-                  smPadding={card_sizes.smPadding as PaddingT}
-                  padding={card_sizes.padding as PaddingT}
-                  key={`Box-cardKnowbookGrid-${props.id}-${item.id}`}
-                >
-                  <CardKnow
-                    key={`cardKnowbookGrid-${props.id}-${item.name}`}
-                    id={item.name}
-                    stores={props.stores}
-                    title={item.name}
-                    // image_url={image_path}
-                    image_url={getKnowbookImage(
-                      item.name,
-                      props.savedStore,
-                      props.knowbookStore
-                    )}
-                    pathname={path_knowbook}
-                    queryObject={{ title: item.name }}
-                    amount={item.items.length}
-                    edit_handler={props.edit_handler(item.name)}
-                    delete_handler={props.delete_handler(item.name)}
-                  />
-                </Box>
-              );
-            })}
-          </Box>
-        )}
+      // <Box>
+      //   {props.compact ? (
+      //     <Box
+      //       wrap={true}
+      //       display="flex"
+      //       direction="row"
+      //       padding={0}
+      //       justifyContent="around"
+      //     >
+      //       {props.knowbooks.map((item) => {
+      //         return (
+      //           <Box
+      //             lgPadding={card_sizes_compact.lgPadding as PaddingT}
+      //             mdPadding={card_sizes_compact.mdPadding as PaddingT}
+      //             smPadding={card_sizes_compact.smPadding as PaddingT}
+      //             padding={card_sizes_compact.padding as PaddingT}
+      //             key={`Box-cardKnowbookGridCompact-${props.id}-${item.id}`}
+      //           >
+      //             <CardKnowCompact
+      //               key={`cardKnowbookGridCompact-${props.id}-${item.name}`}
+      //               id={item.name}
+      //               stores={props.stores}
+      //               title={item.name}
+      //               // image_url={image_path}
+      //               image_url={getKnowbookImage(item.name, props.stores)}
+      //               pathname={path_knowbook}
+      //               queryObject={{ title: item.name }}
+      //               amount={item.items.length}
+      //               edit_handler={props.edit_handler(item.name)}
+      //               delete_handler={props.delete_handler(item.name)}
+      //             />
+      //           </Box>
+      //         );
+      //       })}
+      //     </Box>
+      //   ) : (
+      <Box
+        wrap={true}
+        display="flex"
+        direction="row"
+        padding={0}
+        justifyContent="around"
+      >
+        {props.knowbooks.map((item) => {
+          return (
+            <Box
+              lgColumn={card_sizes.lgColumn as SizeT}
+              mdColumn={card_sizes.mdColumn as SizeT}
+              smColumn={card_sizes.smColumn as SizeT}
+              column={card_sizes.column as SizeT}
+              lgPadding={card_sizes.lgPadding as PaddingT}
+              mdPadding={card_sizes.mdPadding as PaddingT}
+              smPadding={card_sizes.smPadding as PaddingT}
+              padding={card_sizes.padding as PaddingT}
+              key={`Box-cardKnowbookGrid-${props.id}-${item.id}`}
+            >
+              <CardKnow
+                key={`cardKnowbookGrid-${props.id}-${item.name}`}
+                id={item.name}
+                stores={props.stores}
+                title={item.name}
+                // image_url={image_path}
+                image_url={getKnowbookImage(item.name, props.stores)}
+                pathname={path_knowbook}
+                queryObject={{ title: item.name }}
+                amount={item.items.length}
+                edit_handler={props.edit_handler(item.name)}
+                delete_handler={props.delete_handler(item.name)}
+              />
+            </Box>
+          );
+        })}
       </Box>
+      //   )}
+      // </Box>
     );
   }
 };

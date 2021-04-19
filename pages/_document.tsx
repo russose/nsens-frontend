@@ -1,8 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { CONFIG_OPS } from "../src/common/config_env";
+import { CONFIG_ENV } from "../src/common/globals";
 
 const GA_TRACKING_ID =
-  CONFIG_OPS.GA_TRACKING_ID !== undefined ? CONFIG_OPS.GA_TRACKING_ID : "";
+  CONFIG_ENV.GA_TRACKING_ID !== undefined ? CONFIG_ENV.GA_TRACKING_ID : "";
 
 export default class MyDocument extends Document {
   render() {
@@ -25,7 +25,7 @@ export default class MyDocument extends Document {
               page_path: window.location.pathname,
             });
 
-            gtag('config', '${GA_TRACKING_ID}', { 'anonymize_ip': true });
+            // gtag('config', '${GA_TRACKING_ID}', { 'anonymize_ip': true });
 
           `,
             }}

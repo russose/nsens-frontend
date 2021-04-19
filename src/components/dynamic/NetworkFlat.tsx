@@ -1,9 +1,8 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { AtomID } from "../../common/types";
+import { AtomID } from "../../common/globals";
 import { IStores } from "../../stores/_RootStore";
-import CardAtomGrid from "../CardAtomGrid";
 import { Text } from "gestalt";
 import { capitalizeFirstLetter } from "../../libs/utils";
 import {
@@ -12,6 +11,7 @@ import {
   onSaved,
 } from "../../handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
+import CardAtomGridCompact from "../CardAtomGridCompact";
 
 export type INetworkFlatProps = {
   rootItemId: AtomID;
@@ -30,20 +30,14 @@ const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
                 {capitalizeFirstLetter(key_value[0]) + " :"}
               </Text>
             </Box>
-            <CardAtomGrid
+            <CardAtomGridCompact
               id={`NetworkFlat-${key_value[0]}`}
               stores={props.stores}
               atoms={key_value[1]}
-              isItemSaved_handler={isItemSaved(props.stores.savedStore)}
-              isItemSavedActionable_handler={isItemSavedActivated(
-                props.stores.knowbookStore
-              )}
+              isItemSaved_handler={isItemSaved(props.stores)}
+              isItemSavedActionable_handler={isItemSavedActivated(props.stores)}
               saved_handler={onSaved(props.stores)}
-              edit_handler={onEditKnowbooks(
-                props.stores.uiStore,
-                props.stores.knowbookStore
-              )}
-              compact={true}
+              edit_handler={onEditKnowbooks(props.stores)}
             />
           </Box>
         );

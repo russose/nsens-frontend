@@ -1,6 +1,4 @@
-import { configGUIMobile } from "./configGUIMobile";
-
-export type GUI_CONFIG_display_T = typeof configGUIMobile;
+import { configDataDisplay } from "./globals";
 
 const card_size = "15vh";
 const card_compact_size = "10vh";
@@ -10,7 +8,7 @@ const card_compact_vizs_size = 120;
 // const card_compact_size = card_size * 0.8;
 // const card_compact_vizs_size = card_size * 0.5;
 
-export const configGUIDesktop: GUI_CONFIG_display_T = {
+export const configDataDesktop: configDataDisplay = {
   //card_height: 250,
   amount_item_displayed: 50,
   max_nodes_network: 110,
@@ -58,17 +56,6 @@ export const configGUIDesktop: GUI_CONFIG_display_T = {
   atom_compact_sizes: {
     height: card_compact_size,
     width: card_compact_size,
-    lgPadding: 2,
-    mdPadding: 2,
-    smPadding: 2,
-    padding: 2,
-    title_card_size: "sm",
-    max_title_size: 20,
-  },
-  knowbook_compact_sizes: {
-    height: card_compact_size,
-    width: card_compact_size,
-    // image_ratio: "80%",
     lgPadding: 2,
     mdPadding: 2,
     smPadding: 2,

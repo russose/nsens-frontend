@@ -11,13 +11,13 @@ import {
   onDeleteKnowbook,
   onOpenRenameKnowbook,
 } from "../../../src/handlers/handlers_Knowbooks";
-import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
 import { useStores } from "../../../src/stores/_RootStoreHook";
+import { configPaths } from "../../../src/common/globals";
 
 const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -26,10 +26,10 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
 
   const knowbook_all_title = GUI_CONFIG.language.knowbooks.AllSaved_title;
   const knowbook_none_title = GUI_CONFIG.language.knowbooks.None_Title;
-  const knowbook_all_image = GUI_CONFIG.paths.knowbook_all_image;
-  const knowbook_none_image = GUI_CONFIG.paths.knowbook_none_image;
-  const pathKnowbookSaved = GUI_CONFIG.paths.pages.KnowbookSaved;
-  const pathKnowbookNone = GUI_CONFIG.paths.pages.KnowbookNone;
+  const knowbook_all_image = configPaths.knowbook_all_image;
+  const knowbook_none_image = configPaths.knowbook_none_image;
+  const pathKnowbookSaved = configPaths.pages.KnowbookSaved;
+  const pathKnowbookNone = configPaths.pages.KnowbookNone;
   const title = GUI_CONFIG.language.knowbooks.knowbooks_title;
 
   const cardKnowPropsSavedNone: ICardKnowProps[] = [
@@ -62,28 +62,21 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   ];
 
   return (
-    <AppLayout>
+    <AppLayout stores={stores}>
       <Box>
         <HeaderTitle stores={stores} title={title} />
         <CardKnowGrid
           id="knowbooks"
           stores={stores}
           knowbooks={Array.from(stores.knowbookStore.knowbooks.values())}
-          edit_handler={onOpenRenameKnowbook(stores.uiStore)}
-          delete_handler={onDeleteKnowbook(
-            stores.savedStore,
-            stores.knowbookStore
-          )}
-          savedStore={stores.savedStore}
-          knowbookStore={stores.knowbookStore}
-          compact={displayCompactedGridCondition(GUI_CONFIG.id)}
+          edit_handler={onOpenRenameKnowbook(stores)}
+          delete_handler={onDeleteKnowbook(stores)}
         />
         <Divider />
         <CardKnowGridSpecial
           id="knowbooksSpecial"
           stores={stores}
           cardKnowProps={cardKnowPropsSavedNone}
-          compact={displayCompactedGridCondition(GUI_CONFIG.id)}
         />
         {/* <Box paddingY={10}></Box> */}
       </Box>

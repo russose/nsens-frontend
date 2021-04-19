@@ -1,6 +1,6 @@
 import { Box, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { RoundingT, SizeT } from "../../common/types";
+import { RoundingT, SizeT } from "../../common/globals";
 import { IStores } from "../../stores/_RootStore";
 
 export interface INodeGroupProps {

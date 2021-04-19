@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType } from "../common/types";
+import { configGeneral } from "../common/globals";
+import { ButtonIDType } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import _Button, { IButton } from "./_Button";
@@ -12,7 +13,7 @@ interface IMenuBarNavigationProps {
 const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
   props
 ) => {
-  const color_menu = props.stores.userStore.GUI_CONFIG.general.colors.menu;
+  const color_menu = configGeneral.colors.menu;
   const buttons: IButton[] = [
     {
       Id: ButtonIDType.HOME,

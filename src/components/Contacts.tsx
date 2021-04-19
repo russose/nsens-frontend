@@ -1,6 +1,6 @@
 import { Box, Icon, IconButton, Text } from "gestalt";
 import React from "react";
-import { SizeT } from "../common/types";
+import { SizeT } from "../common/globals";
 import _Button from "./_Button";
 import _ButtonWithLabel from "./_ButtonWithLabel";
 

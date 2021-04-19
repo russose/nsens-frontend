@@ -1,21 +1,31 @@
-import { ConfigDisplay } from "../common/types";
-
-const e = "comvacv_msens";
-export function getEmail(): string {
-  const result: string =
-    e.replace(/_/g, "@").replace(/m/g, "n").replace(/v/g, "t") + ".org";
-  return result;
-}
-
-const t = "nwenw";
-export function getTwitter(): string {
-  const result: string = "https://twitter.com/_" + t.replace(/w/g, "s");
-  return result;
-}
+import {
+  AtomID,
+  ConfigDisplay,
+  ConfigLanguage,
+  IAtom,
+} from "../common/globals";
 
 const display_username = "none";
 export function getUserNameDisplay(): string {
   return display_username;
+}
+
+export const empty_value_atom = "";
+export function newAtom(id: AtomID, lang: ConfigLanguage): IAtom {
+  const atom = {
+    id: id,
+    wikibase_item: empty_value_atom,
+    pageid_wp: -1,
+    title: empty_value_atom,
+    title_en: empty_value_atom,
+    language: lang,
+    image_url: empty_value_atom,
+    image_width: -1,
+    image_height: -1,
+    thumbnail_url: empty_value_atom,
+    related: empty_value_atom,
+  };
+  return atom;
 }
 
 export function isMobile(GUI_CONFIG_id: string): boolean {
@@ -50,14 +60,14 @@ export function hasTouchScreen(window: any): boolean {
   return hasTouchScreen;
 }
 
-export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {
-  // if (isMobile(GUI_CONFIG_id)) {
-  //   return true;
-  // } else {
-  //   return false;
-  // }
-  return false;
-}
+// export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {
+//   // if (isMobile(GUI_CONFIG_id)) {
+//   //   return true;
+//   // } else {
+//   //   return false;
+//   // }
+//   return false;
+// }
 
 export function findUndefined(list: Object[]) {
   list.forEach((item) => {

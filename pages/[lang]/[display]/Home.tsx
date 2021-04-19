@@ -10,12 +10,11 @@ import {
   isItemSavedActivated,
   onSaved,
 } from "../../../src/handlers/handlers_Saved";
-import { displayCompactedGridCondition } from "../../../src/libs/utils";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 
 const Home: React.FunctionComponent<IPage> = (props) => {
@@ -25,19 +24,16 @@ const Home: React.FunctionComponent<IPage> = (props) => {
   const slogan = GUI_CONFIG.language.landing.slogan;
 
   return (
-    <AppLayout>
+    <AppLayout stores={stores}>
       <HeaderTitle stores={stores} title={slogan} hidden={true} />
       <CardAtomGrid
         id="Home"
         stores={stores}
         atoms={stores.feedStore.getFeedList()}
-        isItemSaved_handler={isItemSaved(stores.savedStore)}
-        isItemSavedActionable_handler={isItemSavedActivated(
-          stores.knowbookStore
-        )}
+        isItemSaved_handler={isItemSaved(stores)}
+        isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}
-        edit_handler={onEditKnowbooks(stores.uiStore, stores.knowbookStore)}
-        compact={displayCompactedGridCondition(GUI_CONFIG.id)}
+        edit_handler={onEditKnowbooks(stores)}
       />
     </AppLayout>
   );

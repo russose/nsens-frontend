@@ -8,8 +8,10 @@ import MyZoom from "./MyZoom";
 // import Network from "./Network";
 // import NetworkFlat from "./NetworkFlat";
 
-const Network = dynamic(() => import("./Network"), { ssr: false });
-const NetworkFlat = dynamic(() => import("./NetworkFlat"), { ssr: false });
+const Network = dynamic(() => import("../dynamic/Network"), { ssr: false });
+const NetworkFlat = dynamic(() => import("../dynamic/NetworkFlat"), {
+  ssr: false,
+});
 
 export type INetworkZoomableProps = {
   itemId: string;

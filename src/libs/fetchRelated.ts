@@ -1,63 +1,39 @@
-import { CONFIG_FETCHING, LANGUAGE } from "../common/config";
-import { IAtom, IRelatedAtom, JSONDataT } from "../common/types";
+import { configFetching } from "../common/globals";
+import {
+  ConfigLanguage,
+  IAtom,
+  IRelatedAtom,
+  JSONDataT,
+} from "../common/globals";
 import { fetch_data_wikidata } from "./fetch";
 import {
   buildListStringSeparated,
-  chunk,
   enrichImagesBatchFromWikipediaEN,
   enrichOneImageFromRelatedWikipediaParallel,
-  getAtomsFromWikipedia,
-  idsFromSearchOrRandomOrTitlesFromWikipedia,
+  ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia,
   ItemsRelatedFromWikipediaRaw,
-  my_sparqlQuery_related,
   removeBadImages,
-} from "./fetchLib";
+} from "./fetchItems";
 
-const wikidata_language = LANGUAGE;
-const max_size_api = CONFIG_FETCHING.max_size_chunk_api;
+const max_size_api = configFetching.max_size_chunk_api;
 
-export async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia(
-  pattern_or_titles: string,
-  ROOT_URL: string,
-  nb_items: number, //can be any value for "titles" since not used
-  mode: "search" | "random" | "titles"
-): Promise<IAtom[]> {
-  const list_of_PageIds = await idsFromSearchOrRandomOrTitlesFromWikipedia(
-    pattern_or_titles,
-    ROOT_URL,
-    nb_items,
-    mode
-  );
-  const list_of_Pages_string = buildListStringSeparated(list_of_PageIds);
-  const atomsList = await getAtomsFromWikipedia(list_of_Pages_string, ROOT_URL);
-  let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
-  atomsListWithImages = removeBadImages(atomsListWithImages);
-
-  atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
-    atomsListWithImages,
-    CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_REST,
-    CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_ACTION
-  );
-
-  // atomsListWithImages = await enrichImagesOneByOneFromWikiCommonPediaParallel(
-  //   atomsListWithImages,
-  //   CONFIG_FETCHING.URLs.ROOT_URL_WIKICOMMON
-  // );
-
-  return atomsListWithImages;
-}
+/**
+ * Interface
+ */
 
 export async function ItemsRelatedFromWikipedia(
   title: string,
   amount: number,
   ROOT_URL_REST_API: string,
-  ROOT_URL_ACTION_API: string
+  ROOT_URL_ACTION_API: string,
+  lang: ConfigLanguage
 ): Promise<IRelatedAtom[]> {
   const atomsList = await ItemsRelatedFromWikipediaRaw(
     title,
     amount,
     ROOT_URL_REST_API,
-    ROOT_URL_ACTION_API
+    ROOT_URL_ACTION_API,
+    lang
   );
 
   let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
@@ -65,25 +41,23 @@ export async function ItemsRelatedFromWikipedia(
 
   atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
     atomsListWithImages,
-    CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_REST,
-    CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_ACTION
+    ROOT_URL_REST_API,
+    ROOT_URL_ACTION_API,
+    lang
   );
 
   const related: IRelatedAtom[] = atomsListWithImages.map((item: IAtom) => {
     return { relation: "wikipedia", item: item };
   });
 
-  // atomsListWithImages = await enrichImagesOneByOneFromWikiCommonPediaParallel(
-  //   atomsListWithImages,
-  //   CONFIG_FETCHING.URLs.ROOT_URL_WIKICOMMON
-  // );
-
   return related;
 }
 
 export async function ItemsFromWikidata(
   itemId: string,
-  ROOT_URL_WIKIPEDIA: string
+  ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
+  lang: ConfigLanguage
 ): Promise<IRelatedAtom[]> {
   //
   async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
@@ -93,9 +67,11 @@ export async function ItemsFromWikidata(
       list_of_PageTitle_string.map((PageTitle_string: string) => {
         return ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia(
           PageTitle_string,
-          ROOT_URL_WIKIPEDIA,
+          ROOT_URL_REST_API,
+          ROOT_URL_ACTION_API,
           -1,
-          "titles"
+          "titles",
+          lang
         );
       })
     );
@@ -107,10 +83,7 @@ export async function ItemsFromWikidata(
   }
 
   try {
-    const sparqlQuery: string = my_sparqlQuery_related(
-      itemId,
-      wikidata_language
-    );
+    const sparqlQuery: string = my_sparqlQuery_related(itemId, lang);
 
     const result = await fetch_data_wikidata(sparqlQuery);
 
@@ -185,4 +158,45 @@ export async function ItemsFromWikidata(
     // console.log(error);
     return [];
   }
+}
+
+/**
+ * Library
+ */
+
+export function my_sparqlQuery_related(
+  itemId: string,
+  wikidata_language: string
+): string {
+  const sparqlQuery: string = `SELECT ?var ?propLabel ?Entity ?EntityLabel (count (*) as ?EntityClasseLabel) WHERE {
+  
+    BIND(wd:${itemId} AS ?var).
+    
+    #?var wdt:P31 ?Classe.
+    ?var ?p ?Entity.
+    ?Entity wdt:P31 ?EntityClasse.
+    
+    #To get Label of the prop
+    ?prop wikibase:directClaim ?p.
+
+    MINUS {?Entity wdt:P31 wd:Q4167836.}
+    
+    ?Entity rdfs:label ?EntityLabel
+    FILTER (LANG(?EntityLabel) = "${wikidata_language}" && ?prop not in (wd:P31,wd:P910,wd:P5008,wd:P735,wd:P5125,wd:P485,wd:P1343,wd:P1424,wd:P21) )
+            
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "${wikidata_language}". }
+  }
+  group by ?var ?propLabel ?Entity ?EntityLabel order by desc(?propLabel)`;
+
+  return sparqlQuery;
+}
+
+export function chunk(array: any[], size: number) {
+  const chunked_arr = [];
+  let index = 0;
+  while (index < array.length) {
+    chunked_arr.push(array.slice(index, size + index));
+    index += size;
+  }
+  return chunked_arr;
 }

@@ -1,8 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button } from "gestalt";
-import { ColorT, handlerT, RoundingT, SizeT } from "../common/types";
+import { ColorT, handlerT, RoundingT, SizeT } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 import React from "react";
+import { configGeneral } from "../common/globals";
 
 interface IFormChangePasswordProps {
   stores: IStores;
@@ -23,7 +24,7 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
   const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
   const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
-  const color_dialog: ColorT = GUI_CONFIG.general.colors.dialog;
+  const color_dialog: ColorT = configGeneral.colors.dialog;
 
   const value_username_provided =
     props.value_username !== undefined ? true : false;

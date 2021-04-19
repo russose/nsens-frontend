@@ -2,13 +2,12 @@ import { observer } from "mobx-react-lite";
 import { useStores } from "../../../src/stores/_RootStoreHook";
 import React from "react";
 import LandingLayoutHybrid from "../../../src/components/layout/LandingLayoutHybrid";
-import { IFeature } from "../../../src/common/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/utilsConfigGui";
+} from "../../../src/libs/getConfigData";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import FormLoginSignup from "../../../src/components/FormLoginSignup";
@@ -16,6 +15,8 @@ import {
   onChangeUsernamePassword,
   onSubmitLoginSignup,
 } from "../../../src/handlers/handlers_LoginSignup";
+import { configPaths } from "../../../src/common/globals";
+import { IFeature } from "../../../src/common/globals";
 
 const Landing: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -24,9 +25,9 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
 
   const slogan = GUI_CONFIG.language.landing.slogan;
   const description = GUI_CONFIG.language.landing.description;
-  // const path_background_image = GUI_CONFIG.paths.landing.image_background;
-  const path_logo = GUI_CONFIG.paths.image_logo_B;
-  const path_image = GUI_CONFIG.paths.image_landing;
+  // const path_background_image = paths.landing.image_background;
+  const path_logo = configPaths.image_logo_B;
+  const path_image = configPaths.image_landing;
   const ratio_page = GUI_CONFIG.display.landing.ratio_page;
   // const ratio_main = GUI_CONFIG.display.landing.ratio_main;
   const ratio_logo = GUI_CONFIG.display.landing.ratio_logo;
@@ -48,7 +49,7 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
       missing_password_text={missing_password_text}
       label_login={login_label}
       label_signup={signup_label}
-      handler_text={onChangeUsernamePassword(stores.uiStore)}
+      handler_text={onChangeUsernamePassword(stores)}
       handler_button={onSubmitLoginSignup(stores)}
     />
   );
@@ -58,7 +59,7 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
       return {
         title: GUI_CONFIG.language.landing.features[index].title,
         description: GUI_CONFIG.language.landing.features[index].description,
-        // image_url: GUI_CONFIG.paths.landing.images_feature[index],
+        // image_url: paths.landing.images_feature[index],
         icon: GUI_CONFIG.language.landing.features[index].icon,
       };
     }
@@ -86,7 +87,7 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
     );
   } else {
     page = (
-      <AppLayout>
+      <AppLayout stores={stores}>
         <HeaderTitle stores={stores} title={slogan} hidden={true} />
         <LandingLayoutHybrid
           stores={stores}

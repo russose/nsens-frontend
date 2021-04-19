@@ -4,8 +4,7 @@ import React from "react";
 import SearchBar from "../SearchBar";
 import MenuBarNavigation from "../MenuBarNavigation";
 import PageLayoutHybrid from "./PageLayoutHybrid";
-import Dialogs from "../Dialogs";
-import { useStores } from "../../stores/_RootStoreHook";
+// import Dialogs from "../Dialogs";
 import { isMobile } from "../../libs/utils";
 import { useRouter } from "next/router";
 import {
@@ -14,21 +13,30 @@ import {
   onSearchHomeText,
   onTapLogo,
 } from "../../handlers/handlers_Logo_Searchbar";
+import DialogEditKnowbooks from "../DialogEditKnowbooks";
+import DialogRenameKnowbooks from "../DialogRenameKnowbooks";
+import DialogLoading from "../DialogLoading";
+import { IStores } from "../../stores/_RootStore";
+import { configPaths } from "../../common/globals";
 
-const AppLayout: React.FunctionComponent = (props) => {
-  const stores = useStores();
+interface IAppLayoutProps {
+  stores: IStores;
+}
+
+const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
+  const stores = props.stores;
 
   const router = useRouter();
 
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
-  const path_logo_image = GUI_CONFIG.paths.image_logo_W_small;
+  const path_logo_image = configPaths.image_logo_W_small;
 
   const navigationMenu = <MenuBarNavigation stores={stores} />;
 
   const searchbar = (
     <SearchBar
       placeholder={GUI_CONFIG.language.searchBar}
-      handlerText={onSearchHomeText(stores.uiStore)}
+      handlerText={onSearchHomeText(stores)}
       handlerSubmit={onSearchHomeSubmit(stores)}
       handlerKeyboard={onSearchHomeKeyboard(stores)}
       value={stores.uiStore.searchPattern}
@@ -108,7 +116,7 @@ const AppLayout: React.FunctionComponent = (props) => {
   let free_space_buttom;
   if (
     isMobile(GUI_CONFIG.id) &&
-    !router.pathname.includes(GUI_CONFIG.paths.pages.ItemArticle)
+    !router.pathname.includes(configPaths.pages.ItemArticle)
   ) {
     free_space_buttom = <Box height="30vh" />;
   } else {
@@ -121,7 +129,10 @@ const AppLayout: React.FunctionComponent = (props) => {
         {props.children}
         {free_space_buttom}
       </PageLayoutHybrid>
-      <Dialogs />
+      {/* <Dialogs /> */}
+      <DialogEditKnowbooks stores={stores} />
+      <DialogRenameKnowbooks stores={stores} />
+      <DialogLoading stores={stores} />
     </>
   );
 };

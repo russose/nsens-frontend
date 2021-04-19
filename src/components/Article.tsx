@@ -1,9 +1,9 @@
 import React from "react";
-import { CONFIG_FETCHING } from "../common/config";
 import { fetchArticle } from "../libs/fetch";
 import { observer } from "mobx-react-lite";
 import Separator from "./Separator";
 import { Text } from "gestalt";
+import { ROOT_URL_WIKIPEDIA_REST } from "../common/configURLs";
 import { IStores } from "../stores/_RootStore";
 
 interface IArticleProps {
@@ -12,7 +12,7 @@ interface IArticleProps {
   height: number;
 }
 
-const path = CONFIG_FETCHING.URLs.ROOT_URL_WIKIPEDIA_REST;
+// const path = URLs.ROOT_URL_WIKIPEDIA_REST;
 
 const Article: React.FunctionComponent<IArticleProps> = (props) => {
   // const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
@@ -53,7 +53,10 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
 
   props.stores.uiStore.setShowLoading(true);
 
-  fetchArticle(props.item_title, path)
+  fetchArticle(
+    props.item_title,
+    ROOT_URL_WIKIPEDIA_REST(props.stores.userStore.paramsPage.lang)
+  )
     .then((value) => {
       props.stores.uiStore.setArticleContent(prepareArticle(value));
       props.stores.uiStore.setShowLoading(false);

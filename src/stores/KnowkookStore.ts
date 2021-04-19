@@ -1,4 +1,3 @@
-import { SavedStore } from "./SavedStore";
 import { observable, action, makeObservable } from "mobx";
 import {
   IAtom,
@@ -6,14 +5,15 @@ import {
   // IUser,
   IKnowbook,
   KnowbookID,
-} from "../common/types";
+} from "../common/globals";
 import {
   _addItemInKnowbook,
   _addKnowbook,
   _removeItemFromKnowbook,
   _renameKnowbook,
   _removeKnowbook,
-} from "../_api";
+} from "../libs/_apiUserData";
+import { IStores } from "./_RootStore";
 
 export class KnowkookStore {
   private $knowbooks = observable.map<KnowbookID, IKnowbook>();
@@ -74,11 +74,11 @@ export class KnowkookStore {
       });
   }
 
-  deleteKnowbook(name: KnowbookID, savedStore: SavedStore) {
+  deleteKnowbook(name: KnowbookID, stores: IStores) {
     if (!this.knowbooks.has(name)) {
       return;
     }
-    if (this.getKnowbookAtomsList(name, savedStore).length !== 0) {
+    if (this.getKnowbookAtomsList(name, stores).length !== 0) {
       return;
     }
     _removeKnowbook(name)
@@ -200,17 +200,14 @@ export class KnowkookStore {
     }
   }
 
-  getKnowbookAtomsList(
-    knowbookID: KnowbookID,
-    savedStore: SavedStore
-  ): IAtom[] {
+  getKnowbookAtomsList(knowbookID: KnowbookID, stores: IStores): IAtom[] {
     if (!this.knowbooks.has(knowbookID)) {
       // console.log("impossible to provide Atoms List from knowbook");
       return [];
     } else {
       const my_knowbook = this.knowbooks.get(knowbookID);
       if (my_knowbook !== undefined) {
-        return savedStore.getSavedAtomsFromIds(my_knowbook.items);
+        return stores.savedStore.getSavedAtomsFromIds(my_knowbook.items);
       } else {
         // console.log("impossible to provide Atoms List from knowbook");
         return [];
@@ -244,10 +241,10 @@ export class KnowkookStore {
     return false;
   }
 
-  ItemsInNoKnowbook(savedStore: SavedStore): IAtom[] {
+  ItemsInNoKnowbook(stores: IStores): IAtom[] {
     const itemsIdList: AtomID[] = [];
 
-    savedStore.saved.forEach((item) => {
+    stores.savedStore.saved.forEach((item) => {
       const knowbookIds: KnowbookID[] = Array.from(this.knowbooks.keys());
       for (let knowbookId of knowbookIds) {
         const inside = this.isItemInKnowbook(item.id, knowbookId);
@@ -259,6 +256,6 @@ export class KnowkookStore {
       return;
     });
 
-    return savedStore.getSavedAtomsFromIds(itemsIdList);
+    return stores.savedStore.getSavedAtomsFromIds(itemsIdList);
   }
 }

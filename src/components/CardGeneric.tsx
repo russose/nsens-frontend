@@ -6,10 +6,10 @@ import {
   reactComponentT,
   RoundingT,
   SizeT,
-} from "../common/types";
-import { ParsedUrlQueryInput } from "querystring";
+} from "../common/globals";
 import Link from "next/link";
 import { IStores } from "../stores/_RootStore";
+import { configPaths } from "../common/globals";
 
 interface ICardSizes {
   height: number | string;
@@ -27,13 +27,13 @@ interface ICardGenericProps {
   color_image?: string;
   sizes: ICardSizes;
   pathname: string;
-  queryObject?: ParsedUrlQueryInput;
+  queryObject?: any;
   full?: boolean;
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
-  const path_empty_image = GUI_CONFIG.paths.item_empty_image;
+  const path_empty_image = configPaths.item_empty_image;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const max_title_size = props.sizes.max_title_size;
   const title_card_size: SizeT = props.sizes.title_card_size;

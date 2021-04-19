@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType } from "../common/types";
+import { ButtonIDType } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
-import _Button, { IButton, iconColorDefault } from "./_Button";
+import _Button, { IButton } from "./_Button";
 import { Box } from "gestalt";
 import {
   isItemSaved,
@@ -11,6 +11,7 @@ import {
   onSaved,
 } from "../handlers/handlers_Saved";
 import { onEditKnowbooks } from "../handlers/handlers_Knowbooks";
+import { configGeneral } from "../common/globals";
 
 interface IMenuBarDisplayProps {
   stores: IStores;
@@ -21,7 +22,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
   props
 ) => {
   const stores = props.stores;
-  const color_menu = stores.userStore.GUI_CONFIG.general.colors.menu;
+  const color_menu = configGeneral.colors.menu;
   const buttons: IButton[] = [
     {
       Id: ButtonIDType.ARTICLE,
@@ -36,20 +37,15 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     {
       Id: ButtonIDType.SAVE,
       onClick: onSaved(stores)(stores.uiStore.selectedAtom.id),
-      disabled: !isItemSavedActivated(stores.knowbookStore)(
-        stores.uiStore.selectedAtom.id
-      ),
-      iconColor: isItemSaved(stores.savedStore)(stores.uiStore.selectedAtom.id)
+      disabled: !isItemSavedActivated(stores)(stores.uiStore.selectedAtom.id),
+      iconColor: isItemSaved(stores)(stores.uiStore.selectedAtom.id)
         ? "red"
-        : iconColorDefault,
+        : configGeneral.colors.iconColorDefault,
     },
     {
       Id: ButtonIDType.EDIT,
-      onClick: onEditKnowbooks(
-        stores.uiStore,
-        stores.knowbookStore
-      )(stores.uiStore.selectedAtom.id),
-      disabled: !isItemSaved(stores.savedStore)(stores.uiStore.selectedAtom.id),
+      onClick: onEditKnowbooks(stores)(stores.uiStore.selectedAtom.id),
+      disabled: !isItemSaved(stores)(stores.uiStore.selectedAtom.id),
     },
   ];
 

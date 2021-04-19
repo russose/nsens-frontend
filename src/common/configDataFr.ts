@@ -1,17 +1,13 @@
-import { paths } from "./configPaths";
-
-export const Lang_fr = {
+export const configDataFr = {
   searchBar: "Rechercher...",
   // WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
   // USER_WIKIDATA_LANG: "fr",
   landing: {
-    // slogan: "Transformer l'information en connaissance universelle",
     slogan: "Explorer, Comprendre, Agir",
     description:
       "Entretenir le goût du vrai pour rester libre: \
       organiser ses connaissances dans des carnets accessibles partout \
       et se laisser transporter vers de nouvelles découvertes.",
-    // features_title: "Fonctionalités",
     loginSignup: {
       username_placeholder: "Email",
       password_placeholder: "Mot de passe",
@@ -52,23 +48,35 @@ export const Lang_fr = {
     HOME: {
       label: "Accueil",
       icon: "workflow-status-all",
-      path: paths.pages.Home,
     },
     KNOWBOOKS: {
       label: "Carnets",
       icon: "folder",
-      path: paths.pages.Knowbooks,
     },
-    LOGIN: { label: "User", icon: "person", path: paths.pages.User },
-    INFO: { label: "Info", icon: "question-mark", path: paths.pages.Landing },
-    SAVE: { label: "Sauver", icon: "angled-pin", path: paths.pages.empty },
-    EDIT: { label: "Modifier", icon: "edit", path: paths.pages.empty },
+    LOGIN: {
+      label: "User",
+      icon: "person",
+    },
+    INFO: {
+      label: "Info",
+      icon: "question-mark",
+    },
+    SAVE: {
+      label: "Sauver",
+      icon: "angled-pin",
+    },
+    EDIT: {
+      label: "Modifier",
+      icon: "edit",
+    },
     ARTICLE: {
       label: "Article",
       icon: "text-align-left",
-      path: paths.pages.ItemArticle,
     },
-    VIZS: { label: "Vizs", icon: "compass", path: paths.pages.ItemNetwork },
+    VIZS: {
+      label: "Vizs",
+      icon: "compass",
+    },
   },
   knowbooks: {
     knowbooks_title: "Carnets de connaissance",

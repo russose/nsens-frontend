@@ -1,15 +1,12 @@
-import { GUI_CONFIG_T } from "../common/configGUI";
-import { Lang_fr } from "../common/configGUILangFr";
-import { paths } from "../common/configPaths";
-import { ConfigLanguage, ConfigDisplay } from "../common/types";
+import { configDataFr } from "../common/configDataFr";
+import { ConfigLanguage, ConfigDisplay, GUI_CONFIG_T } from "../common/globals";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { configGUIGeneral } from "../common/configGUIGeneral";
 
 export interface IPage {
   guiConfigData: GUI_CONFIG_T;
 }
 
-function getAllGuiConfig() {
+function getAllConfig() {
   const guiConfigList = [
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.mobile } },
     { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.desktop } },
@@ -19,7 +16,7 @@ function getAllGuiConfig() {
   return guiConfigList;
 }
 
-async function getGuiConfigData(params: any): Promise<GUI_CONFIG_T> {
+async function getConfigData(params: any): Promise<GUI_CONFIG_T> {
   const lang = params.lang;
   const display = params.display;
   const id = lang + "_" + display;
@@ -42,52 +39,44 @@ async function getGuiConfigData(params: any): Promise<GUI_CONFIG_T> {
   // };
 
   if (params === undefined) {
-    const configGUIMobile = await import("../common/configGUIMobile");
+    const configGUIMobile = await import("../common/configDataMobile");
     GUI_CONFIG__ = {
       id: id,
-      general: configGUIGeneral,
-      language: Lang_fr,
-      display: configGUIMobile.configGUIMobile,
-      paths: paths,
+      language: configDataFr,
+      display: configGUIMobile.configDataMobile,
     };
   } else if (display === ConfigDisplay.mobile) {
-    const configGUIMobile = await import("../common/configGUIMobile");
+    const configGUIMobile = await import("../common/configDataMobile");
     GUI_CONFIG__ = {
       id: id,
-      general: configGUIGeneral,
-      language: Lang_fr,
-      display: configGUIMobile.configGUIMobile,
-      paths: paths,
+      language: configDataFr,
+      display: configGUIMobile.configDataMobile,
     };
   } else if (display === ConfigDisplay.desktop) {
-    const configGUIDesktop = await import("../common/configGUIDesktop");
+    const configGUIDesktop = await import("../common/configDataDesktop");
     GUI_CONFIG__ = {
       id: id,
-      general: configGUIGeneral,
-      language: Lang_fr,
-      display: configGUIDesktop.configGUIDesktop,
-      paths: paths,
+      language: configDataFr,
+      display: configGUIDesktop.configDataDesktop,
     };
     // GUI_CONFIG__.display = displayDesktop;
   } else if (display === ConfigDisplay.large) {
-    const configGUIDesktop = await import("../common/configGUIDesktop");
+    const configGUIDesktop = await import("../common/configDataDesktop");
     const configGUISpecialScreen = await import(
-      "../common/configGUISpecialScreen"
+      "../common/configDataSpecialScreen"
     );
     GUI_CONFIG__ = {
       id: id,
-      general: configGUIGeneral,
-      language: Lang_fr,
-      display: configGUIDesktop.configGUIDesktop,
-      paths: paths,
+      language: configDataFr,
+      display: configGUIDesktop.configDataDesktop,
     };
     // GUI_CONFIG__.display = displayDesktop;
     GUI_CONFIG__.display.landing.features.lgColumn =
-      configGUISpecialScreen.configGUISpecialScreen.large.landing_features_column;
+      configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
     GUI_CONFIG__.display.atom_sizes.lgColumn =
-      configGUISpecialScreen.configGUISpecialScreen.large.atom_sizes_column;
+      configGUISpecialScreen.configDataSpecialScreen.large.atom_sizes_column;
     GUI_CONFIG__.display.knowbook_sizes.lgColumn =
-      configGUISpecialScreen.configGUISpecialScreen.large.atom_sizes_column;
+      configGUISpecialScreen.configDataSpecialScreen.large.atom_sizes_column;
   }
 
   const guiConfigData = {
@@ -98,7 +87,7 @@ async function getGuiConfigData(params: any): Promise<GUI_CONFIG_T> {
 }
 
 export const I_getStaticPaths: GetStaticPaths = async (context) => {
-  const paths = getAllGuiConfig();
+  const paths = getAllConfig();
   return {
     paths,
     fallback: false,
@@ -106,7 +95,7 @@ export const I_getStaticPaths: GetStaticPaths = async (context) => {
 };
 
 export const I_getStaticProps: GetStaticProps = async (context) => {
-  const guiConfigData = await getGuiConfigData(context.params);
+  const guiConfigData = await getConfigData(context.params);
   if (!guiConfigData) {
     return {
       notFound: true,

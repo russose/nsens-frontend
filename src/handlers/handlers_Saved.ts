@@ -1,14 +1,11 @@
-import { SavedStore } from "../stores/SavedStore";
-import { AtomID, eventT } from "../common/types";
-
+import { AtomID, eventT } from "../common/globals";
 import {
   _login,
   _signup,
   _logout,
   _getValidationNewPassword,
   _setNewPassword,
-} from "../_api";
-import { KnowkookStore } from "../stores/KnowkookStore";
+} from "../libs/_apiUserData";
 import { IStores } from "../stores/_RootStore";
 
 /*******************Save Items*************************** */
@@ -25,26 +22,24 @@ export const onSaved = (stores: IStores) => (itemID: AtomID) => (input: {
   ) {
     stores.savedStore.addSaved(itemID, stores);
   } else {
-    stores.savedStore.removeSaved(itemID, stores.knowbookStore);
+    stores.savedStore.removeSaved(itemID, stores);
   }
   input.event.preventDefault();
 };
 
-export const isItemSaved = (savedStore: SavedStore) => (itemID: AtomID) => {
-  if (savedStore.saved.has(itemID) === undefined) {
+export const isItemSaved = (stores: IStores) => (itemID: AtomID) => {
+  if (stores.savedStore.saved.has(itemID) === undefined) {
     return false;
   }
-  if (savedStore.saved.has(itemID)) {
+  if (stores.savedStore.saved.has(itemID)) {
     return true;
   } else {
     return false;
   }
 };
 
-export const isItemSavedActivated = (knowbookStore: KnowkookStore) => (
-  itemID: AtomID
-) => {
-  if (knowbookStore.IsItemInAnyKnowbook(itemID)) {
+export const isItemSavedActivated = (stores: IStores) => (itemID: AtomID) => {
+  if (stores.knowbookStore.IsItemInAnyKnowbook(itemID)) {
     return false;
   } else {
     return true;

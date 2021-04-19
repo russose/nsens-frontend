@@ -1,14 +1,13 @@
-import { eventT } from "../common/types";
-import { UIStore } from "../stores/UIStore";
+import { eventT } from "../common/globals";
 import {
   _login,
   _signup,
   _logout,
   _getValidationNewPassword,
   _setNewPassword,
-} from "../_api";
+} from "../libs/_apiUserData";
 import { IStores } from "../stores/_RootStore";
-import { GUI_CONFIG_T } from "../common/configGUI";
+import { configPaths } from "../common/globals";
 
 /*******************Logo*************************** */
 export const onTapLogo = (
@@ -25,32 +24,26 @@ export const onTapLogo = (
   //   item.title,
   //   GUI_CONFIG
   // );
-  stores.userStore.goPage(
-    stores.userStore.paramsPage,
-    stores.userStore.GUI_CONFIG.paths.pages.Home
-  );
+  stores.userStore.goPage(stores.userStore.paramsPage, configPaths.pages.Home);
 };
 
 /*******************Searchbar*************************** */
 
-export const onSearchHomeText = (uiStore: UIStore) => (input: {
+export const onSearchHomeText = (stores: IStores) => (input: {
   value: string;
   syntheticEvent: eventT;
 }): void => {
-  uiStore.setSearchPattern(input.value);
+  stores.uiStore.setSearchPattern(input.value);
   // console.log(uiStore.searchPattern);
 };
 
 export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   if (stores.uiStore.searchPattern.length > 0) {
-    stores.feedStore.setFeedFromSearch(stores.uiStore.searchPattern);
+    stores.feedStore.setFeedFromSearch(stores, stores.uiStore.searchPattern);
   } else {
     //feedStore.setFeedFromRandom();
   }
-  stores.userStore.goPage(
-    stores.userStore.paramsPage,
-    stores.userStore.GUI_CONFIG.paths.pages.Home
-  );
+  stores.userStore.goPage(stores.userStore.paramsPage, configPaths.pages.Home);
 };
 
 export const onSearchHomeKeyboard = (stores: IStores) => (input: {
@@ -61,7 +54,7 @@ export const onSearchHomeKeyboard = (stores: IStores) => (input: {
     if (stores.uiStore.searchPattern.length === 0) {
       const amount_item_displayed =
         stores.userStore.GUI_CONFIG.display.amount_item_displayed;
-      stores.feedStore.setFeedFromRelated(amount_item_displayed);
+      stores.feedStore.setFeedFromRelated(stores, amount_item_displayed);
     } else {
       onSearchHomeSubmit(stores)();
     }

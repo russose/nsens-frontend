@@ -5,11 +5,17 @@ import {
   onChangeKnwobooksInclusionEditKnowbooks,
   onSubmitChangesEditKnowbooks,
 } from "../handlers/handlers_Knowbooks";
-import { useStores } from "../stores/_RootStoreHook";
+import { IStores } from "../stores/_RootStore";
 import DialogEditKnowbooksForm from "./DialogEditKnowbooksForm";
 
-const DialogEditKnowbooks: React.FunctionComponent = (props) => {
-  const stores = useStores();
+interface IDialogEditKnowbooksProps {
+  stores: IStores;
+}
+
+const DialogEditKnowbooks: React.FunctionComponent<IDialogEditKnowbooksProps> = (
+  props
+) => {
+  const stores = props.stores;
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
 
   return (
@@ -25,15 +31,10 @@ const DialogEditKnowbooks: React.FunctionComponent = (props) => {
             .map(([key, value]) => {
               return { label: key, activated: value };
             })}
-          handler_cancel={onCancel(stores.uiStore)}
-          handler_confirm={onSubmitChangesEditKnowbooks(
-            stores.uiStore,
-            stores.knowbookStore
-          )}
-          handler_inputValue={onChangeInputValueEditKnowbooks(stores.uiStore)}
-          handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(
-            stores.uiStore
-          )}
+          handler_cancel={onCancel(stores)}
+          handler_confirm={onSubmitChangesEditKnowbooks(stores)}
+          handler_inputValue={onChangeInputValueEditKnowbooks(stores)}
+          handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(stores)}
         />
       )}
     </>

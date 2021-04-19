@@ -3,6 +3,7 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { configPaths } from "../../common/globals";
 import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
 import {
   isItemSaved,
@@ -13,8 +14,8 @@ import { group_name } from "../../stores/GraphStore";
 import { IStores } from "../../stores/_RootStore";
 import { useStores } from "../../stores/_RootStoreHook";
 import CardAtomCompact from "../CardAtomCompact";
-import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
-import NodeGroup from "./NodeGroup";
+import NetworkLinkWithLabel from "../vizs/NetworkLinkWithLabel";
+import NodeGroup from "../vizs/NodeGroup";
 
 export type INetworkWithGroupProps = {
   title: string;
@@ -32,7 +33,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   const GUI_CONFIG = stores.userStore.GUI_CONFIG;
   const node_dx = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
   const node_dy = GUI_CONFIG.display.atom_compact_vizs_sizes.height;
-  const path_Itemview = GUI_CONFIG.paths.pages.ItemArticle;
+  const path_Itemview = configPaths.pages.ItemArticle;
   let node;
   if (props.node.relation_name === group_name) {
     node = (
@@ -61,15 +62,10 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
           image_url={props.node.image_url}
           pathname={path_Itemview}
           queryObject={{ title: props.node.title, id: props.node.id }}
-          saved_enabled={isItemSaved(stores.savedStore)(props.node.id)}
-          saved_actionable={isItemSavedActivated(stores.knowbookStore)(
-            props.node.id
-          )}
+          saved_enabled={isItemSaved(stores)(props.node.id)}
+          saved_actionable={isItemSavedActivated(stores)(props.node.id)}
           saved_handler={onSaved(stores)(props.node.id)}
-          edit_handler={onEditKnowbooks(
-            stores.uiStore,
-            stores.knowbookStore
-          )(props.node.id)}
+          edit_handler={onEditKnowbooks(stores)(props.node.id)}
           forVizs={true}
         />
       </foreignObject>

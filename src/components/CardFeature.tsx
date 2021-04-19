@@ -1,7 +1,8 @@
 import { Box, Icon, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ColorT, IconT, SizeT } from "../common/types";
+import { configGeneral } from "../common/globals";
+import { ColorT, IconT, SizeT } from "../common/globals";
 import { IStores } from "../stores/_RootStore";
 
 interface ICardFeatureProps {
@@ -17,7 +18,7 @@ const CardFeature: React.FunctionComponent<ICardFeatureProps> = (props) => {
     GUI_CONFIG.display.landing.features.desciption_size;
   const feature_title_size: SizeT =
     GUI_CONFIG.display.landing.features.title_size;
-  const features_color: ColorT = GUI_CONFIG.general.colors.features;
+  const features_color: ColorT = configGeneral.colors.features;
 
   return (
     <>
