@@ -1,6 +1,5 @@
 import { observable, action, makeObservable } from "mobx";
-import { AtomID, IparamsAtom, KnowbookID } from "../common/globals";
-import { IStores } from "./_RootStore";
+import { AtomID, IparamsAtom, KnowbookID } from "../config/globals";
 
 export class UIStore {
   private $searchPattern: string = "";
@@ -82,7 +81,7 @@ export class UIStore {
       setChangePasswordPassword: action,
       setChangePasswordValidationCode: action,
       setChangePasswordError: action,
-      initKnowbookEditionElements: action,
+      // initKnowbookEditionElements: action,
       setShowLoading: action,
     });
   }
@@ -201,19 +200,5 @@ export class UIStore {
   }
   setShowLoading(show: boolean): void {
     this.$showLoading = show;
-  }
-
-  /******************************************************* */
-  initKnowbookEditionElements(atomID: AtomID, stores: IStores): void {
-    this.$editKnowbookNewValue = "";
-    this.editKnowbookMembers.clear();
-
-    const knowbook_id_list = Array.from(stores.knowbookStore.knowbooks.keys());
-    knowbook_id_list.forEach((knowbookId) => {
-      this.editKnowbookMembers.set(
-        knowbookId,
-        stores.knowbookStore.isItemInKnowbook(atomID, knowbookId)
-      );
-    });
   }
 }

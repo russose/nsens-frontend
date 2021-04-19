@@ -17,11 +17,12 @@ import {
   onSaved,
 } from "../../../src/handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
+import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
 
 const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
   const title = GUI_CONFIG.language.knowbooks.AllSaved_title;
 
   return (

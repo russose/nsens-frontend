@@ -14,9 +14,9 @@ const ItemArticleNoSSR: React.FunctionComponent<IItemArticleNoSSRProps> = (
 ) => {
   const stores = props.stores;
 
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;
-  const height = stores.userStore.screen.height - 1.0 * heightTopAndBottom;
+  const height = stores.baseStore.screen.height - 1.0 * heightTopAndBottom;
 
   return (
     <Box padding={1}>

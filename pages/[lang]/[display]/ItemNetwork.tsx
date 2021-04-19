@@ -13,6 +13,7 @@ import AppLayout from "../../../src/components/layout/AppLayout";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import MenuBarDisplay from "../../../src/components/MenuBarDisplay";
 import { isMobile } from "../../../src/libs/utils";
+import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
 
 const ItemNetworkNoSSR = dynamic(
   () => import("../../../src/components/dynamic/ItemNetworkNoSSR"),
@@ -22,7 +23,7 @@ const ItemNetworkNoSSR = dynamic(
 const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
 
   const router = useRouter();
   const item_title = router.query.title as string;

@@ -7,10 +7,10 @@ import {
   IconT,
   IparamsAtom,
   SizeT,
-} from "../common/globals";
+} from "../config/globals";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import { configGeneral, configPaths } from "../common/globals";
+import { configGeneral, configPaths } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 
 export interface IButton {
@@ -31,7 +31,7 @@ interface IButtonProps {
 }
 
 const _Button: React.FunctionComponent<IButtonProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const icon_size: SizeT = GUI_CONFIG.display.size_icon_menu;
   const path_empty = configPaths.pages.empty;
   const path_ = props.path === undefined ? path_empty : props.path;
@@ -48,9 +48,9 @@ const _Button: React.FunctionComponent<IButtonProps> = (props) => {
     props.path === configPaths.pages.ItemNetwork
   ) {
     const paramsItem: IparamsAtom = props.stores.uiStore.selectedAtom;
-    query_ = { ...props.stores.userStore.paramsPage, ...paramsItem };
+    query_ = { ...props.stores.baseStore.paramsPage, ...paramsItem };
   } else {
-    query_ = props.stores.userStore.paramsPage;
+    query_ = props.stores.baseStore.paramsPage;
   }
 
   return path_ === path_empty ? (
@@ -65,8 +65,8 @@ const _Button: React.FunctionComponent<IButtonProps> = (props) => {
   ) : (
     <Link
       href={{
-        pathname: props.stores.userStore.rootPath + props.path,
-        // query: props.stores.userStore.paramsPage as any,
+        pathname: props.stores.baseStore.rootPath + props.path,
+        // query: props.stores.baseStore.paramsPage as any,
         query: query_ as any,
       }}
       passHref

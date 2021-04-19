@@ -1,7 +1,7 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { PaddingT, SizeT } from "../common/globals";
+import { PaddingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 import CardKnow, { ICardKnowProps } from "./CardKnow";
 
@@ -14,7 +14,7 @@ interface ICardKnowGridSpecialProps {
 const CardKnowGridSpecial: React.FunctionComponent<ICardKnowGridSpecialProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
   if (props.cardKnowProps === undefined || props.cardKnowProps.length === 0) {
     return <> </>;

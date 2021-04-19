@@ -1,7 +1,7 @@
 import { Box, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { configGeneral } from "../common/globals";
-import { AtomID, ButtonIDType, handlerT, IconT } from "../common/globals";
+import { configGeneral } from "../config/globals";
+import { AtomID, ButtonIDType, handlerT, IconT } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 import CardGeneric from "./CardGeneric";
 
@@ -19,7 +19,7 @@ interface ICardAtomProps {
 }
 
 const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
   const color_item = configGeneral.colors.item_color;

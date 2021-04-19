@@ -6,10 +6,10 @@ import {
   reactComponentT,
   RoundingT,
   SizeT,
-} from "../common/globals";
+} from "../config/globals";
 import Link from "next/link";
 import { IStores } from "../stores/_RootStore";
-import { configPaths } from "../common/globals";
+import { configPaths } from "../config/globals";
 
 interface ICardSizes {
   height: number | string;
@@ -32,7 +32,7 @@ interface ICardGenericProps {
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const path_empty_image = configPaths.item_empty_image;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const max_title_size = props.sizes.max_title_size;
@@ -81,8 +81,8 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     return (
       <Link
         href={{
-          pathname: props.stores.userStore.rootPath + props.pathname,
-          query: { ...props.stores.userStore.paramsPage, ...props.queryObject },
+          pathname: props.stores.baseStore.rootPath + props.pathname,
+          query: { ...props.stores.baseStore.paramsPage, ...props.queryObject },
         }}
         passHref
       >

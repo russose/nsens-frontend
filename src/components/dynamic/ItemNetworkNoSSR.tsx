@@ -12,10 +12,10 @@ interface ItemNetworkNoSSR {
 const ItemNetworkNoSSR: React.FunctionComponent<ItemNetworkNoSSR> = (props) => {
   const stores = props.stores;
 
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;
-  const height = stores.userStore.screen.height - 1.0 * heightTopAndBottom;
-  const width = stores.userStore.screen.width;
+  const height = stores.baseStore.screen.height - 1.0 * heightTopAndBottom;
+  const width = stores.baseStore.screen.width;
 
   return (
     <NetworkZoomable

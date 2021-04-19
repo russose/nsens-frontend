@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, IconButton, Text } from "gestalt";
-import { IconT, SizeT } from "../common/globals";
+import { IconT, SizeT } from "../config/globals";
 
 interface IButtonWithLabelProps {
   icon: IconT;

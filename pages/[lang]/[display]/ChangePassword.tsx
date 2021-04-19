@@ -17,12 +17,16 @@ import {
   onChangePassword_button,
   onChangePassword_text,
 } from "../../../src/handlers/handlers_ChangePassword";
-import { configPaths } from "../../../src/common/globals";
+import { configPaths } from "../../../src/config/globals";
+import {
+  goPage,
+  initializeAppAndRedirect,
+} from "../../../src/libs/helpers_InitAndRedirect";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
   // stores.userStore.initializeAppWithoutDataAndGoPage(
   //   GUI_CONFIG,
   //   paths.pages.ChangePassword
@@ -40,16 +44,16 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const label_changePassword =
     GUI_CONFIG.language.changePassword.label_changePassword;
 
-  const isLogged = stores.userStore.isLogged;
+  const isLogged = stores.baseStore.isLogged;
 
   stores.uiStore.setChangePasswordError("");
 
   const height_elements = isMobile(GUI_CONFIG.id) ? "45vh" : "40vh";
 
   let value_username = undefined;
-  if (isLogged && stores.userStore.user !== null) {
-    value_username = stores.userStore.user.username;
-    stores.uiStore.setChangePasswordUsername(stores.userStore.user.username);
+  if (isLogged && stores.baseStore.user !== null) {
+    value_username = stores.baseStore.user.username;
+    stores.uiStore.setChangePasswordUsername(stores.baseStore.user.username);
   }
 
   const backButton = (
@@ -61,8 +65,9 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
           size="lg"
           // color="red"
           onClick={() => {
-            stores.userStore.goPage(
-              stores.userStore.paramsPage,
+            goPage(
+              stores,
+              stores.baseStore.paramsPage,
               configPaths.pages.Landing
             );
           }}

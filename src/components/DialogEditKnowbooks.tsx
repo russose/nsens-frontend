@@ -16,7 +16,7 @@ const DialogEditKnowbooks: React.FunctionComponent<IDialogEditKnowbooksProps> = 
   props
 ) => {
   const stores = props.stores;
-  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
 
   return (
     <>

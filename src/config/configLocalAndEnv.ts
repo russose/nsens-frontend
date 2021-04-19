@@ -90,3 +90,5 @@ export const configButtonsPath = {
   ARTICLE: configPaths.pages.ItemArticle,
   VIZS: configPaths.pages.ItemNetwork,
 };
+
+export const api_issue_text: string = "issue in loging or network";

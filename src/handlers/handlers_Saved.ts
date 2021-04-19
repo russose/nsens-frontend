@@ -1,11 +1,6 @@
-import { AtomID, eventT } from "../common/globals";
-import {
-  _login,
-  _signup,
-  _logout,
-  _getValidationNewPassword,
-  _setNewPassword,
-} from "../libs/_apiUserData";
+import { AtomID, eventT } from "../config/globals";
+import { IsItemInAnyKnowbook } from "../libs/helpersKnowbooks";
+import { addSaved, removeSaved } from "../libs/helpersSaved";
 import { IStores } from "../stores/_RootStore";
 
 /*******************Save Items*************************** */
@@ -20,9 +15,9 @@ export const onSaved = (stores: IStores) => (itemID: AtomID) => (input: {
     stores.savedStore.saved.has(itemID) === undefined ||
     stores.savedStore.saved.has(itemID) === false
   ) {
-    stores.savedStore.addSaved(itemID, stores);
+    addSaved(itemID, stores);
   } else {
-    stores.savedStore.removeSaved(itemID, stores);
+    removeSaved(itemID, stores);
   }
   input.event.preventDefault();
 };
@@ -39,7 +34,7 @@ export const isItemSaved = (stores: IStores) => (itemID: AtomID) => {
 };
 
 export const isItemSavedActivated = (stores: IStores) => (itemID: AtomID) => {
-  if (stores.knowbookStore.IsItemInAnyKnowbook(itemID)) {
+  if (IsItemInAnyKnowbook(itemID, stores)) {
     return false;
   } else {
     return true;

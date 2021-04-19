@@ -1,11 +1,11 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button, Text } from "gestalt";
-import { ColorT, eventT, handlerT, RoundingT, SizeT } from "../common/globals";
+import { ColorT, eventT, handlerT, RoundingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 import { getUserNameDisplay } from "../libs/utils";
 import React from "react";
 import Link from "next/link";
-import { configGeneral, configPaths } from "../common/globals";
+import { configGeneral, configPaths } from "../config/globals";
 
 interface IFormLoginSignupProps {
   stores: IStores;
@@ -21,7 +21,7 @@ interface IFormLoginSignupProps {
 const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
   const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
@@ -77,9 +77,9 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
           <Link
             href={{
               pathname:
-                props.stores.userStore.rootPath +
+                props.stores.baseStore.rootPath +
                 configPaths.pages.ChangePassword,
-              query: { ...props.stores.userStore.paramsPage },
+              query: { ...props.stores.baseStore.paramsPage },
             }}
             passHref
           >

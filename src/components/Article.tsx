@@ -3,7 +3,7 @@ import { fetchArticle } from "../libs/fetch";
 import { observer } from "mobx-react-lite";
 import Separator from "./Separator";
 import { Text } from "gestalt";
-import { ROOT_URL_WIKIPEDIA_REST } from "../common/configURLs";
+import { ROOT_URL_WIKIPEDIA_REST } from "../config/configURLs";
 import { IStores } from "../stores/_RootStore";
 
 interface IArticleProps {
@@ -15,7 +15,7 @@ interface IArticleProps {
 // const path = URLs.ROOT_URL_WIKIPEDIA_REST;
 
 const Article: React.FunctionComponent<IArticleProps> = (props) => {
-  // const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  // const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   // const language = GUI_CONFIG.general.language;
   // const last_section_header = GUI_CONFIG.language.WIKI_LAST_SECTION_HEADER.replaceAll(
   //   " ",
@@ -55,7 +55,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
 
   fetchArticle(
     props.item_title,
-    ROOT_URL_WIKIPEDIA_REST(props.stores.userStore.paramsPage.lang)
+    ROOT_URL_WIKIPEDIA_REST(props.stores.baseStore.paramsPage.lang)
   )
     .then((value) => {
       props.stores.uiStore.setArticleContent(prepareArticle(value));

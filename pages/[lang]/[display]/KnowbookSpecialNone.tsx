@@ -15,12 +15,14 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/getConfigData";
+import { ItemsInNoKnowbook } from "../../../src/libs/helpersKnowbooks";
 import { useStores } from "../../../src/stores/_RootStoreHook";
+import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
 
 const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
   const title = GUI_CONFIG.language.knowbooks.None_Title;
 
   return (
@@ -29,7 +31,7 @@ const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
       <CardAtomGrid
         id="None"
         stores={stores}
-        atoms={stores.knowbookStore.ItemsInNoKnowbook(stores)}
+        atoms={ItemsInNoKnowbook(stores)}
         isItemSaved_handler={isItemSaved(stores)}
         isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}

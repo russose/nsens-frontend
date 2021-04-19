@@ -1,13 +1,8 @@
-import { eventT } from "../common/globals";
-import {
-  _login,
-  _signup,
-  _logout,
-  _getValidationNewPassword,
-  _setNewPassword,
-} from "../libs/_apiUserData";
+import { eventT } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
-import { configPaths } from "../common/globals";
+import { configPaths } from "../config/globals";
+import { _getValidationNewPassword, _setNewPassword } from "../libs/_apiUser";
+import { goPage } from "../libs/helpers_InitAndRedirect";
 
 /*******************Change Password*************************** */
 
@@ -31,14 +26,14 @@ export const onChangePassword_button = (stores: IStores) => (
     _getValidationNewPassword(stores.uiStore.changePasswordUsername)
       .then(() => {
         stores.uiStore.setChangePasswordError(
-          stores.userStore.GUI_CONFIG.language.changePassword
+          stores.baseStore.GUI_CONFIG.language.changePassword
             .sendValidationCode_success
         );
       })
       .catch(function (error) {
         // console.log("error in logout...");
         stores.uiStore.setChangePasswordError(
-          stores.userStore.GUI_CONFIG.language.changePassword
+          stores.baseStore.GUI_CONFIG.language.changePassword
             .sendValidationCode_error
         );
       });
@@ -52,8 +47,9 @@ export const onChangePassword_button = (stores: IStores) => (
       //   //
       // })
       .then(() => {
-        stores.userStore.goPage(
-          stores.userStore.paramsPage,
+        goPage(
+          stores,
+          stores.baseStore.paramsPage,
           configPaths.pages.Home,
           true
         );
@@ -61,7 +57,7 @@ export const onChangePassword_button = (stores: IStores) => (
       .catch(function (error) {
         // console.log("error in logout...");
         stores.uiStore.setChangePasswordError(
-          stores.userStore.GUI_CONFIG.language.changePassword
+          stores.baseStore.GUI_CONFIG.language.changePassword
             .changePassword_error
         );
       });

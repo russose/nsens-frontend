@@ -14,7 +14,11 @@ import Contacts from "../../../src/components/Contacts";
 import { isMobile } from "../../../src/libs/utils";
 import Installation from "../../../src/components/Installation";
 import { onLogout } from "../../../src/handlers/handlers_LoginSignup";
-import { getEmail, getTwitter, configPaths } from "../../../src/common/globals";
+import { getEmail, getTwitter, configPaths } from "../../../src/config/globals";
+import {
+  goPage,
+  initializeAppAndRedirect,
+} from "../../../src/libs/helpers_InitAndRedirect";
 
 export function isInstalled(): boolean {
   let result = false;
@@ -39,9 +43,9 @@ export function isInstalled(): boolean {
 const User: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
   const title =
-    stores.userStore.user === null ? "" : stores.userStore.user.username;
+    stores.baseStore.user === null ? "" : stores.baseStore.user.username;
   const deconnexion = GUI_CONFIG.language.user.deconnexion;
   const changePassword = GUI_CONFIG.language.user.changePassword;
   const contact = GUI_CONFIG.language.user.contact;
@@ -54,8 +58,9 @@ const User: React.FunctionComponent<IPage> = (props) => {
         size="lg"
         // color="red"
         onClick={() => {
-          stores.userStore.goPage(
-            stores.userStore.paramsPage,
+          goPage(
+            stores,
+            stores.baseStore.paramsPage,
             configPaths.pages.ChangePassword
           );
         }}

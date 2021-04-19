@@ -1,6 +1,6 @@
 import { Box, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { RoundingT, SizeT } from "../../common/globals";
+import { RoundingT, SizeT } from "../../config/globals";
 import { IStores } from "../../stores/_RootStore";
 
 export interface INodeGroupProps {
@@ -9,7 +9,7 @@ export interface INodeGroupProps {
 }
 
 const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   // const title_card_size: SizeT = GUI_CONFIG.display.title_card_size;
   const title_card_size: SizeT =
     GUI_CONFIG.display.atom_compact_vizs_sizes.title_card_size;

@@ -2,6 +2,7 @@ import { Group } from "@visx/group";
 import { observer } from "mobx-react-lite";
 import dynamic from "next/dynamic";
 import React from "react";
+import { renderGraph } from "../../libs/helpersGraph";
 import { isMobile } from "../../libs/utils";
 import { IStores } from "../../stores/_RootStore";
 import MyZoom from "./MyZoom";
@@ -26,7 +27,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
 ) => {
   const margin = 5;
   const size_factor = 4;
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const max_nodes_network = GUI_CONFIG.display.max_nodes_network;
   // const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;
 
@@ -45,7 +46,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
 
   return (
     <>
-      {props.stores.graphStore.renderGraph(
+      {renderGraph(
         props.itemId,
         props.stores,
         size_factor * width,

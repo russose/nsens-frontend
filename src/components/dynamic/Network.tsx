@@ -3,7 +3,7 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configPaths } from "../../common/globals";
+import { configPaths } from "../../config/globals";
 import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
 import {
   isItemSaved,
@@ -30,7 +30,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   props
 ) => {
   const stores = useStores();
-  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const node_dx = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
   const node_dy = GUI_CONFIG.display.atom_compact_vizs_sizes.height;
   const path_Itemview = configPaths.pages.ItemArticle;

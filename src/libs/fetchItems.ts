@@ -1,8 +1,8 @@
-import { configFetching } from "../common/globals";
-import { ConfigLanguage, IAtom, JSONDataT } from "../common/globals";
+import { configFetching } from "../config/globals";
+import { ConfigLanguage, IAtom, JSONDataT } from "../config/globals";
 import { empty_value_atom, newAtom } from "./utils";
 import { fetchRelatedWikipedia, fetch_data } from "./fetch";
-import { URLs } from "../common/configURLs";
+import { URLs } from "../config/configURLs";
 
 const amount_data_fetched_images = configFetching.amount_data_fetched_images;
 

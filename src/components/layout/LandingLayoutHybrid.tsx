@@ -8,9 +8,9 @@ import {
   reactComponentT,
   RoundingT,
   SizeT,
-} from "../../common/globals";
+} from "../../config/globals";
 import { IStores } from "../../stores/_RootStore";
-import { configGeneral } from "../../common/globals";
+import { configGeneral } from "../../config/globals";
 
 interface ILandingLayoutHybridProps {
   stores: IStores;
@@ -30,7 +30,7 @@ interface ILandingLayoutHybridProps {
 const LandingLayoutHybrid: React.FunctionComponent<ILandingLayoutHybridProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const header_size: SizeT = GUI_CONFIG.display.landing.header_size;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const color_background: ColorT = configGeneral.colors.background;

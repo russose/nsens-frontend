@@ -1,12 +1,13 @@
-import { KnowbookID, AtomID, eventT } from "../common/globals";
-import { IStores } from "../stores/_RootStore";
+import { KnowbookID, AtomID, eventT } from "../config/globals";
 import {
-  _login,
-  _signup,
-  _logout,
-  _getValidationNewPassword,
-  _setNewPassword,
-} from "../libs/_apiUserData";
+  addItemInKnowbook,
+  deleteKnowbook,
+  isItemInKnowbook,
+  removeItemFromKnowbook,
+  renameKnowbook,
+} from "../libs/helpersKnowbooks";
+import { initKnowbookEditionElements } from "../libs/helpersUI";
+import { IStores } from "../stores/_RootStore";
 
 /******************* Edit Knowbooks ************************************ */
 
@@ -19,7 +20,7 @@ export const onEditKnowbooks = (stores: IStores) => (
   itemId: AtomID
 ) => (input: { event: eventT }): void => {
   stores.uiStore.setSelectedAtom(itemId, "title");
-  stores.uiStore.initKnowbookEditionElements(itemId, stores);
+  initKnowbookEditionElements(itemId, stores);
   stores.uiStore.setEditKnowbookOpened(true);
   input.event.preventDefault();
 };
@@ -45,13 +46,10 @@ export const onSubmitChangesEditKnowbooks = (stores: IStores) => (
   }
 
   stores.uiStore.editKnowbookMembers.forEach((value, key) => {
-    if (value === true && !stores.knowbookStore.isItemInKnowbook(itemId, key)) {
-      stores.knowbookStore.addItemInKnowbook(key, itemId);
-    } else if (
-      value === false &&
-      stores.knowbookStore.isItemInKnowbook(itemId, key)
-    ) {
-      stores.knowbookStore.removeItemFromKnowbook(key, itemId);
+    if (value === true && !isItemInKnowbook(itemId, key, stores)) {
+      addItemInKnowbook(key, itemId, stores);
+    } else if (value === false && isItemInKnowbook(itemId, key, stores)) {
+      removeItemFromKnowbook(key, itemId, stores);
     }
   });
 
@@ -61,14 +59,11 @@ export const onSubmitChangesEditKnowbooks = (stores: IStores) => (
   const value = stores.uiStore.editKnowbookNewValue;
   if (value.length !== 0) {
     if (knowbookIds.includes(value)) {
-      if (!stores.knowbookStore.isItemInKnowbook(itemId, value)) {
-        stores.knowbookStore.addItemInKnowbook(
-          stores.uiStore.editKnowbookNewValue,
-          itemId
-        );
+      if (!isItemInKnowbook(itemId, value, stores)) {
+        addItemInKnowbook(stores.uiStore.editKnowbookNewValue, itemId, stores);
       }
     } else {
-      stores.knowbookStore.addItemInKnowbook(value, itemId);
+      addItemInKnowbook(value, itemId, stores);
     }
   }
 
@@ -94,9 +89,10 @@ export const onChangeInputValueRenameKnowbook = (stores: IStores) => (input: {
 };
 
 export const onRenameKnowbook = (stores: IStores) => (): void => {
-  stores.knowbookStore.renameKnowbook(
+  renameKnowbook(
     stores.uiStore.selectedKnowbookIdName,
-    stores.uiStore.renameKnowbookNewName
+    stores.uiStore.renameKnowbookNewName,
+    stores
   );
   stores.uiStore.setRenameKnowbookOpened(false);
 };
@@ -104,6 +100,6 @@ export const onRenameKnowbook = (stores: IStores) => (): void => {
 export const onDeleteKnowbook = (stores: IStores) => (
   name: KnowbookID
 ) => (input: { event: eventT }): void => {
-  stores.knowbookStore.deleteKnowbook(name, stores);
+  deleteKnowbook(name, stores);
   input.event.preventDefault();
 };

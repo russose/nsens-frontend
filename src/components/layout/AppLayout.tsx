@@ -12,12 +12,12 @@ import {
   onSearchHomeSubmit,
   onSearchHomeText,
   onTapLogo,
-} from "../../handlers/handlers_Logo_Searchbar";
+} from "../../handlers/handlers_Searchbar_Navigation";
 import DialogEditKnowbooks from "../DialogEditKnowbooks";
 import DialogRenameKnowbooks from "../DialogRenameKnowbooks";
 import DialogLoading from "../DialogLoading";
 import { IStores } from "../../stores/_RootStore";
-import { configPaths } from "../../common/globals";
+import { configPaths } from "../../config/globals";
 
 interface IAppLayoutProps {
   stores: IStores;
@@ -28,7 +28,7 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
 
   const router = useRouter();
 
-  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const path_logo_image = configPaths.image_logo_W_small;
 
   const navigationMenu = <MenuBarNavigation stores={stores} />;

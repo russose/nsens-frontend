@@ -1,6 +1,6 @@
 import { Box, IconButton } from "gestalt";
 import React from "react";
-import { handlerT } from "../common/globals";
+import { handlerT } from "../config/globals";
 import { JsSearchField } from "./_js_components";
 
 interface ISearchBarProps {

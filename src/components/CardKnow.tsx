@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton, Text } from "gestalt";
-import { AtomID, handlerT, IconT } from "../common/globals";
+import { AtomID, handlerT, IconT } from "../config/globals";
 import CardGeneric from "./CardGeneric";
-import { configGeneral, configPaths } from "../common/globals";
+import { configGeneral, configPaths } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 
 export interface ICardKnowProps {
@@ -18,7 +18,7 @@ export interface ICardKnowProps {
 }
 
 const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
   const color = configGeneral.colors.knowbook_color;
   const color_image = configGeneral.colors.knowbook_color_image;

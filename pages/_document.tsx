@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { CONFIG_ENV } from "../src/common/globals";
+import { CONFIG_ENV } from "../src/config/globals";
 
 const GA_TRACKING_ID =
   CONFIG_ENV.GA_TRACKING_ID !== undefined ? CONFIG_ENV.GA_TRACKING_ID : "";

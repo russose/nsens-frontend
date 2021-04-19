@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Heading } from "gestalt";
-import { handlerT, RoundingT, SizeT } from "../common/globals";
+import { handlerT, RoundingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 import Head from "next/head";
-import { configGeneral } from "../common/globals";
+import { configGeneral } from "../config/globals";
 
 interface IHeaderTitleProps {
   stores: IStores;
@@ -12,7 +12,7 @@ interface IHeaderTitleProps {
 }
 
 const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_headers = configGeneral.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;

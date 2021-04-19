@@ -1,6 +1,6 @@
 import { Box, Button, Modal, TextField, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { handlerT, RoundingT, SizeT } from "../common/globals";
+import { handlerT, RoundingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 
 interface IDialogRenameKnowbookFormProps {
@@ -17,7 +17,7 @@ interface IDialogRenameKnowbookFormProps {
 const DialogRenameKnowbookForm: React.FunctionComponent<IDialogRenameKnowbookFormProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const title_size: SizeT = GUI_CONFIG.display.dialogs.title_size;
   const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
   const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;

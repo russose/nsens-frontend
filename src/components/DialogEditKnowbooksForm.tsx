@@ -1,9 +1,9 @@
 import { Box, IconButton, Modal, TextField, Text, Checkbox } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { AtomID, handlerT, RoundingT, SizeT } from "../common/globals";
+import { AtomID, handlerT, RoundingT, SizeT } from "../config/globals";
 import React from "react";
 import { IStores } from "../stores/_RootStore";
-import { configGeneral } from "../common/globals";
+import { configGeneral } from "../config/globals";
 
 export interface ICheckboxes {
   label: string;
@@ -25,7 +25,7 @@ interface IDialogEditKnowbooksFormProps {
 const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const title_size: SizeT = GUI_CONFIG.display.dialogs.title_size;
   const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
   const item_checkbox_size: SizeT = GUI_CONFIG.display.dialogs.item_size;

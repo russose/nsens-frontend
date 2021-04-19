@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
-import { AtomID, ButtonIDType, handlerT, IconT } from "../common/globals";
+import { AtomID, ButtonIDType, handlerT, IconT } from "../config/globals";
 import CardGenericCompact from "./CardGenericCompact";
 import { IStores } from "../stores/_RootStore";
-import { configGeneral } from "../common/globals";
+import { configGeneral } from "../config/globals";
 
 interface ICardAtomCompactProps {
   id: AtomID;
@@ -22,7 +22,7 @@ interface ICardAtomCompactProps {
 const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
   const color_item = configGeneral.colors.item_compact_color;
   const color_image = configGeneral.colors.item_color_image;

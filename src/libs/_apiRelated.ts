@@ -1,10 +1,10 @@
-import { AtomID, IRelatedAtom, ConfigLanguage } from "../common/globals";
+import { AtomID, IRelatedAtom, ConfigLanguage } from "../config/globals";
 import { ItemsFromWikidata, ItemsRelatedFromWikipedia } from "./fetchRelated";
-import { configFetching } from "../common/globals";
+import { configFetching } from "../config/globals";
 import {
   ROOT_URL_WIKIPEDIA_ACTION,
   ROOT_URL_WIKIPEDIA_REST,
-} from "../common/configURLs";
+} from "../config/configURLs";
 
 export const max_amount_data_fetched_items =
   configFetching.amount_data_fetched_items;

@@ -1,13 +1,8 @@
-import { eventT } from "../common/globals";
-import {
-  _login,
-  _signup,
-  _logout,
-  _getValidationNewPassword,
-  _setNewPassword,
-} from "../libs/_apiUserData";
+import { eventT } from "../config/globals";
+import { _login, _signup, _logout } from "../libs/_apiUser";
 import { IStores } from "../stores/_RootStore";
-import { configPaths, configGeneral } from "../common/globals";
+import { configPaths, configGeneral } from "../config/globals";
+import { goPage, initializeUserData } from "../libs/helpers_InitAndRedirect";
 
 /*******************Login and Signup*************************** */
 
@@ -34,15 +29,12 @@ export const onChangeUsernamePassword = (stores: IStores) => (
 export const onLogout = (stores: IStores) => (): void => {
   _logout()
     .then(() => {
-      stores.userStore.setUser({ username: "" });
+      stores.baseStore.setUser({ username: "" });
       stores.savedStore.clearSaved();
       stores.knowbookStore.clearKnowbooks();
     })
     .then(() => {
-      stores.userStore.goPage(
-        stores.userStore.paramsPage,
-        configPaths.pages.Landing
-      );
+      goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Landing);
       //To do: faire une fonction initLoginScreen
       stores.uiStore.setLoginScreenUsername("");
       stores.uiStore.setLoginScreenUsername_("");
@@ -63,30 +55,27 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       stores.uiStore.loginScreenPassword
     )
       .then(() => {
-        stores.userStore.setUser({
+        stores.baseStore.setUser({
           username: stores.uiStore.loginScreenUsername,
         });
         // console.log("logged successfully!");
       })
       .then(() => {
-        stores.userStore.initializeUserData(stores);
+        initializeUserData(stores);
         //Go Home
-        stores.userStore.goPage(
-          stores.userStore.paramsPage,
-          configPaths.pages.Home
-        );
+        goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
       })
       .catch(function (error) {
         // console.log(error);
         // console.log("error in login...");
         stores.uiStore.setLoginScreenError(
-          stores.userStore.GUI_CONFIG.language.landing.loginSignup.login_error
+          stores.baseStore.GUI_CONFIG.language.landing.loginSignup.login_error
         );
       });
   } else if (type === "signup") {
     if (stores.uiStore.loginScreenUsername_ !== configGeneral.successMessage) {
       stores.uiStore.setLoginScreenError(
-        stores.userStore.GUI_CONFIG.language.landing.loginSignup
+        stores.baseStore.GUI_CONFIG.language.landing.loginSignup
           .signup_error_duration
       );
       return;
@@ -98,23 +87,20 @@ export const onSubmitLoginSignup = (stores: IStores) => (
       stores.uiStore.loginScreenPassword
     )
       .then(() => {
-        stores.userStore.setUser({
+        stores.baseStore.setUser({
           username: stores.uiStore.loginScreenUsername,
         });
         // console.log("signed successfully!");
       })
       .then(() => {
-        stores.userStore.initializeUserData(stores);
+        initializeUserData(stores);
         //Go Home
-        stores.userStore.goPage(
-          stores.userStore.paramsPage,
-          configPaths.pages.Home
-        );
+        goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
       })
       .catch(function (error) {
         // console.log("error in signing...");
         stores.uiStore.setLoginScreenError(
-          stores.userStore.GUI_CONFIG.language.landing.loginSignup.signup_error
+          stores.baseStore.GUI_CONFIG.language.landing.loginSignup.signup_error
         );
       });
   }

@@ -1,9 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Box, Sticky } from "gestalt";
-import { ColorT, reactComponentT } from "../../common/globals";
+import { ColorT, reactComponentT } from "../../config/globals";
 import { IStores } from "../../stores/_RootStore";
-import { configGeneral } from "../../common/globals";
+import { configGeneral } from "../../config/globals";
 
 interface IPageLayoutProps {
   stores: IStores;

@@ -1,7 +1,7 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IFeature, PaddingT, SizeT } from "../common/globals";
+import { IFeature, PaddingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 import CardFeature from "./CardFeature";
 
@@ -14,7 +14,7 @@ interface ICardFeatureGridProps {
 const CardFeatureGrid: React.FunctionComponent<ICardFeatureGridProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const features_props = GUI_CONFIG.display.landing.features;
 
   if (props.features === undefined || props.features.length === 0) {

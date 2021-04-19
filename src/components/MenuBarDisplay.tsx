@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType } from "../common/globals";
+import { ButtonIDType } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import _Button, { IButton } from "./_Button";
@@ -11,7 +11,7 @@ import {
   onSaved,
 } from "../handlers/handlers_Saved";
 import { onEditKnowbooks } from "../handlers/handlers_Knowbooks";
-import { configGeneral } from "../common/globals";
+import { configGeneral } from "../config/globals";
 
 interface IMenuBarDisplayProps {
   stores: IStores;

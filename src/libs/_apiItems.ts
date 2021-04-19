@@ -1,10 +1,10 @@
-import { IAtom, ConfigLanguage } from "../common/globals";
+import { IAtom, ConfigLanguage } from "../config/globals";
 import { ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia } from "./fetchItems";
-import { configFetching } from "../common/globals";
+import { configFetching } from "../config/globals";
 import {
   ROOT_URL_WIKIPEDIA_ACTION,
   ROOT_URL_WIKIPEDIA_REST,
-} from "../common/configURLs";
+} from "../config/configURLs";
 
 export const max_amount_data_fetched_items =
   configFetching.amount_data_fetched_items;

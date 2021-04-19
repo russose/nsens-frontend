@@ -1,8 +1,8 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ColorT, DirectionT, RoundingT } from "../../common/globals";
-import { onMenuButtonPath } from "../../handlers/handlers_Navigation";
+import { ColorT, DirectionT, RoundingT } from "../../config/globals";
+import { onMenuButtonPath } from "../../handlers/handlers_Searchbar_Navigation";
 import { IStores } from "../../stores/_RootStore";
 import _Button, { IButton } from "../_Button";
 
@@ -17,7 +17,7 @@ interface IMenuBarButtonLayoutProps {
 const MenuBarButtonLayout: React.FunctionComponent<IMenuBarButtonLayoutProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const buttons_all = GUI_CONFIG.language.buttons;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
 

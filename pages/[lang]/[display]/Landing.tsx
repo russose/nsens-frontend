@@ -15,13 +15,14 @@ import {
   onChangeUsernamePassword,
   onSubmitLoginSignup,
 } from "../../../src/handlers/handlers_LoginSignup";
-import { configPaths } from "../../../src/common/globals";
-import { IFeature } from "../../../src/common/globals";
+import { configPaths } from "../../../src/config/globals";
+import { IFeature } from "../../../src/config/globals";
+import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
 
 const Landing: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
 
   const slogan = GUI_CONFIG.language.landing.slogan;
   const description = GUI_CONFIG.language.landing.description;
@@ -65,7 +66,7 @@ const Landing: React.FunctionComponent<IPage> = (props) => {
     }
   );
 
-  const isLogged = stores.userStore.isLogged;
+  const isLogged = stores.baseStore.isLogged;
   let page;
   if (!isLogged) {
     page = (

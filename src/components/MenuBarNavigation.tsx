@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configGeneral } from "../common/globals";
-import { ButtonIDType } from "../common/globals";
+import { configGeneral } from "../config/globals";
+import { ButtonIDType } from "../config/globals";
 import { IStores } from "../stores/_RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import _Button, { IButton } from "./_Button";

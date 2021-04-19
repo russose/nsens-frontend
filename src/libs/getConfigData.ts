@@ -1,5 +1,5 @@
-import { configDataFr } from "../common/configDataFr";
-import { ConfigLanguage, ConfigDisplay, GUI_CONFIG_T } from "../common/globals";
+import { configDataFr } from "../config/configDataFr";
+import { ConfigLanguage, ConfigDisplay, GUI_CONFIG_T } from "../config/globals";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 export interface IPage {
@@ -39,21 +39,21 @@ async function getConfigData(params: any): Promise<GUI_CONFIG_T> {
   // };
 
   if (params === undefined) {
-    const configGUIMobile = await import("../common/configDataMobile");
+    const configGUIMobile = await import("../config/configDataMobile");
     GUI_CONFIG__ = {
       id: id,
       language: configDataFr,
       display: configGUIMobile.configDataMobile,
     };
   } else if (display === ConfigDisplay.mobile) {
-    const configGUIMobile = await import("../common/configDataMobile");
+    const configGUIMobile = await import("../config/configDataMobile");
     GUI_CONFIG__ = {
       id: id,
       language: configDataFr,
       display: configGUIMobile.configDataMobile,
     };
   } else if (display === ConfigDisplay.desktop) {
-    const configGUIDesktop = await import("../common/configDataDesktop");
+    const configGUIDesktop = await import("../config/configDataDesktop");
     GUI_CONFIG__ = {
       id: id,
       language: configDataFr,
@@ -61,9 +61,9 @@ async function getConfigData(params: any): Promise<GUI_CONFIG_T> {
     };
     // GUI_CONFIG__.display = displayDesktop;
   } else if (display === ConfigDisplay.large) {
-    const configGUIDesktop = await import("../common/configDataDesktop");
+    const configGUIDesktop = await import("../config/configDataDesktop");
     const configGUISpecialScreen = await import(
-      "../common/configDataSpecialScreen"
+      "../config/configDataSpecialScreen"
     );
     GUI_CONFIG__ = {
       id: id,

@@ -17,12 +17,13 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/getConfigData";
 import { useStores } from "../../../src/stores/_RootStoreHook";
-import { configPaths } from "../../../src/common/globals";
+import { configPaths } from "../../../src/config/globals";
+import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
 
 const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
 
   const knowbook_all_title = GUI_CONFIG.language.knowbooks.AllSaved_title;
   const knowbook_none_title = GUI_CONFIG.language.knowbooks.None_Title;
@@ -41,7 +42,7 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
       // pathname: pathKnowbookSaved,
       // queryObject: {},
       pathname: pathKnowbookSaved,
-      queryObject: { ...stores.userStore.paramsPage },
+      queryObject: { ...stores.baseStore.paramsPage },
       amount: stores.savedStore.saved.size,
       edit_handler: undefined,
       delete_handler: undefined,
@@ -54,7 +55,7 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
       // pathname: pathKnowbookNone,
       // queryObject: {},
       pathname: pathKnowbookNone,
-      queryObject: { ...stores.userStore.paramsPage },
+      queryObject: { ...stores.baseStore.paramsPage },
       amount: "-",
       edit_handler: undefined,
       delete_handler: undefined,

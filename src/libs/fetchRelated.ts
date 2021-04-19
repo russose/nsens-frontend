@@ -1,10 +1,10 @@
-import { configFetching } from "../common/globals";
+import { configFetching } from "../config/globals";
 import {
   ConfigLanguage,
   IAtom,
   IRelatedAtom,
   JSONDataT,
-} from "../common/globals";
+} from "../config/globals";
 import { fetch_data_wikidata } from "./fetch";
 import {
   buildListStringSeparated,

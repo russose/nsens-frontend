@@ -1,7 +1,7 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { AtomID } from "../../common/globals";
+import { AtomID } from "../../config/globals";
 import { IStores } from "../../stores/_RootStore";
 import { Text } from "gestalt";
 import { capitalizeFirstLetter } from "../../libs/utils";

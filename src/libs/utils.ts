@@ -3,7 +3,7 @@ import {
   ConfigDisplay,
   ConfigLanguage,
   IAtom,
-} from "../common/globals";
+} from "../config/globals";
 
 const display_username = "none";
 export function getUserNameDisplay(): string {
@@ -58,6 +58,15 @@ export function hasTouchScreen(window: any): boolean {
     }
   }
   return hasTouchScreen;
+}
+
+export function shuffleSized(
+  array: any[],
+  amount_item_displayed: number
+): any[] {
+  const shuffled = shuffleArray(array);
+  const shuffled_sized = shuffled.slice(0, amount_item_displayed);
+  return shuffled_sized;
 }
 
 // export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {

@@ -19,12 +19,15 @@ import {
   onSaved,
 } from "../../../src/handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
-import { IAtom } from "../../../src/common/globals";
+import { IAtom } from "../../../src/config/globals";
+import { getRelatedItemsForItems } from "../../../src/libs/helpersRelated";
+import { getKnowbookAtomsList } from "../../../src/libs/helpersKnowbooks";
+import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
 
   const Related_title = GUI_CONFIG.language.knowbooks.Related_title;
   const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
@@ -38,10 +41,7 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
       <CardAtomGrid
         id="knowbooks"
         stores={stores}
-        atoms={stores.knowbookStore.getKnowbookAtomsList(
-          selected_knowbook,
-          stores
-        )}
+        atoms={getKnowbookAtomsList(selected_knowbook, stores)}
         isItemSaved_handler={isItemSaved(stores)}
         isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}
@@ -56,12 +56,12 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
       <CardAtomGrid
         id="knowbooks_related"
         stores={stores}
-        atoms={stores.feedStore.getRelatedItemsForItems(
-          stores.knowbookStore
-            .getKnowbookAtomsList(selected_knowbook, stores)
-            .map((item: IAtom) => {
-              return item.id;
-            }),
+        atoms={getRelatedItemsForItems(
+          stores,
+
+          getKnowbookAtomsList(selected_knowbook, stores).map((item: IAtom) => {
+            return item.id;
+          }),
           amount_item_displayed
         )}
         isItemSaved_handler={isItemSaved(stores)}

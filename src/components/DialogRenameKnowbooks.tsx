@@ -15,7 +15,7 @@ const DialogRenameKnowbooks: React.FunctionComponent<IDialogRenameKnowbooksProps
   props
 ) => {
   const stores = props.stores;
-  const GUI_CONFIG = stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   return (
     <>
       {stores.uiStore.renameKnowbookOpened && (

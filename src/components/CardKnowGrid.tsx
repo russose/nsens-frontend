@@ -1,14 +1,15 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configPaths } from "../common/globals";
+import { configPaths } from "../config/globals";
 import {
   handlerT,
   IKnowbook,
   KnowbookID,
   PaddingT,
   SizeT,
-} from "../common/globals";
+} from "../config/globals";
+import { getKnowbookAtomsList } from "../libs/helpersKnowbooks";
 import { entierAleatoire } from "../libs/utils";
 import { IStores } from "../stores/_RootStore";
 import CardKnow from "./CardKnow";
@@ -22,11 +23,11 @@ interface ICardKnowGridProps {
 }
 
 function getKnowbookImage(knowbook: KnowbookID, stores: IStores): string {
-  let image_paths_list: string[] = stores.knowbookStore
-    .getKnowbookAtomsList(knowbook, stores)
-    .map((item) => {
+  let image_paths_list: string[] = getKnowbookAtomsList(knowbook, stores).map(
+    (item) => {
       return item.image_url;
-    });
+    }
+  );
   image_paths_list = image_paths_list.filter((item) => {
     return item !== "";
   });
@@ -40,7 +41,7 @@ function getKnowbookImage(knowbook: KnowbookID, stores: IStores): string {
 }
 
 const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
-  const GUI_CONFIG = props.stores.userStore.GUI_CONFIG;
+  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
   const path_knowbook = configPaths.pages.Knowbook;
   if (
@@ -51,42 +52,6 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
     return <> </>;
   } else {
     return (
-      // <Box>
-      //   {props.compact ? (
-      //     <Box
-      //       wrap={true}
-      //       display="flex"
-      //       direction="row"
-      //       padding={0}
-      //       justifyContent="around"
-      //     >
-      //       {props.knowbooks.map((item) => {
-      //         return (
-      //           <Box
-      //             lgPadding={card_sizes_compact.lgPadding as PaddingT}
-      //             mdPadding={card_sizes_compact.mdPadding as PaddingT}
-      //             smPadding={card_sizes_compact.smPadding as PaddingT}
-      //             padding={card_sizes_compact.padding as PaddingT}
-      //             key={`Box-cardKnowbookGridCompact-${props.id}-${item.id}`}
-      //           >
-      //             <CardKnowCompact
-      //               key={`cardKnowbookGridCompact-${props.id}-${item.name}`}
-      //               id={item.name}
-      //               stores={props.stores}
-      //               title={item.name}
-      //               // image_url={image_path}
-      //               image_url={getKnowbookImage(item.name, props.stores)}
-      //               pathname={path_knowbook}
-      //               queryObject={{ title: item.name }}
-      //               amount={item.items.length}
-      //               edit_handler={props.edit_handler(item.name)}
-      //               delete_handler={props.delete_handler(item.name)}
-      //             />
-      //           </Box>
-      //         );
-      //       })}
-      //     </Box>
-      //   ) : (
       <Box
         wrap={true}
         display="flex"
@@ -124,8 +89,6 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
           );
         })}
       </Box>
-      //   )}
-      // </Box>
     );
   }
 };

@@ -16,11 +16,12 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/getConfigData";
 import { useStores } from "../../../src/stores/_RootStoreHook";
+import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
 
 const Home: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const GUI_CONFIG = { ...props.guiConfigData };
-  stores.userStore.initializeAppAndRedirect(stores, GUI_CONFIG);
+  initializeAppAndRedirect(stores, GUI_CONFIG);
   const slogan = GUI_CONFIG.language.landing.slogan;
 
   return (
@@ -29,7 +30,7 @@ const Home: React.FunctionComponent<IPage> = (props) => {
       <CardAtomGrid
         id="Home"
         stores={stores}
-        atoms={stores.feedStore.getFeedList()}
+        atoms={stores.baseStore.getFeedList()}
         isItemSaved_handler={isItemSaved(stores)}
         isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}

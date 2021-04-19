@@ -13,6 +13,11 @@ export enum ConfigDisplay {
   large = "Large",
 }
 
+export interface IparamsPage {
+  lang: ConfigLanguage;
+  display: ConfigDisplay;
+}
+
 export interface IparamsAtom {
   id: AtomID;
   title: string;

@@ -1,11 +1,5 @@
-import {
-  forceCenter,
-  forceCollide,
-  forceLink,
-  forceSimulation,
-} from "d3-force";
 import { action, makeObservable, observable } from "mobx";
-import { AtomID, IAtom, ILink, INode, IRelatedAtom } from "../common/globals";
+import { AtomID, IAtom, ILink, INode, IRelatedAtom } from "../config/globals";
 import { newAtom } from "../libs/utils";
 import { IStores } from "./_RootStore";
 
@@ -28,9 +22,9 @@ export class GraphStore {
       $graph: observable,
       setRelatedMap: action,
       setGraph: action,
-      renderGraph: action,
-      runSimulation: action,
-      renderRelatedMap: action,
+      // renderGraph: action,
+      // runSimulation: action,
+      // renderRelatedMap: action,
     });
   }
 
@@ -45,7 +39,7 @@ export class GraphStore {
   }
 
   setRelatedMap(root_itemId: AtomID, stores: IStores): void {
-    const related: IRelatedAtom[] = stores.feedStore.getRelated(root_itemId);
+    const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
     if (
       root_itemId === undefined ||
       related === undefined ||
@@ -117,7 +111,7 @@ export class GraphStore {
           y: y0,
           pos: this.graph.nodes.length,
           relation_name: group_name,
-          ...newAtom(key, stores.userStore.paramsPage.lang),
+          ...newAtom(key, stores.baseStore.paramsPage.lang),
         };
         node_group.title = key;
         // node_group.related = "group";
@@ -159,119 +153,5 @@ export class GraphStore {
         });
       }
     });
-  }
-
-  renderRelatedMap(root_itemId: AtomID, stores: IStores): void {
-    const root_item = stores.feedStore.getItemFromAnywhere(root_itemId, stores);
-    if (root_item === undefined) {
-      return;
-    }
-
-    if (stores.feedStore.getRelated(root_itemId) === undefined) {
-      stores.feedStore
-        .fetchRelated(stores, root_item.id, root_item.title)
-        .then(() => {
-          this.setRelatedMap(root_itemId, stores);
-        });
-    } else if (root_itemId !== this.$rootItemId) {
-      this.setRelatedMap(root_itemId, stores);
-    }
-  }
-
-  runSimulation(width: number, height: number, stores: IStores): void {
-    const GUI_CONFIG = stores.userStore.GUI_CONFIG;
-    const width_node = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
-
-    const forceColideRadius = width_node * 0.9;
-    const forceLinkDistance = width_node * 1.1;
-    const forceIterations = 10;
-    const forceAlphaMin = 0.001; //0.001 working well
-
-    //Deep Copy, all other solutions didn't worked!
-    const nodesClone = this.graph.nodes.map((el) => {
-      return { ...el };
-    });
-
-    const linksClone = this.graph.links.map((link: ILink) => {
-      return {
-        source: nodesClone[link.source.pos],
-        target: nodesClone[link.target.pos],
-      };
-    });
-
-    // let self = this;
-
-    // let tick_count = 0;
-    forceSimulation(nodesClone)
-      .force("center", forceCenter(width, height).strength(1.5))
-      .force(
-        "collision",
-        forceCollide()
-          .radius(forceColideRadius)
-          .strength(0.5)
-          .iterations(forceIterations)
-      )
-      // .force("charge", forceManyBody().strength(-50))
-      .force(
-        "link",
-        forceLink(linksClone)
-          .distance(forceLinkDistance)
-          .strength(0.5)
-          .iterations(forceIterations)
-      )
-      .on(
-        // "tick",
-        "end",
-        action(() => {
-          // tick_count = tick_count + 1;
-          // if (tick_count % 10 === 0) {
-          this.$graph.nodes = nodesClone;
-          this.$graph.links = linksClone.map((link: ILink) => {
-            return {
-              source: this.$graph.nodes[link.source.pos],
-              target: this.$graph.nodes[link.target.pos],
-            };
-          });
-          // }
-        })
-      )
-      .alphaMin(forceAlphaMin) //To converge quickly, default is 0.001
-      .alphaDecay(0.1);
-    // .alphaDecay(0.05);
-  }
-
-  renderGraph(
-    root_itemId: AtomID,
-    stores: IStores,
-    width: number,
-    height: number
-  ): void {
-    const feedStore = stores.feedStore;
-    const root_item = feedStore.getItemFromAnywhere(root_itemId, stores);
-    if (root_item === undefined) {
-      return;
-    }
-
-    if (feedStore.getRelated(root_itemId) === undefined) {
-      stores.uiStore.setShowLoading(true);
-      feedStore
-        .fetchRelated(stores, root_item.id, root_item.title)
-        .then(
-          action(() => {
-            this.setGraph(root_item, stores, width / 2, height / 2);
-          })
-        )
-        .then(
-          action(() => {
-            this.runSimulation(width / 2, height / 2, stores);
-            stores.uiStore.setShowLoading(false);
-          })
-        );
-    } else if (root_itemId !== this.$rootItemId) {
-      this.setGraph(root_item, stores, width / 2, height / 2);
-      this.runSimulation(width / 2, height / 2, stores);
-      // stores.uiStore.setShowLoading(false);
-    }
-    // stores.uiStore.setShowLoading(false);
   }
 }
