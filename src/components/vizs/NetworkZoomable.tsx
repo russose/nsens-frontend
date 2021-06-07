@@ -4,13 +4,13 @@ import dynamic from "next/dynamic";
 import React from "react";
 import { renderGraph } from "../../libs/helpersGraph";
 import { isMobile } from "../../libs/utils";
-import { IStores } from "../../stores/_RootStore";
+import { IStores } from "../../stores/RootStore";
 import MyZoom from "./MyZoom";
-// import Network from "./Network";
-// import NetworkFlat from "./NetworkFlat";
 
-const Network = dynamic(() => import("../dynamic/Network"), { ssr: false });
-const NetworkFlat = dynamic(() => import("../dynamic/NetworkFlat"), {
+const NetworkDynamic = dynamic(() => import("../Network"), {
+  ssr: false,
+});
+const NetworkFlatDynamic = dynamic(() => import("../NetworkFlat"), {
   ssr: false,
 });
 
@@ -35,7 +35,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   const height = props.height * 0.95 - margin;
 
   const amount_nodes = Array.from(
-    props.stores.graphStore.graphMap.values()
+    props.stores.graphStore.relatedMap.values()
   ).reduce((acc, value) => {
     return acc + value.length;
   }, 0);
@@ -59,7 +59,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
               left={(-width * (size_factor - 1)) / 2}
               top={(-height * (size_factor - 1)) / 2}
             >
-              <Network
+              <NetworkDynamic
                 width={size_factor * width}
                 height={size_factor * height}
                 itemId={props.itemId}
@@ -69,7 +69,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
             </Group>
           </MyZoom>
         ) : (
-          <NetworkFlat rootItemId={props.itemId} stores={props.stores} />
+          <NetworkFlatDynamic rootItemId={props.itemId} stores={props.stores} />
         )}
       </>
     </>

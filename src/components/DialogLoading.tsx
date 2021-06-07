@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Spinner, Sticky } from "gestalt";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 
 interface IDialogLoadingProps {
   stores: IStores;

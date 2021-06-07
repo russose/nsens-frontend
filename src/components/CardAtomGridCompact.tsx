@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { configPaths } from "../config/globals";
 import { handlerT, IAtom, PaddingT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import CardAtomCompact from "./CardAtomCompact";
 
 interface ICardAtomGridCompactProps {

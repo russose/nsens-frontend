@@ -1,41 +1,63 @@
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
-import React from "react";
-import {
-  I_getStaticPaths,
-  I_getStaticProps,
-} from "../../../src/libs/getConfigData";
-import { IPage } from "../../../src/libs/getConfigData";
-import { useStores } from "../../../src/stores/_RootStoreHook";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import AppLayout from "../../../src/components/layout/AppLayout";
+import React from "react";
 import HeaderTitle from "../../../src/components/HeaderTitle";
-import MenuBarDisplay from "../../../src/components/MenuBarDisplay";
-import { isMobile } from "../../../src/libs/utils";
-import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
+import AppLayout from "../../../src/components/layout/AppLayout";
+import {
+  IPage,
+  I_getStaticPaths,
+  I_getStaticProps,
+} from "../../../src/libs/getConfigDataGui";
+import { initialize } from "../../../src/libs/helpersInitialize";
+import { useStores } from "../../../src/stores/RootStoreHook";
 
-const ItemNetworkNoSSR = dynamic(
-  () => import("../../../src/components/dynamic/ItemNetworkNoSSR"),
+const ItemNetworkNoSSRDynamic = dynamic(
+  () => import("../../../src/components/ItemNetworkNoSSR"),
   { ssr: false }
 );
 
 const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = { ...props.guiConfigData };
-  initializeAppAndRedirect(stores, GUI_CONFIG);
+  const GUI_CONFIG = props.guiConfigData;
+  initialize(stores, GUI_CONFIG);
 
   const router = useRouter();
   const item_title = router.query.title as string;
   const item_id = router.query.id as string;
 
+  stores.uiStore.setSelectedAtom(item_id, item_title);
+
   // stores.uiStore.setSelectedAtomId(item_id);
+
+  // let navigation;
+  // if (!stores.baseStore.isLogged) {
+  //   navigation = (
+  //     <>
+  //       <MenuBarDisplayNotLogged
+  //         stores={stores}
+  //         isMobile={isMobile(GUI_CONFIG.id)}
+  //       />
+  //     </>
+  //   );
+  // } else {
+  //   navigation = (
+  //     <>
+  //       <MenuBarDisplayLoggedDynamic
+  //         stores={stores}
+  //         isMobile={isMobile(GUI_CONFIG.id)}
+  //       />
+  //     </>
+  //   );
+  // }
 
   return (
     <AppLayout stores={stores}>
-      <MenuBarDisplay stores={stores} isMobile={isMobile(GUI_CONFIG.id)} />
+      {/* <MenuBarDisplay stores={stores} isMobile={isMobile(GUI_CONFIG.id)} /> */}
+      {/* {navigation} */}
       <HeaderTitle stores={stores} title={item_title} />
-      <ItemNetworkNoSSR
+      <ItemNetworkNoSSRDynamic
         stores={stores}
         item_title={item_title}
         item_id={item_id}

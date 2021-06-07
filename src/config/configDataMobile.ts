@@ -1,54 +1,58 @@
-const card_size = "25vh";
-const card_compact_size = "20vh";
+//
+
+const card_size = 220;
+const card_compact_size = "30vw";
 const card_compact_vizs_size = 120;
 // const card_size_ = 250;
 // const card_compact_size = card_size_ * 0.8;
 // const card_compact_vizs_size = card_size_ * 0.5;
 
 export const configDataMobile = {
-  //card_height: 250,
   amount_item_displayed: 30,
   max_nodes_network: 1,
   // min_width_network: 500,
   heightTopAndBottom: 190,
-  rounding_menu: 6,
+  heightArticle: "77vh",
+  heightUser: 500,
+  heightChangePassword: "45vh",
+  rounding_menu: 4,
   rounding_item: 6,
-  size_icon_menu: "lg",
+  size_icon_menu: "xl",
   size_icon_card: "sm",
   header_size: "sm",
   dialogs: {
     title_size: "lg",
     texfield_size: "md",
     item_size: "md",
-    button_icon_size: "md",
+    button_icon_size: "lg",
   },
   atom_sizes: {
     height: card_size,
     image_ratio: "75%",
-    lgColumn: 6,
-    mdColumn: 6,
-    smColumn: 12,
-    column: 12,
-    lgPadding: 3,
-    mdPadding: 3,
-    smPadding: 3,
-    padding: 3,
+    lgColumn: 4,
+    mdColumn: 4,
+    smColumn: 6,
+    column: 6,
+    lgPadding: 2,
+    mdPadding: 2,
+    smPadding: 2,
+    padding: 2,
     title_card_size: "md",
     max_title_size: 60,
   },
   knowbook_sizes: {
     height: card_size,
     image_ratio: "75%",
-    lgColumn: 6,
-    mdColumn: 6,
-    smColumn: 6,
-    column: 6,
-    lgPadding: 3,
-    mdPadding: 3,
-    smPadding: 3,
-    padding: 3,
+    lgColumn: 4,
+    mdColumn: 4,
+    smColumn: 4,
+    column: 4,
+    lgPadding: 1,
+    mdPadding: 1,
+    smPadding: 1,
+    padding: 1,
     title_card_size: "sm",
-    max_title_size: 20,
+    max_title_size: 40,
   },
   atom_compact_sizes: {
     height: card_compact_size,
@@ -70,25 +74,10 @@ export const configDataMobile = {
     title_card_size: "sm",
     max_title_size: 33,
   },
-  landing: {
-    // sizes: {
-    //   height: 350,
-    //   image_ratio: "70%",
-    //   lgColumn: 12,
-    //   mdColumn: 12,
-    //   smColumn: 12,
-    //   column: 12,
-    //   lgPadding: 2,
-    //   mdPadding: 2,
-    //   smPadding: 2,
-    //   padding: 2,
-    //   title_card_size: "lg",
-    //   max_title_size: 99,
-    // },
-    ratio_page: "160vh",
-    // ratio_main: "75vh",
-    ratio_logo: "10vh",
-    ratio_image: "30vh",
+  About: {
+    ratio_page: 1200,
+    ratio_logo: "15vh",
+    // ratio_image: "30vh",
     header_size: "sm",
     features: {
       lgColumn: 5,
@@ -99,8 +88,5 @@ export const configDataMobile = {
       title_size: "md",
       desciption_size: "md",
     },
-    // feature_desciption_size: "md",
-    // size_icon_card: "lg",
-    // features_color: ["red", "green", "red", "green"],
   },
 };

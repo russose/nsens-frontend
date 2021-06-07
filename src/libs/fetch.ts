@@ -1,4 +1,4 @@
-import { configFetching } from "../config/globals";
+import { configFetching, ConfigLanguage } from "../config/globals";
 import { CONFIG_ENV } from "../config/globals";
 import { URLs } from "../config/configURLs";
 import { JSONDataT } from "../config/globals";
@@ -16,13 +16,13 @@ export function prepare_url(root_url: string, params: Object): string {
   return root_url + "?origin=*" + encodeURI(query);
 }
 
-export async function fetch_data(
+export async function fetch_data_wikipedia_action(
   ROOT_URL: string,
   PARAMS: Object,
   output_URL: boolean
 ): Promise<JSONDataT> {
   const res = await axios({
-    headers: { "User-Agent": userAgentString },
+    // headers: { "User-Agent": userAgentString },
     method: "get",
     url: prepare_url(ROOT_URL, PARAMS),
   });
@@ -42,6 +42,7 @@ export async function fetch_data_wikidata(
   const res = await axios({
     method: "get",
     headers: {
+      // "Api-User-Agent": userAgentString,
       Accept: "application/sparql-results+json",
     },
     url: wikidata_url + "?query=" + encodeURIComponent(sparqlQuery),
@@ -52,7 +53,7 @@ export async function fetch_data_wikidata(
   return data;
 }
 
-export async function _api(
+export async function my_api(
   method: string,
   uri: string,
   data: object
@@ -69,35 +70,97 @@ export async function _api(
   return res;
 }
 
+// export async function fetchArticle(
+//   title: string,
+//   ROOT_URL: string
+// ): Promise<string> {
+//   const res = await axios({
+//     method: "get",
+//     headers: {
+//       // "Api-User-Agent": userAgentString,
+//       Accept: "text/html",
+//     },
+//     // baseURL: ROOT_URL + "html/",  //DSKTOP
+//     baseURL: ROOT_URL + "mobile-html/", //MOBILE
+//     url: title + "?redirect=true",
+//   });
+
+//   const data = await res.data;
+
+//   return data;
+// }
 export async function fetchArticle(
   title: string,
   ROOT_URL: string
 ): Promise<string> {
-  const res = await axios({
-    method: "get",
-    headers: { Accept: "text/html" },
-    // baseURL: ROOT_URL + "html/",  //DSKTOP
-    baseURL: ROOT_URL + "mobile-html/", //MOBILE
-    url: title + "?redirect=true",
-  });
-
-  const data = await res.data;
+  const data = await fetch_data_wiki_rest(
+    title + "?redirect=true",
+    ROOT_URL + "page/mobile-html/" //MOBILE,
+    // ROOT_URL + "html/",  //DSKTOP
+  );
 
   return data;
 }
 
-export async function fetchRelatedWikipedia(
-  title: string,
+export async function fetch_data_wiki_rest(
+  url: string,
   ROOT_URL: string
 ): Promise<string> {
   const res = await axios({
     method: "get",
-    headers: { Accept: "text/html" },
-    baseURL: ROOT_URL + "related/",
-    url: encodeURI(title),
+    headers: {
+      // "Api-User-Agent": userAgentString,
+      Accept: "text/html",
+    },
+    // baseURL: ROOT_URL + "related/",
+    baseURL: ROOT_URL,
+    url: encodeURI(url),
   });
 
   const data = await res.data;
 
   return data;
 }
+
+export async function fetch_data_local(
+  name: string,
+  lang: ConfigLanguage
+): Promise<object> {
+  const res = await axios({
+    method: "get",
+    headers: {
+      // "Api-User-Agent": userAgentString,
+      Accept: "text/html",
+    },
+    // baseURL: ROOT_URL + "related/",
+    baseURL: CONFIG_ENV.FRONT_URL,
+    url: "/staticKnowbooks" + "/" + lang + "/" + name + ".json",
+  });
+
+  const data = await res.data;
+
+  return data;
+}
+
+// export async function fetch_data_wikimedia_rest(
+//   year: string,
+//   month: string,
+//   day: string,
+//   ROOT_URL: string
+// ): Promise<string> {
+//   const res = await axios({
+//     method: "get",
+//     headers: {
+//       // "Api-User-Agent": userAgentString,
+//       Accept: "text/html",
+//     },
+//     baseURL: ROOT_URL,
+//     url: encodeURI(year + "/" + month + "/" + day),
+//   });
+
+//   const data = await res.data;
+
+//   return data;
+// }
+
+// https://wikimedia.org/api/rest_v1/metrics/pageviews/top/fr.wikipedia.org/all-access/2020/12/all-days

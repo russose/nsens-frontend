@@ -1,10 +1,9 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configGeneral } from "../config/globals";
+import { configGeneral, IButton } from "../config/globals";
 import { ButtonIDType } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
-import _Button, { IButton } from "./_Button";
 
 interface IMenuBarNavigationProps {
   stores: IStores;

@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
 import { AtomID, ButtonIDType, handlerT, IconT } from "../config/globals";
 import CardGenericCompact from "./CardGenericCompact";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import { configGeneral } from "../config/globals";
 
 interface ICardAtomCompactProps {

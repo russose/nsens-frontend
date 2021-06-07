@@ -1,13 +1,17 @@
 //Warning: different between back and front
 
+import { ConfigLanguage } from "./globals";
+
 export const CONFIG_ENV = {
   BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
+  FRONT_URL: process.env.NEXT_PUBLIC_FRONT_URL,
   GA_TRACKING_ID: process.env.NEXT_PUBLIC_GA_TRACKING_ID,
 };
 
 export const configGeneral = {
   max_width_mobile: 640,
   large_screen_breakpoint: 1400,
+  extra_large_screen_breakpoint: 2500,
   // tiny_screen_breakpoint: 320,
   colors: {
     //https://www.rapidtables.com/web/color/RGB_Color.html
@@ -26,8 +30,30 @@ export const configGeneral = {
     iconColorDefault: "darkGray",
   },
   successMessage: "you can now login...",
-  loginDuration: 500,
+  loginDuration: 2000,
+  ratio_related_feed: 0.7,
 };
+
+export function EXCLUSION_PATTERNS(lang: ConfigLanguage): string[] {
+  if (lang === ConfigLanguage.fr) {
+    return [
+      "Accueil",
+      "Main_Page",
+      "Catégorie:",
+      "Portail:",
+      "Projet:",
+      "Wikipédia:",
+      "Spécial:",
+      "Special:",
+      "Sp?cial",
+      "HTTP_404",
+      "Fichier:",
+      "Aide:",
+    ];
+  } else {
+    return [];
+  }
+}
 
 const e = "comvacv_msens";
 export function getEmail(): string {
@@ -44,7 +70,7 @@ export function getTwitter(): string {
 
 export const configFetching = {
   userAgent: "n.Sens/1.0 (https://www.nsens.org; " + getEmail() + ")",
-  amount_data_fetched_items: 30,
+  amount_data_fetched_items: 50,
   max_size_chunk_api: 40,
   amount_related: 10,
   amount_data_fetched_images: 10,
@@ -54,6 +80,7 @@ export const configFetching = {
 };
 
 export const configPaths = {
+  rootPath: "/[lang]/[display]",
   item_empty_image: "/The_Scientific_Universe_small.webp",
   knowbook_all_image: "/500px-Book_closed_template_small.svg.webp",
   knowbook_none_image: "/The_Scientific_Universe_small.webp",
@@ -63,10 +90,10 @@ export const configPaths = {
   image_logo_B: "/logo2_B.webp",
   image_logo_W_small: "/logo2_W_small.webp",
   // image_logo_B_small: "/logo2_B_small.webp",
-  image_landing: "/landing.webp",
+  // image_landing: "/landing.webp",
   image_install: "/install.webp",
   pages: {
-    Landing: "/Landing",
+    About: "/About",
     Home: "/Home",
     Knowbooks: "/Knowbooks",
     Knowbook: "/Knowbook",
@@ -76,15 +103,26 @@ export const configPaths = {
     ItemNetwork: "/ItemNetwork",
     User: "/User",
     ChangePassword: "/ChangePassword",
+    StaticKnowbooks: "/StaticKnowbooks/[nameOrPeriod]",
+    StaticArticles: "/StaticArticles/[title]",
     empty: "",
   },
+  static: {
+    knowbooks: "public/staticKnowbooks/",
+    base_cache: "cache/",
+    cache_articles: "articles/",
+    cache_views: "nb_views/",
+  },
 };
+
+// export const path_base_knowbooks = "public_content/knowbooks/";
+// export const path_base_articles = "public_content/articles/";
 
 export const configButtonsPath = {
   HOME: configPaths.pages.Home,
   KNOWBOOKS: configPaths.pages.Knowbooks,
   LOGIN: configPaths.pages.User,
-  INFO: configPaths.pages.Landing,
+  INFO: configPaths.pages.About,
   SAVE: configPaths.pages.empty,
   EDIT: configPaths.pages.empty,
   ARTICLE: configPaths.pages.ItemArticle,
@@ -92,3 +130,5 @@ export const configButtonsPath = {
 };
 
 export const api_issue_text: string = "issue in loging or network";
+
+export const group_name = "group";

@@ -1,8 +1,11 @@
 import { eventT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import { configPaths } from "../config/globals";
-import { _getValidationNewPassword, _setNewPassword } from "../libs/_apiUser";
-import { goPage } from "../libs/helpers_InitAndRedirect";
+import {
+  api_getValidationNewPassword,
+  api_setNewPassword,
+} from "../libs/apiUser";
+import { goPage } from "../libs/helpersBase";
 
 /*******************Change Password*************************** */
 
@@ -23,7 +26,7 @@ export const onChangePassword_button = (stores: IStores) => (
   type: string
 ) => (): void => {
   if (type === "sendValidationCode") {
-    _getValidationNewPassword(stores.uiStore.changePasswordUsername)
+    api_getValidationNewPassword(stores.uiStore.changePasswordUsername)
       .then(() => {
         stores.uiStore.setChangePasswordError(
           stores.baseStore.GUI_CONFIG.language.changePassword
@@ -38,7 +41,7 @@ export const onChangePassword_button = (stores: IStores) => (
         );
       });
   } else if (type === "changePassword") {
-    _setNewPassword(
+    api_setNewPassword(
       stores.uiStore.changePasswordUsername,
       stores.uiStore.changePasswordPassword,
       stores.uiStore.changePasswordValidationCode
@@ -47,12 +50,7 @@ export const onChangePassword_button = (stores: IStores) => (
       //   //
       // })
       .then(() => {
-        goPage(
-          stores,
-          stores.baseStore.paramsPage,
-          configPaths.pages.Home,
-          true
-        );
+        goPage(stores.baseStore.paramsPage, configPaths.pages.Home, true);
       })
       .catch(function (error) {
         // console.log("error in logout...");

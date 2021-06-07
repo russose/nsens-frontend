@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { configPaths } from "../config/globals";
 import { handlerT, IAtom, PaddingT, SizeT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import CardAtom from "./CardAtom";
 
 interface ICardAtomGridProps {
@@ -14,12 +14,18 @@ interface ICardAtomGridProps {
   isItemSavedActionable_handler: handlerT;
   saved_handler: handlerT;
   edit_handler: handlerT;
+  static?: boolean;
 }
 
 const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
-  const path_Itemview = configPaths.pages.ItemArticle;
+  let path_Itemview: string;
+  if (props.static) {
+    path_Itemview = configPaths.pages.StaticArticles;
+  } else {
+    path_Itemview = configPaths.pages.ItemArticle;
+  }
 
   if (
     props.atoms === undefined ||
@@ -50,7 +56,12 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                 title={item.title}
                 image_url={item.image_url}
                 pathname={path_Itemview}
-                queryObject={{ title: item.title, id: item.id }}
+                // queryObject={{ title: item.title, id: item.id }}
+                queryObject={
+                  props.static
+                    ? { title: item.title }
+                    : { title: item.title, id: item.id }
+                }
                 saved_enabled={props.isItemSaved_handler(item.id)}
                 saved_actionable={props.isItemSavedActionable_handler(item.id)}
                 saved_handler={props.saved_handler(item.id)}
@@ -60,8 +71,6 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
           );
         })}
       </Box>
-      //   )}
-      // </Box>
     );
   }
 };

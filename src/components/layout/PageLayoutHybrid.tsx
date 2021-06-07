@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Box, Sticky } from "gestalt";
 import { ColorT, reactComponentT } from "../../config/globals";
-import { IStores } from "../../stores/_RootStore";
+import { IStores } from "../../stores/RootStore";
 import { configGeneral } from "../../config/globals";
 
 interface IPageLayoutProps {
@@ -39,7 +39,8 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
             <Box
               padding={1}
               color={color_top}
-              height={60}
+              height={55}
+              // height="6vh"
               display="flex"
               flex="grow"
               alignItems="center"
@@ -69,13 +70,22 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
           </Box>
         </Box>
         {props.bottom !== undefined ? (
-          <Sticky bottom={60}>
-            <Box width={220}>{props.bottom}</Box>
+          <Sticky bottom={70}>
+            <Box>{props.bottom}</Box>
           </Sticky>
         ) : (
           <></>
         )}
       </Box>
+      {/* {props.left !== undefined ? (
+        <Sticky bottom={120}>
+          <Box padding={0} width="15%">
+            {props.left}
+          </Box>
+        </Sticky>
+      ) : (
+        <></>
+      )} */}
     </>
   );
 };

@@ -4,7 +4,7 @@ import {
   onChangeInputValueRenameKnowbook,
   onRenameKnowbook,
 } from "../handlers/handlers_Knowbooks";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import DialogRenameKnowbookForm from "./DialogRenameKnowbookForm";
 
 interface IDialogRenameKnowbooksProps {

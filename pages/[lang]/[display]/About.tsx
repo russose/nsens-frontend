@@ -1,0 +1,99 @@
+import { observer } from "mobx-react-lite";
+import { useStores } from "../../../src/stores/RootStoreHook";
+import React from "react";
+import AboutLayoutHybrid from "../../../src/components/layout/AboutLayoutHybrid";
+import { GetStaticPaths, GetStaticProps } from "next";
+import {
+  IPage,
+  I_getStaticPaths,
+  I_getStaticProps,
+} from "../../../src/libs/getConfigDataGui";
+import HeaderTitle from "../../../src/components/HeaderTitle";
+import AppLayout from "../../../src/components/layout/AppLayout";
+import {
+  configPaths,
+  getEmail,
+  getTwitter,
+  IFeature,
+} from "../../../src/config/globals";
+import { initialize } from "../../../src/libs/helpersInitialize";
+import { isInstalled, isMobile } from "../../../src/libs/utils";
+import Installation from "../../../src/components/Installation";
+import Contacts from "../../../src/components/Contacts";
+
+const About: React.FunctionComponent<IPage> = (props) => {
+  const stores = useStores();
+  const GUI_CONFIG = props.guiConfigData;
+  initialize(stores, GUI_CONFIG);
+
+  const slogan = GUI_CONFIG.language.about.slogan;
+  // const description = GUI_CONFIG.language.about.description;
+  const path_logo = configPaths.image_logo_B;
+  // const path_image = configPaths.image_landing;
+  const ratio_page = GUI_CONFIG.display.About.ratio_page;
+  const ratio_logo = GUI_CONFIG.display.About.ratio_logo;
+  // const ratio_image = GUI_CONFIG.display.About.ratio_image;
+
+  const features: IFeature[] = GUI_CONFIG.language.about.features.map(
+    (item: object, index: number) => {
+      return {
+        title: GUI_CONFIG.language.about.features[index].title,
+        description: GUI_CONFIG.language.about.features[index].description,
+        // image_url: paths.landing.images_feature[index],
+        icon: GUI_CONFIG.language.about.features[index].icon,
+      };
+    }
+  );
+
+  const contact = GUI_CONFIG.language.user.contact;
+
+  const installation_instructions = !isInstalled() &&
+    isMobile(GUI_CONFIG.id) && (
+      <Installation
+        height="25vh"
+        path_image={configPaths.image_install}
+        instruction={GUI_CONFIG.language.user.install_instructions}
+      />
+    );
+
+  const contacts = (
+    <Contacts
+      email={getEmail()}
+      twitter_link={getTwitter()}
+      text={contact}
+      icon_size={32}
+      text_size="lg"
+    />
+  );
+
+  return (
+    <>
+      <AppLayout stores={stores}>
+        <HeaderTitle stores={stores} title={slogan} hidden={true} />
+        <AboutLayoutHybrid
+          stores={stores}
+          slogan={slogan}
+          // description={description}
+          path_logo={path_logo}
+          // path_image={path_image}
+          // loginSignup={loginSignup}
+          features={features}
+          ratio_page={ratio_page}
+          ratio_logo={ratio_logo}
+          contacts={contacts}
+          installation_instructions={installation_instructions}
+          // ratio_image={ratio_image}
+        ></AboutLayoutHybrid>
+      </AppLayout>
+    </>
+  );
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  return await I_getStaticProps(context);
+};
+export const getStaticPaths: GetStaticPaths = async (constext) => {
+  return await I_getStaticPaths(constext);
+};
+
+export default observer(About);

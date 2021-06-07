@@ -1,35 +1,27 @@
 export const configDataFr = {
   searchBar: "Rechercher...",
+  // exclusion_patterns_items: ["Acceuilxx:", "Portailxx:"],
   // WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
   // USER_WIKIDATA_LANG: "fr",
-  landing: {
-    slogan: "Explorer, Comprendre, Agir",
-    description:
-      "Entretenir le goût du vrai pour rester libre: \
-      organiser ses connaissances dans des carnets accessibles partout \
-      et se laisser transporter vers de nouvelles découvertes.",
-    loginSignup: {
-      username_placeholder: "Email",
-      password_placeholder: "Mot de passe",
-      missing_password_text: "Mot de passe oublié ?",
-      login_label: "Connexion",
-      signup_label: "Enregistrement",
-      login_error: "Nom d'utilisateur ou mot de passe incorect",
-      signup_error: "Impossible de créer le compte",
-      signup_error_duration:
-        "Rafraîchir la page, remplir les champs et attendre quelques secondes avant de s'enregistrer",
-    },
+  about: {
+    slogan:
+      "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
+    // description:
+    //   "Entretenir le goût du vrai pour rester libre: \
+    //   organiser ses connaissances dans des carnets accessibles partout \
+    //   et se laisser transporter vers de nouvelles découvertes.",
     features: [
       {
         title: "Trouver",
-        description: "Trouver de la connaissance de façon visuelle et ludique",
+        description:
+          "Trouver des articles Wikipedia de façon visuelle et ludique",
         icon: "search",
       },
-      {
-        title: "Comprendre",
-        description: "Comprendre grâce à l'information libre de la Wikipédia",
-        icon: "text-align-left",
-      },
+      // {
+      //   title: "Comprendre",
+      //   description: "Comprendre grâce à l'information libre",
+      //   icon: "text-align-left",
+      // },
       {
         title: "Rassembler",
         description:
@@ -39,7 +31,7 @@ export const configDataFr = {
       {
         title: "Explorer",
         description:
-          "Explorer de nouveaux horizons et faire des découvertes grâces aux nombreuses suggestions",
+          "Explorer de nouveaux horizons et faire des découvertes grâces aux suggestions de la plateforme",
         icon: "compass",
       },
     ],
@@ -63,26 +55,26 @@ export const configDataFr = {
     },
     SAVE: {
       label: "Sauver",
-      icon: "angled-pin",
+      icon: "heart",
     },
     EDIT: {
       label: "Modifier",
-      icon: "edit",
+      icon: "download",
     },
     ARTICLE: {
       label: "Article",
-      icon: "text-align-left",
+      icon: "menu",
     },
     VIZS: {
       label: "Vizs",
-      icon: "compass",
+      icon: "globe",
     },
   },
   knowbooks: {
-    knowbooks_title: "Carnets de connaissance",
+    knowbooks_title: "Carnets",
     AllSaved_title: "Sauvés (tous)",
     None_Title: "Aucun Carnet",
-    Related_title: "Suggérés :",
+    Related_title: "A découvrir :",
   },
   editKnowbook: {
     title: "Mise à jour des carnets",
@@ -105,10 +97,24 @@ export const configDataFr = {
     changePassword_error: "Code de validation incorrect ou mot de passe vide",
   },
   user: {
-    contact: "Contacts",
+    guest: "Enregistrement - Connexion",
+    contact: "Contact",
     install_instructions:
       "Installer pour une meilleure expérience (Chrome/Safari)",
     deconnexion: "Se déconnecter",
     changePassword: "Modifier mot de passe",
+    catchup_message:
+      "Enregistrez-vous pour sauvegardez votre contenu et personnaliser votre expérience",
+    loginSignup: {
+      username_placeholder: "Email",
+      password_placeholder: "Mot de passe",
+      missing_password_text: "Mot de passe oublié ?",
+      login_label: "Connexion",
+      signup_label: "Enregistrement",
+      login_error: "Nom d'utilisateur ou mot de passe incorect",
+      signup_error: "Impossible de créer le compte",
+      signup_error_duration:
+        "Rafraîchir la page, remplir les champs et attendre quelques secondes avant de s'enregistrer",
+    },
   },
 };

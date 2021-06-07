@@ -7,6 +7,7 @@ module.exports = {
 };
 
 // To use bundle-analyzer, uncomment and see ./next/analyse directory
+
 // const withBundleAnalyzer = require("@next/bundle-analyzer")({
 //   // enabled: process.env.ANALYZE === "true",
 //   enabled: "true",

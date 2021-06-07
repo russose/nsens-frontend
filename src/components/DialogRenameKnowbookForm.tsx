@@ -1,7 +1,7 @@
 import { Box, Button, Modal, TextField, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { handlerT, RoundingT, SizeT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 
 interface IDialogRenameKnowbookFormProps {
   stores: IStores;

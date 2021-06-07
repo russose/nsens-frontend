@@ -1,4 +1,4 @@
-import type { GUI_CONFIG } from "./configGUI";
+import type { configDataFr } from "./configDataFr";
 import type { configDataMobile } from "./configDataMobile";
 
 export enum ConfigLanguage {
@@ -11,6 +11,15 @@ export enum ConfigDisplay {
   mobile = "Mobile",
   desktop = "Desktop",
   large = "Large",
+  extra = "Extra",
+}
+
+export type configDataDisplay = typeof configDataMobile;
+
+export interface IGUICONFIG {
+  id: string;
+  language: typeof configDataFr;
+  display: configDataDisplay;
 }
 
 export interface IparamsPage {
@@ -32,6 +41,14 @@ export enum ButtonIDType {
   EDIT = "EDIT",
   VIZS = "VIZS",
   ARTICLE = "ARTICLE",
+}
+
+export interface IButton {
+  Id: ButtonIDType;
+  iconColor?: IconT; //handler
+  disabled?: boolean;
+  hidden?: boolean;
+  onClick?: handlerT; //handler
 }
 
 export type UserID = string;
@@ -66,10 +83,24 @@ export interface IKnowbook {
   items: AtomID[];
 }
 
-export interface IKnowbookFull {
+interface IKnowbookFull {
   id: number; //internal ide for back only (database)
   name: KnowbookID;
   items: IAtom[];
+}
+
+export interface IKnowbookStatic extends IKnowbookFull {
+  // id: number; //internal ide for back only (database)
+  // name: KnowbookID;
+  // items: IAtom[];
+  name_display: string;
+}
+
+export interface IStaticKnowbookDefinition {
+  nameOrPeriod: string;
+  display?: string;
+  lang: string;
+  items?: string[];
 }
 
 export interface IRelatedAtom {
@@ -101,6 +132,11 @@ export interface ILink {
   target: INode;
 }
 
+export interface IGraph {
+  nodes: INode[];
+  links: ILink[];
+}
+
 export interface IFeature {
   title: string;
   description: string;
@@ -120,7 +156,3 @@ export type eventT = any;
 export type reactComponentT = any;
 
 export type JSONDataT = any;
-
-export type configDataDisplay = typeof configDataMobile;
-
-export type GUI_CONFIG_T = typeof GUI_CONFIG;

@@ -1,16 +1,15 @@
 import { observer } from "mobx-react-lite";
-import { useStores } from "../../../src/stores/_RootStoreHook";
+import { useStores } from "../../../src/stores/RootStoreHook";
 import React from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigData";
+} from "../../../src/libs/getConfigDataGui";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { Box, Button } from "gestalt";
-import { isMobile } from "../../../src/libs/utils";
 import Separator from "../../../src/components/Separator";
 import FormChangePassword from "../../../src/components/FormChangePassword";
 import {
@@ -18,15 +17,13 @@ import {
   onChangePassword_text,
 } from "../../../src/handlers/handlers_ChangePassword";
 import { configPaths } from "../../../src/config/globals";
-import {
-  goPage,
-  initializeAppAndRedirect,
-} from "../../../src/libs/helpers_InitAndRedirect";
+import { initialize } from "../../../src/libs/helpersInitialize";
+import { goPage } from "../../../src/libs/helpersBase";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = { ...props.guiConfigData };
-  initializeAppAndRedirect(stores, GUI_CONFIG);
+  const GUI_CONFIG = props.guiConfigData;
+  initialize(stores, GUI_CONFIG);
   // stores.userStore.initializeAppWithoutDataAndGoPage(
   //   GUI_CONFIG,
   //   paths.pages.ChangePassword
@@ -34,7 +31,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
 
   const title = GUI_CONFIG.language.changePassword.title;
   const placeholder_username =
-    GUI_CONFIG.language.landing.loginSignup.username_placeholder;
+    GUI_CONFIG.language.user.loginSignup.username_placeholder;
   const password_placeholder =
     GUI_CONFIG.language.changePassword.password_placeholder;
   const placeholder_validationCode =
@@ -48,7 +45,10 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
 
   stores.uiStore.setChangePasswordError("");
 
-  const height_elements = isMobile(GUI_CONFIG.id) ? "45vh" : "40vh";
+  // const height_elements = isMobile(GUI_CONFIG.id) ? "45vh" : "40vh";
+
+  const height_elements =
+    stores.baseStore.GUI_CONFIG.display.heightChangePassword;
 
   let value_username = undefined;
   if (isLogged && stores.baseStore.user !== null) {
@@ -65,11 +65,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
           size="lg"
           // color="red"
           onClick={() => {
-            goPage(
-              stores,
-              stores.baseStore.paramsPage,
-              configPaths.pages.Landing
-            );
+            goPage(stores.baseStore.paramsPage, configPaths.pages.User);
           }}
         />
       </Box>

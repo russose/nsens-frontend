@@ -1,14 +1,5 @@
 import { action, makeObservable, observable } from "mobx";
-import { AtomID, IAtom, ILink, INode, IRelatedAtom } from "../config/globals";
-import { newAtom } from "../libs/utils";
-import { IStores } from "./_RootStore";
-
-interface IGraph {
-  nodes: INode[];
-  links: ILink[];
-}
-
-export const group_name = "group";
+import { AtomID, IAtom, IGraph, ILink, INode } from "../config/globals";
 
 export class GraphStore {
   private $rootItemId: AtomID = undefined;
@@ -20,8 +11,11 @@ export class GraphStore {
     makeObservable<GraphStore, "$rootItemId" | "$graph">(this, {
       $rootItemId: observable,
       $graph: observable,
-      setRelatedMap: action,
+      setRootItemId: action,
       setGraph: action,
+      setRelatedMap: action,
+      clearRelatedMap: action,
+      // setGraph: action,
       // renderGraph: action,
       // runSimulation: action,
       // renderRelatedMap: action,
@@ -31,127 +25,25 @@ export class GraphStore {
   get rootItemId() {
     return this.$rootItemId;
   }
+  setRootItemId(id: AtomID): void {
+    this.$rootItemId = id;
+  }
+
   get graph() {
     return this.$graph;
   }
-  get graphMap() {
+  setGraph(nodes: INode[], links: ILink[]): void {
+    this.$graph = { nodes: nodes, links: links };
+  }
+
+  get relatedMap() {
     return this.$relatedMap;
   }
-
-  setRelatedMap(root_itemId: AtomID, stores: IStores): void {
-    const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
-    if (
-      root_itemId === undefined ||
-      related === undefined ||
-      related.length === 0
-    ) {
-      return;
-    }
-
-    // const relatedMap_local = new Map<AtomID, IAtom[]>();
-    const relatedMap_local = new Map<string, IAtom[]>();
-
-    related.forEach((el) => {
-      const key = el.relation;
-      if (!relatedMap_local.has(key)) {
-        relatedMap_local.set(key, [el.item]);
-      } else {
-        const item_list: IAtom[] = relatedMap_local.get(key);
-        item_list.push(el.item);
-        relatedMap_local.set(key, item_list);
-      }
-    });
-
-    this.$relatedMap.clear();
-    //Sort Map by lengh
-    const keys_values_sorted = Array.from(relatedMap_local.entries()).sort(
-      (a, b) => {
-        if (a[1].length > b[1].length) {
-          //a est avant à b
-          return -1;
-        } else if (a[1].length < b[1].length) {
-          //a est après à b
-          return 1;
-        } else {
-          return 0;
-        }
-      }
-    );
-
-    keys_values_sorted.forEach((key_value) => {
-      this.$relatedMap.set(key_value[0], key_value[1]);
-    });
-
-    this.$rootItemId = root_itemId;
+  setRelatedMap(key: string, item: IAtom[]): void {
+    this.$relatedMap.set(key, item);
   }
 
-  setGraph(root_item: IAtom, stores: IStores, x0: number, y0: number): void {
-    if (root_item === undefined) {
-      return;
-    }
-
-    this.setRelatedMap(root_item.id, stores);
-
-    const rootNode: INode = {
-      x: x0,
-      y: y0,
-      pos: 0,
-      relation_name: "",
-      ...root_item,
-    };
-
-    this.graph.nodes = [rootNode];
-    this.graph.links = [];
-
-    this.$relatedMap.forEach((items_list_for_relation, key) => {
-      if (items_list_for_relation.length > 1) {
-        //NodeGroup Element
-        const node_group: INode = {
-          x: x0,
-          y: y0,
-          pos: this.graph.nodes.length,
-          relation_name: group_name,
-          ...newAtom(key, stores.baseStore.paramsPage.lang),
-        };
-        node_group.title = key;
-        // node_group.related = "group";
-
-        this.graph.nodes.push(node_group);
-        this.graph.links.push({
-          source: this.graph.nodes[0],
-          target: this.graph.nodes[node_group.pos],
-        });
-
-        items_list_for_relation.forEach((item: IAtom) => {
-          const node: INode = {
-            x: x0,
-            y: y0,
-            pos: this.graph.nodes.length,
-            relation_name: "",
-            ...item,
-          };
-          this.graph.nodes.push(node);
-
-          this.graph.links.push({
-            source: this.graph.nodes[node_group.pos],
-            target: this.graph.nodes[node.pos],
-          });
-        });
-      } else if (items_list_for_relation.length === 1) {
-        //No group
-        const node: INode = {
-          x: x0,
-          y: y0,
-          pos: this.graph.nodes.length,
-          relation_name: key,
-          ...items_list_for_relation[0],
-        };
-        this.graph.nodes.push(node);
-        this.graph.links.push({
-          source: this.graph.nodes[0],
-          target: this.graph.nodes[node.pos],
-        });
-      }
-    });
+  clearRelatedMap(): void {
+    this.$relatedMap.clear();
   }
 }

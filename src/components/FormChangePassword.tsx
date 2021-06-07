@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button } from "gestalt";
 import { ColorT, handlerT, RoundingT, SizeT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import React from "react";
 import { configGeneral } from "../config/globals";
 

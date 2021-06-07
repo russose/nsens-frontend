@@ -1,6 +1,5 @@
 import { action, makeObservable, observable } from "mobx";
 import { AtomID, IAtom } from "../config/globals";
-import { _save, _unsave } from "../libs/_apiUserData";
 
 export class SavedStore {
   private $saved = observable.map<AtomID, IAtom>();
@@ -8,13 +7,18 @@ export class SavedStore {
     makeObservable<SavedStore>(this, {
       setSaved: action,
       clearSaved: action,
-      // addSaved: action,
-      // removeSaved: action,
+      deleteSaved: action,
     });
   }
 
   get saved() {
     return this.$saved;
+  }
+  clearSaved(): void {
+    this.$saved.clear();
+  }
+  deleteSaved(key: AtomID): void {
+    this.$saved.delete(key);
   }
 
   getSavedList(): IAtom[] {
@@ -24,8 +28,5 @@ export class SavedStore {
     atoms.forEach((item) => {
       this.$saved.set(item.id, item);
     });
-  }
-  clearSaved(): void {
-    this.$saved.clear();
   }
 }

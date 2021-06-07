@@ -3,7 +3,7 @@ import { Box, IconButton, Text } from "gestalt";
 import { AtomID, handlerT, IconT } from "../config/globals";
 import CardGeneric from "./CardGeneric";
 import { configGeneral, configPaths } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 
 export interface ICardKnowProps {
   id: AtomID;

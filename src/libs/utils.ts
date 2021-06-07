@@ -5,11 +5,57 @@ import {
   IAtom,
 } from "../config/globals";
 
+export const empty_handler = () => {};
+
 const display_username = "none";
 export function getUserNameDisplay(): string {
   return display_username;
 }
 
+export function DateToStringWithZero(date: number): string {
+  if (date < 10) {
+    return "0" + date.toString();
+  } else {
+    return date.toString();
+  }
+}
+
+export function filterAtomListFromPatterns(
+  atomList: IAtom[],
+  patterns: string[]
+): IAtom[] {
+  let atomList_filterned: IAtom[] = atomList;
+  patterns.forEach((pattern: string) => {
+    atomList_filterned = atomList_filterned.filter((atom) => {
+      return !atom.title.includes(pattern);
+    });
+  });
+  return atomList_filterned;
+}
+
+export function prepareArticle(article: string): string {
+  const href_with_including_a_regex = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/gi;
+  const link_open_regex = /<\s*a[^>]*>/gi;
+  const link_close_regex = /<\s*\/a[^>]*>/gi;
+
+  // const sections_ending_including_body = new RegExp(
+  //   "<section(.)*" + last_section_header + "(.|\n)*</body>",
+  //   "gi"
+  // );
+
+  // const base_url = "//" + language + ".wikipedia.org/";
+
+  const article_clean = article
+    .replace(href_with_including_a_regex, "<a") //Remove complex href, cf article "tenseur de Ricci"
+    .replace(link_open_regex, "") //remove links
+    .replace(link_close_regex, "");
+  // .replaceAll('"//', '"https://');
+  // .replaceAll(base, "") //remove base to not destroy navigation...
+  // .replaceAll('href="/', 'href="' + base_url) //add path to relative link of stylesheet
+  // .replaceAll(sections_ending_including_body, "</body>") //remove end of article
+
+  return article_clean;
+}
 export const empty_value_atom = "";
 export function newAtom(id: AtomID, lang: ConfigLanguage): IAtom {
   const atom = {
@@ -26,6 +72,22 @@ export function newAtom(id: AtomID, lang: ConfigLanguage): IAtom {
     related: empty_value_atom,
   };
   return atom;
+}
+
+export function getRandomImageFromItems(items: IAtom[]): string {
+  let image_paths_list: string[] = items.map((item) => {
+    return item.image_url;
+  });
+  image_paths_list = image_paths_list.filter((item) => {
+    return item !== "";
+  });
+  if (image_paths_list.length === 0) {
+    return "";
+  } else {
+    const image_path =
+      image_paths_list[entierAleatoire(0, image_paths_list.length - 1)];
+    return image_path;
+  }
 }
 
 export function isMobile(GUI_CONFIG_id: string): boolean {
@@ -60,6 +122,26 @@ export function hasTouchScreen(window: any): boolean {
   return hasTouchScreen;
 }
 
+export function isInstalled(): boolean {
+  let result = false;
+  if (typeof window !== "undefined") {
+    const navigator: any = window.navigator;
+    // For iOS
+    if (
+      navigator !== undefined &&
+      navigator.standalone !== undefined &&
+      navigator.standalone
+    ) {
+      result = true;
+    }
+    // For Android
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      result = true;
+    }
+  }
+  return result;
+}
+
 export function shuffleSized(
   array: any[],
   amount_item_displayed: number
@@ -67,6 +149,39 @@ export function shuffleSized(
   const shuffled = shuffleArray(array);
   const shuffled_sized = shuffled.slice(0, amount_item_displayed);
   return shuffled_sized;
+}
+
+export function shuffleSizedRemoveDoublesFilterIds(
+  items: IAtom[],
+  itemIds: AtomID[],
+  amount_item_displayed: number
+): IAtom[] {
+  if (items === undefined) {
+    return [];
+  }
+
+  const related_shuffledSized: IAtom[] = shuffleSized(
+    items,
+    amount_item_displayed
+  );
+
+  //Remove duplicated items since related from different items could overlap
+  const related_shuffledSized_no_doubles = new Map();
+  related_shuffledSized.forEach((item: IAtom) => {
+    related_shuffledSized_no_doubles.set(item.id, item);
+  });
+
+  const related_shuffledSized_no_doubles_array: IAtom[] = Array.from(
+    related_shuffledSized_no_doubles.values()
+  );
+
+  // Enlever les items de itemIds
+  const related_shuffledSized_no_doubles_array_filtered =
+    related_shuffledSized_no_doubles_array.filter((item: IAtom) => {
+      return !itemIds.includes(item.id);
+    });
+
+  return related_shuffledSized_no_doubles_array_filtered;
 }
 
 // export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {

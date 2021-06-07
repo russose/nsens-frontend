@@ -1,8 +1,15 @@
-import { ButtonIDType, configButtonsPath, eventT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
-import { configPaths } from "../config/globals";
-import { setFeedFromRelated, setFeedFromSearch } from "../libs/helpersBase";
-import { goPage } from "../libs/helpers_InitAndRedirect";
+import {
+  ButtonIDType,
+  configButtonsPath,
+  configPaths,
+  eventT,
+} from "../config/globals";
+import {
+  goPage,
+  setFeedFromMostviewedAndRelated,
+  setFeedFromSearch,
+} from "../libs/helpersBase";
+import { IStores } from "../stores/RootStore";
 
 /*******************Logo*************************** */
 export const onTapLogo = (
@@ -19,7 +26,7 @@ export const onTapLogo = (
   //   item.title,
   //   GUI_CONFIG
   // );
-  goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+  goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
 };
 
 /*******************Searchbar*************************** */
@@ -36,9 +43,11 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   if (stores.uiStore.searchPattern.length > 0) {
     setFeedFromSearch(stores, stores.uiStore.searchPattern);
   } else {
-    //baseStore.setFeedFromRandom();
+    const amount_item_displayed =
+      stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+    setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
   }
-  goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+  goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
 };
 
 export const onSearchHomeKeyboard = (stores: IStores) => (input: {
@@ -49,7 +58,7 @@ export const onSearchHomeKeyboard = (stores: IStores) => (input: {
     if (stores.uiStore.searchPattern.length === 0) {
       const amount_item_displayed =
         stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
-      setFeedFromRelated(stores, amount_item_displayed);
+      setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
     } else {
       onSearchHomeSubmit(stores)();
     }

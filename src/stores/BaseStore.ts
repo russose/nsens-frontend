@@ -1,98 +1,58 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import {
-  api_issue_text,
   AtomID,
-  GUI_CONFIG_T,
+  IGUICONFIG,
   IAtom,
   IparamsPage,
   IRelatedAtom,
   IUser,
 } from "../config/globals";
-import { _randomFromWeb, _searchFromWeb } from "../libs/_apiItems";
 
 export class BaseStore {
+  //username="": the user not logged - username=null: App not initialyzed
+  private $user: IUser | null = null;
+
+  private $GUI_CONFIG: IGUICONFIG = undefined;
+  private $paramsPage: IparamsPage = { lang: undefined, display: undefined };
+
+  private $screen: {
+    width: number;
+    height: number;
+  } = this.setscreenNoSSR();
+
   private $feed = observable.map<AtomID, IAtom>();
+  private $mostviewed = observable.map<AtomID, IAtom>();
   private $history = observable.map<AtomID, IAtom>();
 
   private $related = observable.map<AtomID, IRelatedAtom[]>();
   private $relatedAll = observable.map<AtomID, IAtom>();
 
-  //when username="", it means the user is not logged!
-  //When username=null, it means the App is not initialyzed
-  private $user: IUser | null = null;
-  private $GUI_CONFIG: GUI_CONFIG_T = undefined;
-  private $rootPath = "/[lang]/[display]";
-  private $paramsPage: IparamsPage = { lang: undefined, display: undefined };
-  private $screen: {
-    width: number;
-    height: number;
-  } = this.setscreenNoSSR();
-  configGeneral: any;
-
   constructor() {
     makeObservable<BaseStore, "$user">(this, {
       setFeed: action,
+      setMostviewed: action,
       setHistory: action,
       $user: observable,
       isLogged: computed,
       setUser: action,
-      // initialyzeRelatedAndRelatedAllFromSaved: action,
-      // addAllRelatedItemsInAllRelated: action,
-      // fetchRelated: action,
+      setRelated: action,
+      setRelatedAll: action,
     });
   }
 
-  get screen() {
-    return this.$screen;
-  }
-
   get isLogged(): boolean {
-    if (this.user === undefined || this.user === null) {
-      return false;
-    }
-    if (this.user.username === "" || this.$user.username === api_issue_text) {
+    if (
+      this.user === undefined ||
+      this.user === null ||
+      this.user.username === ""
+    ) {
       return false;
     } else {
       return true;
     }
   }
 
-  get user() {
-    return this.$user;
-  }
-
-  setUser(user: IUser): void {
-    this.$user = user;
-  }
-
-  get rootPath() {
-    return this.$rootPath;
-  }
-
-  get paramsPage() {
-    return this.$paramsPage;
-  }
-
-  get GUI_CONFIG() {
-    return this.$GUI_CONFIG;
-  }
-
-  setscreenNoSSR(): {
-    width: number;
-    height: number;
-  } {
-    if (process.browser) {
-      const screen = {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      };
-      return screen;
-    } else {
-      return undefined;
-    }
-  }
-
-  set_ParamsPage_GUI_CONFIG(GUI_CONFIG: GUI_CONFIG_T) {
+  setParamsPageFromGUICONFIG(GUI_CONFIG: IGUICONFIG) {
     if (GUI_CONFIG === undefined) {
       return;
     }
@@ -111,17 +71,70 @@ export class BaseStore {
     }
   }
 
-  setFeed(feed: IAtom[]): void {
-    if (feed === undefined) {
+  setscreenNoSSR(): {
+    width: number;
+    height: number;
+  } {
+    if (process.browser) {
+      const screen = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+      return screen;
+    } else {
+      return undefined;
+    }
+  }
+
+  get user() {
+    return this.$user;
+  }
+  setUser(user: IUser): void {
+    this.$user = user;
+  }
+
+  get screen() {
+    return this.$screen;
+  }
+
+  get paramsPage() {
+    return this.$paramsPage;
+  }
+
+  get GUI_CONFIG() {
+    return this.$GUI_CONFIG;
+  }
+
+  get mostviewed() {
+    return this.$mostviewed;
+  }
+  setMostviewed(atoms: IAtom[]): void {
+    if (atoms === undefined || atoms.length === 0) {
+      return;
+    }
+    this.$mostviewed.clear();
+    atoms.forEach((item) => this.$mostviewed.set(item.id, item));
+  }
+
+  get feed() {
+    return this.$feed;
+  }
+  setFeed(atoms: IAtom[]): void {
+    if (atoms === undefined || atoms.length === 0) {
       return;
     }
     this.$feed.clear();
-    feed.forEach((item) => this.$feed.set(item.id, item));
-    this.setHistory(feed);
+    atoms.forEach((item) => {
+      this.$feed.set(item.id, item);
+    });
+    this.setHistory(atoms);
   }
 
+  get history() {
+    return this.$history;
+  }
   setHistory(atoms: IAtom[]): void {
-    if (atoms === undefined) {
+    if (atoms === undefined || atoms.length === 0) {
       return;
     }
     atoms.forEach((item) => {
@@ -131,19 +144,21 @@ export class BaseStore {
     });
   }
 
-  get feed() {
-    return this.$feed;
-  }
-  get history() {
-    return this.$history;
-  }
-
   get related() {
     return this.$related;
+  }
+  setRelated(key: AtomID, item: IRelatedAtom[]) {
+    if (key === undefined || item === undefined || item.length === 0) {
+      return;
+    }
+    this.$related.set(key, item);
   }
 
   get relatedAll() {
     return this.$relatedAll;
+  }
+  setRelatedAll(key: AtomID, item: IAtom) {
+    this.$relatedAll.set(key, item);
   }
 
   getFeedList(): IAtom[] {

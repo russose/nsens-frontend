@@ -1,16 +1,31 @@
 import { AtomID, eventT } from "../config/globals";
-import { IsItemInAnyKnowbook } from "../libs/helpersKnowbooks";
-import { addSaved, removeSaved } from "../libs/helpersSaved";
-import { IStores } from "../stores/_RootStore";
+import { goUserHandler } from "../libs/helpersBase";
+import {
+  addSaved,
+  IsItemInAnyKnowbook,
+  removeSaved,
+} from "../libs/helpersSavedKnowbooks";
+import { IStores } from "../stores/RootStore";
 
 /*******************Save Items*************************** */
 
 export const onSaved = (stores: IStores) => (itemID: AtomID) => (input: {
   event: eventT;
 }): void => {
-  // if (!userStore.isLogged) {
-  //   goLogin();
-  // }
+  if (!stores.baseStore.isLogged) {
+    // goPage(
+    //   {
+    //     lang: stores.baseStore.paramsPage.lang,
+    //     display: stores.baseStore.paramsPage.display,
+    //   },
+    //   configPaths.pages.User
+    // );
+    // input.event.preventDefault();
+    // return;
+    goUserHandler(stores)()(input);
+    return;
+  }
+
   if (
     stores.savedStore.saved.has(itemID) === undefined ||
     stores.savedStore.saved.has(itemID) === false

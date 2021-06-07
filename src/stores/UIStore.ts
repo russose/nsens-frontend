@@ -70,6 +70,7 @@ export class UIStore {
       setEditKnowbookOpened: action,
       setEditKnowbookNewValue: action,
       setEditKnowbookMembers: action,
+      clearEditKnowbookMembers: action,
       setSelectedKnowbookIdName: action,
       setRenameKnowbookOpened: action,
       setRenameKnowbookNewName: action,
@@ -81,7 +82,6 @@ export class UIStore {
       setChangePasswordPassword: action,
       setChangePasswordValidationCode: action,
       setChangePasswordError: action,
-      // initKnowbookEditionElements: action,
       setShowLoading: action,
     });
   }
@@ -113,6 +113,7 @@ export class UIStore {
   setSearchPattern(searchPattern: string): void {
     this.$searchPattern = searchPattern;
   }
+
   get selectedAtom() {
     return this.$selectedAtom;
   }
@@ -120,29 +121,36 @@ export class UIStore {
     this.$selectedAtom.id = id;
     this.$selectedAtom.title = title;
   }
+
   get articleContent() {
     return this.$articleContent;
   }
   setArticleContent(article: string): void {
     this.$articleContent = article;
   }
+
   get editKnowbookOpened() {
     return this.$editKnowbookOpened;
   }
   setEditKnowbookOpened(state: boolean): void {
     this.$editKnowbookOpened = state;
   }
+
   get editKnowbookNewValue() {
     return this.$editKnowbookNewValue;
   }
   setEditKnowbookNewValue(value: string): void {
     this.$editKnowbookNewValue = value;
   }
+
   get editKnowbookMembers() {
     return this.$editKnowbookMembers;
   }
   setEditKnowbookMembers(knowbookId: KnowbookID, value: boolean): void {
     this.editKnowbookMembers.set(knowbookId, value);
+  }
+  clearEditKnowbookMembers(): void {
+    this.editKnowbookMembers.clear();
   }
 
   get changePasswordUsername() {

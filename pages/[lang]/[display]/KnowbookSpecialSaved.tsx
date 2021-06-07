@@ -4,10 +4,10 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigData";
+} from "../../../src/libs/getConfigDataGui";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
 
-import { useStores } from "../../../src/stores/_RootStoreHook";
+import { useStores } from "../../../src/stores/RootStoreHook";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { GetStaticPaths, GetStaticProps } from "next";
 import HeaderTitle from "../../../src/components/HeaderTitle";
@@ -17,12 +17,12 @@ import {
   onSaved,
 } from "../../../src/handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
-import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
+import { initialize } from "../../../src/libs/helpersInitialize";
 
 const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = { ...props.guiConfigData };
-  initializeAppAndRedirect(stores, GUI_CONFIG);
+  const GUI_CONFIG = props.guiConfigData;
+  initialize(stores, GUI_CONFIG);
   const title = GUI_CONFIG.language.knowbooks.AllSaved_title;
 
   return (

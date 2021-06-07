@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { configGeneral } from "../config/globals";
 import { ColorT, IconT, SizeT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 
 interface ICardFeatureProps {
   stores: IStores;
@@ -15,9 +15,9 @@ interface ICardFeatureProps {
 const CardFeature: React.FunctionComponent<ICardFeatureProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const feature_desciption_size: SizeT =
-    GUI_CONFIG.display.landing.features.desciption_size;
+    GUI_CONFIG.display.About.features.desciption_size;
   const feature_title_size: SizeT =
-    GUI_CONFIG.display.landing.features.title_size;
+    GUI_CONFIG.display.About.features.title_size;
   const features_color: ColorT = configGeneral.colors.features;
 
   return (

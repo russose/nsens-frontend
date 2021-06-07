@@ -8,7 +8,7 @@ import {
   SizeT,
 } from "../config/globals";
 import Link from "next/link";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import { configPaths } from "../config/globals";
 
 interface ICardSizes {
@@ -80,8 +80,9 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   const image_with_link = (component: reactComponentT) => {
     return (
       <Link
+        prefetch={false}
         href={{
-          pathname: props.stores.baseStore.rootPath + props.pathname,
+          pathname: configPaths.rootPath + props.pathname,
           query: { ...props.stores.baseStore.paramsPage, ...props.queryObject },
         }}
         passHref
@@ -104,11 +105,11 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   if (props.full === false) {
     c_width = "80%";
     c_rounding = 3;
-    c_marginBottom = 3;
+    c_marginBottom = 4;
   } else {
     c_width = "100%";
     c_rounding = 0;
-    c_marginBottom = 2;
+    c_marginBottom = 4;
   }
 
   const content: reactComponentT = (
@@ -128,7 +129,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       marginBottom={c_marginBottom}
       //
     >
-      <Box padding={1} width="60%">
+      <Box paddingX={2} paddingY={1} width="60%">
         <Text size={title_card_size} align="left" weight="bold">
           {title}
         </Text>

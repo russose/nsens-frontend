@@ -14,15 +14,15 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigData";
-import { ItemsInNoKnowbook } from "../../../src/libs/helpersKnowbooks";
-import { useStores } from "../../../src/stores/_RootStoreHook";
-import { initializeAppAndRedirect } from "../../../src/libs/helpers_InitAndRedirect";
+} from "../../../src/libs/getConfigDataGui";
+import { ItemsInNoKnowbook } from "../../../src/libs/helpersSavedKnowbooks";
+import { useStores } from "../../../src/stores/RootStoreHook";
+import { initialize } from "../../../src/libs/helpersInitialize";
 
 const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = { ...props.guiConfigData };
-  initializeAppAndRedirect(stores, GUI_CONFIG);
+  const GUI_CONFIG = props.guiConfigData;
+  initialize(stores, GUI_CONFIG);
   const title = GUI_CONFIG.language.knowbooks.None_Title;
 
   return (

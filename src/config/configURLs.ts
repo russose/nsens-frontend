@@ -16,5 +16,18 @@ export function ROOT_URL_WIKIPEDIA_ACTION(lang: ConfigLanguage): string {
 }
 
 export function ROOT_URL_WIKIPEDIA_REST(lang: ConfigLanguage): string {
-  return "https://" + lang + ".wikipedia.org/api/rest_v1/page/";
+  return "https://" + lang + ".wikipedia.org/api/rest_v1/";
+}
+
+// ATTENTION, CETTE URL NE FONCTIONNE PAS AVEC LES ADBLOCKERS, à n'utiliser qu'en BACK pour les TOPS
+export function ROOT_URL_WIKIMEDIA_TOP_REST(lang: ConfigLanguage): string {
+  return (
+    "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/" +
+    lang +
+    ".wikipedia.org/all-access/"
+  );
+}
+
+export function ROOT_URL_WIKIPEDIA(lang: ConfigLanguage): string {
+  return "https://" + lang + ".wikipedia.org/wiki/";
 }

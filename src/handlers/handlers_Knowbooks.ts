@@ -2,12 +2,12 @@ import { KnowbookID, AtomID, eventT } from "../config/globals";
 import {
   addItemInKnowbook,
   deleteKnowbook,
+  initKnowbookEditionElements,
   isItemInKnowbook,
   removeItemFromKnowbook,
   renameKnowbook,
-} from "../libs/helpersKnowbooks";
-import { initKnowbookEditionElements } from "../libs/helpersUI";
-import { IStores } from "../stores/_RootStore";
+} from "../libs/helpersSavedKnowbooks";
+import { IStores } from "../stores/RootStore";
 
 /******************* Edit Knowbooks ************************************ */
 

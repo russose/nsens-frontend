@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button, Text } from "gestalt";
 import { ColorT, eventT, handlerT, RoundingT, SizeT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import { getUserNameDisplay } from "../libs/utils";
 import React from "react";
 import Link from "next/link";
@@ -75,10 +75,9 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
         </Box>
         <Box padding={2}>
           <Link
+            prefetch={false}
             href={{
-              pathname:
-                props.stores.baseStore.rootPath +
-                configPaths.pages.ChangePassword,
+              pathname: configPaths.rootPath + configPaths.pages.ChangePassword,
               query: { ...props.stores.baseStore.paramsPage },
             }}
             passHref

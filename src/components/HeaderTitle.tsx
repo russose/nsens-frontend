@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Heading } from "gestalt";
-import { handlerT, RoundingT, SizeT } from "../config/globals";
-import { IStores } from "../stores/_RootStore";
+import { handlerT, JSONDataT, RoundingT, SizeT } from "../config/globals";
+import { IStores } from "../stores/RootStore";
 import Head from "next/head";
 import { configGeneral } from "../config/globals";
 
@@ -16,8 +16,16 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_headers = configGeneral.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
-  const description = GUI_CONFIG.language.landing.description;
   const title_page = "n.Sens" + " - " + props.title;
+
+  // const description = GUI_CONFIG.language.landing.description;
+
+  let description = "";
+  Object.values(GUI_CONFIG.language.about.features).forEach(
+    (item: JSONDataT) => {
+      description = description + " " + item.description;
+    }
+  );
 
   const head = (
     <Head>

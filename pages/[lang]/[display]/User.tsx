@@ -1,54 +1,67 @@
+import { Box, Button } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { useStores } from "../../../src/stores/_RootStoreHook";
-import { Button, Box } from "gestalt";
+import { GetStaticPaths, GetStaticProps } from "next";
+import dynamic from "next/dynamic";
 import React from "react";
+// import CatchupMessage from "../../../src/components/CatchupMessage";
+import FormLoginSignup from "../../../src/components/FormLoginSignup";
+import HeaderTitle from "../../../src/components/HeaderTitle";
+import AppLayout from "../../../src/components/layout/AppLayout";
+import { configPaths } from "../../../src/config/globals";
+import {
+  onChangeUsernamePassword,
+  onLogout,
+  onSubmitLoginSignup,
+} from "../../../src/handlers/handlers_LoginSignup";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigData";
-import { GetStaticPaths, GetStaticProps } from "next";
-import AppLayout from "../../../src/components/layout/AppLayout";
-import HeaderTitle from "../../../src/components/HeaderTitle";
-import Contacts from "../../../src/components/Contacts";
-import { isMobile } from "../../../src/libs/utils";
-import Installation from "../../../src/components/Installation";
-import { onLogout } from "../../../src/handlers/handlers_LoginSignup";
-import { getEmail, getTwitter, configPaths } from "../../../src/config/globals";
-import {
-  goPage,
-  initializeAppAndRedirect,
-} from "../../../src/libs/helpers_InitAndRedirect";
+} from "../../../src/libs/getConfigDataGui";
+import { goPage } from "../../../src/libs/helpersBase";
+import { initialize } from "../../../src/libs/helpersInitialize";
+import { useStores } from "../../../src/stores/RootStoreHook";
 
-export function isInstalled(): boolean {
-  let result = false;
-  if (typeof window !== "undefined") {
-    const navigator: any = window.navigator;
-    // For iOS
-    if (
-      navigator !== undefined &&
-      navigator.standalone !== undefined &&
-      navigator.standalone
-    ) {
-      result = true;
-    }
-    // For Android
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      result = true;
-    }
-  }
-  return result;
-}
+//CSS in JS Styles not supported in SSR
+const CatchupMessageDynamic = dynamic(
+  () => import("../../../src/components/CatchupMessage"),
+  { ssr: false }
+);
 
 const User: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = { ...props.guiConfigData };
-  initializeAppAndRedirect(stores, GUI_CONFIG);
-  const title =
-    stores.baseStore.user === null ? "" : stores.baseStore.user.username;
+  const GUI_CONFIG = props.guiConfigData;
+  initialize(stores, GUI_CONFIG);
+  const title = stores.baseStore.isLogged
+    ? stores.baseStore.user.username
+    : stores.baseStore.GUI_CONFIG.language.user.guest;
+
   const deconnexion = GUI_CONFIG.language.user.deconnexion;
   const changePassword = GUI_CONFIG.language.user.changePassword;
-  const contact = GUI_CONFIG.language.user.contact;
+
+  const placeholder_username =
+    GUI_CONFIG.language.user.loginSignup.username_placeholder;
+  const password_placeholder =
+    GUI_CONFIG.language.user.loginSignup.password_placeholder;
+  const missing_password_text =
+    GUI_CONFIG.language.user.loginSignup.missing_password_text;
+  const login_label = GUI_CONFIG.language.user.loginSignup.login_label;
+  const signup_label = GUI_CONFIG.language.user.loginSignup.signup_label;
+
+  const loginSignup = (
+    <Box padding={0} column={11} smColumn={11} mdColumn={5} lgColumn={3}>
+      <FormLoginSignup
+        stores={stores}
+        placeholder_username={placeholder_username}
+        placeholder_password={password_placeholder}
+        missing_password_text={missing_password_text}
+        label_login={login_label}
+        label_signup={signup_label}
+        handler_text={onChangeUsernamePassword(stores)}
+        handler_button={onSubmitLoginSignup(stores)}
+      />
+    </Box>
+  );
 
   const resetPasswordButton = (
     <Box column={8} smColumn={6} mdColumn={3} lgColumn={2}>
@@ -56,13 +69,9 @@ const User: React.FunctionComponent<IPage> = (props) => {
         accessibilityLabel="resetPassword"
         text={changePassword}
         size="lg"
-        // color="red"
+        color="blue"
         onClick={() => {
-          goPage(
-            stores,
-            stores.baseStore.paramsPage,
-            configPaths.pages.ChangePassword
-          );
+          goPage(stores.baseStore.paramsPage, configPaths.pages.ChangePassword);
         }}
       />
     </Box>
@@ -80,39 +89,52 @@ const User: React.FunctionComponent<IPage> = (props) => {
     </Box>
   );
 
-  const installation_instructions = !isInstalled() &&
-    isMobile(GUI_CONFIG.id) && (
-      <Installation
-        height="25vh"
-        path_image={configPaths.image_install}
-        instruction={GUI_CONFIG.language.user.install_instructions}
-      />
-    );
+  // const installation_instructions = !isInstalled() &&
+  //   isMobile(GUI_CONFIG.id) && (
+  //     <Installation
+  //       height="25vh"
+  //       path_image={configPaths.image_install}
+  //       instruction={GUI_CONFIG.language.user.install_instructions}
+  //     />
+  //   );
 
-  const height_elements = isMobile(GUI_CONFIG.id) ? "70vh" : "30vh";
+  // const height_elements = isMobile(GUI_CONFIG.id) ? "60vh" : "30vh";
+
+  const height_elements = stores.baseStore.GUI_CONFIG.display.heightUser;
+
+  const catchMessage = (
+    <CatchupMessageDynamic stores={stores} withButton={false} />
+  );
+
+  let page_content;
+  if (!stores.baseStore.isLogged) {
+    page_content = (
+      <>
+        {loginSignup}
+        {catchMessage}
+      </>
+    );
+  } else {
+    page_content = (
+      <>
+        {resetPasswordButton}
+        {logoutButton}
+      </>
+    );
+  }
 
   return (
     <AppLayout stores={stores}>
       <HeaderTitle stores={stores} title={title} />
-
       <Box
         display="flex"
         direction="column"
         flex="grow"
         height={height_elements}
-        justifyContent="evenly"
+        justifyContent="around"
         alignItems="center"
       >
-        <Contacts
-          email={getEmail()}
-          twitter_link={getTwitter()}
-          text={contact}
-          icon_size={32}
-          text_size="lg"
-        />
-        {resetPasswordButton}
-        {logoutButton}
-        {installation_instructions}
+        {page_content}
       </Box>
     </AppLayout>
   );

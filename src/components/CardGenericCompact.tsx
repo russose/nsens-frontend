@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { Image, Box, Mask, Text } from "gestalt";
 import { AtomID, ColorT, RoundingT, SizeT } from "../config/globals";
 import Link from "next/link";
-import { IStores } from "../stores/_RootStore";
+import { IStores } from "../stores/RootStore";
 import { configPaths } from "../config/globals";
 
 interface ICardSizes {
@@ -65,9 +65,10 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
           <Box padding={1} height="100%" width="100%">
             <Mask rounding={rounding} height="100%" width="100%">
               <Link
+                prefetch={false}
                 href={{
                   // pathname: props.pathname, query: props.queryObject
-                  pathname: props.stores.baseStore.rootPath + props.pathname,
+                  pathname: configPaths.rootPath + props.pathname,
                   query: {
                     ...props.stores.baseStore.paramsPage,
                     ...props.queryObject,

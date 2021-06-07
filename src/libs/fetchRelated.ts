@@ -1,4 +1,4 @@
-import { configFetching } from "../config/globals";
+import { AtomID, configFetching } from "../config/globals";
 import {
   ConfigLanguage,
   IAtom,
@@ -10,10 +10,11 @@ import {
   buildListStringSeparated,
   enrichImagesBatchFromWikipediaEN,
   enrichOneImageFromRelatedWikipediaParallel,
-  ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
   ItemsRelatedFromWikipediaRaw,
   removeBadImages,
-} from "./fetchItems";
+} from "./fetchBase";
+import { filterAtomListFromPatterns } from "./utils";
 
 const max_size_api = configFetching.max_size_chunk_api;
 
@@ -21,12 +22,77 @@ const max_size_api = configFetching.max_size_chunk_api;
  * Interface
  */
 
-export async function ItemsRelatedFromWikipedia(
+export async function fetchRelated(
+  itemId: AtomID,
   title: string,
   amount: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage
+  lang: ConfigLanguage,
+  exclusion_patterns: string[]
+): Promise<IRelatedAtom[]> {
+  if (itemId === undefined || title === undefined) {
+    return;
+  }
+
+  // const relatedItems_wikipedia: IRelatedAtom[] =
+  //   await api_getRelatedFromWikipediaFromWeb(title, lang);
+  // const relatedItems_wikidata: IRelatedAtom[] =
+  //   await api_getRelatedFromWikidataFromWeb(itemId, lang);
+
+  const relatedItems_wikipedia: IRelatedAtom[] =
+    await ItemsRelatedFromWikipedia(
+      title,
+      // itemId,
+      amount,
+      ROOT_URL_REST_API,
+      ROOT_URL_ACTION_API,
+      lang,
+      exclusion_patterns
+    );
+
+  const relatedItems_wikidata: IRelatedAtom[] = await ItemsFromWikidata(
+    itemId,
+    ROOT_URL_REST_API,
+    ROOT_URL_ACTION_API,
+    lang,
+    exclusion_patterns
+  );
+
+  const relatedItems = relatedItems_wikidata.concat(relatedItems_wikipedia);
+
+  //Remove duplicated items
+  const relatedItems_no_doubles = new Map();
+  relatedItems.forEach((related) => {
+    relatedItems_no_doubles.set(related.item.id, related);
+  });
+
+  const relatedItems_no_doubles_array: IRelatedAtom[] = Array.from(
+    relatedItems_no_doubles.values()
+  );
+
+  // Remove items containing ":" for Portal or other generic item (main filtered in wikidata fetching)
+  // const relatedItems_no_generic_item: IRelatedAtom[] =
+  //   relatedItems_no_doubles_array.filter((relatedItem) => {
+  //     const exclusion_condition: boolean = relatedItem.item.title.includes(":");
+  //     return !exclusion_condition;
+  //   });
+  // return relatedItems_no_generic_item;
+
+  return relatedItems_no_doubles_array;
+}
+
+/*****
+ *
+ */
+
+async function ItemsRelatedFromWikipedia(
+  title: string,
+  amount: number,
+  ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
+  lang: ConfigLanguage,
+  exclusion_patterns: string[]
 ): Promise<IRelatedAtom[]> {
   const atomsList = await ItemsRelatedFromWikipediaRaw(
     title,
@@ -36,7 +102,14 @@ export async function ItemsRelatedFromWikipedia(
     lang
   );
 
-  let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
+  const atomsList_filtered = filterAtomListFromPatterns(
+    atomsList,
+    exclusion_patterns
+  );
+
+  let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(
+    atomsList_filtered
+  );
   atomsListWithImages = removeBadImages(atomsListWithImages);
 
   atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
@@ -53,11 +126,12 @@ export async function ItemsRelatedFromWikipedia(
   return related;
 }
 
-export async function ItemsFromWikidata(
+async function ItemsFromWikidata(
   itemId: string,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage
+  lang: ConfigLanguage,
+  exclusion_patterns: string[]
 ): Promise<IRelatedAtom[]> {
   //
   async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
@@ -65,13 +139,14 @@ export async function ItemsFromWikidata(
   ): Promise<IAtom[][]> {
     const myBigPromise = await Promise.all(
       list_of_PageTitle_string.map((PageTitle_string: string) => {
-        return ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipedia(
+        return ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
           PageTitle_string,
           ROOT_URL_REST_API,
           ROOT_URL_ACTION_API,
           -1,
           "titles",
-          lang
+          lang,
+          exclusion_patterns
         );
       })
     );
@@ -121,9 +196,10 @@ export async function ItemsFromWikidata(
       }
     );
 
-    const items_chunked: IAtom[][] = await ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
-      list_of_PageTitle_string
-    );
+    const items_chunked: IAtom[][] =
+      await ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
+        list_of_PageTitle_string
+      );
     // const items_flat: IAtom[] = makeArrayFlat(items_chunked)
     const items_flat: IAtom[] = [].concat(...items_chunked);
 
@@ -164,7 +240,7 @@ export async function ItemsFromWikidata(
  * Library
  */
 
-export function my_sparqlQuery_related(
+function my_sparqlQuery_related(
   itemId: string,
   wikidata_language: string
 ): string {
@@ -182,7 +258,7 @@ export function my_sparqlQuery_related(
     MINUS {?Entity wdt:P31 wd:Q4167836.}
     
     ?Entity rdfs:label ?EntityLabel
-    FILTER (LANG(?EntityLabel) = "${wikidata_language}" && ?prop not in (wd:P31,wd:P910,wd:P5008,wd:P735,wd:P5125,wd:P485,wd:P1343,wd:P1424,wd:P21) )
+    FILTER (LANG(?EntityLabel) = "${wikidata_language}" && ?prop not in (wd:P31,wd:P910,wd:P5008,wd:P735,wd:P5125,wd:P485,wd:P1343,wd:P1424,wd:P21,wd:P530) )
             
     SERVICE wikibase:label { bd:serviceParam wikibase:language "${wikidata_language}". }
   }
@@ -191,7 +267,7 @@ export function my_sparqlQuery_related(
   return sparqlQuery;
 }
 
-export function chunk(array: any[], size: number) {
+function chunk(array: any[], size: number) {
   const chunked_arr = [];
   let index = 0;
   while (index < array.length) {
