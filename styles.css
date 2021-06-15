@@ -30,6 +30,7 @@ body {
 
 :root {
   --color-p1: #3490de;
+  /* --color-p1: #de8634; */
   --color1: var(--color-p1);
 
   --g-colorRed0: #ff5247;

@@ -73,10 +73,11 @@ export const configFetching = {
   amount_data_fetched_items: 50,
   max_size_chunk_api: 40,
   amount_related: 10,
-  amount_data_fetched_images: 10,
+  amount_data_fetched_related_for_images: 2,
+  width_image_thumbnail: 300,
   // max_width_image: 1300,
-  max_width_image: 2600,
-  min_width_image: 50,
+  // max_width_image: 2600,
+  // min_width_image: 50,
 };
 
 export const configPaths = {
@@ -90,7 +91,7 @@ export const configPaths = {
   image_logo_B: "/logo2_B.webp",
   image_logo_W_small: "/logo2_W_small.webp",
   // image_logo_B_small: "/logo2_B_small.webp",
-  // image_landing: "/landing.webp",
+  image_landing: "/landing.webp",
   image_install: "/install.webp",
   pages: {
     About: "/About",
@@ -132,3 +133,5 @@ export const configButtonsPath = {
 export const api_issue_text: string = "issue in loging or network";
 
 export const group_name = "group";
+
+export const is_testing_mode = true;

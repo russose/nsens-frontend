@@ -20,6 +20,7 @@ import { initialize } from "../../../src/libs/helpersInitialize";
 import { isInstalled, isMobile } from "../../../src/libs/utils";
 import Installation from "../../../src/components/Installation";
 import Contacts from "../../../src/components/Contacts";
+import { Box, Image } from "gestalt";
 
 const About: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -29,10 +30,13 @@ const About: React.FunctionComponent<IPage> = (props) => {
   const slogan = GUI_CONFIG.language.about.slogan;
   // const description = GUI_CONFIG.language.about.description;
   const path_logo = configPaths.image_logo_B;
-  // const path_image = configPaths.image_landing;
-  const ratio_page = GUI_CONFIG.display.About.ratio_page;
+  const path_image_main = configPaths.image_landing;
   const ratio_logo = GUI_CONFIG.display.About.ratio_logo;
-  // const ratio_image = GUI_CONFIG.display.About.ratio_image;
+  const ratio_image = GUI_CONFIG.display.About.ratio_image;
+
+  const ratio_page = isMobile(GUI_CONFIG.id)
+    ? GUI_CONFIG.display.About.ratio_page_number
+    : GUI_CONFIG.display.About.ratio_page_vh;
 
   const features: IFeature[] = GUI_CONFIG.language.about.features.map(
     (item: object, index: number) => {
@@ -66,26 +70,39 @@ const About: React.FunctionComponent<IPage> = (props) => {
     />
   );
 
+  const main_image = (
+    <Box padding={0} height={ratio_image} width="100%">
+      <Image
+        alt="image"
+        color="transparent"
+        fit="contain"
+        naturalHeight={1}
+        naturalWidth={1}
+        loading="lazy"
+        src={path_image_main}
+      ></Image>
+    </Box>
+  );
+
   return (
-    <>
-      <AppLayout stores={stores}>
-        <HeaderTitle stores={stores} title={slogan} hidden={true} />
-        <AboutLayoutHybrid
-          stores={stores}
-          slogan={slogan}
-          // description={description}
-          path_logo={path_logo}
-          // path_image={path_image}
-          // loginSignup={loginSignup}
-          features={features}
-          ratio_page={ratio_page}
-          ratio_logo={ratio_logo}
-          contacts={contacts}
-          installation_instructions={installation_instructions}
-          // ratio_image={ratio_image}
-        ></AboutLayoutHybrid>
-      </AppLayout>
-    </>
+    <AppLayout stores={stores}>
+      <HeaderTitle stores={stores} title={slogan} hidden={true} />
+      <AboutLayoutHybrid
+        stores={stores}
+        slogan={slogan}
+        // description={description}
+        path_logo={path_logo}
+        main_image={main_image}
+        // path_image={path_image}
+        // loginSignup={loginSignup}
+        features={features}
+        ratio_page={ratio_page}
+        ratio_logo={ratio_logo}
+        contacts={contacts}
+        installation_instructions={installation_instructions}
+        // ratio_image={ratio_image}
+      ></AboutLayoutHybrid>
+    </AppLayout>
   );
 };
 

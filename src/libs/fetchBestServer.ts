@@ -12,10 +12,8 @@ import {
 import { fetch_data_wiki_rest } from "./fetch";
 import {
   buildListStringSeparated,
-  enrichImagesBatchFromWikipediaEN,
-  enrichOneImageFromRelatedWikipediaParallel,
+  filterAndImproveImages,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
-  removeBadImages,
 } from "./fetchBase";
 import { DateToStringWithZero } from "./utils";
 import { writeFileJson } from "./utilsServer";
@@ -56,14 +54,22 @@ export async function ItemsBestYearFromWikipedia(
     );
   }
 
-  let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
-  atomsListWithImages = removeBadImages(atomsListWithImages);
+  // let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
+  // atomsListWithImages = removeBadImages(atomsListWithImages);
 
-  atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
-    atomsListWithImages,
+  // atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
+  //   atomsListWithImages,
+  //   ROOT_URL_REST_API,
+  //   ROOT_URL_ACTION_API,
+  //   lang
+  // );
+
+  const atomsListWithImages = await filterAndImproveImages(
+    atomsList,
     ROOT_URL_REST_API,
     ROOT_URL_ACTION_API,
-    lang
+    lang,
+    exclusion_patterns
   );
 
   return atomsListWithImages;

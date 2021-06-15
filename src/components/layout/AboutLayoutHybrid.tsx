@@ -18,6 +18,7 @@ interface IAboutLayoutHybridProps {
   // description: string;
   // path_background_image: string;
   path_logo: string;
+  main_image: any;
   // path_image: string;
   // loginSignup?: reactComponentT;
   features: IFeature[];
@@ -67,7 +68,9 @@ const AboutLayoutHybrid: React.FunctionComponent<IAboutLayoutHybridProps> = (
           ></Image>
         </Box>
 
-        <Box padding={0} column={12}>
+        {props.main_image}
+
+        <Box padding={2} column={12}>
           <Heading size={header_size} align="center" overflow="normal">
             {props.slogan}
             {/* <Badge position="top" text="beta" /> */}

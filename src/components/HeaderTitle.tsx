@@ -35,13 +35,11 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   );
 
   const display_ =
-    props.hidden === undefined || props.hidden === false
-      ? "block"
-      : "visuallyHidden";
+    props.hidden === undefined || props.hidden === false ? "block" : "none";
   return (
     <>
       {head}
-      <Box display={display_}>
+      <Box display={display_} width="100%">
         <Box padding={2}></Box>
         <Box
           display="flex"

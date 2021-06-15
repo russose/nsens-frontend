@@ -24,7 +24,7 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
         justifyContent="between"
         direction="column"
         height="100vh"
-        // width="100%"
+        // width="100vw"
         color={color_background}
         overflow="auto"
       >
@@ -77,15 +77,6 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
           <></>
         )}
       </Box>
-      {/* {props.left !== undefined ? (
-        <Sticky bottom={120}>
-          <Box padding={0} width="15%">
-            {props.left}
-          </Box>
-        </Sticky>
-      ) : (
-        <></>
-      )} */}
     </>
   );
 };

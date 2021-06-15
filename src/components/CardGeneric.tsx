@@ -55,8 +55,8 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         alt="image"
         color={color_image}
         fit="cover"
-        naturalHeight={1}
-        naturalWidth={1}
+        naturalHeight={3000}
+        naturalWidth={3000}
         loading="lazy"
         src={
           props.image_url === "" || props.image_url === undefined

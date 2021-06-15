@@ -71,8 +71,8 @@ export async function getConfigDataGui(params: any): Promise<IPage> {
       language: configDataFr,
       display: configGUIDesktop.configDataDesktop,
     };
-    GUI_CONFIG__.display.About.features.lgColumn =
-      configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
+    // GUI_CONFIG__.display.About.features.lgColumn =
+    //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
     GUI_CONFIG__.display.atom_sizes.lgColumn =
       configGUISpecialScreen.configDataSpecialScreen.large.atom_sizes_column;
     GUI_CONFIG__.display.knowbook_sizes.lgColumn =
@@ -87,8 +87,8 @@ export async function getConfigDataGui(params: any): Promise<IPage> {
       language: configDataFr,
       display: configGUIDesktop.configDataDesktop,
     };
-    GUI_CONFIG__.display.About.features.lgColumn =
-      configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
+    // GUI_CONFIG__.display.About.features.lgColumn =
+    //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
     GUI_CONFIG__.display.atom_sizes.lgColumn =
       configGUISpecialScreen.configDataSpecialScreen.extra_large.atom_sizes_column;
     GUI_CONFIG__.display.knowbook_sizes.lgColumn =

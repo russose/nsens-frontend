@@ -11,13 +11,14 @@ import {
   configPaths,
   EXCLUSION_PATTERNS,
   IAtom,
+  is_testing_mode,
 } from "../config/globals";
 import { fetchArticle } from "./fetch";
 import { ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia } from "./fetchBase";
 import { getAllConfigGui, getConfigDataGui, IPage } from "./getConfigDataGui";
 import { readFileJson, writeFileJson } from "./utilsServer";
 
-const testing_mode = false;
+const testing_mode = is_testing_mode;
 
 // function cleanString(input: string): string {
 //   return input.replace(/[^a-z0-9]/gi, "").toLowerCase();

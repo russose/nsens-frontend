@@ -2,7 +2,7 @@ import { IStaticKnowbookDefinition } from "./globals";
 
 export const staticKnowbooks: IStaticKnowbookDefinition[] = [
   { nameOrPeriod: "2016-2020", lang: "" },
-  { nameOrPeriod: "2021", lang: "" },
+  // { nameOrPeriod: "2021", lang: "" },
   {
     nameOrPeriod: "Ecologie_Developpement_Durable",
     display: "Ecologie et Développement Durable",

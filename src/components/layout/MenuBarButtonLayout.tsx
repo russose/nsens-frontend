@@ -34,7 +34,7 @@ const MenuBarButtonLayout: React.FunctionComponent<IMenuBarButtonLayoutProps> =
           opacity={1}
         >
           {props.buttons.map((button) => {
-            const display = button.hidden ? "visuallyHidden" : "block";
+            const display = button.hidden ? "none" : "block";
             return (
               <Box
                 key={`'box'-${props.name}-${button.Id}`}

@@ -75,13 +75,14 @@ export const configDataDesktop: configDataDisplay = {
     max_title_size: 33,
   },
   About: {
-    ratio_page: 900,
-    ratio_logo: "10vh",
-    // ratio_image: "30vh",
+    ratio_page_vh: "90vh",
+    ratio_page_number: 0,
+    ratio_logo: "8vh",
+    ratio_image: "30vh",
     header_size: "md",
     features: {
       lgColumn: 3,
-      mdColumn: 5,
+      mdColumn: 3,
       smColumn: 10,
       column: 10,
       padding: 3,

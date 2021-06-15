@@ -197,6 +197,7 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
 
   return (
     <>
+      {/* <Box color="red" height="100vh" width="100vw"></Box> */}
       <PageLayoutHybrid stores={stores} top={top} bottom={bottom}>
         {props.children}
         {free_space_buttom}

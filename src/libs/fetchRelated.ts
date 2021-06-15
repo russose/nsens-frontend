@@ -8,13 +8,10 @@ import {
 import { fetch_data_wikidata } from "./fetch";
 import {
   buildListStringSeparated,
-  enrichImagesBatchFromWikipediaEN,
-  enrichOneImageFromRelatedWikipediaParallel,
+  filterAndImproveImages,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
   ItemsRelatedFromWikipediaRaw,
-  removeBadImages,
 } from "./fetchBase";
-import { filterAtomListFromPatterns } from "./utils";
 
 const max_size_api = configFetching.max_size_chunk_api;
 
@@ -102,21 +99,29 @@ async function ItemsRelatedFromWikipedia(
     lang
   );
 
-  const atomsList_filtered = filterAtomListFromPatterns(
+  // const atomsList_filtered = filterAtomListFromPatterns(
+  //   atomsList,
+  //   exclusion_patterns
+  // );
+
+  // let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(
+  //   atomsList_filtered
+  // );
+  // atomsListWithImages = removeBadImages(atomsListWithImages);
+
+  // atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
+  //   atomsListWithImages,
+  //   ROOT_URL_REST_API,
+  //   ROOT_URL_ACTION_API,
+  //   lang
+  // );
+
+  const atomsListWithImages = await filterAndImproveImages(
     atomsList,
-    exclusion_patterns
-  );
-
-  let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(
-    atomsList_filtered
-  );
-  atomsListWithImages = removeBadImages(atomsListWithImages);
-
-  atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
-    atomsListWithImages,
     ROOT_URL_REST_API,
     ROOT_URL_ACTION_API,
-    lang
+    lang,
+    exclusion_patterns
   );
 
   const related: IRelatedAtom[] = atomsListWithImages.map((item: IAtom) => {

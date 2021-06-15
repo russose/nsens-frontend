@@ -6,7 +6,7 @@ export const URLs = {
   // ROOT_URL_WIKIPEDIA_ACTION: "https://" + LANGUAGE + ".wikipedia.org/w/api.php",
   // ROOT_URL_WIKIPEDIA_REST:
   //   "https://" + LANGUAGE + ".wikipedia.org/api/rest_v1/page/",
-  ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
+  // ROOT_URL_WIKIPEDIA_EN: "https://en.wikipedia.org/w/api.php",
   ROOT_URL_WIKIDATA: "https://query.wikidata.org/sparql",
   ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
 };
