@@ -36,10 +36,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
 
   return (
     <>
-      <Box padding={1} height={height}>
-        {article}
-      </Box>
-      <Box paddingY={3} paddingX={5}>
+      <Box paddingY={0} paddingX={2}>
         <Link
           href={
             ROOT_URL_WIKIPEDIA(props.stores.baseStore.paramsPage.lang) +
@@ -51,6 +48,9 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
             Source: Wikipedia
           </Text>
         </Link>
+      </Box>
+      <Box padding={1} height={height}>
+        {article}
       </Box>
     </>
   );

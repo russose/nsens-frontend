@@ -1,4 +1,4 @@
-import { Box, Image, TapArea } from "gestalt";
+import { Box, Image, TapArea, Sticky } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import SearchBar from "../SearchBar";
@@ -31,13 +31,11 @@ interface IAppLayoutProps {
 
 const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
   const stores = props.stores;
-
   const router = useRouter();
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const path_logo_image = configPaths.image_logo_W_small;
-
-  const navigationMenu = <MenuBarNavigation stores={stores} />;
+  const rounding = stores.baseStore.GUI_CONFIG.display.rounding_menu;
 
   const searchbar = (
     <SearchBar
@@ -66,39 +64,49 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
   let displayMenu;
   let dialogs_Logged;
   if (!stores.baseStore.isLogged) {
-    displayMenu = (
-      <>
-        <MenuBarDisplayNotLogged stores={stores} />
-      </>
-    );
+    displayMenu = <MenuBarDisplayNotLogged stores={stores} />;
     dialogs_Logged = <></>;
   } else {
-    displayMenu = (
-      <>
-        <MenuBarDisplayLoggedDynamic stores={stores} />
-      </>
-    );
-    dialogs_Logged = (
-      <>
-        <DialogsLoggedDynamic stores={stores} />
-      </>
-    );
+    displayMenu = <MenuBarDisplayLoggedDynamic stores={stores} />;
+    dialogs_Logged = <DialogsLoggedDynamic stores={stores} />;
   }
 
-  // const bottom_mobile = navigationMenu;
-  const menuDirection = isMobile(GUI_CONFIG.id) ? "column" : "row";
-  const menu = (
+  const menu_mobile = (
     <Box
       display="flex"
       flex="grow"
-      // direction="column"
-      direction={menuDirection}
+      direction="column"
       alignItems="center"
       justifyContent="center"
     >
-      {/* <Box width="70%">{displayMenu}</Box> */}
-      {displayMenu}
-      {navigationMenu}
+      <Box paddingY={1}>{displayMenu}</Box>
+      <Box width="100%">
+        <MenuBarNavigation stores={stores} rounding={0} />
+      </Box>
+    </Box>
+  );
+
+  const navigation_desktop = (
+    <Box
+      height="100%"
+      padding={0}
+      display="flex"
+      direction="column"
+      justifyContent="center"
+      column={5}
+      smColumn={4}
+      mdColumn={3}
+      lgColumn={2}
+    >
+      <MenuBarNavigation stores={stores} rounding={rounding} />
+    </Box>
+  );
+
+  const display_desktop = !isMobile(GUI_CONFIG.id) && (
+    <Box display="flex" width="100%" justifyContent="center">
+      <Box paddingY={1} column={4} smColumn={4} mdColumn={3} lgColumn={2}>
+        {displayMenu}
+      </Box>
     </Box>
   );
 
@@ -136,69 +144,28 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
 
       <Box>{searchbar}</Box>
 
-      <Box>{menu}</Box>
+      {navigation_desktop}
     </Box>
   );
 
-  // const top_desktop = (
-  //   <>
-  //     <Box
-  //       height="100%"
-  //       padding={2}
-  //       column={2}
-  //       smColumn={2}
-  //       mdColumn={2}
-  //       lgColumn={1}
-  //     >
-  //       {logo_with_tap}
-  //     </Box>
-
-  //     <Box display="flex" column={9} smColumn={9} mdColumn={7} lgColumn={5}>
-  //       <Box column={6} smColumn={6} mdColumn={8} lgColumn={8}>
-  //         <Box
-  //           display="flex"
-  //           flex="grow"
-  //           alignItems="center"
-  //           justifyContent="start"
-  //         >
-  //           {searchbar}
-  //         </Box>
-  //       </Box>
-  //       <Box padding={3} />
-  //       <Box column={6} smColumn={6} mdColumn={4} lgColumn={4}>
-  //         {menu}
-  //       </Box>
-  //     </Box>
-  //   </>
-  // );
-
   let top;
-  let bottom;
+  let bottom = <></>;
   let free_space_buttom;
   if (isMobile(GUI_CONFIG.id)) {
     top = top_mobile;
-    bottom = menu;
+    bottom = menu_mobile;
     if (!router.pathname.includes(configPaths.pages.ItemArticle)) {
-      free_space_buttom = <Box height="30vh" />;
+      free_space_buttom = <Box height="20vh" />;
     }
   } else {
     top = top_desktop;
     free_space_buttom = <> </>;
   }
 
-  // if (
-  //   isMobile(GUI_CONFIG.id) &&
-  //   !router.pathname.includes(configPaths.pages.ItemArticle)
-  // ) {
-  //   free_space_buttom = <Box height="30vh" />;
-  // } else {
-  //   free_space_buttom = <> </>;
-  // }
-
   return (
     <>
-      {/* <Box color="red" height="100vh" width="100vw"></Box> */}
       <PageLayoutHybrid stores={stores} top={top} bottom={bottom}>
+        {display_desktop}
         {props.children}
         {free_space_buttom}
       </PageLayoutHybrid>

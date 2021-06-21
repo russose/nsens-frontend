@@ -20,8 +20,8 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
 ) => {
   const router = useRouter();
 
-  const stores = props.stores;
   const color_menu = configGeneral.colors.menu;
+  const rounding = props.stores.baseStore.GUI_CONFIG.display.rounding_menu;
 
   const display: boolean =
     router.pathname.includes(configPaths.pages.ItemArticle) ||
@@ -41,7 +41,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     },
     {
       Id: ButtonIDType.SAVE,
-      onClick: goUserHandler(stores)(),
+      onClick: goUserHandler(props.stores)(),
       iconColor: configGeneral.colors.iconColorDefault,
     },
     {
@@ -82,11 +82,13 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
 
   const menuBarButton = (
     <MenuBarButtonLayout
-      stores={stores}
+      stores={props.stores}
       name="MenuBarDisplay"
       color={color_menu}
       direction="row"
+      rounding={rounding}
       buttons={button_updated}
+      displayLabel={false}
     />
   );
 

@@ -48,7 +48,7 @@ const Home: React.FunctionComponent<IPage> = (props) => {
   }
   /****************************************************************************/
 
-  const slogan = GUI_CONFIG.language.about.slogan;
+  // const slogan = GUI_CONFIG.language.about.slogan;
 
   let page_content;
   if (!stores.baseStore.isLogged) {
@@ -75,7 +75,7 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={slogan} hidden={true} />
+      <HeaderTitle stores={stores} title={undefined} hidden={true} />
       {page_content}
     </AppLayout>
   );
@@ -84,8 +84,8 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   return await I_getStaticProps(context);
 };
-export const getStaticPaths: GetStaticPaths = async (constext) => {
-  return await I_getStaticPaths(constext);
+export const getStaticPaths: GetStaticPaths = async (context) => {
+  return await I_getStaticPaths(context);
 };
 
 export default observer(Home);

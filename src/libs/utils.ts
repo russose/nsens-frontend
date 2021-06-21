@@ -24,6 +24,9 @@ export function filterAtomListFromPatterns(
   atomList: IAtom[],
   patterns: string[]
 ): IAtom[] {
+  if (atomList === undefined || atomList.length === 0) {
+    return [];
+  }
   let atomList_filterned: IAtom[] = atomList;
   patterns.forEach((pattern: string) => {
     atomList_filterned = atomList_filterned.filter((atom) => {

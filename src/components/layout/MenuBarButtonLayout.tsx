@@ -11,6 +11,9 @@ interface IMenuBarButtonLayoutProps {
   name: string;
   color: ColorT;
   direction: DirectionT;
+  rounding: RoundingT;
+  // width: string;
+  displayLabel: boolean;
   buttons: IButton[];
 }
 
@@ -18,44 +21,48 @@ const MenuBarButtonLayout: React.FunctionComponent<IMenuBarButtonLayoutProps> =
   (props) => {
     const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
     const buttons_all = GUI_CONFIG.language.buttons;
-    const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
+    const rounding_menu: RoundingT = props.rounding;
 
     return (
-      <Box padding={1}>
-        <Box
-          padding={0}
-          color={props.color}
-          display="flex"
-          direction={props.direction}
-          alignItems="center"
-          justifyContent="around"
-          borderStyle="lg"
-          rounding={rounding_menu}
-          opacity={1}
-        >
-          {props.buttons.map((button) => {
-            const display = button.hidden ? "none" : "block";
-            return (
-              <Box
-                key={`'box'-${props.name}-${button.Id}`}
-                alignItems="center"
-                display={display}
-              >
-                <Button
-                  key={`${props.name}-${button.Id}`}
-                  stores={props.stores}
-                  icon={buttons_all[button.Id].icon}
-                  label={buttons_all[button.Id].label}
-                  path={onMenuButtonPath(button.Id)}
-                  iconColor={button.iconColor}
-                  disabled={button.disabled}
-                  onClick={button.onClick}
-                />
-              </Box>
-            );
-          })}
-        </Box>
+      // <Box width="100%">
+      // <Box padding={0}>
+      <Box
+        paddingY={1}
+        color={props.color}
+        display="flex"
+        direction={props.direction}
+        alignItems="center"
+        justifyContent="around"
+        borderStyle="lg"
+        rounding={rounding_menu}
+        opacity={1}
+        // width={props.width}
+      >
+        {props.buttons.map((button) => {
+          const display = button.hidden ? "none" : "block";
+          return (
+            <Box
+              key={`'box'-${props.name}-${button.Id}`}
+              alignItems="center"
+              display={display}
+            >
+              <Button
+                key={`${props.name}-${button.Id}`}
+                stores={props.stores}
+                icon={buttons_all[button.Id].icon}
+                label={buttons_all[button.Id].label}
+                path={onMenuButtonPath(button.Id)}
+                iconColor={button.iconColor}
+                disabled={button.disabled}
+                onClick={button.onClick}
+                displayLabel={props.displayLabel}
+              />
+            </Box>
+          );
+        })}
       </Box>
+      // </Box>
+      // </Box>
     );
   };
 

@@ -1,18 +1,27 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configGeneral, IButton } from "../config/globals";
+import { configGeneral, IButton, RoundingT } from "../config/globals";
 import { ButtonIDType } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 
 interface IMenuBarNavigationProps {
   stores: IStores;
+  rounding: RoundingT;
+  // isMobile: boolean;
 }
 
 const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
   props
 ) => {
   const color_menu = configGeneral.colors.menu;
+
+  // let width = "100%";
+  // let rounding = 0;
+  // if (!props.isMobile) {
+  //   // width = "";
+  //   rounding = props.stores.baseStore.GUI_CONFIG.display.rounding_menu;
+  // }
   const buttons: IButton[] = [
     {
       Id: ButtonIDType.HOME,
@@ -35,7 +44,10 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
       name="NavigationMenuBar"
       color={color_menu}
       direction="row"
+      // width={width}
+      rounding={props.rounding}
       buttons={buttons}
+      displayLabel={true}
     />
   );
 };

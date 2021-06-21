@@ -21,8 +21,15 @@ export async function filterAndImproveImages(
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
+  if (atomsList === undefined || atomsList.length === 0) {
+    return [];
+  }
+  //Remove undefined
+  const atomsList_no_undefined = atomsList.filter((item) => {
+    return item !== undefined;
+  });
   const atomsList_filtered = filterAtomListFromPatterns(
-    atomsList,
+    atomsList_no_undefined,
     exclusion_patterns
   );
   const atomsListWithImages = await improveImageFromWikipediaParallel(
@@ -40,8 +47,8 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFrom
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   nb_items: number,
-  mode: "search" | "titles",
-  //  | "random" | "mostviewed"
+  mode: "search" | "titles" | "random",
+  // | "mostviewed"
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
@@ -58,19 +65,6 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFrom
     ROOT_URL_ACTION_API,
     lang
   );
-
-  // const atomsList_filtered = filterAtomListFromPatterns(
-  //   atomsList,
-  //   exclusion_patterns
-  // );
-
-  // const atomsListWithImages = await improveImageFromWikipediaParallel(
-  //   atomsList_filtered,
-  //   ROOT_URL_ACTION_API,
-  //   ROOT_URL_REST_API,
-  //   lang
-  // );
-
   const atomsListWithImages = await filterAndImproveImages(
     atomsList,
     ROOT_URL_REST_API,
@@ -78,18 +72,6 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFrom
     lang,
     exclusion_patterns
   );
-
-  // let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(
-  //   atomsList_filtered
-  // );
-  // atomsListWithImages = removeBadImages(atomsListWithImages);
-
-  // atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
-  //   atomsListWithImages,
-  //   ROOT_URL_REST_API,
-  //   ROOT_URL_ACTION_API,
-  //   lang
-  // );
 
   return atomsListWithImages;
 }
@@ -111,18 +93,6 @@ export async function ItemsFeaturedCleanImagesFromWikipedia(
     lang
   );
 
-  // let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(
-  //   atomsList_filtered
-  // );
-  // atomsListWithImages = removeBadImages(atomsListWithImages);
-
-  // atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
-  //   atomsListWithImages,
-  //   ROOT_URL_REST_API,
-  //   ROOT_URL_ACTION_API,
-  //   lang
-  // );
-
   const atomsListWithImages = await filterAndImproveImages(
     atomsList,
     ROOT_URL_REST_API,
@@ -130,17 +100,6 @@ export async function ItemsFeaturedCleanImagesFromWikipedia(
     lang,
     exclusion_patterns
   );
-
-  // const atomsList_filtered = filterAtomListFromPatterns(
-  //   atomsList,
-  //   exclusion_patterns
-  // );
-  // const atomsListWithImages = await improveImageFromWikipediaParallel(
-  //   atomsList_filtered,
-  //   ROOT_URL_ACTION_API,
-  //   ROOT_URL_REST_API,
-  //   lang
-  // );
 
   return atomsListWithImages;
 }
@@ -169,8 +128,8 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
   pattern_or_titles: string, //Not used for "random", can be any value
   ROOT_URL_ACTION_API: string,
   nb_atoms: number, //Not used for "titles", can be any value
-  mode: "search" | "titles"
-  //| "random" |"mostviewed"
+  mode: "search" | "titles" | "random"
+  // |"mostviewed"
 ): Promise<string[]> {
   let PARAMS;
 
@@ -194,17 +153,17 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
       titles: pattern_or_titles,
       utf8: 1,
     };
+  } else if (mode === "random") {
+    PARAMS = {
+      action: "query",
+      format: "json",
+      list: "random",
+      utf8: 1,
+      rnnamespace: "0",
+      rnlimit: nb_atoms.toString(),
+    };
   }
-  // else if (mode === "random") {
-  //   PARAMS = {
-  //     action: "query",
-  //     format: "json",
-  //     list: "random",
-  //     utf8: 1,
-  //     rnnamespace: "0",
-  //     rnlimit: nb_atoms.toString(),
-  //   };
-  // } else if (mode === "mostviewed") {
+  //else if (mode === "mostviewed") {
   //   PARAMS = {
   //     action: "query",
   //     format: "json",
@@ -236,15 +195,15 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
         // return "";
         return [];
       }
+    } else if (mode === "random") {
+      if (
+        data["query"] === undefined ||
+        data["query"]["random"] === undefined
+      ) {
+        return [];
+      }
     }
-    // else if (mode === "random") {
-    //   if (
-    //     data["query"] === undefined ||
-    //     data["query"]["random"] === undefined
-    //   ) {
-    //     return [];
-    //   }
-    // } else if (mode === "mostviewed") {
+    //else if (mode === "mostviewed") {
     //   if (
     //     data["query"] === undefined ||
     //     data["query"]["mostviewed"] === undefined
@@ -275,16 +234,16 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
           }
         }
       );
+    } else if (mode === "random") {
+      list_of_Pages_list = data["query"]["random"].map((item: JSONDataT) => {
+        if (item["id"] !== undefined) {
+          return item["id"];
+        } else {
+          return undefined;
+        }
+      });
     }
-    // else if (mode === "random") {
-    //   list_of_Pages_list = data["query"]["random"].map((item: JSONDataT) => {
-    //     if (item["id"] !== undefined) {
-    //       return item["id"];
-    //     } else {
-    //       return undefined;
-    //     }
-    //   });
-    // } else if (mode === "mostviewed") {
+    //else if (mode === "mostviewed") {
     //   const list_of_Pages_title_list = data["query"]["mostviewed"].map(
     //     (item: JSONDataT) => {
     //       if (item["title"] !== undefined) {
@@ -517,6 +476,9 @@ export async function improveImageFromWikipedia(
 
     //Filter svg
     const images_filtered: IImage[] = images.filter((image) => {
+      if (image === undefined) {
+        return false;
+      }
       const extension = image.title.slice(-3);
       return !(extension === "svg" || extension === "SVG");
     });
@@ -542,11 +504,14 @@ export async function improveImageFromWikipedia(
   }
 
   let best_image: IImage;
-  const images = await getAllPageImagesReducedFromWikipediaAction(
+  let images = await getAllPageImagesReducedFromWikipediaAction(
     item.title,
     width_image_thumbnail,
     ROOT_URL_ACTION_API
   );
+  if (images === undefined) {
+    images = [];
+  }
 
   best_image = findImageFromUrl(images, item.image_url);
 
@@ -565,13 +530,17 @@ export async function improveImageFromWikipedia(
       ConfigLanguage.en
     );
     const item_en: IAtom = atomsList[0];
-
-    images_en = await getAllPageImagesReducedFromWikipediaAction(
-      item_en.title,
-      width_image_thumbnail,
-      ROOT_URL_WIKIPEDIA_EN
-    );
-    best_image = findImageFromUrl(images_en, item_en.image_url);
+    if (item_en !== undefined) {
+      images_en = await getAllPageImagesReducedFromWikipediaAction(
+        item_en.title,
+        width_image_thumbnail,
+        ROOT_URL_WIKIPEDIA_EN
+      );
+      if (images_en === undefined) {
+        images_en = [];
+      }
+      best_image = findImageFromUrl(images_en, item_en.image_url);
+    }
   }
 
   if (best_image === undefined && images.length > 0) {
@@ -583,13 +552,17 @@ export async function improveImageFromWikipedia(
   }
   if (best_image === undefined) {
     //Finalyze with related items
-    const items_related: IAtom[] = await ItemsRelatedFromWikipediaRaw(
+    let items_related: IAtom[] = await ItemsRelatedFromWikipediaRaw(
       item.title,
       amount_data_fetched_related_for_images,
       ROOT_URL_REST_API,
       ROOT_URL_ACTION_API,
       lang
     );
+
+    items_related = items_related.filter((item) => {
+      return item !== undefined;
+    });
 
     for (const item_related of items_related) {
       // if (best_image === undefined) {
@@ -627,8 +600,11 @@ export async function improveImageFromWikipediaParallel(
   ROOT_URL_REST_API: string,
   lang: ConfigLanguage
 ): Promise<IAtom[]> {
-  if (list_information_atoms.length === 0) {
-    return list_information_atoms;
+  if (
+    list_information_atoms === undefined ||
+    list_information_atoms.length === 0
+  ) {
+    return [];
   }
 
   const myBigPromise = await Promise.all(
@@ -644,190 +620,6 @@ export async function improveImageFromWikipediaParallel(
 
   return myBigPromise;
 }
-
-/**
- * Images OLD
- */
-
-// export function removeBadImages(list_information_atoms: IAtom[]): IAtom[] {
-//   const list_information_atoms_updated: IAtom[] = [];
-//   list_information_atoms.forEach((item) => {
-//     const item_updated = item;
-//     if (
-//       item.image_url === empty_value_atom ||
-//       // item.image_width > 2 * CONFIG_FETCHING.max_width_image ||
-//       item.image_width > configFetching.max_width_image ||
-//       !["jpg", "JPG", "png", "PNG", "tif", "TIF", "svg", "SVG"].includes(
-//         item.image_url.slice(-3)
-//       )
-//     ) {
-//       item_updated.image_url = empty_value_atom;
-//     }
-//     list_information_atoms_updated.push(item_updated);
-//   });
-//   return list_information_atoms_updated;
-// }
-
-// /**
-//  * Get Images improved one by one
-//  */
-
-// //From Wikipedia Related
-// export async function enrichOneImageFromRelatedWikipedia(
-//   item: IAtom,
-//   ROOT_URL_REST_API: string,
-//   ROOT_URL_ACTION_API: string,
-//   lang: ConfigLanguage
-// ): Promise<IAtom> {
-//   if (item.image_url !== empty_value_atom) {
-//     return item;
-//   }
-
-//   const items_related: IAtom[] = await ItemsRelatedFromWikipediaRaw(
-//     item.title,
-//     // item.id,
-//     amount_data_fetched_related_for_images,
-//     ROOT_URL_REST_API,
-//     ROOT_URL_ACTION_API,
-//     lang
-//   );
-
-//   const items_related_images_url: string[] = removeBadImages(items_related)
-//     .map((item: IAtom) => {
-//       return item.image_url;
-//     })
-//     .filter((url) => {
-//       return url !== empty_value_atom;
-//     });
-
-//   try {
-//     if (items_related_images_url.length !== 0) {
-//       item.image_url = items_related_images_url[0];
-//     }
-//   } catch (error) {
-//     // console.log(error);
-//     return item;
-//   }
-
-//   return item;
-// }
-
-// export async function enrichImagesBatchFromWikipediaEN(
-//   list_information_atoms: IAtom[]
-// ): Promise<IAtom[]> {
-//   if (
-//     list_information_atoms === undefined ||
-//     list_information_atoms.length === 0
-//   ) {
-//     return list_information_atoms;
-//   }
-
-//   //Build list of items without images (for querry)
-//   const list_of_title_en_string_list = list_information_atoms.map((item) => {
-//     if (
-//       item["title_en"] !== empty_value_atom &&
-//       (item["image_url"] === empty_value_atom ||
-//         item["image_width"] > configFetching.max_width_image)
-//     ) {
-//       return item["title_en"];
-//     } else {
-//       return undefined;
-//     }
-//   });
-
-//   const list_of_title_en_string = buildListStringSeparated(
-//     list_of_title_en_string_list
-//   );
-//   if (list_of_title_en_string === "") {
-//     return list_information_atoms;
-//   }
-
-//   try {
-//     //Obtenir les images de Wikipedia EN
-//     const PARAMS = {
-//       action: "query",
-//       format: "json",
-//       prop: "pageimages",
-//       utf8: 1,
-//       titles: list_of_title_en_string,
-//       piprop: "original|thumbnail",
-//       pilicense: "free",
-//     };
-//     const data = await fetch_data_wikipedia_action(
-//       ROOT_URL_WIKIPEDIA_EN,
-//       PARAMS,
-//       false
-//     );
-
-//     if (data["query"]["pages"] === undefined) {
-//       return list_information_atoms;
-//     }
-//     const atoms_where_image_found: IAtom[] = [];
-//     Object.values(data["query"]["pages"]).forEach((item: JSONDataT) => {
-//       //Find the atom to update in list_information_atoms
-//       const atom = list_information_atoms.filter((atom) => {
-//         return atom.title_en === item["title"];
-//       })[0];
-
-//       if (atom !== undefined) {
-//         if (item["thumbnail"] !== undefined) {
-//           atom.thumbnail_url = item["thumbnail"]["source"];
-//         }
-//         if (item["original"] !== undefined) {
-//           atom.image_url = item["original"]["source"];
-//           atom.image_height = item["original"]["height"];
-//           atom.image_width = item["original"]["width"];
-//           atoms_where_image_found.push(atom);
-//           //console.log("image trouvé sur EN pour:", atom.title, atom.image_url);
-//         } else {
-//           //console.log("no image for:", item["title"]);
-//         }
-//       }
-//     });
-
-//     const list_information_atoms_updated = list_information_atoms.map(
-//       (item) => {
-//         let item_updated = item;
-
-//         for (const item_image_completed of atoms_where_image_found) {
-//           if (item_image_completed.title_en === item.title_en) {
-//             item_updated = item_image_completed;
-//             break;
-//           }
-//         }
-//         return item_updated;
-//       }
-//     );
-//     return list_information_atoms_updated;
-//   } catch (error) {
-//     // console.log(error);
-//     return list_information_atoms;
-//   }
-// }
-
-// export async function enrichOneImageFromRelatedWikipediaParallel(
-//   list_information_atoms: IAtom[],
-//   ROOT_URL_REST_API: string,
-//   ROOT_URL_ACTION_API: string,
-//   lang: ConfigLanguage
-// ): Promise<IAtom[]> {
-//   if (list_information_atoms.length === 0) {
-//     return list_information_atoms;
-//   }
-
-//   const myBigPromise = await Promise.all(
-//     list_information_atoms.map((item: IAtom) => {
-//       return enrichOneImageFromRelatedWikipedia(
-//         item,
-//         ROOT_URL_REST_API,
-//         ROOT_URL_ACTION_API,
-//         lang
-//       );
-//     })
-//   );
-
-//   return myBigPromise;
-// }
 
 /**
  * Related Items

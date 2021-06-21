@@ -54,16 +54,6 @@ export async function ItemsBestYearFromWikipedia(
     );
   }
 
-  // let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(atomsList);
-  // atomsListWithImages = removeBadImages(atomsListWithImages);
-
-  // atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
-  //   atomsListWithImages,
-  //   ROOT_URL_REST_API,
-  //   ROOT_URL_ACTION_API,
-  //   lang
-  // );
-
   const atomsListWithImages = await filterAndImproveImages(
     atomsList,
     ROOT_URL_REST_API,
@@ -315,21 +305,6 @@ async function ItemsBestYearFromWikipediaRaw(
         lang,
         exclusion_patterns
       );
-
-    // const list_of_PageIds = await idsFromSearchOrRandomOrTitlesFromWikipedia(
-    //   list_of_PageTitles_string,
-    //   ROOT_URL_ACTION_API,
-    //   amount,
-    //   "titles"
-    // );
-
-    // const list_of_PageIds_string = buildListStringSeparated(list_of_PageIds);
-
-    // let atomsList = await getAtomsFromWikipediaAction(
-    //   list_of_PageIds_string,
-    //   ROOT_URL_ACTION_API,
-    //   lang
-    // );
 
     // remettre dans l'ordre decroissant de vue
     const use_dangerous_sorting = false;

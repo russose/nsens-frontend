@@ -2,6 +2,8 @@
 
 import { ConfigLanguage } from "./globals";
 
+export const is_testing_mode = false;
+
 export const CONFIG_ENV = {
   BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
   FRONT_URL: process.env.NEXT_PUBLIC_FRONT_URL,
@@ -31,7 +33,10 @@ export const configGeneral = {
   },
   successMessage: "you can now login...",
   loginDuration: 2000,
-  ratio_related_feed: 0.7,
+  feed: {
+    ratio_related: 0.7,
+    ratio_mostviewed_over_randow: 1, //when 0.5, as many mostviewed as random
+  },
 };
 
 export function EXCLUSION_PATTERNS(lang: ConfigLanguage): string[] {
@@ -75,9 +80,6 @@ export const configFetching = {
   amount_related: 10,
   amount_data_fetched_related_for_images: 2,
   width_image_thumbnail: 300,
-  // max_width_image: 1300,
-  // max_width_image: 2600,
-  // min_width_image: 50,
 };
 
 export const configPaths = {
@@ -116,9 +118,6 @@ export const configPaths = {
   },
 };
 
-// export const path_base_knowbooks = "public_content/knowbooks/";
-// export const path_base_articles = "public_content/articles/";
-
 export const configButtonsPath = {
   HOME: configPaths.pages.Home,
   KNOWBOOKS: configPaths.pages.Knowbooks,
@@ -133,5 +132,3 @@ export const configButtonsPath = {
 export const api_issue_text: string = "issue in loging or network";
 
 export const group_name = "group";
-
-export const is_testing_mode = true;

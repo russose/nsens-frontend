@@ -13,6 +13,7 @@ import {
   IAtom,
   IRelatedAtom,
   IStaticKnowbookDefinition,
+  is_testing_mode,
 } from "../config/globals";
 import { api_getRelatedFromWeb } from "./apiRelated";
 import {
@@ -83,7 +84,7 @@ async function getConfigDataGuiStaticKnowbooks(
   const date = new Date();
   const current_year = date.getFullYear();
 
-  if (nameOrPeriod !== DateToStringWithZero(current_year)) {
+  if (nameOrPeriod !== DateToStringWithZero(current_year) || is_testing_mode) {
     try {
       const staticKnowbook: any = await readFileJson(static_path);
       // console.log(static_path + " used from cache");

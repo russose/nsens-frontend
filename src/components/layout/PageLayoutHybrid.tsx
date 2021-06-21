@@ -14,42 +14,53 @@ interface IPageLayoutProps {
 const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
   const color_top: ColorT = configGeneral.colors.top;
   const color_background: ColorT = configGeneral.colors.background;
+  const heightHeader =
+    props.stores.baseStore.GUI_CONFIG.display.layout.heightHeader;
+  const heightBody =
+    props.stores.baseStore.GUI_CONFIG.display.layout.heightBody;
 
   return (
     <>
       <Box
         padding={0}
-        display="flex"
-        alignItems="center"
-        justifyContent="between"
-        direction="column"
+        // display="flex"
+        // display="inlineBlock"
+        // alignItems="center"
+        // justifyContent="between"
+        // direction="column"
         height="100vh"
-        // width="100vw"
+        width="100%"
+        // flex="grow"
         color={color_background}
-        overflow="auto"
+        // overflow="auto"
       >
         <Box
-          // column={12}
-          // smColumn={12}
-          // mdColumn={12}
-          // lgColumn={12}
+          padding={1}
+          color={color_top}
+          height={heightHeader}
           width="100%"
+          // height="6vh"
+          display="flex"
+          direction="row"
+          // flex="grow"
+          // alignItems="center"
+          // justifyContent="between"
         >
-          <Sticky top={0}>
-            <Box
-              padding={1}
-              color={color_top}
-              height={55}
-              // height="6vh"
-              display="flex"
-              flex="grow"
-              alignItems="center"
-              justifyContent="between"
-            >
-              {props.top}
-            </Box>
-          </Sticky>
+          {props.top}
+        </Box>
+        <Box
+          padding={0}
+          height={heightBody}
+          width="100%"
+          overflow="auto"
+          // height="6vh"
+          // display="flex"
+          // direction="column"
+          // flex="grow"
 
+          // alignItems="center"
+          // justifyContent="between"
+        >
           <Box
             display="flex"
             flex="grow"
@@ -69,13 +80,9 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
             </Box>
           </Box>
         </Box>
-        {props.bottom !== undefined ? (
-          <Sticky bottom={70}>
-            <Box>{props.bottom}</Box>
-          </Sticky>
-        ) : (
-          <></>
-        )}
+        <Box padding={0} position="fixed" bottom width="100%">
+          {props.bottom}
+        </Box>
       </Box>
     </>
   );

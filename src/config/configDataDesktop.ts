@@ -17,9 +17,13 @@ export const configDataDesktop: configDataDisplay = {
   heightChangePassword: "40vh",
   rounding_menu: 4,
   rounding_item: 6,
-  size_icon_menu: "sm",
+  size_icon_menu: "xs",
   size_icon_card: "sm",
   header_size: "sm",
+  layout: {
+    heightHeader: "4%",
+    heightBody: "96%",
+  },
   dialogs: {
     title_size: "lg",
     texfield_size: "md",

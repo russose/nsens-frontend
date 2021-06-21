@@ -16,7 +16,10 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_headers = configGeneral.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
-  const title_page = "n.Sens" + " - " + props.title;
+  let title_page = "n.Sens";
+  if (props.title !== undefined) {
+    title_page = title_page + " - " + props.title;
+  }
 
   // const description = GUI_CONFIG.language.landing.description;
 

@@ -143,8 +143,8 @@ const User: React.FunctionComponent<IPage> = (props) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   return await I_getStaticProps(context);
 };
-export const getStaticPaths: GetStaticPaths = async (constext) => {
-  return await I_getStaticPaths(constext);
+export const getStaticPaths: GetStaticPaths = async (context) => {
+  return await I_getStaticPaths(context);
 };
 
 export default observer(User);

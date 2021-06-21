@@ -99,23 +99,6 @@ async function ItemsRelatedFromWikipedia(
     lang
   );
 
-  // const atomsList_filtered = filterAtomListFromPatterns(
-  //   atomsList,
-  //   exclusion_patterns
-  // );
-
-  // let atomsListWithImages = await enrichImagesBatchFromWikipediaEN(
-  //   atomsList_filtered
-  // );
-  // atomsListWithImages = removeBadImages(atomsListWithImages);
-
-  // atomsListWithImages = await enrichOneImageFromRelatedWikipediaParallel(
-  //   atomsListWithImages,
-  //   ROOT_URL_REST_API,
-  //   ROOT_URL_ACTION_API,
-  //   lang
-  // );
-
   const atomsListWithImages = await filterAndImproveImages(
     atomsList,
     ROOT_URL_REST_API,

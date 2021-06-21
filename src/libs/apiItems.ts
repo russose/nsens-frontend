@@ -10,7 +10,7 @@ import {
 } from "../config/configURLs";
 import { fetch_data_local } from "./fetch";
 
-export const max_amount_data_fetched_items =
+export const amount_data_fetched_items =
   configFetching.amount_data_fetched_items;
 
 /**
@@ -27,7 +27,7 @@ export async function api_searchFromWeb(
       searchPattern,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),
-      max_amount_data_fetched_items,
+      amount_data_fetched_items,
       "search",
       lang,
       exclusion_patterns
@@ -50,6 +50,27 @@ export async function api_getItemsFromTitlesFromWeb(
       ROOT_URL_WIKIPEDIA_ACTION(lang),
       -1,
       "titles",
+      lang,
+      exclusion_patterns
+    );
+  } catch (error) {
+    // console.log(error);
+    return [];
+  }
+}
+
+export async function api_getItemsRandomFromWeb(
+  lang: ConfigLanguage,
+  exclusion_patterns: string[],
+  amount: number
+): Promise<IAtom[]> {
+  try {
+    return ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
+      "is empty",
+      ROOT_URL_WIKIPEDIA_REST(lang),
+      ROOT_URL_WIKIPEDIA_ACTION(lang),
+      amount,
+      "random",
       lang,
       exclusion_patterns
     );
@@ -105,22 +126,6 @@ export async function api_getStaticKnowbooksLocal(
 //       ROOT_URL_WIKIPEDIA_ACTION(lang),
 //       max_amount_data_fetched_items,
 //       "mostviewed",
-//       lang
-//     );
-//   } catch (error) {
-//     // console.log(error);
-//     return [];
-//   }
-// }
-
-// export async function _randomFromWeb(lang: ConfigLanguage): Promise<IAtom[]> {
-//   try {
-//     return ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
-//       "is empty",
-//       ROOT_URL_WIKIPEDIA_REST(lang),
-//       ROOT_URL_WIKIPEDIA_ACTION(lang),
-//       max_amount_data_fetched_items,
-//       "random",
 //       lang
 //     );
 //   } catch (error) {

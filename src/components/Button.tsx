@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton } from "gestalt";
+import { Box, IconButton, Text } from "gestalt";
 import { ColorT, IconT, IparamsAtom, SizeT } from "../config/globals";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
@@ -13,6 +13,8 @@ interface IButtonProps {
   path: string;
   iconColor?: ColorT;
   disabled?: boolean;
+
+  displayLabel: boolean;
 
   onClick?: () => {};
 }
@@ -40,34 +42,51 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
     query_ = props.stores.baseStore.paramsPage;
   }
 
+  let labetText = <></>;
+  if (props.displayLabel) {
+    labetText = (
+      <Box paddingY={0}>
+        <Text size={"sm"} weight="bold">
+          {props.label}
+        </Text>
+      </Box>
+    );
+  }
+
   return path_ === path_empty ? (
-    <IconButton
-      accessibilityLabel={props.label}
-      icon={props.icon}
-      iconColor={iconColor_}
-      size={icon_size}
-      onClick={onClick_}
-      disabled={disabled_}
-    />
+    <Box paddingX={0} display="flex" direction="column" alignItems="center">
+      <IconButton
+        accessibilityLabel={props.label}
+        icon={props.icon}
+        iconColor={iconColor_}
+        size={icon_size}
+        onClick={onClick_}
+        disabled={disabled_}
+      />
+      {labetText}
+    </Box>
   ) : (
-    <Link
-      prefetch={false}
-      href={{
-        pathname: configPaths.rootPath + props.path,
-        // query: props.stores.baseStore.paramsPage as any,
-        query: query_ as any,
-      }}
-      passHref
-    >
-      <a>
-        <IconButton
-          accessibilityLabel={props.label}
-          icon={props.icon}
-          iconColor={iconColor_}
-          size={icon_size}
-        />
-      </a>
-    </Link>
+    <Box paddingY={0} display="flex" direction="column" alignItems="center">
+      <Link
+        prefetch={false}
+        href={{
+          pathname: configPaths.rootPath + props.path,
+          // query: props.stores.baseStore.paramsPage as any,
+          query: query_ as any,
+        }}
+        passHref
+      >
+        <a>
+          <IconButton
+            accessibilityLabel={props.label}
+            icon={props.icon}
+            iconColor={iconColor_}
+            size={icon_size}
+          />
+        </a>
+      </Link>
+      {labetText}
+    </Box>
   );
 };
 

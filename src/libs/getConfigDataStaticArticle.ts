@@ -20,10 +20,6 @@ import { readFileJson, writeFileJson } from "./utilsServer";
 
 const testing_mode = is_testing_mode;
 
-// function cleanString(input: string): string {
-//   return input.replace(/[^a-z0-9]/gi, "").toLowerCase();
-// }
-
 export interface IPageStaticArticle extends IPage {
   id: AtomID;
   title: string;
@@ -110,9 +106,6 @@ async function getConfigDataStaticArticles(
     const guiConfigDataStaticArticles = {
       guiConfigData: (await getConfigDataGui({ lang: lang, display: display }))
         .guiConfigData,
-      // id: json.id,
-      // title: json.title,
-      // articleContent: json.articleContent,
       ...article,
     };
     return guiConfigDataStaticArticles;
@@ -145,18 +138,9 @@ async function getConfigDataStaticArticles(
 
   await writeFileJson(static_path_articles, article);
 
-  // await writeFileJson(static_path_articles, {
-  //   id: item.id,
-  //   title: title,
-  //   articleContent: articleContent,
-  // });
-
   const guiConfigDataStaticArticles = {
     guiConfigData: (await getConfigDataGui({ lang: lang, display: display }))
       .guiConfigData,
-    // id: item.id,
-    // title: title,
-    // articleContent: articleContent,
     ...article,
   };
 
