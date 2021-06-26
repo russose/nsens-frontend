@@ -19,17 +19,17 @@ export function initialize(stores: IStores, GUI_CONFIG: IGUICONFIG) {
 
 async function initializeApp(stores: IStores) {
   try {
+    stores.uiStore.setShowLoading(true);
     const user = await api_getUser();
     stores.baseStore.setUser({ username: user });
-    stores.uiStore.setShowLoading(true);
     if (!stores.baseStore.isLogged) {
-      // await initializeUserData(stores);
-      initializeUserData(stores);
+      await initializeUserData(stores);
+      // initializeUserData(stores);
     } else {
       const initializeUserDataLogged = await import(
         "./helpersInitializeLogged"
       );
-      initializeUserDataLogged.initializeUserDataLogged(stores);
+      await initializeUserDataLogged.initializeUserDataLogged(stores);
       // await initializeUserDataLogged(stores);
     }
     stores.uiStore.setShowLoading(false);

@@ -7,6 +7,7 @@ export async function readFileJson(path: string): Promise<object> {
 }
 
 export async function writeFileJson(path: string, data: object) {
-  const jsondata = JSON.stringify(data, null, 2);
+  const jsondata = JSON.stringify(data);
+  // const jsondata = JSON.stringify(data, null, 2);
   writeFile(path, jsondata, "utf8");
 }

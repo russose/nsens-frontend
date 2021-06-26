@@ -28,8 +28,15 @@ Allow from all
         Header set Cache-Control "max-age=86400, public"
     </FilesMatch>
 
-	<FilesMatch "\.(json)$">
+    <FilesMatch "\.(txt)$">
         Header set Cache-Control "max-age=86400, public"
     </FilesMatch>
 
+	<FilesMatch "\.(json|js)$">
+        Header set Cache-Control "max-age=604800, public"
+    </FilesMatch>
+
+
+
 </IfModule>
+

@@ -79,7 +79,7 @@ async function getConfigDataGuiStaticKnowbooks(
   const exclusion_patterns_items: string[] = EXCLUSION_PATTERNS(lang);
 
   const static_path =
-    configPaths.static.knowbooks + lang + "/" + nameOrPeriod + ".json";
+    configPaths.static.knowbooks + lang + "/" + nameOrPeriod + ".txt";
 
   const date = new Date();
   const current_year = date.getFullYear();

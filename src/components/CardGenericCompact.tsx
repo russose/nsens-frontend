@@ -106,7 +106,7 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
         </Box>
 
         <Box padding={2}>
-          <Text size={title_card_size} align="left" weight="bold">
+          <Text size={title_card_size} align="start" weight="bold">
             {title}
           </Text>
         </Box>

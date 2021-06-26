@@ -9,7 +9,7 @@ const Index: React.FunctionComponent<IPage> = (props) => {
   goPage(
     {
       lang: ConfigLanguage.fr,
-      display: ConfigDisplay.desktop,
+      display: ConfigDisplay.mobile,
     },
     configPaths.pages.Home
   );

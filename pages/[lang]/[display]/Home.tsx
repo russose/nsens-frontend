@@ -23,6 +23,8 @@ const CardAtomGridLoggedDynamic = dynamic(
 );
 
 const Home: React.FunctionComponent<IPage> = (props) => {
+  console.log(props.children);
+
   const stores = useStores();
   const GUI_CONFIG = props.guiConfigData;
   /****************************************************************************/

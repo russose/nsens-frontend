@@ -165,7 +165,7 @@ export function goPage(
   reload: boolean = false
 ) {
   if (process.browser) {
-    Router.push({
+    Router.replace({
       pathname: configPaths.rootPath + page,
       query: paramsPage as any,
     });

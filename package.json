@@ -27,8 +27,8 @@
     "@visx/text": "^1.7.0",
     "@visx/zoom": "^1.7.0",
     "axios": "^0.21.1",
-    "d3-force": "^2.1.1",
-    "gestalt": "^22.6.1",
+    "d3-force": "^3.0.0",
+    "gestalt": "^27.2.1",
     "mobx": "^6.1.8",
     "mobx-react-lite": "^3.2.0",
     "next": "^10.0.8",
@@ -36,14 +36,14 @@
     "react-dom": "^16.0.0"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^10.1.3",
+    "@next/bundle-analyzer": "^11.0.1",
     "@types/d3-force": "^2.1.1",
-    "@types/gestalt": "^21.0.0",
+    "@types/gestalt": "^27.2.0",
     "@types/node": "^15.0.1",
     "@types/react": "^17.0.3",
-    "dependency-cruiser": "^9.25.1",
+    "dependency-cruiser": "^10.0.2",
     "next-sitemap": "^1.6.20",
-    "serve": "^11.3.2",
+    "serve": "^12.0.0",
     "typescript": "^4.2.3"
   },
   "comments": {

@@ -130,7 +130,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       //
     >
       <Box paddingX={2} paddingY={1} width="60%">
-        <Text size={title_card_size} align="left" weight="bold">
+        <Text size={title_card_size} align="start" weight="bold">
           {title}
         </Text>
       </Box>

@@ -83,7 +83,7 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
             passHref
           >
             <a>
-              <Text align="right" size="sm" weight="bold">
+              <Text align="end" size="sm" weight="bold">
                 {props.missing_password_text}
               </Text>
             </a>

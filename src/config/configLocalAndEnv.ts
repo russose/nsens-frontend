@@ -2,7 +2,7 @@
 
 import { ConfigLanguage } from "./globals";
 
-export const is_testing_mode = false;
+export const is_testing_mode = true;
 
 export const CONFIG_ENV = {
   BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,

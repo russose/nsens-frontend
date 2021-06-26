@@ -47,7 +47,7 @@ async function getAllConfigStaticArticles() {
         });
         if (testing_mode) {
           item_title_list = item_title_list.concat(
-            item_title_list_increment.slice(0, 3)
+            item_title_list_increment.slice(0, 2)
           );
         } else {
           item_title_list = item_title_list.concat(item_title_list_increment);

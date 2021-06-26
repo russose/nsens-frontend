@@ -134,7 +134,7 @@ export async function fetch_data_local(
     },
     // baseURL: ROOT_URL + "related/",
     baseURL: CONFIG_ENV.FRONT_URL,
-    url: "/staticKnowbooks" + "/" + lang + "/" + name + ".json",
+    url: "/staticKnowbooks" + "/" + lang + "/" + name + ".txt",
   });
 
   const data = await res.data;
