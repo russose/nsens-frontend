@@ -1,10 +1,20 @@
-module.exports = {
+const withPWA = require("next-pwa");
+const runtimeCaching = require("./runtimeCaching");
+
+module.exports = withPWA({
   trailingSlash: true,
   reactStrictMode: true,
   future: {
     webpack5: true,
   },
-};
+  pwa: {
+    dest: "public",
+    disable: process.env.NODE_ENV === "development",
+    runtimeCaching: runtimeCaching,
+    // dynamicStartUrl=false,
+    // cacheOnFrontEndNav: true,
+  },
+});
 
 // To use bundle-analyzer, uncomment and see ./next/analyse directory
 

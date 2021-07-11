@@ -12,32 +12,36 @@ import {
 import { IStores } from "../stores/RootStore";
 
 /*******************Logo*************************** */
-export const onTapLogo = (
-  stores: IStores
-  // GUI_CONFIG: GUI_CONFIG_T
-) => (): void => {
-  // const itemId = stores.baseStore.getRandomItemIdFromAnywhere(stores);
-  // const item = stores.baseStore.getItemFromAnywhere(itemId, stores);
+export const onTapLogo =
+  (
+    stores: IStores
+    // GUI_CONFIG: GUI_CONFIG_T
+  ) =>
+  (): void => {
+    // const itemId = stores.baseStore.getRandomItemIdFromAnywhere(stores);
+    // const item = stores.baseStore.getItemFromAnywhere(itemId, stores);
 
-  //Go Article Page
-  // stores.baseStore.goPageArticle(
-  //   stores.baseStore.paramsPage,
-  //   itemId,
-  //   item.title,
-  //   GUI_CONFIG
-  // );
-  goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
-};
+    //Go Article Page
+    // stores.baseStore.goPageArticle(
+    //   stores.baseStore.paramsPage,
+    //   itemId,
+    //   item.title,
+    //   GUI_CONFIG
+    // );
+    goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
+    const amount_item_displayed =
+      stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+    setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+  };
 
 /*******************Searchbar*************************** */
 
-export const onSearchHomeText = (stores: IStores) => (input: {
-  value: string;
-  syntheticEvent: eventT;
-}): void => {
-  stores.uiStore.setSearchPattern(input.value);
-  // console.log(uiStore.searchPattern);
-};
+export const onSearchHomeText =
+  (stores: IStores) =>
+  (input: { value: string; syntheticEvent: eventT }): void => {
+    stores.uiStore.setSearchPattern(input.value);
+    // console.log(uiStore.searchPattern);
+  };
 
 export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   if (stores.uiStore.searchPattern.length > 0) {
@@ -50,22 +54,21 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
 };
 
-export const onSearchHomeKeyboard = (stores: IStores) => (input: {
-  event: eventT;
-  value: string;
-}): void => {
-  if (input.event.key === "Enter") {
-    if (stores.uiStore.searchPattern.length === 0) {
-      const amount_item_displayed =
-        stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
-      setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
-    } else {
-      onSearchHomeSubmit(stores)();
+export const onSearchHomeKeyboard =
+  (stores: IStores) =>
+  (input: { event: eventT; value: string }): void => {
+    if (input.event.key === "Enter") {
+      if (stores.uiStore.searchPattern.length === 0) {
+        const amount_item_displayed =
+          stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+        setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+      } else {
+        onSearchHomeSubmit(stores)();
+      }
+    } else if (input.event.key === "Escape") {
+      stores.uiStore.setSearchPattern("");
     }
-  } else if (input.event.key === "Escape") {
-    stores.uiStore.setSearchPattern("");
-  }
-};
+  };
 
 /*******************Navigation*************************** */
 

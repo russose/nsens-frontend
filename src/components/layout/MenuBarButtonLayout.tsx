@@ -24,8 +24,6 @@ const MenuBarButtonLayout: React.FunctionComponent<IMenuBarButtonLayoutProps> =
     const rounding_menu: RoundingT = props.rounding;
 
     return (
-      // <Box width="100%">
-      // <Box padding={0}>
       <Box
         paddingY={1}
         color={props.color}
@@ -61,8 +59,6 @@ const MenuBarButtonLayout: React.FunctionComponent<IMenuBarButtonLayoutProps> =
           );
         })}
       </Box>
-      // </Box>
-      // </Box>
     );
   };
 

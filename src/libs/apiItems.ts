@@ -1,4 +1,4 @@
-import { IAtom, ConfigLanguage } from "../config/globals";
+import { IAtom, ConfigLanguage, configPaths } from "../config/globals";
 import {
   ItemsFeaturedCleanImagesFromWikipedia,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
@@ -108,7 +108,14 @@ export async function api_getStaticKnowbooksLocal(
   lang: ConfigLanguage
 ): Promise<object> {
   try {
-    return fetch_data_local(name, lang);
+    return fetch_data_local(
+      configPaths.static.knowbooks.split("/")[1] +
+        "/" +
+        lang +
+        "/" +
+        name +
+        ".txt"
+    );
   } catch (error) {
     // console.log(error);
     return [];

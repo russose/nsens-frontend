@@ -7,3 +7,6 @@ node_modules/
 build/
 tmp/
 temp/
+public/sw.js
+public/workbox-*.js
+frontend-static.tar.bz2

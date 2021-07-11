@@ -6,7 +6,7 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigDataGui";
+} from "../../../src/libs/getDataParamsPage";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { Box, Button } from "gestalt";
@@ -17,18 +17,20 @@ import {
   onChangePassword_text,
 } from "../../../src/handlers/handlers_ChangePassword";
 import { configPaths } from "../../../src/config/globals";
-import { initialize } from "../../../src/libs/helpersInitialize";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 import { goPage } from "../../../src/libs/helpersBase";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  initialize(stores, GUI_CONFIG);
-  // stores.userStore.initializeAppWithoutDataAndGoPage(
-  //   GUI_CONFIG,
-  //   paths.pages.ChangePassword
-  // );
 
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
+
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const title = GUI_CONFIG.language.changePassword.title;
   const placeholder_username =
     GUI_CONFIG.language.user.loginSignup.username_placeholder;

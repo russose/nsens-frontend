@@ -7,7 +7,7 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigDataGui";
+} from "../../../src/libs/getDataParamsPage";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import {
@@ -16,7 +16,7 @@ import {
   getTwitter,
   IFeature,
 } from "../../../src/config/globals";
-import { initialize } from "../../../src/libs/helpersInitialize";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 import { isInstalled, isMobile } from "../../../src/libs/utils";
 import Installation from "../../../src/components/Installation";
 import Contacts from "../../../src/components/Contacts";
@@ -24,9 +24,14 @@ import { Box, Image } from "gestalt";
 
 const About: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  initialize(stores, GUI_CONFIG);
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
 
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const slogan = GUI_CONFIG.language.about.slogan;
   // const description = GUI_CONFIG.language.about.description;
   const path_logo = configPaths.image_logo_B;

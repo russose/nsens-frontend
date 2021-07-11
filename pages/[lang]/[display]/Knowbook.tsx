@@ -10,20 +10,28 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigDataGui";
-import { initialize } from "../../../src/libs/helpersInitialize";
+} from "../../../src/libs/getDataParamsPage";
+import {
+  initializeApp,
+  initializeKnowbooks,
+} from "../../../src/libs/helpersInitialize";
 import { getRelatedItemsForItems } from "../../../src/libs/helpersRelated";
 import { getKnowbookAtomsList } from "../../../src/libs/helpersSavedKnowbooks";
 import { useStores } from "../../../src/stores/RootStoreHook";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  initialize(stores, GUI_CONFIG);
-
-  const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  initializeKnowbooks(stores);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
 
   const router = useRouter();
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
+  const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
   const selected_knowbook = router.query.title as string;
 
   // const content = (

@@ -2,7 +2,7 @@
 
 import { ConfigLanguage } from "./globals";
 
-export const is_testing_mode = true;
+export const is_testing_mode = false;
 
 export const CONFIG_ENV = {
   BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
@@ -34,7 +34,7 @@ export const configGeneral = {
   successMessage: "you can now login...",
   loginDuration: 2000,
   feed: {
-    ratio_related: 0.7,
+    ratio_related: 0.6,
     ratio_mostviewed_over_randow: 1, //when 0.5, as many mostviewed as random
   },
 };
@@ -80,6 +80,7 @@ export const configFetching = {
   amount_related: 10,
   amount_data_fetched_related_for_images: 2,
   width_image_thumbnail: 300,
+  cache_duration_in_sec: "2628000", //1 Mois pour le cache
 };
 
 export const configPaths = {
@@ -114,7 +115,7 @@ export const configPaths = {
     knowbooks: "public/staticKnowbooks/",
     base_cache: "cache/",
     cache_articles: "articles/",
-    cache_views: "nb_views/",
+    cache_nbviews: "nb_views/",
   },
 };
 

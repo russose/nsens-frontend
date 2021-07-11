@@ -17,8 +17,11 @@ import {
 } from "./apiItems";
 import { DateToStringWithZero, hasTouchScreen, shuffleSized } from "./utils";
 
-export function getParamsPageFromContext(stores: IStores): IparamsPage {
+export async function getParamsPageFromContext(
+  stores: IStores
+): Promise<IparamsPage> {
   if (process.browser) {
+    stores.baseStore.setscreenNoSSR();
     const max_width_mobile = configGeneral.max_width_mobile;
     const isMobile: boolean =
       hasTouchScreen(window) || window.innerWidth < max_width_mobile;
@@ -69,6 +72,16 @@ export async function initialyzeMostviewed(stores: IStores) {
       DateToStringWithZero(year),
       DateToStringWithZero(month),
       DateToStringWithZero(day - 1),
+      lang,
+      exclusion_patterns_items
+    );
+  }
+
+  if (atoms.length === 0) {
+    atoms = await api_getItemsFeaturedFromWeb(
+      DateToStringWithZero(year),
+      DateToStringWithZero(month - 1),
+      DateToStringWithZero(30),
       lang,
       exclusion_patterns_items
     );

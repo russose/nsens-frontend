@@ -16,12 +16,6 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
 ) => {
   const color_menu = configGeneral.colors.menu;
 
-  // let width = "100%";
-  // let rounding = 0;
-  // if (!props.isMobile) {
-  //   // width = "";
-  //   rounding = props.stores.baseStore.GUI_CONFIG.display.rounding_menu;
-  // }
   const buttons: IButton[] = [
     {
       Id: ButtonIDType.HOME,

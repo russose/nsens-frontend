@@ -1,4 +1,4 @@
-import { Box } from "gestalt";
+import { Box, Divider } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
@@ -8,9 +8,12 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigDataGui";
+} from "../../../src/libs/getDataParamsPage";
 import { useStores } from "../../../src/stores/RootStoreHook";
-import { initialize } from "../../../src/libs/helpersInitialize";
+import {
+  initializeApp,
+  initializeKnowbooks,
+} from "../../../src/libs/helpersInitialize";
 import dynamic from "next/dynamic";
 // import CatchupMessage from "../../../src/components/CatchupMessage";
 import Separator from "../../../src/components/Separator";
@@ -28,8 +31,15 @@ const CatchupMessageDynamic = dynamic(
 
 const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  initialize(stores, GUI_CONFIG);
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  initializeKnowbooks(stores);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
+
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
 
   const title = GUI_CONFIG.language.knowbooks.knowbooks_title;
 
@@ -39,7 +49,11 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
     knowbooksUser = (
       <>
         <KnowbooksLoggedDynamic stores={stores} />
+        <Separator with_line={false} />
+        <Separator with_line={false} />
         <Separator with_line={true} />
+        <Separator with_line={false} />
+        <Separator with_line={false} />
       </>
     );
     message = <></>;

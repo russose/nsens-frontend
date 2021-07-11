@@ -1,4 +1,5 @@
 import { readdir } from "fs/promises";
+import LZString from "lz-string";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   ROOT_URL_WIKIPEDIA_ACTION,
@@ -15,7 +16,7 @@ import {
 } from "../config/globals";
 import { fetchArticle } from "./fetch";
 import { ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia } from "./fetchBase";
-import { getAllConfigGui, getConfigDataGui, IPage } from "./getConfigDataGui";
+import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import { readFileJson, writeFileJson } from "./utilsServer";
 
 const testing_mode = is_testing_mode;
@@ -23,7 +24,8 @@ const testing_mode = is_testing_mode;
 export interface IPageStaticArticle extends IPage {
   id: AtomID;
   title: string;
-  articleContent: string;
+  // articleContent: string;
+  articleContentCompressed: string;
 }
 
 async function getAllConfigStaticArticles() {
@@ -87,9 +89,9 @@ async function getConfigDataStaticArticles(
 
   const static_path_articles =
     configPaths.static.base_cache +
+    configPaths.static.cache_articles +
     lang +
     "/" +
-    configPaths.static.cache_articles +
     title +
     ".json";
 
@@ -101,11 +103,12 @@ async function getConfigDataStaticArticles(
     const article = {
       id: json.id,
       title: json.title,
-      articleContent: json.articleContent,
+      // articleContent: json.articleContent,
+      articleContentCompressed: json.articleContentCompressed,
     };
     const guiConfigDataStaticArticles = {
-      guiConfigData: (await getConfigDataGui({ lang: lang, display: display }))
-        .guiConfigData,
+      paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
+        .paramsPage,
       ...article,
     };
     return guiConfigDataStaticArticles;
@@ -130,18 +133,20 @@ async function getConfigDataStaticArticles(
     );
   const item = items[0];
 
-  const article = {
+  const article_with_articleContent = {
     id: item.id,
     title: title,
-    articleContent: articleContent,
+    // articleContent: articleContent,
+    articleContentCompressed: LZString.compress(articleContent),
   };
 
-  await writeFileJson(static_path_articles, article);
+  await writeFileJson(static_path_articles, article_with_articleContent);
 
   const guiConfigDataStaticArticles = {
-    guiConfigData: (await getConfigDataGui({ lang: lang, display: display }))
-      .guiConfigData,
-    ...article,
+    paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
+      .paramsPage,
+    // ...article,
+    ...article_with_articleContent,
   };
 
   return guiConfigDataStaticArticles;
@@ -156,6 +161,7 @@ export const I_getStaticPaths: GetStaticPaths = async (context) => {
 };
 export const I_getStaticProps: GetStaticProps = async (context) => {
   const data = await getConfigDataStaticArticles(context.params);
+  // const data = {};
   if (!data) {
     return {
       notFound: true,

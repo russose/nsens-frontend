@@ -7,7 +7,6 @@ module.exports = {
       {
         userAgent: "*",
         allow: "/",
-        disallow: "/_next*",
       },
     ],
   },

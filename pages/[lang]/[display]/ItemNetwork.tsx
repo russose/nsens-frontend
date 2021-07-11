@@ -9,8 +9,8 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigDataGui";
-import { initialize } from "../../../src/libs/helpersInitialize";
+} from "../../../src/libs/getDataParamsPage";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 import { useStores } from "../../../src/stores/RootStoreHook";
 
 const ItemNetworkNoSSRDynamic = dynamic(
@@ -20,8 +20,12 @@ const ItemNetworkNoSSRDynamic = dynamic(
 
 const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  initialize(stores, GUI_CONFIG);
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
 
   const router = useRouter();
   const item_title = router.query.title as string;

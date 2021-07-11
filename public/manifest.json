@@ -1,24 +1,25 @@
 {
-    "name": "n.Sens",
-    "short_name": "n.Sens",
-    "description": "n.Sens",
-    "icons": [
-      {
-        "src": "favicon/apple-icon-144x144.png",
-        "sizes": "144x144",
-        "type": "image/png",
-        "purpose": "maskable any"
-      },
-      {
-        "src": "favicon/android-icon-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "maskable any"
-      }
-    ],
-    "start_url": "index.html",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#3490de"
-  }
-  
+  "name": "n.Sens",
+  "short_name": "n.Sens",
+  "description": "n.Sens",
+  "icons": [
+    {
+      "src": "assets/manifest-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/manifest-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "start_url": "index.html",
+  "scope": "/",
+  "display": "fullscreen",
+  "background_color": "#ffffff",
+  "theme_color": "#3490de",
+  "splash_pages": null
+}

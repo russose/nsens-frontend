@@ -10,6 +10,8 @@ const ROOT_URL_WIKIPEDIA_EN = ROOT_URL_WIKIPEDIA_ACTION(ConfigLanguage.en);
 
 const width_image_thumbnail = configFetching.width_image_thumbnail;
 
+const cache_duration_in_sec = configFetching.cache_duration_in_sec;
+
 /**
  * Interfaces
  */
@@ -143,6 +145,7 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
       srsearch: pattern_or_titles,
       srlimit: nb_atoms.toString(),
       srnamespace: "0",
+      maxage: cache_duration_in_sec, //1 semaine pour le cache
       //srprop: "",
       //srnamespace: "4",
     };
@@ -152,6 +155,7 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
       format: "json",
       titles: pattern_or_titles,
       utf8: 1,
+      maxage: cache_duration_in_sec, //1 semaine pour le cache
     };
   } else if (mode === "random") {
     PARAMS = {
@@ -295,6 +299,7 @@ export async function getAtomsFromWikipediaAction(
       piprop: "original|thumbnail",
       pilicense: "free",
       iiprop: "url|size|mediatype|dimensions",
+      maxage: cache_duration_in_sec, //1 semaine pour le cache
     };
 
     const data = await fetch_data_wikipedia_action(
@@ -390,6 +395,7 @@ export async function getAllPageImagesReducedFromWikipediaAction(
       iiurlwidth: width.toString(),
       // gimlimit: amount_data_fetched_images.toString(),
       gimlimit: "50",
+      maxage: cache_duration_in_sec, //1 semaine pour le cache
     };
 
     const data = await fetch_data_wikipedia_action(

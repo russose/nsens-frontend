@@ -1,4 +1,4 @@
-import { configFetching, ConfigLanguage } from "../config/globals";
+import { configFetching } from "../config/globals";
 import { CONFIG_ENV } from "../config/globals";
 import { URLs } from "../config/configURLs";
 import { JSONDataT } from "../config/globals";
@@ -123,8 +123,8 @@ export async function fetch_data_wiki_rest(
 }
 
 export async function fetch_data_local(
-  name: string,
-  lang: ConfigLanguage
+  path: string
+  // lang: ConfigLanguage
 ): Promise<object> {
   const res = await axios({
     method: "get",
@@ -134,7 +134,8 @@ export async function fetch_data_local(
     },
     // baseURL: ROOT_URL + "related/",
     baseURL: CONFIG_ENV.FRONT_URL,
-    url: "/staticKnowbooks" + "/" + lang + "/" + name + ".txt",
+    // url: "/staticKnowbooks" + "/" + lang + "/" + name + ".txt",
+    url: path,
   });
 
   const data = await res.data;

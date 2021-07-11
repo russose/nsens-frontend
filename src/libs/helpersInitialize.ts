@@ -1,5 +1,10 @@
 import { staticKnowbooks } from "../config/configStaticKnowbooks";
-import { IGUICONFIG, IKnowbookStatic, IRelatedAtom } from "../config/globals";
+import {
+  IKnowbookStatic,
+  IparamsPage,
+  IRelatedAtom,
+  initStateCat,
+} from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { api_getStaticKnowbooksLocal } from "./apiItems";
 import { api_getUser } from "./apiUser";
@@ -9,49 +14,107 @@ import {
 } from "./helpersBase";
 import { readRelatedFromItem } from "./helpersRelated";
 
-export function initialize(stores: IStores, GUI_CONFIG: IGUICONFIG) {
-  stores.baseStore.setParamsPageFromGUICONFIG(GUI_CONFIG);
-  if (stores.baseStore.user === null) {
-    //Not initialyzed
-    initializeApp(stores);
-  }
-}
-
-async function initializeApp(stores: IStores) {
+export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
+  // stores.uiStore.setShowLoading(true);
+  // await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
+  //   paramsPage
+  // );
   try {
-    stores.uiStore.setShowLoading(true);
-    const user = await api_getUser();
-    stores.baseStore.setUser({ username: user });
-    if (!stores.baseStore.isLogged) {
-      await initializeUserData(stores);
-      // initializeUserData(stores);
-    } else {
-      const initializeUserDataLogged = await import(
-        "./helpersInitializeLogged"
+    if (stores.baseStore.initCompleted.app === undefined) {
+      stores.baseStore.setInitCompleted(initStateCat.app, false);
+
+      stores.baseStore.setscreenNoSSR();
+      await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
+        paramsPage
       );
-      await initializeUserDataLogged.initializeUserDataLogged(stores);
-      // await initializeUserDataLogged(stores);
+
+      const user = await api_getUser();
+      stores.baseStore.setUser({ username: user });
+
+      initializeSaved(stores);
+
+      stores.baseStore.setInitCompleted(initStateCat.app, true);
     }
-    stores.uiStore.setShowLoading(false);
   } catch (error) {
     // console.log(error);
   }
+
+  // stores.uiStore.setShowLoading(false);
 }
 
-export async function initializeUserData(stores: IStores) {
-  stores.savedStore.clearSaved();
-  stores.knowbookStore.clearKnowbooks();
-  // await initializeUserDataCommon(stores);
-  initializeUserDataCommon(stores);
+export async function initializeSaved(stores: IStores) {
+  // stores.uiStore.setShowLoading(true);
+  if (stores.baseStore.initCompleted.saved === undefined) {
+    stores.baseStore.setInitCompleted(initStateCat.saved, false);
+    if (stores.baseStore.isLogged) {
+      const helpersInitializeLogged = await import("./helpersInitializeLogged");
+      await helpersInitializeLogged.initializeSavedLogged(stores);
+    } else {
+      stores.savedStore.clearSaved();
+      stores.baseStore.clearRelatedAndRelatedAll();
+    }
+    stores.baseStore.setInitCompleted(initStateCat.saved, true);
+  }
+  // stores.uiStore.setShowLoading(false);
 }
 
-export async function initializeUserDataCommon(stores: IStores) {
-  const amount_item_displayed =
-    stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+export async function initializeFeed(stores: IStores) {
+  // stores.uiStore.setShowLoading(true);
+  if (
+    stores.baseStore.initCompleted.feed === undefined &&
+    stores.baseStore.initCompleted.app === true
+  ) {
+    // try {
+    stores.baseStore.setInitCompleted(initStateCat.feed, false);
 
-  await initialyzeMostviewed(stores);
-  setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+    const amount_item_displayed =
+      stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+    await initialyzeMostviewed(stores);
+    setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
 
+    stores.baseStore.setInitCompleted(initStateCat.feed, true);
+
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }
+  // stores.uiStore.setShowLoading(false);
+}
+
+export async function initializeKnowbooks(stores: IStores) {
+  // stores.uiStore.setShowLoading(true);
+  // try {
+  if (
+    stores.baseStore.initCompleted.staticKnowbooks === undefined &&
+    stores.baseStore.initCompleted.app === true
+  ) {
+    stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);
+    await initializeStaticKnowbooks(stores);
+    stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, true);
+  }
+  // } catch (error) {
+  //   // console.log(error);
+  // }
+
+  if (
+    stores.baseStore.initCompleted.knowbooks === undefined &&
+    stores.baseStore.initCompleted.app === true
+  ) {
+    stores.baseStore.setInitCompleted(initStateCat.knowbooks, false);
+
+    if (stores.baseStore.isLogged) {
+      const helpersInitializeLogged = await import("./helpersInitializeLogged");
+      await helpersInitializeLogged.initializeKnowbooksLogged(stores);
+    } else {
+      stores.knowbookStore.clearKnowbooks();
+    }
+    stores.baseStore.setInitCompleted(initStateCat.knowbooks, true);
+  }
+
+  // stores.uiStore.setShowLoading(false);
+}
+
+export async function initializeStaticKnowbooks(stores: IStores) {
   //Static Knowbooks
   const lang = stores.baseStore.paramsPage.lang;
   const staticKnowbooks_local = staticKnowbooks;

@@ -12,7 +12,7 @@ export const configDataDesktop: configDataDisplay = {
   max_nodes_network: 110,
   // min_width_network: 500,
   heightTopAndBottom: 200,
-  heightArticle: "90vh",
+  heightArticle: "87vh",
   heightUser: 500,
   heightChangePassword: "40vh",
   rounding_menu: 4,
@@ -21,8 +21,8 @@ export const configDataDesktop: configDataDisplay = {
   size_icon_card: "sm",
   header_size: "sm",
   layout: {
-    heightHeader: "4%",
-    heightBody: "96%",
+    heightHeader: "6%", //4% originally
+    heightBody: "94%",
   },
   dialogs: {
     title_size: "lg",

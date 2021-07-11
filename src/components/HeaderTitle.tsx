@@ -16,7 +16,8 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_headers = configGeneral.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
-  let title_page = "n.Sens";
+  let title_page = GUI_CONFIG.language.SEO.title_page_base;
+  let canonical = GUI_CONFIG.language.SEO.canonical;
   if (props.title !== undefined) {
     title_page = title_page + " - " + props.title;
   }
@@ -32,8 +33,10 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
 
   const head = (
     <Head>
-      <title>{title_page}</title>
+      <link rel="canonical" href={canonical} />
+      <meta name="robots" content="index, follow" />
       <meta name="description" content={description} />
+      <title>{title_page}</title>
     </Head>
   );
 

@@ -20,16 +20,16 @@ Allow from all
     </FilesMatch>
 
     <FilesMatch "\.(webp)$">
-        Header set Cache-Control "max-age=604800, public"
+        Header set Cache-Control "max-age=2628000, public"
     </FilesMatch>
 
     #favicon
 	<FilesMatch "\.(png)$">
-        Header set Cache-Control "max-age=86400, public"
+        Header set Cache-Control "max-age=2628000, public"
     </FilesMatch>
 
     <FilesMatch "\.(txt)$">
-        Header set Cache-Control "max-age=86400, public"
+        Header set Cache-Control "max-age=604800, public"
     </FilesMatch>
 
 	<FilesMatch "\.(json|js)$">

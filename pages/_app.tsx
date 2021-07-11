@@ -6,6 +6,7 @@ import { AppProps } from "next/app";
 import React from "react";
 import { ContextStores } from "../src/stores/RootStoreHook";
 import rootStore from "../src/stores/RootStore";
+import Head from "next/head";
 
 // enable MobX strict mode
 configure({ enforceActions: "observed" });
@@ -17,7 +18,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   //MobX
 
   return (
-    <>
+    <><Head>
+              <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+        /></Head>
       <ContextStores.Provider value={{ rootStore: rootStore }}>
         <Component {...pageProps} />
       </ContextStores.Provider>

@@ -157,9 +157,9 @@ async function ItemsBestMultiYearFromWikipediaRaw(
 
   const static_path_views =
     configPaths.static.base_cache +
+    configPaths.static.cache_nbviews +
     lang +
     "/" +
-    configPaths.static.cache_views +
     year_start +
     "-" +
     year_end +
@@ -274,9 +274,9 @@ async function ItemsBestYearFromWikipediaRaw(
 
     const static_path_views =
       configPaths.static.base_cache +
+      configPaths.static.cache_nbviews +
       lang +
       "/" +
-      configPaths.static.cache_views +
       year +
       ".json";
 

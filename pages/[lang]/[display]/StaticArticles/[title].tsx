@@ -1,3 +1,4 @@
+import LZString from "lz-string";
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
@@ -8,55 +9,32 @@ import {
   IPageStaticArticle,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../../src/libs/getConfigDataStaticArticle";
-import { initialize } from "../../../../src/libs/helpersInitialize";
+} from "../../../../src/libs/getDataStaticArticle";
+import { initializeApp } from "../../../../src/libs/helpersInitialize";
 import { prepareArticle } from "../../../../src/libs/utils";
 import { useStores } from "../../../../src/stores/RootStoreHook";
-
-// const MenuBarDisplayLoggedDynamic = dynamic(
-//   () => import("../../../../src/components/MenuBarDisplayLogged"),
-//   { ssr: true }
-// );
 
 const ItemStaticArticle: React.FunctionComponent<IPageStaticArticle> = (
   props
 ) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  const item_id = props.id;
-  const item_title = props.title;
-  const articleContent = props.articleContent;
-  initialize(stores, GUI_CONFIG);
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
 
+  const item_title = props.title;
+  const item_id = props.id;
+  const articleContent = LZString.decompress(props.articleContentCompressed);
   stores.uiStore.setSelectedAtom(item_id, item_title);
 
   stores.uiStore.setArticleContent(prepareArticle(articleContent));
 
-  // let navigation;
-  // if (!stores.baseStore.isLogged) {
-  //   navigation = (
-  //     <>
-  //       <MenuBarDisplayNotLogged
-  //         stores={stores}
-  //         isMobile={isMobile(GUI_CONFIG.id)}
-  //       />
-  //     </>
-  //   );
-  // } else {
-  //   navigation = (
-  //     <>
-  //       <MenuBarDisplayLoggedDynamic
-  //         stores={stores}
-  //         isMobile={isMobile(GUI_CONFIG.id)}
-  //       />
-  //     </>
-  //   );
-  // }
-
   return (
     <AppLayout stores={stores}>
       <HeaderTitle stores={stores} title={item_title} hidden={true} />
-      {/* {navigation} */}
       <Article item_title={item_title} stores={stores} />
     </AppLayout>
   );

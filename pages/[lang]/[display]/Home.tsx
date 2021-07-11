@@ -3,13 +3,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
-import {
-  IPage,
-  I_getStaticPaths,
-  I_getStaticProps,
-} from "../../../src/libs/getConfigDataGui";
 import { useStores } from "../../../src/stores/RootStoreHook";
-import { initialize } from "../../../src/libs/helpersInitialize";
 import { configPaths } from "../../../src/config/globals";
 import {
   getParamsPageFromContext,
@@ -17,38 +11,61 @@ import {
 } from "../../../src/libs/helpersBase";
 import dynamic from "next/dynamic";
 import CardAtomGridNotLogged from "../../../src/components/CardAtomGridNotLogged";
+import {
+  IPage,
+  I_getStaticPaths,
+  I_getStaticProps,
+} from "../../../src/libs/getDataParamsPage";
+import {
+  initializeApp,
+  initializeFeed,
+} from "../../../src/libs/helpersInitialize";
 
 const CardAtomGridLoggedDynamic = dynamic(
   () => import("../../../src/components/CardAtomGridLogged")
 );
 
 const Home: React.FunctionComponent<IPage> = (props) => {
-  console.log(props.children);
-
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  /****************************************************************************/
-  //Initialyzation extended for Home to adapt Home to Context (display, lang)
-  let paramsPageContext = undefined;
-  if (stores.baseStore.user === null) {
-    paramsPageContext = getParamsPageFromContext(stores);
+  const paramsPage = props.paramsPage;
+
+  /*******************************************************************************************/
+  //Initialyzation extended for Home to adapt Home to Context (display, lang) if changed
+  // if (stores.baseStore.user === null) {
+  initializeApp(stores, paramsPage);
+  initializeFeed(stores);
+  // if (stores.baseStore.initCompleted.app === undefined) {
+  //
+
+  getParamsPageFromContext(stores).then((paramsPageContext) => {
+    if (
+      paramsPageContext !== undefined &&
+      (paramsPageContext.lang !== paramsPage.lang ||
+        paramsPageContext.display !== paramsPage.display)
+    ) {
+      stores.baseStore
+        .setParamsPageAndGUICONFIGFromParamsPageData(paramsPageContext)
+        .then(() => {
+          goPage(
+            {
+              lang: paramsPageContext.lang,
+              display: paramsPageContext.display,
+            },
+            configPaths.pages.Home
+          );
+        });
+    }
+  });
+
+  //
+  // }
+
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
   }
-  initialize(stores, GUI_CONFIG);
-  if (
-    stores.baseStore.user === null &&
-    paramsPageContext !== undefined &&
-    (paramsPageContext.lang !== stores.baseStore.paramsPage.lang ||
-      paramsPageContext.display !== stores.baseStore.paramsPage.display)
-  ) {
-    goPage(
-      {
-        lang: paramsPageContext.lang,
-        display: paramsPageContext.display,
-      },
-      configPaths.pages.Home
-    );
-  }
-  /****************************************************************************/
+
+  /*******************************************************************************************/
 
   // const slogan = GUI_CONFIG.language.about.slogan;
 

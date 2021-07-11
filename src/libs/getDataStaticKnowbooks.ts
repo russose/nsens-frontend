@@ -21,14 +21,14 @@ import {
   ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
 } from "./fetchBase";
 import { ItemsBestYearFromWikipedia } from "./fetchBestServer";
-import { getAllConfigGui, getConfigDataGui, IPage } from "./getConfigDataGui";
+import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import { DateToStringWithZero } from "./utils";
 import { readFileJson, writeFileJson } from "./utilsServer";
 
 export interface IPageStaticKnowbooks extends IPage {
   nameOrPeriod: string;
   name_display: string;
-  items: IAtom[];
+  items?: IAtom[];
 }
 
 function findItemFromstaticKnowbooksDefinition(
@@ -86,13 +86,16 @@ async function getConfigDataGuiStaticKnowbooks(
 
   if (nameOrPeriod !== DateToStringWithZero(current_year) || is_testing_mode) {
     try {
-      const staticKnowbook: any = await readFileJson(static_path);
+      const staticKnowbook_with_items: any = await readFileJson(static_path);
+      // const staticKnowbook_without_items = {
+      //   nameOrPeriod: staticKnowbook_with_items.nameOrPeriod,
+      //   name_display: staticKnowbook_with_items.name_display,
+      // };
       // console.log(static_path + " used from cache");
-      const guiConfigDataBestKnowbooks = {
-        guiConfigData: (
-          await getConfigDataGui({ lang: lang, display: display })
-        ).guiConfigData,
-        ...staticKnowbook,
+      const guiConfigDataBestKnowbooks: IPageStaticKnowbooks = {
+        paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
+          .paramsPage,
+        ...staticKnowbook_with_items,
       };
       return guiConfigDataBestKnowbooks;
     } catch {
@@ -169,19 +172,24 @@ async function getConfigDataGuiStaticKnowbooks(
     }
   });
 
-  const staticKnowbook: any = {
+  const staticKnowbook_with_items: any = {
     nameOrPeriod: nameOrPeriod,
     name_display: name_display,
     items: items,
   };
 
-  const guiConfigDataBestKnowbooks = {
-    guiConfigData: (await getConfigDataGui({ lang: lang, display: display }))
-      .guiConfigData,
-    ...staticKnowbook,
+  // const staticKnowbook_without_items: any = {
+  //   nameOrPeriod: nameOrPeriod,
+  //   name_display: name_display,
+  // };
+
+  const guiConfigDataBestKnowbooks: IPageStaticKnowbooks = {
+    paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
+      .paramsPage,
+    ...staticKnowbook_with_items,
   };
 
-  await writeFileJson(static_path, staticKnowbook);
+  await writeFileJson(static_path, staticKnowbook_with_items);
 
   return guiConfigDataBestKnowbooks;
 }
@@ -194,13 +202,20 @@ export const I_getStaticPaths: GetStaticPaths = async (context) => {
   };
 };
 export const I_getStaticProps: GetStaticProps = async (context) => {
-  const data = await getConfigDataGuiStaticKnowbooks(context.params);
-  if (!data) {
+  const data_with_items: IPageStaticKnowbooks =
+    await getConfigDataGuiStaticKnowbooks(context.params);
+  const data_without_items: IPageStaticKnowbooks = {
+    paramsPage: data_with_items.paramsPage,
+    nameOrPeriod: data_with_items.nameOrPeriod,
+    name_display: data_with_items.name_display,
+  };
+
+  if (!data_without_items) {
     return {
       notFound: true,
     };
   }
   return {
-    props: data,
+    props: data_without_items,
   };
 };

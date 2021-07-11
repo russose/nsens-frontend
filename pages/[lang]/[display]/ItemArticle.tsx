@@ -11,8 +11,8 @@ import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getConfigDataGui";
-import { initialize } from "../../../src/libs/helpersInitialize";
+} from "../../../src/libs/getDataParamsPage";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 import { prepareArticle } from "../../../src/libs/utils";
 import { useStores } from "../../../src/stores/RootStoreHook";
 
@@ -28,8 +28,12 @@ import { useStores } from "../../../src/stores/RootStoreHook";
 
 const ItemArticle: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  initialize(stores, GUI_CONFIG);
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
 
   const router = useRouter();
   const item_title = router.query.title as string;
@@ -46,7 +50,7 @@ const ItemArticle: React.FunctionComponent<IPage> = (props) => {
         stores.uiStore.setArticleContent(prepareArticle(value));
         stores.uiStore.setShowLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         stores.uiStore.setShowLoading(false);
         // console.log("error in fetching article");
       });

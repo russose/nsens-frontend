@@ -14,6 +14,15 @@ export enum ConfigDisplay {
   extra = "Extra",
 }
 
+export enum initStateCat {
+  app = "app",
+  feed = "feed",
+
+  saved = "saved",
+  staticKnowbooks = "staticKnowbooks",
+  knowbooks = "knowbooks",
+}
+
 export type configDataDisplay = typeof configDataMobile;
 
 export interface IGUICONFIG {

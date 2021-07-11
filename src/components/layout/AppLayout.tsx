@@ -155,7 +155,7 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
     top = top_mobile;
     bottom = menu_mobile;
     if (!router.pathname.includes(configPaths.pages.ItemArticle)) {
-      free_space_buttom = <Box height="20vh" />;
+      free_space_buttom = <Box height="50vh" />;
     }
   } else {
     top = top_desktop;

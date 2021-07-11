@@ -10,8 +10,11 @@ import {
   IPageStaticKnowbooks,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../../src/libs/getConfigDataStaticKnowbooks";
-import { initialize } from "../../../../src/libs/helpersInitialize";
+} from "../../../../src/libs/getDataStaticKnowbooks";
+import {
+  initializeApp,
+  initializeKnowbooks,
+} from "../../../../src/libs/helpersInitialize";
 import { readRelatedFromItem } from "../../../../src/libs/helpersRelated";
 import {
   makeArrayFlat,
@@ -48,20 +51,29 @@ function getRelatedItemsFromItems(
 
 const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   const stores = useStores();
-  const GUI_CONFIG = props.guiConfigData;
-  const items = props.items;
-  // const nameOrPeriod = props.nameOrPeriod;
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  initializeKnowbooks(stores);
+  if (stores.baseStore.GUI_CONFIG === undefined) {
+    //Not yet initialyzed
+    return <></>;
+  }
+
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
+  // const items = props.items;
   const name_display = props.name_display;
+  let items: IAtom[];
+  if (
+    stores.knowbookStore.staticKnowbooks.get(props.nameOrPeriod) !== undefined
+  ) {
+    items = stores.knowbookStore.staticKnowbooks.get(props.nameOrPeriod).items;
+  } else {
+    items = [];
+  }
 
-  initialize(stores, GUI_CONFIG);
-
-  // const Related_title = GUI_CONFIG.language.knowbooks.Related_title;
   const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
 
   const related_items = getRelatedItemsFromItems(items, amount_item_displayed);
-
-  // const name_display =
-  //   stores.knowbookStore.staticKnowbooks.get(nameOrPeriod).name_display;
 
   let content;
   if (!stores.baseStore.isLogged) {

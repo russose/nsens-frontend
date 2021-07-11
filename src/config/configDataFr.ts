@@ -3,6 +3,10 @@ export const configDataFr = {
   // exclusion_patterns_items: ["Acceuilxx:", "Portailxx:"],
   // WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
   // USER_WIKIDATA_LANG: "fr",
+  SEO: {
+    canonical: "https://www.nsens.org/fr/Mobile/About/",
+    title_page_base: "n.Sens",
+  },
   about: {
     slogan:
       "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
