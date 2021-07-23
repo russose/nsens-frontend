@@ -20,7 +20,7 @@ const ItemStaticArticle: React.FunctionComponent<IPageStaticArticle> = (
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }
@@ -29,7 +29,6 @@ const ItemStaticArticle: React.FunctionComponent<IPageStaticArticle> = (
   const item_id = props.id;
   const articleContent = LZString.decompress(props.articleContentCompressed);
   stores.uiStore.setSelectedAtom(item_id, item_title);
-
   stores.uiStore.setArticleContent(prepareArticle(articleContent));
 
   return (

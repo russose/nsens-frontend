@@ -16,10 +16,9 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
-import {
-  initializeApp,
-  initializeFeed,
-} from "../../../src/libs/helpersInitialize";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
+import DialogLoading from "../../../src/components/DialogLoading";
+import { Box } from "gestalt";
 
 const CardAtomGridLoggedDynamic = dynamic(
   () => import("../../../src/components/CardAtomGridLogged")
@@ -31,43 +30,43 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 
   /*******************************************************************************************/
   //Initialyzation extended for Home to adapt Home to Context (display, lang) if changed
-  // if (stores.baseStore.user === null) {
   initializeApp(stores, paramsPage);
-  initializeFeed(stores);
-  // if (stores.baseStore.initCompleted.app === undefined) {
-  //
-
-  getParamsPageFromContext(stores).then((paramsPageContext) => {
-    if (
-      paramsPageContext !== undefined &&
-      (paramsPageContext.lang !== paramsPage.lang ||
-        paramsPageContext.display !== paramsPage.display)
-    ) {
-      stores.baseStore
-        .setParamsPageAndGUICONFIGFromParamsPageData(paramsPageContext)
-        .then(() => {
-          goPage(
-            {
-              lang: paramsPageContext.lang,
-              display: paramsPageContext.display,
-            },
-            configPaths.pages.Home
-          );
-        });
-    }
-  });
-
-  //
-  // }
-
-  if (stores.baseStore.GUI_CONFIG === undefined) {
-    //Not yet initialyzed
-    return <></>;
+  if (stores.baseStore.initCompleted.core !== true) {
+    //Not yet initialyzed (Core part)
+    return (
+      <Box
+        height="100vh"
+        display="flex"
+        direction="column"
+        justifyContent="center"
+      >
+        <DialogLoading stores={stores} />
+      </Box>
+    );
   }
 
-  /*******************************************************************************************/
+  // getParamsPageFromContext(stores).then((paramsPageContext) => {
+  //   if (
+  //     paramsPageContext !== undefined &&
+  //     (paramsPageContext.lang !== paramsPage.lang ||
+  //       paramsPageContext.display !== paramsPage.display)
+  //   ) {
+  //     stores.baseStore
+  //       .setParamsPageAndGUICONFIGFromParamsPageData(paramsPageContext)
+  //       .then(() => {
+  //         goPage(
+  //           stores,
+  //           {
+  //             lang: paramsPageContext.lang,
+  //             display: paramsPageContext.display,
+  //           },
+  //           configPaths.pages.Home
+  //         );
+  //       });
+  //   }
+  // });
 
-  // const slogan = GUI_CONFIG.language.about.slogan;
+  /*******************************************************************************************/
 
   let page_content;
   if (!stores.baseStore.isLogged) {

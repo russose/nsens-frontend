@@ -1,19 +1,45 @@
-import { eventT, initStateCat } from "../config/globals";
+import {
+  ConfigLanguage,
+  eventT,
+  initStateCat,
+  IparamsPage,
+} from "../config/globals";
 import { api_login, api_signup, api_logout } from "../libs/apiUser";
 import { IStores } from "../stores/RootStore";
 import { configPaths, configGeneral } from "../config/globals";
 import { goPage } from "../libs/helpersBase";
-import { initializeSaved } from "../libs/helpersInitialize";
+import { initializeApp } from "../libs/helpersInitialize";
+
+export const onChangeLanguage =
+  (stores: IStores, language: ConfigLanguage) => (): void => {
+    stores.baseStore.setInitCompleted(initStateCat.core, undefined);
+    stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, undefined);
+    stores.baseStore.setInitCompleted(initStateCat.userData, undefined);
+
+    stores.baseStore.clearHistory();
+    stores.baseStore.clearRelatedAndRelatedAll();
+    stores.savedStore.clearSaved();
+    stores.knowbookStore.clearStaticKnowbooks();
+    stores.knowbookStore.clearKnowbooks();
+
+    const paramsPage: IparamsPage = {
+      display: stores.baseStore.paramsPage.display,
+      lang: language,
+    };
+
+    initializeApp(stores, paramsPage)
+      .then(() => {
+        goPage(stores, paramsPage, configPaths.pages.User, false);
+      })
+      .catch(function (error) {
+        // console.log(error);
+      });
+  };
 
 /*******************Login and Signup*************************** */
 
-function initStateSavedKnowbooks(stores: IStores): void {
-  // stores.savedStore.clearSaved();
-  // stores.knowbookStore.clearKnowbooks();
-  stores.baseStore.setInitCompleted(initStateCat.feed, undefined);
-  stores.baseStore.setInitCompleted(initStateCat.saved, undefined);
-  stores.baseStore.setInitCompleted(initStateCat.knowbooks, undefined);
-  initializeSaved(stores); //Relaunch initializeSaved after login/logout even if stores.baseStore.initCompleted.app !== undefined
+function initStateAfterLoginLoggout(stores: IStores): void {
+  stores.baseStore.setInitCompleted(initStateCat.userData, undefined);
 }
 
 export const onChangeUsernamePassword =
@@ -43,8 +69,8 @@ export const onLogout = (stores: IStores) => (): void => {
       stores.baseStore.setUser({ username: "" });
     })
     .then(() => {
-      goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
-      initStateSavedKnowbooks(stores);
+      initStateAfterLoginLoggout(stores);
+      goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
       //To do: faire une fonction initLoginScreen
       stores.uiStore.setLoginScreenUsername("");
       stores.uiStore.setLoginScreenUsername_("");
@@ -74,8 +100,8 @@ export const onSubmitLoginSignup =
           //Go Home
           // stores.baseStore.setInitCompleted(initStateCat.saved, undefined);
           // stores.baseStore.setInitCompleted(initStateCat.knowbooks, undefined);
-          initStateSavedKnowbooks(stores);
-          goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
+          initStateAfterLoginLoggout(stores);
+          goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
         })
         .catch(function (error) {
           // console.log(error);
@@ -109,8 +135,8 @@ export const onSubmitLoginSignup =
         .then(() => {
           // initializeUserDataBaseLogged(stores);
           //Go Home
-          initStateSavedKnowbooks(stores);
-          goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
+          initStateAfterLoginLoggout(stores);
+          goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
         })
         .catch(function (error) {
           // console.log("error in signing...");

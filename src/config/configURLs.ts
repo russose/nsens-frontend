@@ -1,7 +1,5 @@
 import { ConfigLanguage } from "./globals";
 
-// export const LANGUAGE: ConfigLanguage = ConfigLanguage.fr;
-
 export const URLs = {
   // ROOT_URL_WIKIPEDIA_ACTION: "https://" + LANGUAGE + ".wikipedia.org/w/api.php",
   // ROOT_URL_WIKIPEDIA_REST:

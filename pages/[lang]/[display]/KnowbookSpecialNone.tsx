@@ -17,17 +17,14 @@ import {
 } from "../../../src/libs/getDataParamsPage";
 import { ItemsInNoKnowbook } from "../../../src/libs/helpersSavedKnowbooks";
 import { useStores } from "../../../src/stores/RootStoreHook";
-import {
-  initializeApp,
-  initializeKnowbooks,
-} from "../../../src/libs/helpersInitialize";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 
 const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  initializeKnowbooks(stores);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  // initializeKnowbooks(stores);
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }

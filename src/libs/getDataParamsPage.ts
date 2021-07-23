@@ -1,4 +1,9 @@
-import { ConfigDisplay, ConfigLanguage, IparamsPage } from "../config/globals";
+import {
+  ConfigDisplay,
+  ConfigLanguage,
+  IparamsPage,
+  languages_activated,
+} from "../config/globals";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 export interface IPage {
@@ -6,13 +11,18 @@ export interface IPage {
 }
 
 export function getAllConfigGui() {
-  const guiConfigList = [
-    { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.mobile } },
-    { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.desktop } },
-    { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.large } },
-    { params: { lang: ConfigLanguage.fr, display: ConfigDisplay.extra } },
-    // { params: { lang: ConfigLanguage.en, display: ConfigDisplay.desktop } },
-  ];
+  const languages_list = Object.values(ConfigLanguage).filter((language) => {
+    return languages_activated.includes(language);
+  });
+  const displays_list: ConfigDisplay[] = Object.values(ConfigDisplay);
+
+  const guiConfigList: any[] = [];
+  languages_list.forEach((language) => {
+    displays_list.forEach((display) => {
+      const guiConfig = { params: { lang: language, display: display } };
+      guiConfigList.push(guiConfig);
+    });
+  });
 
   return guiConfigList;
 }

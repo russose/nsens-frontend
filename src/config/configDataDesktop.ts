@@ -21,8 +21,8 @@ export const configDataDesktop: configDataDisplay = {
   size_icon_card: "sm",
   header_size: "sm",
   layout: {
-    heightHeader: "6%", //4% originally
-    heightBody: "94%",
+    heightHeader: 60, //7%
+    heightBody: "93%",
   },
   dialogs: {
     title_size: "lg",

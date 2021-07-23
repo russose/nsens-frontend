@@ -1,17 +1,17 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { AtomID } from "../config/globals";
-import { IStores } from "../stores/RootStore";
+import { AtomID } from "../../config/globals";
+import { IStores } from "../../stores/RootStore";
 import { Text } from "gestalt";
-import { capitalizeFirstLetter } from "../libs/utils";
+import { capitalizeFirstLetter } from "../../libs/utils";
 import {
   isItemSaved,
   isItemSavedActivated,
   onSaved,
-} from "../handlers/handlers_Saved";
-import { onEditKnowbooks } from "../handlers/handlers_Knowbooks";
-import CardAtomGridCompact from "./CardAtomGridCompact";
+} from "../../handlers/handlers_Saved";
+import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
+import CardAtomGridCompact from "./../CardAtomGridCompact";
 
 export type INetworkFlatProps = {
   rootItemId: AtomID;

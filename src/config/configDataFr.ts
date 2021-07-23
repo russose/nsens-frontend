@@ -1,8 +1,8 @@
+import { ConfigLanguage, ICONS } from "./globals";
+
 export const configDataFr = {
   searchBar: "Rechercher...",
-  // exclusion_patterns_items: ["Acceuilxx:", "Portailxx:"],
-  // WIKI_LAST_SECTION_HEADER: "Notes et références", //English: "References"
-  // USER_WIKIDATA_LANG: "fr",
+  source_wikipedia: "Source: Wikipedia",
   SEO: {
     canonical: "https://www.nsens.org/fr/Mobile/About/",
     title_page_base: "n.Sens",
@@ -10,10 +10,6 @@ export const configDataFr = {
   about: {
     slogan:
       "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
-    // description:
-    //   "Entretenir le goût du vrai pour rester libre: \
-    //   organiser ses connaissances dans des carnets accessibles partout \
-    //   et se laisser transporter vers de nouvelles découvertes.",
     features: [
       {
         title: "Trouver",
@@ -21,11 +17,6 @@ export const configDataFr = {
           "Trouver des articles Wikipedia de façon visuelle et ludique",
         icon: "search",
       },
-      // {
-      //   title: "Comprendre",
-      //   description: "Comprendre grâce à l'information libre",
-      //   icon: "text-align-left",
-      // },
       {
         title: "Rassembler",
         description:
@@ -43,35 +34,35 @@ export const configDataFr = {
   buttons: {
     HOME: {
       label: "Accueil",
-      icon: "workflow-status-all",
+      icon: ICONS.HOME,
     },
     KNOWBOOKS: {
       label: "Carnets",
-      icon: "folder",
+      icon: ICONS.KNOWBOOKS,
     },
     LOGIN: {
       label: "User",
-      icon: "person",
+      icon: ICONS.LOGIN,
     },
     INFO: {
       label: "Info",
-      icon: "question-mark",
+      icon: ICONS.INFO,
     },
     SAVE: {
       label: "Sauver",
-      icon: "heart",
+      icon: ICONS.SAVE,
     },
     EDIT: {
       label: "Modifier",
-      icon: "download",
+      icon: ICONS.EDIT,
     },
     ARTICLE: {
       label: "Article",
-      icon: "menu",
+      icon: ICONS.ARTICLE,
     },
     VIZS: {
       label: "Vizs",
-      icon: "globe",
+      icon: ICONS.VIZS,
     },
   },
   knowbooks: {
@@ -85,7 +76,7 @@ export const configDataFr = {
     input_placeholder: "Nouveau Carnet",
   },
   renameDeleteKnowbook: {
-    title: "Renommer un knowbook",
+    title: "Renommer un carnet",
     rename_label: "Renommer",
     cancel_label: "Annuler",
   },
@@ -115,10 +106,15 @@ export const configDataFr = {
       missing_password_text: "Mot de passe oublié ?",
       login_label: "Connexion",
       signup_label: "Enregistrement",
-      login_error: "Nom d'utilisateur ou mot de passe incorect",
+      login_error: "Nom d'utilisateur ou mot de passe incorrect",
       signup_error: "Impossible de créer le compte",
       signup_error_duration:
         "Rafraîchir la page, remplir les champs et attendre quelques secondes avant de s'enregistrer",
+    },
+    languages: {
+      [ConfigLanguage.fr]: "Francais",
+      [ConfigLanguage.it]: "Italien",
+      [ConfigLanguage.en]: "Anglais",
     },
   },
 };

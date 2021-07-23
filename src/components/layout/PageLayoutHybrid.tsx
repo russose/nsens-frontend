@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Box, Sticky } from "gestalt";
+import { Box } from "gestalt";
 import { ColorT, reactComponentT } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
 import { configGeneral } from "../../config/globals";
@@ -16,6 +16,7 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
   const color_background: ColorT = configGeneral.colors.background;
   const heightHeader =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightHeader;
+  // const heightHeader = 60;
   const heightBody =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightBody;
 

@@ -173,20 +173,21 @@ module.exports = [
   //
   {
     urlPattern: ({ url }) => {
-      const isSameOrigin = self.origin === url.origin;
-      if (!isSameOrigin) return false;
+      // const isSameOrigin = self.origin === url.origin;
+      // if (!isSameOrigin) return false;
+      //
       // const pathname = url.pathname;
       // if (pathname.startsWith("/api/")) return false;
       return true;
     },
-    handler: "NetworkFirst",
+    handler: "StaleWhileRevalidate",
     options: {
       cacheName: "others",
       expiration: {
         maxEntries: 320,
         maxAgeSeconds: 7 * 24 * 60 * 60, // 7 * days
       },
-      networkTimeoutSeconds: 10,
+      // networkTimeoutSeconds: 10,
     },
   },
 ];

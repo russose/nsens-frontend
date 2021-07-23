@@ -4,7 +4,7 @@ import { ButtonIDType, configPaths, IButton } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import { configGeneral } from "../config/globals";
-import { empty_handler } from "../libs/utils";
+import { empty_handler, isMobile } from "../libs/utils";
 import { goUserHandler } from "../libs/helpersBase";
 import { useRouter } from "next/router";
 
@@ -80,6 +80,8 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     button_updated = buttons;
   }
 
+  const displayLabel = !isMobile(props.stores.baseStore.GUI_CONFIG.id);
+
   const menuBarButton = (
     <MenuBarButtonLayout
       stores={props.stores}
@@ -88,7 +90,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
       direction="row"
       rounding={rounding}
       buttons={button_updated}
-      displayLabel={false}
+      displayLabel={displayLabel}
     />
   );
 

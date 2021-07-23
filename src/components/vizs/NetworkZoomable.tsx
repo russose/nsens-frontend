@@ -7,10 +7,10 @@ import { isMobile } from "../../libs/utils";
 import { IStores } from "../../stores/RootStore";
 import MyZoom from "./MyZoom";
 
-const NetworkDynamic = dynamic(() => import("../Network"), {
+const NetworkDynamic = dynamic(() => import("./Network"), {
   ssr: false,
 });
-const NetworkFlatDynamic = dynamic(() => import("../NetworkFlat"), {
+const NetworkFlatDynamic = dynamic(() => import("./NetworkFlat"), {
   ssr: false,
 });
 
@@ -26,7 +26,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   props
 ) => {
   const margin = 5;
-  const size_factor = 4;
+  const size_factor = 4; //4
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const max_nodes_network = GUI_CONFIG.display.max_nodes_network;
   // const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;

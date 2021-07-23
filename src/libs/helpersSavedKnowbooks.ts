@@ -6,7 +6,7 @@ import {
   KnowbookID,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { api_getItemsFromTitlesFromWeb } from "./apiItems";
+import { api_getItemsFromTitlesFromWeb_blocking } from "./apiItems";
 import {
   api_addItemInKnowbook,
   api_addKnowbook,
@@ -55,7 +55,7 @@ export function addSaved(itemId: AtomID, stores: IStores): void {
   const item = getItemFromAnyStores(itemId, stores);
 
   if (item === undefined) {
-    api_getItemsFromTitlesFromWeb(
+    api_getItemsFromTitlesFromWeb_blocking(
       stores.uiStore.selectedAtom.title,
       lang,
       exclusion_patterns_items
@@ -115,7 +115,7 @@ export function removeSaved(itemId: AtomID, stores: IStores): void {
 
     stores.savedStore.deleteSaved(itemId);
     setTimeout(() => {
-      api_unsave(itemId)
+      api_unsave(itemId, stores.baseStore.paramsPage.lang)
         // .then(() => {
         //   console.log("unsaved successfull");
         // })
@@ -163,7 +163,7 @@ export function renameKnowbook(
     return;
   }
 
-  api_renameKnowbook(name, new_name)
+  api_renameKnowbook(name, new_name, stores.baseStore.paramsPage.lang)
     .then(
       // action(
       () => {
@@ -196,7 +196,7 @@ export function deleteKnowbook(name: KnowbookID, stores: IStores) {
   if (getKnowbookAtomsList(name, stores).length !== 0) {
     return;
   }
-  api_removeKnowbook(name)
+  api_removeKnowbook(name, stores.baseStore.paramsPage.lang)
     .then(
       // action(
       () => {
@@ -233,9 +233,17 @@ export function addItemInKnowbook(
     //     // console.log("error in adding item in knowbook");
     //   });
 
-    stores.knowbookStore.addItemInKnowbook(knowbookID, atomId);
+    stores.knowbookStore.addItemInKnowbook(
+      knowbookID,
+      atomId,
+      stores.baseStore.paramsPage.lang
+    );
     setTimeout(() => {
-      api_addItemInKnowbook(knowbookID, atomId)
+      api_addItemInKnowbook(
+        knowbookID,
+        atomId,
+        stores.baseStore.paramsPage.lang
+      )
         // .then(() => {
         //   console.log("added in knowbook successfully");
         // })
@@ -246,6 +254,7 @@ export function addItemInKnowbook(
   } else {
     const newKnowbook: IKnowbook = {
       id: -1, //id not used in front but only in back
+      language: stores.baseStore.paramsPage.lang,
       name: knowbookID,
       items: [atomId],
     };
@@ -263,9 +272,13 @@ export function addItemInKnowbook(
 
     stores.knowbookStore.setKnowbooks(knowbookID, newKnowbook);
     setTimeout(() => {
-      api_addKnowbook(knowbookID)
+      api_addKnowbook(knowbookID, stores.baseStore.paramsPage.lang)
         .then(() => {
-          api_addItemInKnowbook(knowbookID, atomId);
+          api_addItemInKnowbook(
+            knowbookID,
+            atomId,
+            stores.baseStore.paramsPage.lang
+          );
         })
         // .then(() => {
         //   console.log("added in knowbook successfully");
@@ -300,9 +313,17 @@ export function removeItemFromKnowbook(
 
       // this.knowbooks.set(knowbookID, knowbook_updated);
 
-      api_removeItemFromKnowbook(knowbookID, atomId)
+      api_removeItemFromKnowbook(
+        knowbookID,
+        atomId,
+        stores.baseStore.paramsPage.lang
+      )
         .then(() => {
-          stores.knowbookStore.removeItemFromKnowbook(knowbookID, atomId);
+          stores.knowbookStore.removeItemFromKnowbook(
+            knowbookID,
+            atomId,
+            stores.baseStore.paramsPage.lang
+          );
           return;
         })
         .catch(() => {

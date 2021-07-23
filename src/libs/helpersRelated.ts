@@ -10,7 +10,7 @@ import {
   makeArrayFlat,
   shuffleSizedRemoveDoublesFilterIds,
 } from "./utils";
-import { api_getRelatedFromWeb } from "./apiRelated";
+import { api_getRelatedFromWeb_blocking } from "./apiRelated";
 
 export function initialyzeRelatedAndRelatedAllFromSaved(stores: IStores): void {
   stores.savedStore.getSavedList().forEach((item: IAtom) => {
@@ -112,7 +112,7 @@ export async function fetchRelatedAndUpdateStores(
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
 
-  const relatedItems_no_generic_item = await api_getRelatedFromWeb(
+  const relatedItems_no_generic_item = await api_getRelatedFromWeb_blocking(
     itemId,
     title,
     lang,

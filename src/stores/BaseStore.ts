@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable } from "mobx";
-import { configDataFr } from "../config/configDataFr";
+// import { configDataFr } from "../config/configDataFr";
 import {
   AtomID,
   IGUICONFIG,
@@ -9,23 +9,25 @@ import {
   IUser,
   ConfigDisplay,
   initStateCat,
+  ConfigLanguage,
+  configDataLanguage,
 } from "../config/globals";
 
 interface IInitState {
-  [initStateCat.app]: boolean;
-  [initStateCat.feed]: boolean;
+  [initStateCat.core]: boolean;
+  // [initStateCat.feed]: boolean;
   [initStateCat.staticKnowbooks]: boolean;
-  [initStateCat.knowbooks]: boolean;
-  [initStateCat.saved]: boolean;
+  // [initStateCat.knowbooks]: boolean;
+  [initStateCat.userData]: boolean;
 }
 
 export class BaseStore {
   private $initCompleted: IInitState = {
-    app: undefined,
-    feed: undefined,
-    staticKnowbooks: undefined,
-    knowbooks: undefined,
-    saved: undefined,
+    [initStateCat.core]: undefined,
+    // [initStateCat.feed]: undefined,
+    [initStateCat.staticKnowbooks]: undefined,
+    // knowbooks: undefined,
+    [initStateCat.userData]: undefined,
   };
 
   //username="": the user not logged - username=null: App not initialyzed
@@ -41,7 +43,7 @@ export class BaseStore {
 
   private $feed = observable.map<AtomID, IAtom>();
   private $mostviewed = observable.map<AtomID, IAtom>();
-  private $history = observable.map<AtomID, IAtom>();
+  private $history = observable.map<AtomID, IAtom>(); //Search history
 
   private $related = observable.map<AtomID, IRelatedAtom[]>();
   private $relatedAll = observable.map<AtomID, IAtom>();
@@ -51,10 +53,14 @@ export class BaseStore {
       $user: observable,
       // $GUI_CONFIG: observable,
       $initCompleted: observable,
+      // $paramsPage: observable,
+      clearHistory: action,
       clearRelatedAndRelatedAll: action,
       setInitCompleted: action,
       setFeed: action,
+      setFeedSingle: action,
       setMostviewed: action,
+      setMostviewedSingle: action,
       setHistory: action,
       isLogged: computed,
       setUser: action,
@@ -62,6 +68,10 @@ export class BaseStore {
       setRelatedAll: action,
       setParamsPageAndGUICONFIGFromParamsPageData: action,
     });
+  }
+
+  clearHistory(): void {
+    this.$history.clear();
   }
 
   clearRelatedAndRelatedAll(): void {
@@ -89,7 +99,11 @@ export class BaseStore {
   }
 
   async setParamsPageAndGUICONFIGFromParamsPageData(paramsPage: IparamsPage) {
-    if (paramsPage === undefined) {
+    if (
+      paramsPage === undefined ||
+      paramsPage.lang === undefined ||
+      paramsPage.display === undefined
+    ) {
       return;
     }
 
@@ -97,34 +111,33 @@ export class BaseStore {
     const display = paramsPage.display;
     const id = lang + "_" + display;
 
-    // if (
-    //   this.GUI_CONFIG === undefined ||
-    //   this.GUI_CONFIG.id === undefined ||
-    //   // GUI_CONFIG.id !== this.GUI_CONFIG.id
-    //   id !== this.GUI_CONFIG.id
-    // ) {
     let GUI_CONFIG_: IGUICONFIG;
 
-    // if (params === undefined) {
-    //   const configGUIMobile = await import("../config/configDataMobile");
-    //   GUI_CONFIG = {
-    //     id: id,
-    //     language: configDataFr,
-    //     display: configGUIMobile.configDataMobile,
-    //   };
-    // }
+    let configDataLang: configDataLanguage;
+
+    if (lang === ConfigLanguage.fr) {
+      const configDataFr = await import("../config/configDataFr");
+      configDataLang = configDataFr.configDataFr;
+    } else if (lang === ConfigLanguage.it) {
+      const configDataIt = await import("../config/configDataIt");
+      configDataLang = configDataIt.configDataIt;
+    } else if (lang === ConfigLanguage.en) {
+      const configDataEn = await import("../config/configDataEn");
+      configDataLang = configDataEn.configDataEn;
+    }
+
     if (display === ConfigDisplay.mobile) {
       const configGUIMobile = await import("../config/configDataMobile");
       GUI_CONFIG_ = {
         id: id,
-        language: configDataFr,
+        language: configDataLang,
         display: configGUIMobile.configDataMobile,
       };
     } else if (display === ConfigDisplay.desktop) {
       const configGUIDesktop = await import("../config/configDataDesktop");
       GUI_CONFIG_ = {
         id: id,
-        language: configDataFr,
+        language: configDataLang,
         display: configGUIDesktop.configDataDesktop,
       };
     } else if (display === ConfigDisplay.large) {
@@ -134,7 +147,7 @@ export class BaseStore {
       );
       GUI_CONFIG_ = {
         id: id,
-        language: configDataFr,
+        language: configDataLang,
         display: configGUIDesktop.configDataDesktop,
       };
       // GUI_CONFIG__.display.About.features.lgColumn =
@@ -150,7 +163,7 @@ export class BaseStore {
       );
       GUI_CONFIG_ = {
         id: id,
-        language: configDataFr,
+        language: configDataLang,
         display: configGUIDesktop.configDataDesktop,
       };
       // GUI_CONFIG__.display.About.features.lgColumn =
@@ -171,11 +184,12 @@ export class BaseStore {
     //   this.$paramsPage.lang = paramsPage[0];
     //   this.$paramsPage.display = paramsPage[1];
     // }
-    if (id !== undefined) {
-      // const paramsPage: any[] = GUI_CONFIG.id.split("_");
-      this.$paramsPage.lang = lang;
-      this.$paramsPage.display = display;
-    }
+    // if (id !== undefined) {
+    // const paramsPage: any[] = GUI_CONFIG.id.split("_");
+    this.$paramsPage.lang = lang;
+    this.$paramsPage.display = display;
+
+    // }
     // }
   }
 
@@ -242,6 +256,13 @@ export class BaseStore {
     atoms.forEach((item) => this.$mostviewed.set(item.id, item));
   }
 
+  setMostviewedSingle(item: IAtom): void {
+    if (item === undefined) {
+      return;
+    }
+    this.$mostviewed.set(item.id, item);
+  }
+
   get feed() {
     return this.$feed;
   }
@@ -254,6 +275,14 @@ export class BaseStore {
       this.$feed.set(item.id, item);
     });
     this.setHistory(atoms);
+  }
+
+  setFeedSingle(item: IAtom): void {
+    if (item === undefined) {
+      return;
+    }
+    this.$feed.set(item.id, item);
+    this.$history.set(item.id, item);
   }
 
   get history() {

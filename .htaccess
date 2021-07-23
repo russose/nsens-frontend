@@ -19,22 +19,22 @@ Allow from all
         Header set Cache-Control "no-cache, max-age=0, public"
     </FilesMatch>
 
-    <FilesMatch "\.(webp)$">
-        Header set Cache-Control "max-age=2628000, public"
-    </FilesMatch>
-
-    #favicon
-	<FilesMatch "\.(png)$">
-        Header set Cache-Control "max-age=2628000, public"
-    </FilesMatch>
-
-    <FilesMatch "\.(txt)$">
-        Header set Cache-Control "max-age=604800, public"
-    </FilesMatch>
-
-	<FilesMatch "\.(json|js)$">
-        Header set Cache-Control "max-age=604800, public"
-    </FilesMatch>
+    #<FilesMatch "\.(webp)$">
+    #    Header set Cache-Control "max-age=2628000, public"
+    #</FilesMatch>
+#
+    ##favicon
+	#<FilesMatch "\.(png)$">
+    #    Header set Cache-Control "max-age=2628000, public"
+    #</FilesMatch>
+#
+    #<FilesMatch "\.(txt)$">
+    #    Header set Cache-Control "max-age=604800, public"
+    #</FilesMatch>
+#
+	#<FilesMatch "\.(json|js)$">
+    #    Header set Cache-Control "max-age=604800, public"
+    #</FilesMatch>
 
 
 

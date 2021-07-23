@@ -3,18 +3,18 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configPaths, group_name } from "../config/globals";
-import { onEditKnowbooks } from "../handlers/handlers_Knowbooks";
+import { configPaths, group_name } from "../../config/globals";
+import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
 import {
   isItemSaved,
   isItemSavedActivated,
   onSaved,
-} from "../handlers/handlers_Saved";
-import { IStores } from "../stores/RootStore";
-import { useStores } from "../stores/RootStoreHook";
-import CardAtomCompact from "./CardAtomCompact";
-import NetworkLinkWithLabel from "./vizs/NetworkLinkWithLabel";
-import NodeGroup from "./vizs/NodeGroup";
+} from "../../handlers/handlers_Saved";
+import { IStores } from "../../stores/RootStore";
+import { useStores } from "../../stores/RootStoreHook";
+import CardAtomCompact from "../CardAtomCompact";
+import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
+import NodeGroup from "./NodeGroup";
 
 export type INetworkWithGroupProps = {
   title: string;

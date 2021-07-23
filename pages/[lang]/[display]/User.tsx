@@ -6,6 +6,7 @@ import React from "react";
 // import CatchupMessage from "../../../src/components/CatchupMessage";
 import FormLoginSignup from "../../../src/components/FormLoginSignup";
 import HeaderTitle from "../../../src/components/HeaderTitle";
+import LanguageSelector from "../../../src/components/LanguageSelector";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { configPaths } from "../../../src/config/globals";
 import {
@@ -32,7 +33,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }
@@ -53,6 +54,8 @@ const User: React.FunctionComponent<IPage> = (props) => {
     GUI_CONFIG.language.user.loginSignup.missing_password_text;
   const login_label = GUI_CONFIG.language.user.loginSignup.login_label;
   const signup_label = GUI_CONFIG.language.user.loginSignup.signup_label;
+
+  const height_elements = stores.baseStore.GUI_CONFIG.display.heightUser;
 
   const loginSignup = (
     <Box padding={0} column={11} smColumn={11} mdColumn={5} lgColumn={3}>
@@ -77,7 +80,11 @@ const User: React.FunctionComponent<IPage> = (props) => {
         size="lg"
         color="blue"
         onClick={() => {
-          goPage(stores.baseStore.paramsPage, configPaths.pages.ChangePassword);
+          goPage(
+            stores,
+            stores.baseStore.paramsPage,
+            configPaths.pages.ChangePassword
+          );
         }}
       />
     </Box>
@@ -95,18 +102,11 @@ const User: React.FunctionComponent<IPage> = (props) => {
     </Box>
   );
 
-  // const installation_instructions = !isInstalled() &&
-  //   isMobile(GUI_CONFIG.id) && (
-  //     <Installation
-  //       height="25vh"
-  //       path_image={configPaths.image_install}
-  //       instruction={GUI_CONFIG.language.user.install_instructions}
-  //     />
-  //   );
-
-  // const height_elements = isMobile(GUI_CONFIG.id) ? "60vh" : "30vh";
-
-  const height_elements = stores.baseStore.GUI_CONFIG.display.heightUser;
+  const languageSelector = (
+    <Box padding={0} column={11} smColumn={11} mdColumn={5} lgColumn={3}>
+      <LanguageSelector stores={stores} />
+    </Box>
+  );
 
   const catchMessage = (
     <CatchupMessageDynamic stores={stores} withButton={false} />
@@ -116,6 +116,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
   if (!stores.baseStore.isLogged) {
     page_content = (
       <>
+        {languageSelector}
         {loginSignup}
         {catchMessage}
       </>
@@ -123,6 +124,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
   } else {
     page_content = (
       <>
+        {languageSelector}
         {resetPasswordButton}
         {logoutButton}
       </>

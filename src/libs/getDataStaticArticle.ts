@@ -13,9 +13,10 @@ import {
   EXCLUSION_PATTERNS,
   IAtom,
   is_testing_mode,
+  languages_activated,
 } from "../config/globals";
 import { fetchArticle } from "./fetch";
-import { ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia } from "./fetchBase";
+import { ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking } from "./fetchBase";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import { readFileJson, writeFileJson } from "./utilsServer";
 
@@ -31,7 +32,11 @@ export interface IPageStaticArticle extends IPage {
 async function getAllConfigStaticArticles() {
   let item_title_list: string[] = [];
 
-  const languages_list = Object.values(ConfigLanguage);
+  // const languages_list = Object.values(ConfigLanguage);
+  const languages_list = Object.values(ConfigLanguage).filter((language) => {
+    return languages_activated.includes(language);
+  });
+
   const titles_for_language = new Map<ConfigLanguage, string[]>();
 
   for (const language of languages_list) {
@@ -122,7 +127,7 @@ async function getConfigDataStaticArticles(
   );
 
   const items: IAtom[] =
-    await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
+    await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
       title,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),

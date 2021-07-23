@@ -8,8 +8,9 @@ import {
 import { fetch_data_wikidata } from "./fetch";
 import {
   buildListStringSeparated,
-  filterAndImproveImages,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
+  filterItems,
+  improveImageFromWikipediaParallel_blocking,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking,
   ItemsRelatedFromWikipediaRaw,
 } from "./fetchBase";
 
@@ -19,7 +20,7 @@ const max_size_api = configFetching.max_size_chunk_api;
  * Interface
  */
 
-export async function fetchRelated(
+export async function fetchRelated_blocking(
   itemId: AtomID,
   title: string,
   amount: number,
@@ -38,7 +39,7 @@ export async function fetchRelated(
   //   await api_getRelatedFromWikidataFromWeb(itemId, lang);
 
   const relatedItems_wikipedia: IRelatedAtom[] =
-    await ItemsRelatedFromWikipedia(
+    await ItemsRelatedFromWikipedia_blocking(
       title,
       // itemId,
       amount,
@@ -48,13 +49,14 @@ export async function fetchRelated(
       exclusion_patterns
     );
 
-  const relatedItems_wikidata: IRelatedAtom[] = await ItemsFromWikidata(
-    itemId,
-    ROOT_URL_REST_API,
-    ROOT_URL_ACTION_API,
-    lang,
-    exclusion_patterns
-  );
+  const relatedItems_wikidata: IRelatedAtom[] =
+    await ItemsFromWikidata_blocking(
+      itemId,
+      ROOT_URL_REST_API,
+      ROOT_URL_ACTION_API,
+      lang,
+      exclusion_patterns
+    );
 
   const relatedItems = relatedItems_wikidata.concat(relatedItems_wikipedia);
 
@@ -83,7 +85,7 @@ export async function fetchRelated(
  *
  */
 
-async function ItemsRelatedFromWikipedia(
+async function ItemsRelatedFromWikipedia_blocking(
   title: string,
   amount: number,
   ROOT_URL_REST_API: string,
@@ -99,12 +101,20 @@ async function ItemsRelatedFromWikipedia(
     lang
   );
 
-  const atomsListWithImages = await filterAndImproveImages(
-    atomsList,
-    ROOT_URL_REST_API,
+  // const atomsListWithImages = await filterAndGetCleanImages_blocking(
+  //   atomsList,
+  //   ROOT_URL_REST_API,
+  //   ROOT_URL_ACTION_API,
+  //   lang,
+  //   exclusion_patterns
+  // );
+
+  const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
+  const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
+    atomsList_filtered,
     ROOT_URL_ACTION_API,
-    lang,
-    exclusion_patterns
+    ROOT_URL_REST_API,
+    lang
   );
 
   const related: IRelatedAtom[] = atomsListWithImages.map((item: IAtom) => {
@@ -114,7 +124,7 @@ async function ItemsRelatedFromWikipedia(
   return related;
 }
 
-async function ItemsFromWikidata(
+async function ItemsFromWikidata_blocking(
   itemId: string,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
@@ -122,12 +132,12 @@ async function ItemsFromWikidata(
   exclusion_patterns: string[]
 ): Promise<IRelatedAtom[]> {
   //
-  async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
+  async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel_blocking(
     list_of_PageTitle_string: string[]
   ): Promise<IAtom[][]> {
     const myBigPromise = await Promise.all(
       list_of_PageTitle_string.map((PageTitle_string: string) => {
-        return ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
+        return ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
           PageTitle_string,
           ROOT_URL_REST_API,
           ROOT_URL_ACTION_API,
@@ -185,7 +195,7 @@ async function ItemsFromWikidata(
     );
 
     const items_chunked: IAtom[][] =
-      await ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel(
+      await ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel_blocking(
         list_of_PageTitle_string
       );
     // const items_flat: IAtom[] = makeArrayFlat(items_chunked)

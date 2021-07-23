@@ -11,10 +11,7 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../../src/libs/getDataStaticKnowbooks";
-import {
-  initializeApp,
-  initializeKnowbooks,
-} from "../../../../src/libs/helpersInitialize";
+import { initializeApp } from "../../../../src/libs/helpersInitialize";
 import { readRelatedFromItem } from "../../../../src/libs/helpersRelated";
 import {
   makeArrayFlat,
@@ -53,8 +50,8 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  initializeKnowbooks(stores);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  // initializeKnowbooks(stores);
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }

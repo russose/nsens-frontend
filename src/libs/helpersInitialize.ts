@@ -15,13 +15,11 @@ import {
 import { readRelatedFromItem } from "./helpersRelated";
 
 export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
-  // stores.uiStore.setShowLoading(true);
-  // await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
-  //   paramsPage
-  // );
   try {
-    if (stores.baseStore.initCompleted.app === undefined) {
-      stores.baseStore.setInitCompleted(initStateCat.app, false);
+    if (stores.baseStore.initCompleted.core === undefined) {
+      stores.uiStore.setShowLoading(true);
+      /****************Core Blocking*******************************/
+      stores.baseStore.setInitCompleted(initStateCat.core, false);
 
       stores.baseStore.setscreenNoSSR();
       await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
@@ -31,93 +29,72 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       const user = await api_getUser();
       stores.baseStore.setUser({ username: user });
 
-      initializeSaved(stores);
+      //Mostviewed
+      await initialyzeMostviewed(stores);
 
-      stores.baseStore.setInitCompleted(initStateCat.app, true);
+      stores.baseStore.setInitCompleted(initStateCat.core, true);
+      /************************************************************/
+      stores.uiStore.setShowLoading(false);
+    } else if (stores.baseStore.initCompleted.core !== true) {
+      return;
+    }
+
+    if (stores.baseStore.initCompleted.staticKnowbooks === undefined) {
+      stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);
+      //Static knowbooks
+      // await initializeStaticKnowbooks(stores);
+      initializeStaticKnowbooks(stores);
+      stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, true);
+    }
+
+    if (stores.baseStore.initCompleted.userData === undefined) {
+      stores.baseStore.setInitCompleted(initStateCat.userData, false);
+
+      // Saved Items
+      if (stores.baseStore.isLogged) {
+        const helpersInitializeLogged = await import(
+          "./helpersInitializeLogged"
+        );
+        await helpersInitializeLogged.initializeSavedLogged(stores);
+      } else {
+        stores.savedStore.clearSaved();
+        stores.baseStore.clearRelatedAndRelatedAll();
+      }
+
+      setFeedFromMostviewedAndRelated(
+        stores,
+        stores.baseStore.GUI_CONFIG.display.amount_item_displayed
+      );
+
+      //Knowbooks
+      if (stores.baseStore.isLogged) {
+        const helpersInitializeLogged = await import(
+          "./helpersInitializeLogged"
+        );
+        helpersInitializeLogged.initializeKnowbooksLogged(stores);
+      } else {
+        stores.knowbookStore.clearKnowbooks();
+      }
+      stores.baseStore.setInitCompleted(initStateCat.userData, true);
     }
   } catch (error) {
     // console.log(error);
   }
-
-  // stores.uiStore.setShowLoading(false);
-}
-
-export async function initializeSaved(stores: IStores) {
-  // stores.uiStore.setShowLoading(true);
-  if (stores.baseStore.initCompleted.saved === undefined) {
-    stores.baseStore.setInitCompleted(initStateCat.saved, false);
-    if (stores.baseStore.isLogged) {
-      const helpersInitializeLogged = await import("./helpersInitializeLogged");
-      await helpersInitializeLogged.initializeSavedLogged(stores);
-    } else {
-      stores.savedStore.clearSaved();
-      stores.baseStore.clearRelatedAndRelatedAll();
-    }
-    stores.baseStore.setInitCompleted(initStateCat.saved, true);
-  }
-  // stores.uiStore.setShowLoading(false);
-}
-
-export async function initializeFeed(stores: IStores) {
-  // stores.uiStore.setShowLoading(true);
-  if (
-    stores.baseStore.initCompleted.feed === undefined &&
-    stores.baseStore.initCompleted.app === true
-  ) {
-    // try {
-    stores.baseStore.setInitCompleted(initStateCat.feed, false);
-
-    const amount_item_displayed =
-      stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
-    await initialyzeMostviewed(stores);
-    setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
-
-    stores.baseStore.setInitCompleted(initStateCat.feed, true);
-
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  }
-  // stores.uiStore.setShowLoading(false);
-}
-
-export async function initializeKnowbooks(stores: IStores) {
-  // stores.uiStore.setShowLoading(true);
-  // try {
-  if (
-    stores.baseStore.initCompleted.staticKnowbooks === undefined &&
-    stores.baseStore.initCompleted.app === true
-  ) {
-    stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);
-    await initializeStaticKnowbooks(stores);
-    stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, true);
-  }
-  // } catch (error) {
-  //   // console.log(error);
-  // }
-
-  if (
-    stores.baseStore.initCompleted.knowbooks === undefined &&
-    stores.baseStore.initCompleted.app === true
-  ) {
-    stores.baseStore.setInitCompleted(initStateCat.knowbooks, false);
-
-    if (stores.baseStore.isLogged) {
-      const helpersInitializeLogged = await import("./helpersInitializeLogged");
-      await helpersInitializeLogged.initializeKnowbooksLogged(stores);
-    } else {
-      stores.knowbookStore.clearKnowbooks();
-    }
-    stores.baseStore.setInitCompleted(initStateCat.knowbooks, true);
-  }
-
-  // stores.uiStore.setShowLoading(false);
 }
 
 export async function initializeStaticKnowbooks(stores: IStores) {
   //Static Knowbooks
   const lang = stores.baseStore.paramsPage.lang;
-  const staticKnowbooks_local = staticKnowbooks;
+  const staticKnowbooks_local_all = staticKnowbooks;
+  const staticKnowbooks_local = staticKnowbooks_local_all.filter((knowbook) => {
+    return (
+      knowbook.lang === "" || knowbook.lang === stores.baseStore.paramsPage.lang
+    );
+  });
+
+  //   image_paths_list = image_paths_list.filter((item) => {
+  //     return item !== "";
+  //   });
   try {
     for (const item of staticKnowbooks_local) {
       const knowbook_json: any = await api_getStaticKnowbooksLocal(
@@ -126,6 +103,7 @@ export async function initializeStaticKnowbooks(stores: IStores) {
       );
       const knowbook: IKnowbookStatic = {
         id: -1, //id not used in front but only in back
+        language: lang,
         name: knowbook_json.nameOrPeriod,
         name_display: knowbook_json.name_display,
         items: knowbook_json.items,
@@ -149,3 +127,106 @@ export async function initializeStaticKnowbooks(stores: IStores) {
     // console.log("error in getting static knowbooks...");
   }
 }
+
+// export async function initializeApp_Old(
+//   stores: IStores,
+//   paramsPage: IparamsPage
+// ) {
+//   // stores.uiStore.setShowLoading(true);
+//   // await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
+//   //   paramsPage
+//   // );
+//   try {
+//     if (stores.baseStore.initCompleted.app === undefined) {
+//       stores.baseStore.setInitCompleted(initStateCat.app, false);
+
+//       stores.baseStore.setscreenNoSSR();
+//       await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
+//         paramsPage
+//       );
+
+//       const user = await api_getUser();
+//       stores.baseStore.setUser({ username: user });
+
+//       initializeSaved(stores);
+
+//       stores.baseStore.setInitCompleted(initStateCat.app, true);
+//     }
+//   } catch (error) {
+//     // console.log(error);
+//   }
+
+//   // stores.uiStore.setShowLoading(false);
+// }
+
+// export async function initializeSaved(stores: IStores) {
+//   // stores.uiStore.setShowLoading(true);
+//   if (stores.baseStore.initCompleted.saved === undefined) {
+//     stores.baseStore.setInitCompleted(initStateCat.saved, false);
+//     if (stores.baseStore.isLogged) {
+//       const helpersInitializeLogged = await import("./helpersInitializeLogged");
+//       await helpersInitializeLogged.initializeSavedLogged(stores);
+//     } else {
+//       stores.savedStore.clearSaved();
+//       stores.baseStore.clearRelatedAndRelatedAll();
+//     }
+//     stores.baseStore.setInitCompleted(initStateCat.saved, true);
+//   }
+//   // stores.uiStore.setShowLoading(false);
+// }
+
+// export async function initializeFeed(stores: IStores) {
+//   // stores.uiStore.setShowLoading(true);
+//   if (
+//     stores.baseStore.initCompleted.feed === undefined &&
+//     stores.baseStore.initCompleted.app === true
+//   ) {
+//     // try {
+//     stores.baseStore.setInitCompleted(initStateCat.feed, false);
+
+//     const amount_item_displayed =
+//       stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+//     await initialyzeMostviewed(stores);
+//     setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+
+//     stores.baseStore.setInitCompleted(initStateCat.feed, true);
+
+//     // } catch (error) {
+//     //   console.log(error);
+//     // }
+//   }
+//   // stores.uiStore.setShowLoading(false);
+// }
+
+// export async function initializeKnowbooks(stores: IStores) {
+//   // stores.uiStore.setShowLoading(true);
+//   // try {
+//   if (
+//     stores.baseStore.initCompleted.staticKnowbooks === undefined &&
+//     stores.baseStore.initCompleted.app === true
+//   ) {
+//     stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);
+//     await initializeStaticKnowbooks(stores);
+//     stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, true);
+//   }
+//   // } catch (error) {
+//   //   // console.log(error);
+//   // }
+
+//   if (
+//     stores.baseStore.initCompleted.knowbooks === undefined &&
+//     stores.baseStore.initCompleted.app === true
+//   ) {
+//     stores.baseStore.setInitCompleted(initStateCat.knowbooks, false);
+
+//     if (stores.baseStore.isLogged) {
+//       const helpersInitializeLogged = await import("./helpersInitializeLogged");
+//       await helpersInitializeLogged.initializeKnowbooksLogged(stores);
+//     } else {
+//       stores.knowbookStore.clearKnowbooks();
+//     }
+//     stores.baseStore.setInitCompleted(initStateCat.knowbooks, true);
+//   }
+
+//   // stores.uiStore.setShowLoading(false);
+// }

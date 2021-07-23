@@ -15,10 +15,10 @@ import {
   IStaticKnowbookDefinition,
   is_testing_mode,
 } from "../config/globals";
-import { api_getRelatedFromWeb } from "./apiRelated";
+import { api_getRelatedFromWeb_blocking } from "./apiRelated";
 import {
   buildListStringSeparated,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking,
 } from "./fetchBase";
 import { ItemsBestYearFromWikipedia } from "./fetchBestServer";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
@@ -138,7 +138,7 @@ async function getConfigDataGuiStaticKnowbooks(
     const list_of_Pages_titles_string =
       buildListStringSeparated(list_of_Pages_titles);
     items =
-      await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
+      await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
         list_of_Pages_titles_string,
         ROOT_URL_WIKIPEDIA_REST(lang),
         ROOT_URL_WIKIPEDIA_ACTION(lang),
@@ -150,7 +150,7 @@ async function getConfigDataGuiStaticKnowbooks(
 
     let items_with_related: IAtom[] = [];
     for (const item of items) {
-      const related: IRelatedAtom[] = await api_getRelatedFromWeb(
+      const related: IRelatedAtom[] = await api_getRelatedFromWeb_blocking(
         item.id,
         item.title,
         lang,

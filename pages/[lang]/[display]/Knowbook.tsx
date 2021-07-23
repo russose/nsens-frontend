@@ -11,10 +11,7 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
-import {
-  initializeApp,
-  initializeKnowbooks,
-} from "../../../src/libs/helpersInitialize";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 import { getRelatedItemsForItems } from "../../../src/libs/helpersRelated";
 import { getKnowbookAtomsList } from "../../../src/libs/helpersSavedKnowbooks";
 import { useStores } from "../../../src/stores/RootStoreHook";
@@ -23,8 +20,8 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  initializeKnowbooks(stores);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  // initializeKnowbooks(stores);
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }

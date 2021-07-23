@@ -3,6 +3,7 @@ import type { configDataMobile } from "./configDataMobile";
 
 export enum ConfigLanguage {
   fr = "fr",
+  it = "it",
   en = "en",
 }
 
@@ -15,19 +16,22 @@ export enum ConfigDisplay {
 }
 
 export enum initStateCat {
-  app = "app",
-  feed = "feed",
-
-  saved = "saved",
+  core = "core",
+  // feed = "feed",
   staticKnowbooks = "staticKnowbooks",
-  knowbooks = "knowbooks",
+
+  userData = "userData",
+
+  // knowbooks = "knowbooks",
 }
 
 export type configDataDisplay = typeof configDataMobile;
 
+export type configDataLanguage = typeof configDataFr;
+
 export interface IGUICONFIG {
   id: string;
-  language: typeof configDataFr;
+  language: configDataLanguage;
   display: configDataDisplay;
 }
 
@@ -76,7 +80,7 @@ export interface IAtom {
   pageid_wp: number;
   title: string;
   title_en: string;
-  language: string;
+  language: ConfigLanguage;
   image_url: string;
   image_width: number;
   image_height: number;
@@ -87,14 +91,16 @@ export interface IAtom {
 export interface IKnowbook {
   id: number;
   name: KnowbookID;
+  language: ConfigLanguage;
   //creation_date: Date;
   //update_date: Date;
   items: AtomID[];
 }
 
-interface IKnowbookFull {
+export interface IKnowbookFull {
   id: number; //internal ide for back only (database)
   name: KnowbookID;
+  language: ConfigLanguage;
   items: IAtom[];
 }
 
@@ -108,7 +114,7 @@ export interface IKnowbookStatic extends IKnowbookFull {
 export interface IStaticKnowbookDefinition {
   nameOrPeriod: string;
   display?: string;
-  lang: string;
+  lang: string | ConfigLanguage;
   items?: string[];
 }
 

@@ -19,7 +19,7 @@ import { fetchRelatedAndUpdateStores } from "./helpersRelated";
 import { IStores } from "../stores/RootStore";
 import { newAtom } from "./utils";
 import { getItemFromAnyStores } from "./helpersSavedKnowbooks";
-import { api_getItemsFromTitlesFromWeb } from "./apiItems";
+import { api_getItemsFromTitlesFromWeb_blocking } from "./apiItems";
 
 export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
   const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
@@ -311,7 +311,7 @@ export function renderGraph(
   let root_item: IAtom = getItemFromAnyStores(root_itemId, stores);
 
   if (root_item === undefined) {
-    api_getItemsFromTitlesFromWeb(
+    api_getItemsFromTitlesFromWeb_blocking(
       stores.uiStore.selectedAtom.title,
       lang,
       exclusion_patterns_items

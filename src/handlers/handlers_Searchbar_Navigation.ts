@@ -28,7 +28,8 @@ export const onTapLogo =
     //   item.title,
     //   GUI_CONFIG
     // );
-    goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
+    goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+
     const amount_item_displayed =
       stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
     setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
@@ -51,7 +52,7 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
       stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
     setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
   }
-  goPage(stores.baseStore.paramsPage, configPaths.pages.Home);
+  goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
 };
 
 export const onSearchHomeKeyboard =
@@ -72,9 +73,13 @@ export const onSearchHomeKeyboard =
 
 /*******************Navigation*************************** */
 
-export const onMenuButtonPath = (buttonId: ButtonIDType): string => {
+export const onMenuButtonPath = (
+  buttonId: ButtonIDType
+  // stores: IStores
+): string => {
   // const buttons = stores.baseStore.GUI_CONFIG.language.buttons;
   // const path = buttons[buttonId].path;
+  // stores.uiStore.setSearchPattern("");
   const path = configButtonsPath[buttonId];
   return path;
 };

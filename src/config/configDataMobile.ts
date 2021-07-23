@@ -21,8 +21,8 @@ export const configDataMobile = {
   size_icon_card: "sm",
   header_size: "sm",
   layout: {
-    heightHeader: "7%",
-    heightBody: "93%",
+    heightHeader: 60, //7%
+    heightBody: "87%",
   },
   dialogs: {
     title_size: "lg",

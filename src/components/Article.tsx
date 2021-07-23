@@ -12,6 +12,9 @@ interface IArticleProps {
 
 const Article: React.FunctionComponent<IArticleProps> = (props) => {
   const height = props.stores.baseStore.GUI_CONFIG.display.heightArticle;
+  const source_wikipedia =
+    props.stores.baseStore.GUI_CONFIG.language.source_wikipedia;
+
   if (props.item_title === undefined) {
     return <Text>{"..."}</Text>;
   }
@@ -45,7 +48,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
           target="blank"
         >
           <Text size="sm" weight="bold">
-            Source: Wikipedia
+            {source_wikipedia}
           </Text>
         </Link>
       </Box>

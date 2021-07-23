@@ -9,23 +9,20 @@ import {
 } from "../../../src/libs/getDataParamsPage";
 import HeaderTitle from "../../../src/components/HeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
-import { Box, Button } from "gestalt";
-import Separator from "../../../src/components/Separator";
+import { Box } from "gestalt";
 import FormChangePassword from "../../../src/components/FormChangePassword";
 import {
   onChangePassword_button,
   onChangePassword_text,
 } from "../../../src/handlers/handlers_ChangePassword";
-import { configPaths } from "../../../src/config/globals";
 import { initializeApp } from "../../../src/libs/helpersInitialize";
-import { goPage } from "../../../src/libs/helpersBase";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
 
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }
@@ -58,21 +55,21 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
     stores.uiStore.setChangePasswordUsername(stores.baseStore.user.username);
   }
 
-  const backButton = (
-    <Box display="flex" flex="grow" justifyContent="center">
-      <Box column={5} smColumn={4} mdColumn={2} lgColumn={1}>
-        <Button
-          accessibilityLabel="nSens_back"
-          text="n.Sens"
-          size="lg"
-          // color="red"
-          onClick={() => {
-            goPage(stores.baseStore.paramsPage, configPaths.pages.User);
-          }}
-        />
-      </Box>
-    </Box>
-  );
+  // const backButton = (
+  //   <Box display="flex" flex="grow" justifyContent="center">
+  //     <Box column={5} smColumn={4} mdColumn={2} lgColumn={1}>
+  //       <Button
+  //         accessibilityLabel="nSens_back"
+  //         text="n.Sens"
+  //         size="lg"
+  //         // color="red"
+  //         onClick={() => {
+  //           goPage(stores.baseStore.paramsPage, configPaths.pages.User);
+  //         }}
+  //       />
+  //     </Box>
+  //   </Box>
+  // );
 
   const changePasswordForm = (
     <Box
@@ -101,26 +98,33 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
     </Box>
   );
 
-  let page;
-  if (!isLogged) {
-    page = (
-      <>
-        <HeaderTitle stores={stores} title={title} hidden={false} />
-        {changePasswordForm}
-        <Separator with_line={false} />
-        {backButton}
-      </>
-    );
-  } else {
-    page = (
+  // let page;
+  // if (!isLogged) {
+  //   page = (
+  //     <>
+  //       <HeaderTitle stores={stores} title={title} hidden={false} />
+  //       {changePasswordForm}
+  //       <Separator with_line={false} />
+  //       {backButton}
+  //     </>
+  //   );
+  // } else {
+  //   page = (
+  //     <AppLayout stores={stores}>
+  //       <HeaderTitle stores={stores} title={title} hidden={false} />
+  //       {changePasswordForm}
+  //     </AppLayout>
+  //   );
+  // }
+
+  return (
+    <>
       <AppLayout stores={stores}>
         <HeaderTitle stores={stores} title={title} hidden={false} />
         {changePasswordForm}
       </AppLayout>
-    );
-  }
-
-  return <>{page}</>;
+    </>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {

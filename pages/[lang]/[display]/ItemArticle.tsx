@@ -30,7 +30,7 @@ const ItemArticle: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }
@@ -41,6 +41,7 @@ const ItemArticle: React.FunctionComponent<IPage> = (props) => {
 
   if (item_title !== undefined && item_id !== undefined) {
     stores.uiStore.setSelectedAtom(item_id, item_title);
+    stores.uiStore.setArticleContent("");
     stores.uiStore.setShowLoading(true);
     fetchArticle(
       item_title,

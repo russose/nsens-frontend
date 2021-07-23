@@ -1,4 +1,4 @@
-import { IStaticKnowbookDefinition } from "./globals";
+import { ConfigLanguage, IStaticKnowbookDefinition } from "./globals";
 
 export const staticKnowbooks: IStaticKnowbookDefinition[] = [
   { nameOrPeriod: "2016-2020", lang: "" },
@@ -6,17 +6,14 @@ export const staticKnowbooks: IStaticKnowbookDefinition[] = [
   {
     nameOrPeriod: "Ecologie_Developpement_Durable",
     display: "Ecologie et Développement Durable",
-    lang: "fr",
+    lang: ConfigLanguage.fr,
     items: [
-      "Tableau périodique des éléments",
       "Classification scientifique des espèces",
       "Extinction des espèces",
       "Grand requin blanc",
       "Développement durable",
       "Homo sapiens",
-      "Perte de la biodiversité",
       "Ressources et consommation énergétiques mondiales",
-      "Croissance économique",
       "Orque",
       "Les Limites à la croissance",
       "Jean-Marc Jancovici",
@@ -26,13 +23,11 @@ export const staticKnowbooks: IStaticKnowbookDefinition[] = [
       "Greta Thunberg",
       "Objectifs de développement durable",
       "Pandémie de Covid-19",
-      "Protection de l'environnement",
-      "SARS-CoV",
     ],
   },
   {
     nameOrPeriod: "Infinis",
-    lang: "fr",
+    lang: ConfigLanguage.fr,
     items: [
       "Physique quantique",
       "Relativité générale",
@@ -43,12 +38,11 @@ export const staticKnowbooks: IStaticKnowbookDefinition[] = [
       "Exoplanète",
       "Système solaire",
       "Trou noir",
-      "Matière noire",
     ],
   },
   {
     nameOrPeriod: "Philosophie",
-    lang: "fr",
+    lang: ConfigLanguage.fr,
     items: [
       "William James",
       "Blaise Pascal",
@@ -74,6 +68,58 @@ export const staticKnowbooks: IStaticKnowbookDefinition[] = [
       "Jean-Paul Sartre",
       "Adam Smith",
       "Épistémologie",
+      "Alchimie",
+    ],
+  },
+  {
+    nameOrPeriod: "Ecologia",
+    lang: ConfigLanguage.it,
+    items: [
+      "Ecologia",
+      "Sviluppo sostenibile",
+      "Rapporto sui limiti dello sviluppo",
+      "Biodiversità",
+      "Greta Thunberg",
+      "Obiettivi di sviluppo sostenibile",
+      "COVID-19",
+    ],
+  },
+  {
+    nameOrPeriod: "Infinito",
+    lang: ConfigLanguage.it,
+    items: [
+      "Meccanica quantistica",
+      "Relatività generale",
+      "Infinito (matematica)",
+      "Via Lattea",
+      "Pianeta extrasolare",
+      "Sistema solare",
+      "Buco nero",
+    ],
+  },
+  {
+    nameOrPeriod: "Ecology",
+    lang: ConfigLanguage.en,
+    items: [
+      "Ecology",
+      "Sustainable development",
+      "The Limits to Growth",
+      "Biodiversity",
+      "Greta Thunberg",
+      "Sustainable Development Goals",
+      "COVID-19",
+    ],
+  },
+  {
+    nameOrPeriod: "Infinity",
+    lang: ConfigLanguage.en,
+    items: [
+      "Quantum mechanics",
+      "General relativity",
+      "Milky Way",
+      "Exoplanet",
+      "Solar System",
+      "Black hole",
     ],
   },
 ];

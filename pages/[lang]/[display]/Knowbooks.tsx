@@ -10,10 +10,7 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
 import { useStores } from "../../../src/stores/RootStoreHook";
-import {
-  initializeApp,
-  initializeKnowbooks,
-} from "../../../src/libs/helpersInitialize";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 import dynamic from "next/dynamic";
 // import CatchupMessage from "../../../src/components/CatchupMessage";
 import Separator from "../../../src/components/Separator";
@@ -33,8 +30,8 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  initializeKnowbooks(stores);
-  if (stores.baseStore.GUI_CONFIG === undefined) {
+  // initializeKnowbooks(stores);
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <></>;
   }

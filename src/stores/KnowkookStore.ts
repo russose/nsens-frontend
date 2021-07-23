@@ -1,6 +1,7 @@
 import { observable, action, makeObservable } from "mobx";
 import {
   AtomID,
+  ConfigLanguage,
   IKnowbook,
   IKnowbookStatic,
   KnowbookID,
@@ -14,6 +15,7 @@ export class KnowkookStore {
     makeObservable<KnowkookStore>(this, {
       // knowbooks: computed,
       setKnowbooks: action,
+      clearStaticKnowbooks: action,
       clearKnowbooks: action,
       deleteKnowbooks: action,
       setKnowbooksFromList: action,
@@ -48,6 +50,9 @@ export class KnowkookStore {
   setStaticKnowbooks(key: KnowbookID, knowbook: IKnowbookStatic) {
     this.$staticKnowbooks.set(key, knowbook);
   }
+  clearStaticKnowbooks(): void {
+    this.$staticKnowbooks.clear();
+  }
 
   clearKnowbooks(): void {
     this.$knowbooks.clear();
@@ -55,7 +60,11 @@ export class KnowkookStore {
   deleteKnowbooks(key: KnowbookID): void {
     this.$knowbooks.delete(key);
   }
-  addItemInKnowbook(knowbookID: KnowbookID, atomId: AtomID): void {
+  addItemInKnowbook(
+    knowbookID: KnowbookID,
+    atomId: AtomID,
+    lang: ConfigLanguage
+  ): void {
     if (!this.$knowbooks.has(knowbookID)) {
       return;
     }
@@ -69,12 +78,17 @@ export class KnowkookStore {
 
     this.$knowbooks.set(knowbookID, {
       id: knowbook_to_update.id,
+      language: lang,
       name: knowbook_to_update.name,
       items: items_updated,
     });
   }
 
-  removeItemFromKnowbook(knowbookID: KnowbookID, atomId: AtomID): void {
+  removeItemFromKnowbook(
+    knowbookID: KnowbookID,
+    atomId: AtomID,
+    lang: ConfigLanguage
+  ): void {
     if (!this.$knowbooks.has(knowbookID)) {
       return;
     }
@@ -88,6 +102,7 @@ export class KnowkookStore {
 
     this.$knowbooks.set(knowbookID, {
       id: knowbook_to_update.id,
+      language: lang,
       name: knowbook_to_update.name,
       items: items_updated,
     });

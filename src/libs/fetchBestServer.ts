@@ -12,8 +12,9 @@ import {
 import { fetch_data_wiki_rest } from "./fetch";
 import {
   buildListStringSeparated,
-  filterAndImproveImages,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia,
+  filterItems,
+  improveImageFromWikipediaParallel_blocking,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking,
 } from "./fetchBase";
 import { DateToStringWithZero } from "./utils";
 import { writeFileJson } from "./utilsServer";
@@ -54,12 +55,20 @@ export async function ItemsBestYearFromWikipedia(
     );
   }
 
-  const atomsListWithImages = await filterAndImproveImages(
-    atomsList,
-    ROOT_URL_REST_API,
+  // const atomsListWithImages = await filterAndGetCleanImages_blocking(
+  //   atomsList,
+  //   ROOT_URL_REST_API,
+  //   ROOT_URL_ACTION_API,
+  //   lang,
+  //   exclusion_patterns
+  // );
+
+  const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
+  const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
+    atomsList_filtered,
     ROOT_URL_ACTION_API,
-    lang,
-    exclusion_patterns
+    ROOT_URL_REST_API,
+    lang
   );
 
   return atomsListWithImages;
@@ -181,7 +190,7 @@ async function ItemsBestMultiYearFromWikipediaRaw(
     buildListStringSeparated(list_of_PageTitles);
 
   const atomsList: IAtom[] =
-    await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
+    await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
       list_of_PageTitles_string,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),
@@ -296,7 +305,7 @@ async function ItemsBestYearFromWikipediaRaw(
       buildListStringSeparated(list_of_PageTitles);
 
     const atomsList =
-      await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia(
+      await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
         list_of_PageTitles_string,
         ROOT_URL_WIKIPEDIA_REST(lang),
         ROOT_URL_WIKIPEDIA_ACTION(lang),

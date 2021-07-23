@@ -8,7 +8,7 @@ import {
   ConfigLanguage,
   IRelatedAtom,
 } from "../config/globals";
-import { fetchRelated } from "./fetchRelated";
+import { fetchRelated_blocking } from "./fetchRelated";
 
 // export const max_amount_data_fetched_items =
 //   configFetching.amount_data_fetched_items;
@@ -16,14 +16,14 @@ import { fetchRelated } from "./fetchRelated";
 // export const url_wikipedia_rest = URLs.ROOT_URL_WIKIPEDIA_REST;
 const amount_related = configFetching.amount_related;
 
-export async function api_getRelatedFromWeb(
+export async function api_getRelatedFromWeb_blocking(
   itemId: AtomID,
   title: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtom[]> {
   try {
-    return fetchRelated(
+    return fetchRelated_blocking(
       itemId,
       title,
       amount_related,

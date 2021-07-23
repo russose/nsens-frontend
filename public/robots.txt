@@ -1,7 +1,6 @@
 # *
 User-agent: *
 Allow: /
-Disallow: /_next*
 
 # Host
 Host: https://www.nsens.org

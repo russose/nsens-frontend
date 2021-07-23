@@ -3,6 +3,11 @@
 import { ConfigLanguage } from "./globals";
 
 export const is_testing_mode = false;
+export const languages_activated: ConfigLanguage[] = [
+  ConfigLanguage.fr,
+  ConfigLanguage.it,
+  ConfigLanguage.en,
+];
 
 export const CONFIG_ENV = {
   BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
@@ -55,6 +60,33 @@ export function EXCLUSION_PATTERNS(lang: ConfigLanguage): string[] {
       "Fichier:",
       "Aide:",
     ];
+  } else if (lang === ConfigLanguage.it) {
+    return [
+      "_Accueil",
+      "Pagina_principale",
+      "Categoria:",
+      "Portale:",
+      "Progetto:",
+      "Wikipedia:",
+      "Speciale:",
+      "Special:",
+      "HTTP_404",
+      "File:",
+      "Aiuto:",
+    ];
+  } else if (lang === ConfigLanguage.en) {
+    return [
+      "_Accueil",
+      "Main_Page",
+      "Category:",
+      "Portal:",
+      "_Projet:",
+      "Wikipedia:",
+      "Special:",
+      "HTTP_404",
+      "File:",
+      "Help:",
+    ];
   } else {
     return [];
   }
@@ -94,7 +126,7 @@ export const configPaths = {
   image_logo_B: "/logo2_B.webp",
   image_logo_W_small: "/logo2_W_small.webp",
   // image_logo_B_small: "/logo2_B_small.webp",
-  image_landing: "/landing.webp",
+  image_landing: "/landing_graph.webp",
   image_install: "/install.webp",
   pages: {
     About: "/About",
@@ -117,6 +149,26 @@ export const configPaths = {
     cache_articles: "articles/",
     cache_nbviews: "nb_views/",
   },
+};
+
+export const ICONS = {
+  HOME: "workflow-status-all",
+
+  KNOWBOOKS: "folder",
+
+  LOGIN: "person",
+
+  INFO: "question-mark",
+
+  // SAVE: "heart",
+  SAVE: "download",
+
+  // EDIT: "download",
+  EDIT: "edit",
+
+  ARTICLE: "menu",
+
+  VIZS: "globe",
 };
 
 export const configButtonsPath = {

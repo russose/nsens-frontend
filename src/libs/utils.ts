@@ -187,6 +187,12 @@ export function shuffleSizedRemoveDoublesFilterIds(
   return related_shuffledSized_no_doubles_array_filtered;
 }
 
+export function wait() {
+  setTimeout(() => {
+    console.log("after waiting!!!!");
+  }, 5000);
+}
+
 // export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {
 //   // if (isMobile(GUI_CONFIG_id)) {
 //   //   return true;

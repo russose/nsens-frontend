@@ -1,5 +1,9 @@
 import Router from "next/router";
 import {
+  ROOT_URL_WIKIPEDIA_ACTION,
+  ROOT_URL_WIKIPEDIA_REST,
+} from "../config/configURLs";
+import {
   ConfigDisplay,
   configGeneral,
   ConfigLanguage,
@@ -15,6 +19,7 @@ import {
   api_getItemsRandomFromWeb,
   api_searchFromWeb,
 } from "./apiItems";
+import { getCleanImage } from "./fetchBase";
 import { DateToStringWithZero, hasTouchScreen, shuffleSized } from "./utils";
 
 export async function getParamsPageFromContext(
@@ -26,7 +31,16 @@ export async function getParamsPageFromContext(
     const isMobile: boolean =
       hasTouchScreen(window) || window.innerWidth < max_width_mobile;
 
-    let paramsPage_lang = ConfigLanguage.fr;
+    const language_navigator = navigator.language;
+    let paramsPage_lang: ConfigLanguage;
+    if (language_navigator.includes("fr")) {
+      paramsPage_lang = ConfigLanguage.fr;
+    } else if (language_navigator.includes("it")) {
+      paramsPage_lang = ConfigLanguage.it;
+    } else {
+      paramsPage_lang = ConfigLanguage.en;
+    }
+    //paramsPage_lang = ConfigLanguage.fr;
 
     let paramsPage_display: ConfigDisplay;
     if (isMobile) {
@@ -48,6 +62,16 @@ export async function getParamsPageFromContext(
     return { lang: paramsPage_lang, display: paramsPage_display };
   }
   return undefined;
+}
+
+function removeBigImage(atoms: IAtom[]): IAtom[] {
+  const atoms_without_images = atoms.map((item) => {
+    let atom_without_image = item;
+    atom_without_image.image_url = "";
+    return atom_without_image;
+  });
+
+  return atoms_without_images;
 }
 
 export async function initialyzeMostviewed(stores: IStores) {
@@ -87,20 +111,36 @@ export async function initialyzeMostviewed(stores: IStores) {
     );
   }
 
-  stores.baseStore.setMostviewed(atoms);
+  //**************************************************************** */
+  // Remove images very big
+  // const atoms_without_images = atoms.map((item) => {
+  //   let atom_without_image = item;
+  //   atom_without_image.image_url = "";
+  //   return atom_without_image;
+  // });
+  const atoms_without_images = removeBigImage(atoms);
+
+  stores.baseStore.setMostviewed(atoms_without_images);
+
+  atoms.forEach((item) => {
+    getCleanImage(
+      item,
+      ROOT_URL_WIKIPEDIA_REST(lang),
+      ROOT_URL_WIKIPEDIA_ACTION(lang),
+      lang
+    )
+      .then((item) => {
+        stores.baseStore.setMostviewedSingle(item);
+        if (stores.baseStore.feed.has(item.id)) {
+          stores.baseStore.setFeedSingle(item);
+        }
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  });
+  //**************************************************************** */
 }
-
-// Used if Icon Tap goes in random article
-// export function getRandomItemIdFromAnywhere(stores: IStores): AtomID {
-//   const history_ids = Array.from(stores.baseStore.history.keys());
-//   const relatedAll_ids = Array.from(stores.baseStore.relatedAll.keys());
-//   const saved_ids = Array.from(stores.savedStore.saved.keys());
-//   const all_ids: AtomID[] = history_ids
-//     .concat(relatedAll_ids)
-//     .concat(saved_ids);
-
-//   return shuffleSized(all_ids, 1)[0];
-// }
 
 export function setFeedFromSearch(
   stores: IStores,
@@ -114,7 +154,25 @@ export function setFeedFromSearch(
 
   api_searchFromWeb(searchPattern, lang, exclusion_patterns_items)
     .then((atoms) => {
-      stores.baseStore.setFeed(atoms);
+      const atoms_without_images = removeBigImage(atoms);
+      stores.baseStore.setFeed(atoms_without_images);
+
+      atoms.forEach((item) => {
+        getCleanImage(
+          item,
+          ROOT_URL_WIKIPEDIA_REST(lang),
+          ROOT_URL_WIKIPEDIA_ACTION(lang),
+          lang
+        )
+          .then((item) => {
+            // if (stores.baseStore.feed.has(item.id)) {
+            stores.baseStore.setFeedSingle(item);
+            // }
+          })
+          .catch((error) => {
+            // console.log(error);
+          });
+      });
     })
     // .then(() => {
     //   //LOG SEARCHED ITEM, DISABLED
@@ -158,11 +216,36 @@ export function setFeedFromMostviewedAndRelated(
 
     api_getItemsRandomFromWeb(lang, exclusion_patterns_items, amount_random)
       .then((atoms) => {
-        const random_items: IAtom[] = atoms;
+        // const random_items: IAtom[] = atoms;
+        // feed_items = feed_items.concat(random_items);
+        // stores.baseStore.setFeed(
+        //   shuffleSized(feed_items, amount_item_displayed)
+        // );
+
+        const atoms_without_images = removeBigImage(atoms);
+
+        const random_items: IAtom[] = atoms_without_images;
         feed_items = feed_items.concat(random_items);
         stores.baseStore.setFeed(
           shuffleSized(feed_items, amount_item_displayed)
         );
+
+        atoms.forEach((item) => {
+          getCleanImage(
+            item,
+            ROOT_URL_WIKIPEDIA_REST(lang),
+            ROOT_URL_WIKIPEDIA_ACTION(lang),
+            lang
+          )
+            .then((item) => {
+              // if (stores.baseStore.feed.has(item.id)) {
+              stores.baseStore.setFeedSingle(item);
+              // }
+            })
+            .catch((error) => {
+              // console.log(error);
+            });
+        });
       })
       .catch((error) => {
         // console.log("error in seach from pattern");
@@ -173,11 +256,13 @@ export function setFeedFromMostviewedAndRelated(
 }
 
 export function goPage(
+  stores: IStores,
   paramsPage: IparamsPage,
   page: string,
   reload: boolean = false
 ) {
   if (process.browser) {
+    stores.uiStore.setSearchPattern("");
     Router.replace({
       pathname: configPaths.rootPath + page,
       query: paramsPage as any,
@@ -191,6 +276,7 @@ export function goPage(
 export function goUserHandler(stores: IStores) {
   return () => (input: { event: eventT }) => {
     goPage(
+      stores,
       {
         lang: stores.baseStore.paramsPage.lang,
         display: stores.baseStore.paramsPage.display,
@@ -200,3 +286,15 @@ export function goUserHandler(stores: IStores) {
     input.event.preventDefault();
   };
 }
+
+// Used if Icon Tap goes in random article
+// export function getRandomItemIdFromAnywhere(stores: IStores): AtomID {
+//   const history_ids = Array.from(stores.baseStore.history.keys());
+//   const relatedAll_ids = Array.from(stores.baseStore.relatedAll.keys());
+//   const saved_ids = Array.from(stores.savedStore.saved.keys());
+//   const all_ids: AtomID[] = history_ids
+//     .concat(relatedAll_ids)
+//     .concat(saved_ids);
+
+//   return shuffleSized(all_ids, 1)[0];
+// }
