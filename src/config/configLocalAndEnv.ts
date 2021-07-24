@@ -2,7 +2,7 @@
 
 import { ConfigLanguage } from "./globals";
 
-export const is_testing_mode = false;
+export const is_testing_mode = true;
 export const languages_activated: ConfigLanguage[] = [
   ConfigLanguage.fr,
   ConfigLanguage.it,

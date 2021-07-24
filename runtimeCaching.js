@@ -178,6 +178,10 @@ module.exports = [
       //
       // const pathname = url.pathname;
       // if (pathname.startsWith("/api/")) return false;
+
+      const pathname = url.pathname;
+      if (pathname.includes(CONFIG_ENV.BACK_URL)) return false;
+
       return true;
     },
     handler: "StaleWhileRevalidate",

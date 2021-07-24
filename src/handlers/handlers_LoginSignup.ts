@@ -38,7 +38,7 @@ export const onChangeLanguage =
 
 /*******************Login and Signup*************************** */
 
-function initStateAfterLoginLoggout(stores: IStores): void {
+function initStateAfterLoginOrLoggout(stores: IStores): void {
   stores.baseStore.setInitCompleted(initStateCat.userData, undefined);
 }
 
@@ -69,7 +69,7 @@ export const onLogout = (stores: IStores) => (): void => {
       stores.baseStore.setUser({ username: "" });
     })
     .then(() => {
-      initStateAfterLoginLoggout(stores);
+      initStateAfterLoginOrLoggout(stores);
       goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
       //To do: faire une fonction initLoginScreen
       stores.uiStore.setLoginScreenUsername("");
@@ -100,7 +100,7 @@ export const onSubmitLoginSignup =
           //Go Home
           // stores.baseStore.setInitCompleted(initStateCat.saved, undefined);
           // stores.baseStore.setInitCompleted(initStateCat.knowbooks, undefined);
-          initStateAfterLoginLoggout(stores);
+          initStateAfterLoginOrLoggout(stores);
           goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
         })
         .catch(function (error) {
@@ -135,7 +135,7 @@ export const onSubmitLoginSignup =
         .then(() => {
           // initializeUserDataBaseLogged(stores);
           //Go Home
-          initStateAfterLoginLoggout(stores);
+          initStateAfterLoginOrLoggout(stores);
           goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
         })
         .catch(function (error) {
