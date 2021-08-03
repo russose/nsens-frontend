@@ -1,9 +1,16 @@
 import React from "react";
 import { Box, Heading } from "gestalt";
-import { handlerT, JSONDataT, RoundingT, SizeT } from "../config/globals";
+import {
+  ConfigLanguage,
+  handlerT,
+  JSONDataT,
+  RoundingT,
+  SizeT,
+} from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import Head from "next/head";
 import { configGeneral } from "../config/globals";
+import { useRouter } from "next/router";
 
 interface IHeaderTitleProps {
   stores: IStores;
@@ -11,13 +18,15 @@ interface IHeaderTitleProps {
   hidden?: boolean;
 }
 
-const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
+const SEOHeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
+  const router = useRouter();
+  const path_full = router.asPath;
+
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const header_size: SizeT = GUI_CONFIG.display.header_size;
   const color_headers = configGeneral.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
   let title_page = GUI_CONFIG.language.SEO.title_page_base;
-  let canonical = GUI_CONFIG.language.SEO.canonical;
   if (props.title !== undefined) {
     title_page = title_page + " - " + props.title;
   }
@@ -31,17 +40,45 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
     }
   );
 
+  function alternate_links(): any[] {
+    const alternate = Object.values(ConfigLanguage).map(
+      (language: ConfigLanguage, key) => {
+        return (
+          <link
+            key={`link-alternate-${path_full}-${key}`}
+            rel="alternate"
+            hrefLang={language}
+            href={"/" + language + path_full.substring(3)}
+          />
+        );
+      }
+    );
+
+    alternate.push(
+      <link
+        key={`link-alternate-default-${path_full}`}
+        rel="alternate"
+        hrefLang="x-default"
+        href={"/" + ConfigLanguage.en + path_full.substring(3)}
+      />
+    );
+
+    return alternate;
+  }
+
   const head = (
     <Head>
-      <link rel="canonical" href={canonical} />
-      <meta name="robots" content="index, follow" />
-      <meta name="description" content={description} />
+      {/* <link rel="canonical" href={canonical} /> */}
       <title>{title_page}</title>
+      <meta name="description" content={description} />
+      {alternate_links()}
+      <meta name="robots" content="index, follow" />
     </Head>
   );
 
   const display_ =
     props.hidden === undefined || props.hidden === false ? "block" : "none";
+
   return (
     <>
       {head}
@@ -67,7 +104,12 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
             alignItems="center"
             rounding={rounding_menu}
           >
-            <Heading size={header_size} align="center" overflow="normal">
+            <Heading
+              accessibilityLevel={1}
+              size={header_size}
+              align="center"
+              overflow="normal"
+            >
               {props.title}
             </Heading>
           </Box>
@@ -78,4 +120,4 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   );
 };
 
-export default HeaderTitle;
+export default SEOHeaderTitle;

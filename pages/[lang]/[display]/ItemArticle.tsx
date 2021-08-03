@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import Article from "../../../src/components/Article";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { ROOT_URL_WIKIPEDIA_REST } from "../../../src/config/configURLs";
 import { fetchArticle } from "../../../src/libs/fetch";
@@ -80,7 +80,7 @@ const ItemArticle: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={item_title} hidden={true} />
+      <SEOHeaderTitle stores={stores} title={item_title} hidden={true} />
       {/* {navigation} */}
       {/* <ItemArticleNoSSRDynamic stores={stores} item_title={item_title} /> */}
       <Article item_title={item_title} stores={stores} />

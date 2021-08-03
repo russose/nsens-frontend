@@ -42,7 +42,9 @@ const CardFeature: React.FunctionComponent<ICardFeatureProps> = (props) => {
           </Text>
         </Box>
         <Box padding={5}>
-          <Text size={feature_desciption_size}>{props.description}</Text>
+          <h2>
+            <Text size={feature_desciption_size}>{props.description}</Text>
+          </h2>
         </Box>
       </Box>
     </>

@@ -78,7 +78,7 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
               >
                 <a>
                   <Image
-                    alt="image"
+                    alt={props.title}
                     color={
                       props.image_url === "" && props.color_image !== undefined
                         ? props.color_image

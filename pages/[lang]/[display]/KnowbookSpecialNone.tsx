@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
 import {
@@ -33,7 +33,7 @@ const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={title} />
+      <SEOHeaderTitle stores={stores} title={title} />
       <CardAtomGrid
         id="None"
         stores={stores}

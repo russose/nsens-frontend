@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import Article from "../../../../src/components/Article";
-import HeaderTitle from "../../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../../src/components/SEOHeaderTitle";
 import AppLayout from "../../../../src/components/layout/AppLayout";
 import {
   IPageStaticArticle,
@@ -33,7 +33,7 @@ const ItemStaticArticle: React.FunctionComponent<IPageStaticArticle> = (
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={item_title} hidden={true} />
+      <SEOHeaderTitle stores={stores} title={item_title} hidden={true} />
       <Article item_title={item_title} stores={stores} />
     </AppLayout>
   );

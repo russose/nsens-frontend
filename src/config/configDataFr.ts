@@ -4,7 +4,7 @@ export const configDataFr = {
   searchBar: "Rechercher...",
   source_wikipedia: "Source: Wikipedia",
   SEO: {
-    canonical: "https://www.nsens.org/fr/Mobile/About/",
+    // canonical: "https://www.nsens.org/fr/Mobile/About/",
     title_page_base: "n.Sens",
   },
   about: {

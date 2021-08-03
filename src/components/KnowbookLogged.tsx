@@ -29,7 +29,9 @@ const KnowbookLogged: React.FunctionComponent<IKnowbookLoggedProps> = (
         <Box height="15vh" />
         <Separator with_line={true} />
         <Box padding={3}>
-          <Heading size="md">{Related_title}</Heading>
+          <Heading accessibilityLevel={2} size="md">
+            {Related_title}
+          </Heading>
         </Box>
         <CardAtomGridLogged
           id="KnowbookStaticLogged_related"

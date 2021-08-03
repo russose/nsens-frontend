@@ -50,7 +50,7 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
   const logo_with_tap = (
     <TapArea fullHeight={true} onTap={onTapLogo(stores)}>
       <Image
-        alt="image"
+        alt="logo"
         color="transparent"
         fit="contain"
         naturalHeight={1}

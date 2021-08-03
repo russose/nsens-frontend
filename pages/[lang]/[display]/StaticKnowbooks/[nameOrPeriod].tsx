@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import React from "react";
-import HeaderTitle from "../../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../../src/components/SEOHeaderTitle";
 import KnowbookNotLogged from "../../../../src/components/KnowbookNotLogged";
 import AppLayout from "../../../../src/components/layout/AppLayout";
 import { IAtom } from "../../../../src/config/globals";
@@ -99,7 +99,7 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={name_display} />
+      <SEOHeaderTitle stores={stores} title={name_display} />
       {content}
     </AppLayout>
   );

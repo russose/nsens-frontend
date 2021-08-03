@@ -52,7 +52,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     return (
       <Image
         key={props.id}
-        alt="image"
+        alt={props.title}
         color={color_image}
         fit="cover"
         naturalHeight={3000}

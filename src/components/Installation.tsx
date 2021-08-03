@@ -16,7 +16,7 @@ const Installation: React.FunctionComponent<IInstallationProps> = (props) => {
 
       <Box padding={0} height={props.height} width="100%">
         <Image
-          alt="image"
+          alt={props.instruction}
           color="transparent"
           fit="contain"
           naturalHeight={1}

@@ -4,7 +4,7 @@ export const configDataIt: configDataLanguage = {
   searchBar: "Cerca...",
   source_wikipedia: "Sorgente: Wikipedia",
   SEO: {
-    canonical: "https://www.nsens.org/it/Mobile/About/",
+    // canonical: "https://www.nsens.org/it/Mobile/About/",
     title_page_base: "n.Sens",
   },
   about: {
@@ -104,7 +104,7 @@ export const configDataIt: configDataLanguage = {
       login_label: "Accedi",
       signup_label: "Registrati",
       login_error: "Nome uttento o password incoretta",
-      signup_error: "Impossibile creare il conto",
+      signup_error: "Impossibile effettuare la registrazione",
       signup_error_duration:
         "Riscarigare la paggina, riempire i campi et aspettare qualque secondi prima di registrarsi",
     },

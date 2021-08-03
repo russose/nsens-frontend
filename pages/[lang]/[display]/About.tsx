@@ -8,7 +8,7 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import {
   configPaths,
@@ -78,7 +78,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
   const main_image = (
     <Box padding={0} height={ratio_image} width="100%">
       <Image
-        alt="image"
+        alt={GUI_CONFIG.language.about.slogan}
         color="transparent"
         fit="contain"
         naturalHeight={1}
@@ -91,7 +91,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={slogan} hidden={true} />
+      <SEOHeaderTitle stores={stores} title={slogan} hidden={true} />
       <AboutLayoutHybrid
         stores={stores}
         slogan={slogan}

@@ -7,7 +7,7 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { Box } from "gestalt";
 import FormChangePassword from "../../../src/components/FormChangePassword";
@@ -120,7 +120,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   return (
     <>
       <AppLayout stores={stores}>
-        <HeaderTitle stores={stores} title={title} hidden={false} />
+        <SEOHeaderTitle stores={stores} title={title} hidden={false} />
         {changePasswordForm}
       </AppLayout>
     </>

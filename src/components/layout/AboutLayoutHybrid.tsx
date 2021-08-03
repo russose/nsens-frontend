@@ -58,7 +58,7 @@ const AboutLayoutHybrid: React.FunctionComponent<IAboutLayoutHybridProps> = (
           width="100%"
         >
           <Image
-            alt="image"
+            alt={props.slogan}
             color="transparent"
             fit="contain"
             naturalHeight={1}
@@ -71,7 +71,12 @@ const AboutLayoutHybrid: React.FunctionComponent<IAboutLayoutHybridProps> = (
         {props.main_image}
 
         <Box padding={2} column={12}>
-          <Heading size={header_size} align="center" overflow="normal">
+          <Heading
+            accessibilityLevel={2}
+            size={header_size}
+            align="center"
+            overflow="normal"
+          >
             {props.slogan}
             {/* <Badge position="top" text="beta" /> */}
           </Heading>
@@ -125,7 +130,7 @@ const AboutLayoutHybrid: React.FunctionComponent<IAboutLayoutHybridProps> = (
           // color="green"
         >
           <Image
-            alt="image"
+            alt={props.description}
             color="transparent"
             fit="contain"
             naturalHeight={1}

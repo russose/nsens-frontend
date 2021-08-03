@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { useStores } from "../../../src/stores/RootStoreHook";
 import { configPaths } from "../../../src/config/globals";
@@ -93,7 +93,7 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={undefined} hidden={true} />
+      <SEOHeaderTitle stores={stores} title={undefined} hidden={true} />
       {page_content}
     </AppLayout>
   );

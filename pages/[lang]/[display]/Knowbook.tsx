@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import KnowbookLogged from "../../../src/components/KnowbookLogged";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { IAtom } from "../../../src/config/globals";
@@ -68,7 +68,7 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={selected_knowbook} />
+      <SEOHeaderTitle stores={stores} title={selected_knowbook} />
       <KnowbookLogged
         stores={stores}
         items={getKnowbookAtomsList(selected_knowbook, stores)}

@@ -10,7 +10,7 @@ import CardAtomGrid from "../../../src/components/CardAtomGrid";
 import { useStores } from "../../../src/stores/RootStoreHook";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { GetStaticPaths, GetStaticProps } from "next";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import {
   isItemSaved,
   isItemSavedActivated,
@@ -33,7 +33,7 @@ const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={title} />
+      <SEOHeaderTitle stores={stores} title={title} />
       <CardAtomGrid
         id="Saved"
         stores={stores}

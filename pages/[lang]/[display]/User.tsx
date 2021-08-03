@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import React from "react";
 // import CatchupMessage from "../../../src/components/CatchupMessage";
 import FormLoginSignup from "../../../src/components/FormLoginSignup";
-import HeaderTitle from "../../../src/components/HeaderTitle";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
 import LanguageSelector from "../../../src/components/LanguageSelector";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { configPaths } from "../../../src/config/globals";
@@ -133,7 +133,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <HeaderTitle stores={stores} title={title} />
+      <SEOHeaderTitle stores={stores} title={title} />
       <Box
         display="flex"
         direction="column"
