@@ -1,5 +1,5 @@
 import React from "react";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { Box } from "gestalt";
 import { ColorT, reactComponentT } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";

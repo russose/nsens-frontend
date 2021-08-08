@@ -1,20 +1,20 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import KnowbookLogged from "../../../src/components/KnowbookLogged";
-import AppLayout from "../../../src/components/layout/AppLayout";
-import { IAtom } from "../../../src/config/globals";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import KnowbookLogged from "../../src/components/KnowbookLogged";
+import AppLayout from "../../src/components/layout/AppLayout";
+import { IAtom } from "../../src/config/globals";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
-import { getRelatedItemsForItems } from "../../../src/libs/helpersRelated";
-import { getKnowbookAtomsList } from "../../../src/libs/helpersSavedKnowbooks";
-import { useStores } from "../../../src/stores/RootStoreHook";
+} from "../../src/libs/getDataParamsPage";
+import { initializeApp } from "../../src/libs/helpersInitialize";
+import { getRelatedItemsForItems } from "../../src/libs/helpersRelated";
+import { getKnowbookAtomsList } from "../../src/libs/helpersSavedKnowbooks";
+import { useStores } from "../../src/stores/RootStoreHook";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();

@@ -8,7 +8,6 @@ export enum ConfigLanguage {
 }
 
 export enum ConfigDisplay {
-  // small = "Small",
   mobile = "Mobile",
   desktop = "Desktop",
   large = "Large",
@@ -17,12 +16,9 @@ export enum ConfigDisplay {
 
 export enum initStateCat {
   core = "core",
-  // feed = "feed",
+  // display = "display",
   staticKnowbooks = "staticKnowbooks",
-
   userData = "userData",
-
-  // knowbooks = "knowbooks",
 }
 
 export type configDataDisplay = typeof configDataMobile;
@@ -30,14 +26,17 @@ export type configDataDisplay = typeof configDataMobile;
 export type configDataLanguage = typeof configDataFr;
 
 export interface IGUICONFIG {
-  id: string;
+  // id: string;
   language: configDataLanguage;
   display: configDataDisplay;
+
+  currentDisplay: ConfigDisplay;
+  // currentLanguage: string; //already covered by IparamsPage.lang
 }
 
 export interface IparamsPage {
   lang: ConfigLanguage;
-  display: ConfigDisplay;
+  // display: ConfigDisplay;
 }
 
 export interface IparamsAtom {

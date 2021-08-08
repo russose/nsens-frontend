@@ -1,28 +1,28 @@
 import { Box, Divider } from "gestalt";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import AppLayout from "../../../src/components/layout/AppLayout";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import AppLayout from "../../src/components/layout/AppLayout";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import { useStores } from "../../../src/stores/RootStoreHook";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
+} from "../../src/libs/getDataParamsPage";
+import { useStores } from "../../src/stores/RootStoreHook";
+import { initializeApp } from "../../src/libs/helpersInitialize";
 import dynamic from "next/dynamic";
-// import CatchupMessage from "../../../src/components/CatchupMessage";
-import Separator from "../../../src/components/Separator";
-import KnowbooksStatic from "../../../src/components/KnowbooksStatic";
-// import CatchupMessage from "../../../src/components/CatchupMessage";
+// import CatchupMessage from "../../src/components/CatchupMessage";
+import Separator from "../../src/components/Separator";
+import KnowbooksStatic from "../../src/components/KnowbooksStatic";
+// import CatchupMessage from "../../src/components/CatchupMessage";
 
 const KnowbooksLoggedDynamic = dynamic(
-  () => import("../../../src/components/KnowbooksLogged"),
+  () => import("../../src/components/KnowbooksLogged"),
   { ssr: true }
 );
 const CatchupMessageDynamic = dynamic(
-  () => import("../../../src/components/CatchupMessage"),
+  () => import("../../src/components/CatchupMessage"),
   { ssr: false }
 );
 

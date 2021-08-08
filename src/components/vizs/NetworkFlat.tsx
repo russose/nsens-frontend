@@ -1,5 +1,5 @@
 import { Box } from "gestalt";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import { AtomID } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";

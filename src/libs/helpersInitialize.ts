@@ -4,6 +4,7 @@ import {
   IparamsPage,
   IRelatedAtom,
   initStateCat,
+  ConfigDisplay,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { api_getStaticKnowbooksLocal } from "./apiItems";
@@ -26,6 +27,8 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
         paramsPage
       );
 
+      stores.baseStore.setGUICONFIGFromDisplay(ConfigDisplay.mobile);
+
       const user = await api_getUser();
       stores.baseStore.setUser({ username: user });
 
@@ -38,6 +41,12 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
     } else if (stores.baseStore.initCompleted.core !== true) {
       return;
     }
+
+    // if (stores.baseStore.initCompleted.display === undefined) {
+    //   stores.baseStore.setInitCompleted(initStateCat.display, false);
+    //   stores.baseStore.setGUICONFIGFromDisplay(ConfigDisplay.desktop);
+    //   stores.baseStore.setInitCompleted(initStateCat.display, true);
+    // }
 
     if (stores.baseStore.initCompleted.staticKnowbooks === undefined) {
       stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);

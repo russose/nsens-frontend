@@ -6,26 +6,30 @@ import { my_api } from "./fetch";
  */
 
 export async function api_save(atom: IAtom): Promise<IAtom> {
-  // try {
-  const res = await my_api("post", "/saved", atom);
-  return res.data;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return undefined;
-  // }
+  try {
+    const res = await my_api("post", "/saved", atom);
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
 }
 
 export async function api_unsave(
   itemId: AtomID,
   lang: ConfigLanguage
 ): Promise<IAtom> {
-  // try {
-  const res = await my_api("delete", "/saved" + "/" + lang + "/" + itemId, {});
-  return res.data;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return undefined;
-  // }
+  try {
+    const res = await my_api(
+      "delete",
+      "/saved" + "/" + lang + "/" + itemId,
+      {}
+    );
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
 }
 
 export async function api_getSavedList(lang: ConfigLanguage): Promise<IAtom[]> {
@@ -57,14 +61,14 @@ export async function api_addKnowbook(
   name: string,
   lang: ConfigLanguage
 ): Promise<string> {
-  // try {
-  const knowbook = { name: name, language: lang };
-  const res = await my_api("post", "/knowbooks", knowbook);
-  return res.data;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return api_issue_text;
-  // }
+  try {
+    const knowbook = { name: name, language: lang };
+    const res = await my_api("post", "/knowbooks", knowbook);
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
 }
 
 export async function api_renameKnowbook(
@@ -72,30 +76,30 @@ export async function api_renameKnowbook(
   new_name: string,
   lang: ConfigLanguage
 ): Promise<string> {
-  // try {
-  const res = await my_api(
-    "post",
-    "/knowbooks/rename/" + lang + "/" + name + "/" + new_name,
-    {}
-  );
-  return res.data;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return api_issue_text;
-  // }
+  try {
+    const res = await my_api(
+      "post",
+      "/knowbooks/rename/" + lang + "/" + name + "/" + new_name,
+      {}
+    );
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
 }
 
 export async function api_removeKnowbook(
   name: string,
   lang: ConfigLanguage
 ): Promise<string> {
-  // try {
-  const res = await my_api("delete", "/knowbooks/" + lang + "/" + name, {});
-  return res.data;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return api_issue_text;
-  // }
+  try {
+    const res = await my_api("delete", "/knowbooks/" + lang + "/" + name, {});
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
 }
 
 // export async function _addItemInKnowbook(
@@ -116,17 +120,17 @@ export async function api_addItemInKnowbook(
   id: AtomID,
   lang: ConfigLanguage
 ): Promise<IKnowbook | undefined> {
-  // try {
-  const res = await my_api(
-    "post",
-    "/knowbooks/" + lang + "/" + name + "/" + id,
-    {}
-  );
-  return res.data;
-  // } catch (error) {
-  //   console.log(error);
-  //   return undefined;
-  // }
+  try {
+    const res = await my_api(
+      "post",
+      "/knowbooks/" + lang + "/" + name + "/" + id,
+      {}
+    );
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
 }
 
 export async function api_removeItemFromKnowbook(
@@ -134,15 +138,15 @@ export async function api_removeItemFromKnowbook(
   id: AtomID,
   lang: ConfigLanguage
 ): Promise<IKnowbook> {
-  // try {
-  const res = await my_api(
-    "delete",
-    "/knowbooks/" + lang + "/" + name + "/" + id,
-    {}
-  );
-  return res.data;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return undefined;
-  // }
+  try {
+    const res = await my_api(
+      "delete",
+      "/knowbooks/" + lang + "/" + name + "/" + id,
+      {}
+    );
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
 }

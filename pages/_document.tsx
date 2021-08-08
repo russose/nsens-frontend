@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { CONFIG_ENV } from "../src/config/globals";
+import { mediaStyles } from "../src/config/media";
 
 const GA_TRACKING_ID =
   CONFIG_ENV.GA_TRACKING_ID !== undefined ? CONFIG_ENV.GA_TRACKING_ID : "";
@@ -174,6 +175,12 @@ export default class MyDocument extends Document {
           />
           <meta name="theme-color" content="#3490de" />
           <link rel="manifest" href="/manifest.json" />
+
+          {/* Fresnel */}
+          <style
+            type="text/css"
+            dangerouslySetInnerHTML={{ __html: mediaStyles }}
+          />
         </Head>
         <body>
           <Main />

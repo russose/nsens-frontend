@@ -1,8 +1,8 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import { configGeneral, IButton, RoundingT } from "../config/globals";
 import { ButtonIDType } from "../config/globals";
-import { isMobile } from "../libs/utils";
+import { isMobile } from "../libs/helpersBase";
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 
@@ -32,20 +32,22 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     },
   ];
 
-  const displayLabel = !isMobile(props.stores.baseStore.GUI_CONFIG.id);
+  const displayLabel = !isMobile(props.stores);
 
   return (
-    <MenuBarButtonLayout
-      stores={props.stores}
-      // name={props.name}
-      name="NavigationMenuBar"
-      color={color_menu}
-      direction="row"
-      // width={width}
-      rounding={props.rounding}
-      buttons={buttons}
-      displayLabel={displayLabel}
-    />
+    <>
+      <MenuBarButtonLayout
+        stores={props.stores}
+        // name={props.name}
+        name="NavigationMenuBar"
+        color={color_menu}
+        direction="row"
+        // width={width}
+        rounding={props.rounding}
+        buttons={buttons}
+        displayLabel={displayLabel}
+      />
+    </>
   );
 };
 

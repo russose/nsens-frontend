@@ -1,27 +1,22 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import AppLayout from "../../../src/components/layout/AppLayout";
-import { useStores } from "../../../src/stores/RootStoreHook";
-import { configPaths } from "../../../src/config/globals";
-import {
-  getParamsPageFromContext,
-  goPage,
-} from "../../../src/libs/helpersBase";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import AppLayout from "../../src/components/layout/AppLayout";
+import { useStores } from "../../src/stores/RootStoreHook";
 import dynamic from "next/dynamic";
-import CardAtomGridNotLogged from "../../../src/components/CardAtomGridNotLogged";
+import CardAtomGridNotLogged from "../../src/components/CardAtomGridNotLogged";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
-import DialogLoading from "../../../src/components/DialogLoading";
+} from "../../src/libs/getDataParamsPage";
+import { initializeApp } from "../../src/libs/helpersInitialize";
+import DialogLoading from "../../src/components/DialogLoading";
 import { Box } from "gestalt";
 
 const CardAtomGridLoggedDynamic = dynamic(
-  () => import("../../../src/components/CardAtomGridLogged")
+  () => import("../../src/components/CardAtomGridLogged")
 );
 
 const Home: React.FunctionComponent<IPage> = (props) => {

@@ -1,4 +1,4 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { Box, IconButton, Text } from "gestalt";
 import { AtomID, handlerT, IconT } from "../config/globals";
 import CardGeneric from "./CardGeneric";

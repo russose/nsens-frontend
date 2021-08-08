@@ -1,28 +1,28 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import Article from "../../../src/components/Article";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import AppLayout from "../../../src/components/layout/AppLayout";
-import { ROOT_URL_WIKIPEDIA_REST } from "../../../src/config/configURLs";
-import { fetchArticle } from "../../../src/libs/fetch";
+import Article from "../../src/components/Article";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import AppLayout from "../../src/components/layout/AppLayout";
+import { ROOT_URL_WIKIPEDIA_REST } from "../../src/config/configURLs";
+import { fetchArticle } from "../../src/libs/fetch";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
-import { prepareArticle } from "../../../src/libs/utils";
-import { useStores } from "../../../src/stores/RootStoreHook";
+} from "../../src/libs/getDataParamsPage";
+import { initializeApp } from "../../src/libs/helpersInitialize";
+import { prepareArticle } from "../../src/libs/utils";
+import { useStores } from "../../src/stores/RootStoreHook";
 
 // const ItemArticleNoSSRDynamic = dynamic(
-//   () => import("../../../src/components/ItemArticleNoSSR"),
+//   () => import("../../src/components/ItemArticleNoSSR"),
 //   { ssr: false }
 // );
 
 // const MenuBarDisplayLoggedDynamic = dynamic(
-//   () => import("../../../src/components/MenuBarDisplayLogged"),
+//   () => import("../../src/components/MenuBarDisplayLogged"),
 //   { ssr: true }
 // );
 

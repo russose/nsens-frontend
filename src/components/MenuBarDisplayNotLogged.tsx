@@ -1,11 +1,11 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import { ButtonIDType, configPaths, IButton } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import { configGeneral } from "../config/globals";
-import { empty_handler, isMobile } from "../libs/utils";
-import { goUserHandler } from "../libs/helpersBase";
+import { empty_handler } from "../libs/utils";
+import { goUserHandler, isMobile } from "../libs/helpersBase";
 import { useRouter } from "next/router";
 
 interface IMenuBarDisplayProps {
@@ -80,7 +80,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     button_updated = buttons;
   }
 
-  const displayLabel = !isMobile(props.stores.baseStore.GUI_CONFIG.id);
+  const displayLabel = !isMobile(props.stores);
 
   const menuBarButton = (
     <MenuBarButtonLayout

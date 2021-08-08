@@ -33,7 +33,7 @@
     "gestalt": "^29.6.4",
     "lz-string": "^1.4.4",
     "mobx": "^6.1.8",
-    "mobx-react-lite": "^3.2.0",
+    "mobx-react": "^7.2.0",
     "next": "^10.0.8",
     "next-pwa": "^5.2.23",
     "react": "^16.0.0",

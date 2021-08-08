@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, IconButton, Text } from "gestalt";
 import { ColorT, IconT, IparamsAtom, SizeT } from "../config/globals";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import Link from "next/link";
 import { configGeneral, configPaths } from "../config/globals";
 import { IStores } from "../stores/RootStore";

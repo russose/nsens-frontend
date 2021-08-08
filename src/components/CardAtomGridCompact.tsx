@@ -1,5 +1,5 @@
 import { Box } from "gestalt";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import { configPaths } from "../config/globals";
 import { handlerT, IAtom, PaddingT } from "../config/globals";
@@ -16,51 +16,52 @@ interface ICardAtomGridCompactProps {
   edit_handler: handlerT;
 }
 
-const CardAtomGridCompact: React.FunctionComponent<ICardAtomGridCompactProps> = (
-  props
-) => {
-  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const card_sizes_compact = GUI_CONFIG.display.atom_compact_sizes;
+const CardAtomGridCompact: React.FunctionComponent<ICardAtomGridCompactProps> =
+  (props) => {
+    const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
+    const card_sizes_compact = GUI_CONFIG.display.atom_compact_sizes;
 
-  const path_Itemview = configPaths.pages.ItemArticle;
+    const path_Itemview = configPaths.pages.ItemArticle;
 
-  if (
-    props.atoms === undefined ||
-    props.atoms === null ||
-    props.atoms.length === 0
-  ) {
-    return <></>;
-  } else {
-    return (
-      <Box wrap={true} display="flex" direction="row" justifyContent="around">
-        {props.atoms.map((item) => {
-          return (
-            <Box
-              lgPadding={card_sizes_compact.lgPadding as PaddingT}
-              mdPadding={card_sizes_compact.mdPadding as PaddingT}
-              smPadding={card_sizes_compact.smPadding as PaddingT}
-              padding={card_sizes_compact.padding as PaddingT}
-              key={`Box-cardAtomGrid_Compact-${props.id}-${item.id}`}
-            >
-              <CardAtomCompact
-                key={`cardAtomGrid_Compact-${props.id}-${item.id}`}
-                id={item.id}
-                stores={props.stores}
-                title={item.title}
-                image_url={item.image_url}
-                pathname={path_Itemview}
-                queryObject={{ title: item.title, id: item.id }}
-                saved_enabled={props.isItemSaved_handler(item.id)}
-                saved_actionable={props.isItemSavedActionable_handler(item.id)}
-                saved_handler={props.saved_handler(item.id)}
-                edit_handler={props.edit_handler(item.id)}
-              />
-            </Box>
-          );
-        })}
-      </Box>
-    );
-  }
-};
+    if (
+      props.atoms === undefined ||
+      props.atoms === null ||
+      props.atoms.length === 0
+    ) {
+      return <></>;
+    } else {
+      return (
+        <Box wrap={true} display="flex" direction="row" justifyContent="around">
+          {props.atoms.map((item) => {
+            return (
+              <Box
+                lgPadding={card_sizes_compact.lgPadding as PaddingT}
+                mdPadding={card_sizes_compact.mdPadding as PaddingT}
+                smPadding={card_sizes_compact.smPadding as PaddingT}
+                padding={card_sizes_compact.padding as PaddingT}
+                key={`Box-cardAtomGrid_Compact-${props.id}-${item.id}`}
+              >
+                <CardAtomCompact
+                  key={`cardAtomGrid_Compact-${props.id}-${item.id}`}
+                  id={item.id}
+                  stores={props.stores}
+                  title={item.title}
+                  image_url={item.image_url}
+                  pathname={path_Itemview}
+                  queryObject={{ title: item.title, id: item.id }}
+                  saved_enabled={props.isItemSaved_handler(item.id)}
+                  saved_actionable={props.isItemSavedActionable_handler(
+                    item.id
+                  )}
+                  saved_handler={props.saved_handler(item.id)}
+                  edit_handler={props.edit_handler(item.id)}
+                />
+              </Box>
+            );
+          })}
+        </Box>
+      );
+    }
+  };
 
 export default observer(CardAtomGridCompact);

@@ -93,14 +93,6 @@ export function getRandomImageFromItems(items: IAtom[]): string {
   }
 }
 
-export function isMobile(GUI_CONFIG_id: string): boolean {
-  const result: boolean =
-    // GUI_CONFIG_id.includes(ConfigDisplay.small) ||
-    GUI_CONFIG_id.includes(ConfigDisplay.mobile);
-
-  return result;
-}
-
 export function hasTouchScreen(window: any): boolean {
   //https://developer.mozilla.org/fr/docs/Web/API/Navigator
   let hasTouchScreen = false;

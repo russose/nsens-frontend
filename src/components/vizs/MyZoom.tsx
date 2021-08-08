@@ -1,6 +1,6 @@
 /* eslint react/jsx-handler-names: "off" */
 import React from "react";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { Zoom } from "@visx/zoom";
 import { Group } from "@visx/group";
 

@@ -1,5 +1,5 @@
 import { Box, Icon, Text } from "gestalt";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import { configGeneral } from "../config/globals";
 import { ColorT, IconT, SizeT } from "../config/globals";

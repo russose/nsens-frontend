@@ -1,26 +1,27 @@
-import { observer } from "mobx-react-lite";
-import { useStores } from "../../../src/stores/RootStoreHook";
+import { observer } from "mobx-react";
+import { useStores } from "../../src/stores/RootStoreHook";
 import React from "react";
-import AboutLayoutHybrid from "../../../src/components/layout/AboutLayoutHybrid";
+import AboutLayoutHybrid from "../../src/components/layout/AboutLayoutHybrid";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import AppLayout from "../../../src/components/layout/AppLayout";
+} from "../../src/libs/getDataParamsPage";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import AppLayout from "../../src/components/layout/AppLayout";
 import {
   configPaths,
   getEmail,
   getTwitter,
   IFeature,
-} from "../../../src/config/globals";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
-import { isInstalled, isMobile } from "../../../src/libs/utils";
-import Installation from "../../../src/components/Installation";
-import Contacts from "../../../src/components/Contacts";
+} from "../../src/config/globals";
+import { initializeApp } from "../../src/libs/helpersInitialize";
+import { isInstalled } from "../../src/libs/utils";
+import Installation from "../../src/components/Installation";
+import Contacts from "../../src/components/Contacts";
 import { Box, Image } from "gestalt";
+import { isMobile } from "../../src/libs/helpersBase";
 
 const About: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -39,7 +40,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
   const ratio_logo = GUI_CONFIG.display.About.ratio_logo;
   const ratio_image = GUI_CONFIG.display.About.ratio_image;
 
-  const ratio_page = isMobile(GUI_CONFIG.id)
+  const ratio_page = isMobile(stores)
     ? GUI_CONFIG.display.About.ratio_page_number
     : GUI_CONFIG.display.About.ratio_page_vh;
 
@@ -56,14 +57,13 @@ const About: React.FunctionComponent<IPage> = (props) => {
 
   const contact = GUI_CONFIG.language.user.contact;
 
-  const installation_instructions = !isInstalled() &&
-    isMobile(GUI_CONFIG.id) && (
-      <Installation
-        height="25vh"
-        path_image={configPaths.image_install}
-        instruction={GUI_CONFIG.language.user.install_instructions}
-      />
-    );
+  const installation_instructions = !isInstalled() && isMobile(stores) && (
+    <Installation
+      height="25vh"
+      path_image={configPaths.image_install}
+      instruction={GUI_CONFIG.language.user.install_instructions}
+    />
+  );
 
   const contacts = (
     <Contacts

@@ -116,7 +116,7 @@ export const configFetching = {
 };
 
 export const configPaths = {
-  rootPath: "/[lang]/[display]",
+  rootPath: "/[lang]",
   item_empty_image: "/The_Scientific_Universe_small.webp",
   knowbook_all_image: "/500px-Book_closed_template_small.svg.webp",
   knowbook_none_image: "/The_Scientific_Universe_small.webp",
@@ -130,7 +130,7 @@ export const configPaths = {
   image_install: "/install.webp",
   pages: {
     About: "/About",
-    Home: "/Home",
+    Home: "/",
     Knowbooks: "/Knowbooks",
     Knowbook: "/Knowbook",
     KnowbookSaved: "/KnowbookSpecialSaved",

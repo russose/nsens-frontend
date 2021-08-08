@@ -8,6 +8,7 @@ const card_compact_vizs_size = 120;
 // const card_compact_vizs_size = card_size_ * 0.5;
 
 export const configDataMobile = {
+  test_color: "red",
   amount_item_displayed: 30,
   max_nodes_network: 1,
   // min_width_network: 500,
@@ -17,7 +18,7 @@ export const configDataMobile = {
   heightChangePassword: "45vh",
   rounding_menu: 4,
   rounding_item: 6,
-  size_icon_menu: "md",
+  size_icon_menu: "lg", //"md" before tests
   size_icon_card: "sm",
   header_size: "sm",
   layout: {

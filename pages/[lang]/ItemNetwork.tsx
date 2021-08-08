@@ -1,20 +1,20 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import AppLayout from "../../../src/components/layout/AppLayout";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import AppLayout from "../../src/components/layout/AppLayout";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
-import { useStores } from "../../../src/stores/RootStoreHook";
+} from "../../src/libs/getDataParamsPage";
+import { initializeApp } from "../../src/libs/helpersInitialize";
+import { useStores } from "../../src/stores/RootStoreHook";
 
 const ItemNetworkNoSSRDynamic = dynamic(
-  () => import("../../../src/components/ItemNetworkNoSSR"),
+  () => import("../../src/components/ItemNetworkNoSSR"),
   { ssr: false }
 );
 

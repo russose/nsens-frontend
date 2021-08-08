@@ -1,21 +1,21 @@
-import { observer } from "mobx-react-lite";
-import { useStores } from "../../../src/stores/RootStoreHook";
+import { observer } from "mobx-react";
+import { useStores } from "../../src/stores/RootStoreHook";
 import React from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import AppLayout from "../../../src/components/layout/AppLayout";
+} from "../../src/libs/getDataParamsPage";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import AppLayout from "../../src/components/layout/AppLayout";
 import { Box } from "gestalt";
-import FormChangePassword from "../../../src/components/FormChangePassword";
+import FormChangePassword from "../../src/components/FormChangePassword";
 import {
   onChangePassword_button,
   onChangePassword_text,
-} from "../../../src/handlers/handlers_ChangePassword";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
+} from "../../src/handlers/handlers_ChangePassword";
+import { initializeApp } from "../../src/libs/helpersInitialize";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();

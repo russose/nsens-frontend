@@ -1,4 +1,7 @@
 import { action, computed, makeObservable, observable } from "mobx";
+import { configDataDesktop } from "../config/configDataDesktop";
+import { configDataMobile } from "../config/configDataMobile";
+import { configDataSpecialScreen } from "../config/configDataSpecialScreen";
 // import { configDataFr } from "../config/configDataFr";
 import {
   AtomID,
@@ -15,26 +18,29 @@ import {
 
 interface IInitState {
   [initStateCat.core]: boolean;
-  // [initStateCat.feed]: boolean;
+  // [initStateCat.display]: boolean;
   [initStateCat.staticKnowbooks]: boolean;
-  // [initStateCat.knowbooks]: boolean;
   [initStateCat.userData]: boolean;
 }
 
 export class BaseStore {
   private $initCompleted: IInitState = {
     [initStateCat.core]: undefined,
-    // [initStateCat.feed]: undefined,
+    // [initStateCat.display]: undefined,
     [initStateCat.staticKnowbooks]: undefined,
-    // knowbooks: undefined,
     [initStateCat.userData]: undefined,
   };
 
   //username="": the user not logged - username=null: App not initialyzed
   private $user: IUser | null = null;
 
-  private $GUI_CONFIG: IGUICONFIG = undefined;
-  private $paramsPage: IparamsPage = { lang: undefined, display: undefined };
+  private $GUI_CONFIG: IGUICONFIG = {
+    language: undefined,
+    display: undefined,
+    currentDisplay: undefined,
+  };
+  // private $paramsPage: IparamsPage = { lang: undefined, display: undefined };
+  private $paramsPage: IparamsPage = { lang: undefined };
 
   private $screen: {
     width: number;
@@ -98,20 +104,44 @@ export class BaseStore {
     }
   }
 
+  setGUICONFIGFromDisplay(display: ConfigDisplay) {
+    if (display === this.$GUI_CONFIG.currentDisplay) {
+      return;
+    }
+
+    // this.$initCompleted.display = false;
+
+    if (display === ConfigDisplay.mobile) {
+      this.$GUI_CONFIG.display = configDataMobile;
+    } else if (display === ConfigDisplay.desktop) {
+      this.$GUI_CONFIG.display = configDataDesktop;
+    } else if (display === ConfigDisplay.large) {
+      this.$GUI_CONFIG.display = configDataDesktop;
+      this.$GUI_CONFIG.display.atom_sizes.lgColumn =
+        configDataSpecialScreen.large.atom_sizes_column;
+      this.$GUI_CONFIG.display.knowbook_sizes.lgColumn =
+        configDataSpecialScreen.large.knowbook_sizes_column;
+    } else if (display === ConfigDisplay.extra) {
+      this.$GUI_CONFIG.display = configDataDesktop;
+      // GUI_CONFIG__.display.About.features.lgColumn =
+      //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
+      this.$GUI_CONFIG.display.atom_sizes.lgColumn =
+        configDataSpecialScreen.extra_large.atom_sizes_column;
+      this.$GUI_CONFIG.display.knowbook_sizes.lgColumn =
+        configDataSpecialScreen.extra_large.knowbook_sizes_column;
+    }
+
+    this.$GUI_CONFIG.currentDisplay = display;
+
+    // this.$initCompleted.display = true;
+  }
+
   async setParamsPageAndGUICONFIGFromParamsPageData(paramsPage: IparamsPage) {
-    if (
-      paramsPage === undefined ||
-      paramsPage.lang === undefined ||
-      paramsPage.display === undefined
-    ) {
+    if (paramsPage === undefined || paramsPage.lang === undefined) {
       return;
     }
 
     const lang = paramsPage.lang;
-    const display = paramsPage.display;
-    const id = lang + "_" + display;
-
-    let GUI_CONFIG_: IGUICONFIG;
 
     let configDataLang: configDataLanguage;
 
@@ -126,90 +156,104 @@ export class BaseStore {
       configDataLang = configDataEn.configDataEn;
     }
 
-    if (display === ConfigDisplay.mobile) {
-      const configGUIMobile = await import("../config/configDataMobile");
-      GUI_CONFIG_ = {
-        id: id,
-        language: configDataLang,
-        display: configGUIMobile.configDataMobile,
-      };
-    } else if (display === ConfigDisplay.desktop) {
-      const configGUIDesktop = await import("../config/configDataDesktop");
-      GUI_CONFIG_ = {
-        id: id,
-        language: configDataLang,
-        display: configGUIDesktop.configDataDesktop,
-      };
-    } else if (display === ConfigDisplay.large) {
-      const configGUIDesktop = await import("../config/configDataDesktop");
-      const configGUISpecialScreen = await import(
-        "../config/configDataSpecialScreen"
-      );
-      GUI_CONFIG_ = {
-        id: id,
-        language: configDataLang,
-        display: configGUIDesktop.configDataDesktop,
-      };
-      // GUI_CONFIG__.display.About.features.lgColumn =
-      //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
-      GUI_CONFIG_.display.atom_sizes.lgColumn =
-        configGUISpecialScreen.configDataSpecialScreen.large.atom_sizes_column;
-      GUI_CONFIG_.display.knowbook_sizes.lgColumn =
-        configGUISpecialScreen.configDataSpecialScreen.large.knowbook_sizes_column;
-    } else if (display === ConfigDisplay.extra) {
-      const configGUIDesktop = await import("../config/configDataDesktop");
-      const configGUISpecialScreen = await import(
-        "../config/configDataSpecialScreen"
-      );
-      GUI_CONFIG_ = {
-        id: id,
-        language: configDataLang,
-        display: configGUIDesktop.configDataDesktop,
-      };
-      // GUI_CONFIG__.display.About.features.lgColumn =
-      //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
-      GUI_CONFIG_.display.atom_sizes.lgColumn =
-        configGUISpecialScreen.configDataSpecialScreen.extra_large.atom_sizes_column;
-      GUI_CONFIG_.display.knowbook_sizes.lgColumn =
-        configGUISpecialScreen.configDataSpecialScreen.extra_large.knowbook_sizes_column;
-    }
+    this.$GUI_CONFIG.language = configDataLang;
 
-    // this.$GUI_CONFIG = GUI_CONFIG_;
-    // runInAction(() => {
-    this.$GUI_CONFIG = GUI_CONFIG_;
-    // });
-
-    // if (GUI_CONFIG.id !== undefined) {
-    //   const paramsPage: any[] = GUI_CONFIG.id.split("_");
-    //   this.$paramsPage.lang = paramsPage[0];
-    //   this.$paramsPage.display = paramsPage[1];
-    // }
-    // if (id !== undefined) {
-    // const paramsPage: any[] = GUI_CONFIG.id.split("_");
     this.$paramsPage.lang = lang;
-    this.$paramsPage.display = display;
-
-    // }
-    // }
   }
 
-  // setParamsPageFromGUICONFIG(GUI_CONFIG: IGUICONFIG) {
-  //   if (GUI_CONFIG === undefined) {
+  // async setParamsPageAndGUICONFIGFromParamsPageData_old(paramsPage: IparamsPage) {
+  //   if (
+  //     paramsPage === undefined ||
+  //     paramsPage.lang === undefined ||
+  //     paramsPage.display === undefined
+  //   ) {
   //     return;
   //   }
 
-  //   if (
-  //     this.GUI_CONFIG === undefined ||
-  //     this.GUI_CONFIG.id === undefined ||
-  //     GUI_CONFIG.id !== this.GUI_CONFIG.id
-  //   ) {
-  //     this.$GUI_CONFIG = GUI_CONFIG;
-  //     if (GUI_CONFIG.id !== undefined) {
-  //       const paramsPage: any[] = GUI_CONFIG.id.split("_");
-  //       this.$paramsPage.lang = paramsPage[0];
-  //       this.$paramsPage.display = paramsPage[1];
-  //     }
+  //   const lang = paramsPage.lang;
+  //   const display = paramsPage.display;
+  //   const id = lang + "_" + display;
+
+  //   let GUI_CONFIG_: IGUICONFIG;
+
+  //   let configDataLang: configDataLanguage;
+
+  //   if (lang === ConfigLanguage.fr) {
+  //     const configDataFr = await import("../config/configDataFr");
+  //     configDataLang = configDataFr.configDataFr;
+  //   } else if (lang === ConfigLanguage.it) {
+  //     const configDataIt = await import("../config/configDataIt");
+  //     configDataLang = configDataIt.configDataIt;
+  //   } else if (lang === ConfigLanguage.en) {
+  //     const configDataEn = await import("../config/configDataEn");
+  //     configDataLang = configDataEn.configDataEn;
   //   }
+
+  //   if (display === ConfigDisplay.mobile) {
+  //     const configGUIMobile = await import("../config/configDataMobile");
+  //     GUI_CONFIG_ = {
+  //       id: id,
+  //       language: configDataLang,
+  //       display: configGUIMobile.configDataMobile,
+  //     };
+  //   } else if (display === ConfigDisplay.desktop) {
+  //     const configGUIDesktop = await import("../config/configDataDesktop");
+  //     GUI_CONFIG_ = {
+  //       id: id,
+  //       language: configDataLang,
+  //       display: configGUIDesktop.configDataDesktop,
+  //     };
+  //   } else if (display === ConfigDisplay.large) {
+  //     const configGUIDesktop = await import("../config/configDataDesktop");
+  //     const configGUISpecialScreen = await import(
+  //       "../config/configDataSpecialScreen"
+  //     );
+  //     GUI_CONFIG_ = {
+  //       id: id,
+  //       language: configDataLang,
+  //       display: configGUIDesktop.configDataDesktop,
+  //     };
+  //     // GUI_CONFIG__.display.About.features.lgColumn =
+  //     //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
+  //     GUI_CONFIG_.display.atom_sizes.lgColumn =
+  //       configGUISpecialScreen.configDataSpecialScreen.large.atom_sizes_column;
+  //     GUI_CONFIG_.display.knowbook_sizes.lgColumn =
+  //       configGUISpecialScreen.configDataSpecialScreen.large.knowbook_sizes_column;
+  //   } else if (display === ConfigDisplay.extra) {
+  //     const configGUIDesktop = await import("../config/configDataDesktop");
+  //     const configGUISpecialScreen = await import(
+  //       "../config/configDataSpecialScreen"
+  //     );
+  //     GUI_CONFIG_ = {
+  //       id: id,
+  //       language: configDataLang,
+  //       display: configGUIDesktop.configDataDesktop,
+  //     };
+  //     // GUI_CONFIG__.display.About.features.lgColumn =
+  //     //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
+  //     GUI_CONFIG_.display.atom_sizes.lgColumn =
+  //       configGUISpecialScreen.configDataSpecialScreen.extra_large.atom_sizes_column;
+  //     GUI_CONFIG_.display.knowbook_sizes.lgColumn =
+  //       configGUISpecialScreen.configDataSpecialScreen.extra_large.knowbook_sizes_column;
+  //   }
+
+  //   // this.$GUI_CONFIG = GUI_CONFIG_;
+  //   // runInAction(() => {
+  //   this.$GUI_CONFIG = GUI_CONFIG_;
+  //   // });
+
+  //   // if (GUI_CONFIG.id !== undefined) {
+  //   //   const paramsPage: any[] = GUI_CONFIG.id.split("_");
+  //   //   this.$paramsPage.lang = paramsPage[0];
+  //   //   this.$paramsPage.display = paramsPage[1];
+  //   // }
+  //   // if (id !== undefined) {
+  //   // const paramsPage: any[] = GUI_CONFIG.id.split("_");
+  //   this.$paramsPage.lang = lang;
+  //   this.$paramsPage.display = display;
+
+  //   // }
+  //   // }
   // }
 
   setscreenNoSSR(): void {

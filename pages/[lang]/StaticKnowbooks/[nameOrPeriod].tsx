@@ -1,26 +1,26 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import React from "react";
-import SEOHeaderTitle from "../../../../src/components/SEOHeaderTitle";
-import KnowbookNotLogged from "../../../../src/components/KnowbookNotLogged";
-import AppLayout from "../../../../src/components/layout/AppLayout";
-import { IAtom } from "../../../../src/config/globals";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
+import KnowbookNotLogged from "../../../src/components/KnowbookNotLogged";
+import AppLayout from "../../../src/components/layout/AppLayout";
+import { IAtom } from "../../../src/config/globals";
 import {
   IPageStaticKnowbooks,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../../src/libs/getDataStaticKnowbooks";
-import { initializeApp } from "../../../../src/libs/helpersInitialize";
-import { readRelatedFromItem } from "../../../../src/libs/helpersRelated";
+} from "../../../src/libs/getDataStaticKnowbooks";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
+import { readRelatedFromItem } from "../../../src/libs/helpersRelated";
 import {
   makeArrayFlat,
   shuffleSizedRemoveDoublesFilterIds,
-} from "../../../../src/libs/utils";
-import { useStores } from "../../../../src/stores/RootStoreHook";
+} from "../../../src/libs/utils";
+import { useStores } from "../../../src/stores/RootStoreHook";
 
 const KnowbookLoggedDynamic = dynamic(
-  () => import("../../../../src/components/KnowbookLogged")
+  () => import("../../../src/components/KnowbookLogged")
 );
 
 function getRelatedItemsFromItems(

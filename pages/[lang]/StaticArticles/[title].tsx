@@ -1,18 +1,18 @@
 import LZString from "lz-string";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-import Article from "../../../../src/components/Article";
-import SEOHeaderTitle from "../../../../src/components/SEOHeaderTitle";
-import AppLayout from "../../../../src/components/layout/AppLayout";
+import Article from "../../../src/components/Article";
+import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
+import AppLayout from "../../../src/components/layout/AppLayout";
 import {
   IPageStaticArticle,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../../src/libs/getDataStaticArticle";
-import { initializeApp } from "../../../../src/libs/helpersInitialize";
-import { prepareArticle } from "../../../../src/libs/utils";
-import { useStores } from "../../../../src/stores/RootStoreHook";
+} from "../../../src/libs/getDataStaticArticle";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
+import { prepareArticle } from "../../../src/libs/utils";
+import { useStores } from "../../../src/stores/RootStoreHook";
 
 const ItemStaticArticle: React.FunctionComponent<IPageStaticArticle> = (
   props

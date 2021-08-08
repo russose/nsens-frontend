@@ -1,31 +1,31 @@
 import { Box, Button } from "gestalt";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import React from "react";
-// import CatchupMessage from "../../../src/components/CatchupMessage";
-import FormLoginSignup from "../../../src/components/FormLoginSignup";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
-import LanguageSelector from "../../../src/components/LanguageSelector";
-import AppLayout from "../../../src/components/layout/AppLayout";
-import { configPaths } from "../../../src/config/globals";
+// import CatchupMessage from "../../src/components/CatchupMessage";
+import FormLoginSignup from "../../src/components/FormLoginSignup";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import LanguageSelector from "../../src/components/LanguageSelector";
+import AppLayout from "../../src/components/layout/AppLayout";
+import { configPaths } from "../../src/config/globals";
 import {
   onChangeUsernamePassword,
   onLogout,
   onSubmitLoginSignup,
-} from "../../../src/handlers/handlers_LoginSignup";
+} from "../../src/handlers/handlers_LoginSignup";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import { goPage } from "../../../src/libs/helpersBase";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
-import { useStores } from "../../../src/stores/RootStoreHook";
+} from "../../src/libs/getDataParamsPage";
+import { goPage } from "../../src/libs/helpersBase";
+import { initializeApp } from "../../src/libs/helpersInitialize";
+import { useStores } from "../../src/stores/RootStoreHook";
 
 //CSS in JS Styles not supported in SSR
 const CatchupMessageDynamic = dynamic(
-  () => import("../../../src/components/CatchupMessage"),
+  () => import("../../src/components/CatchupMessage"),
   { ssr: false }
 );
 
@@ -74,31 +74,35 @@ const User: React.FunctionComponent<IPage> = (props) => {
 
   const resetPasswordButton = (
     <Box column={8} smColumn={6} mdColumn={3} lgColumn={2}>
-      <Button
-        accessibilityLabel="resetPassword"
-        text={changePassword}
-        size="lg"
-        color="blue"
-        onClick={() => {
-          goPage(
-            stores,
-            stores.baseStore.paramsPage,
-            configPaths.pages.ChangePassword
-          );
-        }}
-      />
+      <Box display="flex" direction="row" justifyContent="around">
+        <Button
+          accessibilityLabel="resetPassword"
+          text={changePassword}
+          size="lg"
+          color="blue"
+          onClick={() => {
+            goPage(
+              stores,
+              stores.baseStore.paramsPage,
+              configPaths.pages.ChangePassword
+            );
+          }}
+        />
+      </Box>
     </Box>
   );
 
   const logoutButton = (
     <Box column={8} smColumn={6} mdColumn={3} lgColumn={2}>
-      <Button
-        accessibilityLabel="logout"
-        text={deconnexion}
-        size="lg"
-        color="red"
-        onClick={onLogout(stores)}
-      />
+      <Box display="flex" direction="row" justifyContent="around">
+        <Button
+          accessibilityLabel="logout"
+          text={deconnexion}
+          size="lg"
+          color="red"
+          onClick={onLogout(stores)}
+        />
+      </Box>
     </Box>
   );
 

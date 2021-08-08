@@ -1,4 +1,4 @@
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { Image, Box, Mask, Text } from "gestalt";
 import { AtomID, ColorT, RoundingT, SizeT } from "../config/globals";
 import Link from "next/link";

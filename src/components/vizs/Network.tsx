@@ -1,7 +1,7 @@
 import { Group } from "@visx/group";
 import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import { configPaths, group_name } from "../../config/globals";
 import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";

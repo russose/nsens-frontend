@@ -20,16 +20,30 @@ import {
   api_searchFromWeb,
 } from "./apiItems";
 import { getCleanImage } from "./fetchBase";
-import { DateToStringWithZero, hasTouchScreen, shuffleSized } from "./utils";
+import { DateToStringWithZero, shuffleSized } from "./utils";
+
+export function isMobile(stores: IStores): boolean {
+  const result: boolean =
+    stores.baseStore.GUI_CONFIG.currentDisplay === ConfigDisplay.mobile;
+  return result;
+}
+
+// export function isMobile(GUI_CONFIG_id: string): boolean {
+//   const result: boolean =
+//     // GUI_CONFIG_id.includes(ConfigDisplay.small) ||
+//     GUI_CONFIG_id.includes(ConfigDisplay.mobile);
+
+//   return result;
+// }
 
 export async function getParamsPageFromContext(
   stores: IStores
 ): Promise<IparamsPage> {
   if (process.browser) {
     stores.baseStore.setscreenNoSSR();
-    const max_width_mobile = configGeneral.max_width_mobile;
-    const isMobile: boolean =
-      hasTouchScreen(window) || window.innerWidth < max_width_mobile;
+    // const max_width_mobile = configGeneral.max_width_mobile;
+    // const isMobile: boolean =
+    //   hasTouchScreen(window) || window.innerWidth < max_width_mobile;
 
     const language_navigator = navigator.language;
     let paramsPage_lang: ConfigLanguage;
@@ -42,27 +56,71 @@ export async function getParamsPageFromContext(
     }
     //paramsPage_lang = ConfigLanguage.fr;
 
-    let paramsPage_display: ConfigDisplay;
-    if (isMobile) {
-      paramsPage_display = ConfigDisplay.mobile;
-    } else {
-      if (
-        stores.baseStore.screen.width >
-        configGeneral.extra_large_screen_breakpoint
-      ) {
-        paramsPage_display = ConfigDisplay.extra;
-      } else if (
-        stores.baseStore.screen.width > configGeneral.large_screen_breakpoint
-      ) {
-        paramsPage_display = ConfigDisplay.large;
-      } else {
-        paramsPage_display = ConfigDisplay.desktop;
-      }
-    }
-    return { lang: paramsPage_lang, display: paramsPage_display };
+    // let paramsPage_display: ConfigDisplay;
+    // if (isMobile) {
+    //   paramsPage_display = ConfigDisplay.mobile;
+    // } else {
+    //   if (
+    //     stores.baseStore.screen.width >
+    //     configGeneral.extra_large_screen_breakpoint
+    //   ) {
+    //     paramsPage_display = ConfigDisplay.extra;
+    //   } else if (
+    //     stores.baseStore.screen.width > configGeneral.large_screen_breakpoint
+    //   ) {
+    //     paramsPage_display = ConfigDisplay.large;
+    //   } else {
+    //     paramsPage_display = ConfigDisplay.desktop;
+    //   }
+    // }
+    // return { lang: paramsPage_lang, display: paramsPage_display };
+
+    return { lang: paramsPage_lang };
   }
   return undefined;
 }
+
+// export async function getParamsPageFromContext(
+//   stores: IStores
+// ): Promise<IparamsPage> {
+//   if (process.browser) {
+//     stores.baseStore.setscreenNoSSR();
+//     const max_width_mobile = configGeneral.max_width_mobile;
+//     const isMobile: boolean =
+//       hasTouchScreen(window) || window.innerWidth < max_width_mobile;
+
+//     const language_navigator = navigator.language;
+//     let paramsPage_lang: ConfigLanguage;
+//     if (language_navigator.includes("fr")) {
+//       paramsPage_lang = ConfigLanguage.fr;
+//     } else if (language_navigator.includes("it")) {
+//       paramsPage_lang = ConfigLanguage.it;
+//     } else {
+//       paramsPage_lang = ConfigLanguage.en;
+//     }
+//     //paramsPage_lang = ConfigLanguage.fr;
+
+//     let paramsPage_display: ConfigDisplay;
+//     if (isMobile) {
+//       paramsPage_display = ConfigDisplay.mobile;
+//     } else {
+//       if (
+//         stores.baseStore.screen.width >
+//         configGeneral.extra_large_screen_breakpoint
+//       ) {
+//         paramsPage_display = ConfigDisplay.extra;
+//       } else if (
+//         stores.baseStore.screen.width > configGeneral.large_screen_breakpoint
+//       ) {
+//         paramsPage_display = ConfigDisplay.large;
+//       } else {
+//         paramsPage_display = ConfigDisplay.desktop;
+//       }
+//     }
+//     return { lang: paramsPage_lang, display: paramsPage_display };
+//   }
+//   return undefined;
+// }
 
 function removeBigImage(atoms: IAtom[]): IAtom[] {
   const atoms_without_images = atoms.map((item) => {
@@ -279,7 +337,7 @@ export function goUserHandler(stores: IStores) {
       stores,
       {
         lang: stores.baseStore.paramsPage.lang,
-        display: stores.baseStore.paramsPage.display,
+        // display: stores.baseStore.paramsPage.display,
       },
       configPaths.pages.User
     );

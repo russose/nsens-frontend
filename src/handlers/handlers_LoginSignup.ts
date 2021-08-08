@@ -23,7 +23,7 @@ export const onChangeLanguage =
     stores.knowbookStore.clearKnowbooks();
 
     const paramsPage: IparamsPage = {
-      display: stores.baseStore.paramsPage.display,
+      // display: stores.baseStore.paramsPage.display,
       lang: language,
     };
 

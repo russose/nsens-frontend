@@ -1,5 +1,5 @@
 import { Box } from "gestalt";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import React from "react";
 import DialogLoading from "../src/components/DialogLoading";
 import { configPaths } from "../src/config/globals";
@@ -16,7 +16,7 @@ const Index: React.FunctionComponent = (props) => {
           stores,
           {
             lang: paramsPageContext.lang,
-            display: paramsPageContext.display,
+            // display: paramsPageContext.display,
           },
           configPaths.pages.Home
         );

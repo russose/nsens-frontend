@@ -1,25 +1,25 @@
-import { observer } from "mobx-react-lite";
-import React from "react";
-import {
-  IPage,
-  I_getStaticPaths,
-  I_getStaticProps,
-} from "../../../src/libs/getDataParamsPage";
-import CardAtomGrid from "../../../src/components/CardAtomGrid";
-
-import { useStores } from "../../../src/stores/RootStoreHook";
-import AppLayout from "../../../src/components/layout/AppLayout";
+import { observer } from "mobx-react";
 import { GetStaticPaths, GetStaticProps } from "next";
-import SEOHeaderTitle from "../../../src/components/SEOHeaderTitle";
+import React from "react";
+import CardAtomGrid from "../../src/components/CardAtomGrid";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import AppLayout from "../../src/components/layout/AppLayout";
+import { onEditKnowbooks } from "../../src/handlers/handlers_Knowbooks";
 import {
   isItemSaved,
   isItemSavedActivated,
   onSaved,
-} from "../../../src/handlers/handlers_Saved";
-import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
+} from "../../src/handlers/handlers_Saved";
+import {
+  IPage,
+  I_getStaticPaths,
+  I_getStaticProps,
+} from "../../src/libs/getDataParamsPage";
+import { ItemsInNoKnowbook } from "../../src/libs/helpersSavedKnowbooks";
+import { useStores } from "../../src/stores/RootStoreHook";
+import { initializeApp } from "../../src/libs/helpersInitialize";
 
-const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
+const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
@@ -29,15 +29,15 @@ const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
     return <></>;
   }
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const title = GUI_CONFIG.language.knowbooks.AllSaved_title;
+  const title = GUI_CONFIG.language.knowbooks.None_Title;
 
   return (
     <AppLayout stores={stores}>
       <SEOHeaderTitle stores={stores} title={title} />
       <CardAtomGrid
-        id="Saved"
+        id="None"
         stores={stores}
-        atoms={Array.from(stores.savedStore.saved.values())}
+        atoms={ItemsInNoKnowbook(stores)}
         isItemSaved_handler={isItemSaved(stores)}
         isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}
@@ -54,4 +54,4 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
   return await I_getStaticPaths(context);
 };
 
-export default observer(KnowbookSpecialSaved);
+export default observer(KnowbookSpecialNone);
