@@ -4,7 +4,6 @@ import {
   forceLink,
   forceSimulation,
 } from "d3-force";
-// import { action } from "mobx";
 import {
   AtomID,
   EXCLUSION_PATTERNS,
@@ -18,8 +17,7 @@ import {
 import { fetchRelatedAndUpdateStores } from "./helpersRelated";
 import { IStores } from "../stores/RootStore";
 import { newAtom } from "./utils";
-import { getItemFromAnyStores } from "./helpersSavedKnowbooks";
-import { api_getItemsFromTitlesFromWeb_blocking } from "./apiItems";
+import { api_getItemsFromTitlesFromWebWithGoodImages_blocking } from "./apiItems";
 
 export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
   const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
@@ -31,7 +29,6 @@ export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
     return;
   }
 
-  // const relatedMap_local = new Map<AtomID, IAtom[]>();
   const relatedMap_local = new Map<string, IAtom[]>();
 
   related.forEach((el) => {
@@ -45,7 +42,6 @@ export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
     }
   });
 
-  // stores.graphStore.relatedMap.clear();
   stores.graphStore.clearRelatedMap();
   //Sort Map by lengh
   const keys_values_sorted = Array.from(relatedMap_local.entries()).sort(
@@ -63,87 +59,11 @@ export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
   );
 
   keys_values_sorted.forEach((key_value) => {
-    // this.$relatedMap.set(key_value[0], key_value[1]);
     stores.graphStore.setRelatedMap(key_value[0], key_value[1]);
   });
 
   stores.graphStore.setRootItemId(root_itemId);
 }
-
-// export function setGraph(
-//   root_item: IAtom,
-//   stores: IStores,
-//   x0: number,
-//   y0: number
-// ): void {
-//   if (root_item === undefined) {
-//     return;
-//   }
-
-//   setRelatedMap(root_item.id, stores);
-
-//   const rootNode: INode = {
-//     x: x0,
-//     y: y0,
-//     pos: 0,
-//     relation_name: "",
-//     ...root_item,
-//   };
-
-//   this.graph.nodes = [rootNode];
-//   this.graph.links = [];
-
-//   stores.graphStore.relatedMap.forEach((items_list_for_relation, key) => {
-//     if (items_list_for_relation.length > 1) {
-//       //NodeGroup Element
-//       const node_group: INode = {
-//         x: x0,
-//         y: y0,
-//         pos: stores.graphStore.graph.nodes.length,
-//         relation_name: group_name,
-//         ...newAtom(key, stores.baseStore.paramsPage.lang),
-//       };
-//       node_group.title = key;
-//       // node_group.related = "group";
-
-//       this.graph.nodes.push(node_group);
-//       this.graph.links.push({
-//         source: this.graph.nodes[0],
-//         target: this.graph.nodes[node_group.pos],
-//       });
-
-//       items_list_for_relation.forEach((item: IAtom) => {
-//         const node: INode = {
-//           x: x0,
-//           y: y0,
-//           pos: stores.graphStore.graph.nodes.length,
-//           relation_name: "",
-//           ...item,
-//         };
-//         this.graph.nodes.push(node);
-
-//         this.graph.links.push({
-//           source: stores.graphStore.graph.nodes[node_group.pos],
-//           target: stores.graphStore.graph.nodes[node.pos],
-//         });
-//       });
-//     } else if (items_list_for_relation.length === 1) {
-//       //No group
-//       const node: INode = {
-//         x: x0,
-//         y: y0,
-//         pos: stores.graphStore.graph.nodes.length,
-//         relation_name: key,
-//         ...items_list_for_relation[0],
-//       };
-//       this.graph.nodes.push(node);
-//       this.graph.links.push({
-//         source: this.graph.nodes[0],
-//         target: this.graph.nodes[node.pos],
-//       });
-//     }
-//   });
-// }
 
 export function setGraph(
   root_item: IAtom,
@@ -257,7 +177,6 @@ function runSimulation(width: number, height: number, stores: IStores): void {
         .strength(0.5)
         .iterations(forceIterations)
     )
-    // .force("charge", forceManyBody().strength(-50))
     .force(
       "link",
       forceLink(linksClone)
@@ -271,14 +190,6 @@ function runSimulation(width: number, height: number, stores: IStores): void {
       // action(
       () => {
         if (tick_count % 10 === 0) {
-          // OLD
-          // stores.graphStore.graph.nodes = nodesClone;
-          // stores.graphStore.graph.links = linksClone.map((link: ILink) => {
-          //   return {
-          //     source: stores.graphStore.graph.nodes[link.source.pos],
-          //     target: stores.graphStore.graph.nodes[link.target.pos],
-          //   };
-          // });
           //NEW
           // stores.graphStore.graph.nodes = nodesClone;
           const new_links: ILink[] = linksClone.map((link: ILink) => {
@@ -308,10 +219,11 @@ export function renderGraph(
   const baseStore = stores.baseStore;
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
-  let root_item: IAtom = getItemFromAnyStores(root_itemId, stores);
+  // let root_item: IAtom = getItemFromAnyStores(root_itemId, stores);
+  let root_item: IAtom = stores.baseStore.getHistoryItem(root_itemId);
 
   if (root_item === undefined) {
-    api_getItemsFromTitlesFromWeb_blocking(
+    api_getItemsFromTitlesFromWebWithGoodImages_blocking(
       stores.uiStore.selectedAtom.title,
       lang,
       exclusion_patterns_items

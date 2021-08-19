@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { Box, TextField, Button, Text } from "gestalt";
 import { ColorT, eventT, handlerT, RoundingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
@@ -100,7 +100,7 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
             onClick={props.handler_button("signup")}
             color="red"
             // color="gray"
-            inline
+            fullWidth
           />
         </Box>
         <Box paddingX={1}>
@@ -111,7 +111,7 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
             onClick={props.handler_button("login")}
             color="blue"
             // color="gray"
-            inline
+            fullWidth
           />
         </Box>
       </Box>

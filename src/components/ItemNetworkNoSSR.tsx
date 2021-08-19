@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { IStores } from "../stores/RootStore";
 import NetworkZoomable from "./vizs/NetworkZoomable";
@@ -11,6 +11,8 @@ interface ItemNetworkNoSSR {
 
 const ItemNetworkNoSSR: React.FunctionComponent<ItemNetworkNoSSR> = (props) => {
   const stores = props.stores;
+
+  stores.baseStore.setscreenNoSSR();
 
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;

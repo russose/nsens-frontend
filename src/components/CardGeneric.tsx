@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { Image, Box, Mask, Text } from "gestalt";
 import {
   AtomID,

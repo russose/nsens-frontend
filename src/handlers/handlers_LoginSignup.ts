@@ -16,11 +16,12 @@ export const onChangeLanguage =
     stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, undefined);
     stores.baseStore.setInitCompleted(initStateCat.userData, undefined);
 
-    stores.baseStore.clearHistory();
-    stores.baseStore.clearRelatedAndRelatedAll();
-    stores.savedStore.clearSaved();
-    stores.knowbookStore.clearStaticKnowbooks();
-    stores.knowbookStore.clearKnowbooks();
+    // //This block has to be moved in initialyzation function...
+    // stores.baseStore.clearHistory();
+    // stores.baseStore.clearRelatedAndRelatedAll();
+    // stores.savedStore.clearSaved();
+    // stores.knowbookStore.clearStaticKnowbooks();
+    // stores.knowbookStore.clearKnowbooks();
 
     const paramsPage: IparamsPage = {
       // display: stores.baseStore.paramsPage.display,

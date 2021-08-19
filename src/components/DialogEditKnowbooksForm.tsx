@@ -1,5 +1,5 @@
 import { Box, IconButton, Modal, TextField, Text, Checkbox } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { AtomID, handlerT, RoundingT, SizeT } from "../config/globals";
 import React from "react";
 import { IStores } from "../stores/RootStore";

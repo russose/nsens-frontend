@@ -6,18 +6,20 @@ import {
   IKnowbookStatic,
   KnowbookID,
 } from "../config/globals";
+import { RootStore } from "./RootStore";
 
 export class KnowkookStore {
+  $rootStore: RootStore;
   private $knowbooks = observable.map<KnowbookID, IKnowbook>();
   private $staticKnowbooks = observable.map<KnowbookID, IKnowbookStatic>();
 
-  constructor() {
+  constructor(rootStore: RootStore) {
+    this.$rootStore = rootStore;
     makeObservable<KnowkookStore>(this, {
-      // knowbooks: computed,
       setKnowbooks: action,
       clearStaticKnowbooks: action,
       clearKnowbooks: action,
-      deleteKnowbooks: action,
+      deleteKnowbook: action,
       setKnowbooksFromList: action,
       setStaticKnowbooks: action,
       addItemInKnowbook: action,
@@ -57,7 +59,7 @@ export class KnowkookStore {
   clearKnowbooks(): void {
     this.$knowbooks.clear();
   }
-  deleteKnowbooks(key: KnowbookID): void {
+  deleteKnowbook(key: KnowbookID): void {
     this.$knowbooks.delete(key);
   }
   addItemInKnowbook(

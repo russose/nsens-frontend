@@ -1,12 +1,13 @@
 import { IStores } from "../stores/RootStore";
 import { api_getKnowbooksList, api_getSavedList } from "./apiUserData";
-import { initialyzeRelatedAndRelatedAllFromSaved } from "./helpersRelated";
+import { initialyzeRelatedFromSaved } from "./helpersRelated";
 
 export async function initializeSavedLogged(stores: IStores) {
   try {
     const saved = await api_getSavedList(stores.baseStore.paramsPage.lang);
     stores.savedStore.setSaved(saved);
-    initialyzeRelatedAndRelatedAllFromSaved(stores);
+    initialyzeRelatedFromSaved(stores);
+    stores.savedStore.refreshRelatedAllItemsFromSaved();
   } catch (error) {
     // console.log(error);
   }

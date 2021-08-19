@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { configGeneral, IButton, RoundingT } from "../config/globals";
 import { ButtonIDType } from "../config/globals";

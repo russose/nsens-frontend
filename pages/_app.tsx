@@ -1,7 +1,7 @@
 import "gestalt/dist/gestalt.css";
 import "../styles.css";
 import { configure } from "mobx";
-import { enableStaticRendering } from "mobx-react";
+import { enableStaticRendering } from "mobx-react-lite";
 import { AppProps } from "next/app";
 import React from "react";
 import { ContextStores } from "../src/stores/RootStoreHook";

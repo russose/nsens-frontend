@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -12,7 +12,7 @@ import {
   I_getStaticProps,
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
-import { getRelatedItemsForItems } from "../../src/libs/helpersRelated";
+import { getRelatedItemsForItemsShuffleSized } from "../../src/libs/helpersRelated";
 import { getKnowbookAtomsList } from "../../src/libs/helpersSavedKnowbooks";
 import { useStores } from "../../src/stores/RootStoreHook";
 
@@ -72,7 +72,7 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
       <KnowbookLogged
         stores={stores}
         items={getKnowbookAtomsList(selected_knowbook, stores)}
-        related_items={getRelatedItemsForItems(
+        related_items={getRelatedItemsForItemsShuffleSized(
           stores,
           getKnowbookAtomsList(selected_knowbook, stores).map((item: IAtom) => {
             return item.id;

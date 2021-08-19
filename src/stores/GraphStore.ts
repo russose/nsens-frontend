@@ -1,13 +1,15 @@
 import { action, makeObservable, observable } from "mobx";
 import { AtomID, IAtom, IGraph, ILink, INode } from "../config/globals";
+import { RootStore } from "./RootStore";
 
 export class GraphStore {
+  $rootStore: RootStore;
   private $rootItemId: AtomID = undefined;
   private $graph: IGraph = { nodes: [], links: [] };
   private $relatedMap = observable.map<string, IAtom[]>();
-  // private $relatedMap = observable.map<AtomID, IAtom[]>();
 
-  constructor() {
+  constructor(rootStore: RootStore) {
+    this.$rootStore = rootStore;
     makeObservable<GraphStore, "$rootItemId" | "$graph">(this, {
       $rootItemId: observable,
       $graph: observable,
@@ -15,10 +17,6 @@ export class GraphStore {
       setGraph: action,
       setRelatedMap: action,
       clearRelatedMap: action,
-      // setGraph: action,
-      // renderGraph: action,
-      // runSimulation: action,
-      // renderRelatedMap: action,
     });
   }
 

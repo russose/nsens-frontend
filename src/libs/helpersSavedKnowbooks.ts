@@ -6,7 +6,7 @@ import {
   KnowbookID,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { api_getItemsFromTitlesFromWeb_blocking } from "./apiItems";
+import { api_getItemsFromTitlesFromWebWithGoodImages_blocking } from "./apiItems";
 import {
   api_addItemInKnowbook,
   api_addKnowbook,
@@ -18,33 +18,8 @@ import {
 } from "./apiUserData";
 import { fetchRelatedAndUpdateStores } from "./helpersRelated";
 
-const delay_api_in_s = 5000;
+const delay_api_in_ms = 5000;
 
-export function getItemFromAnyStores(
-  itemId: AtomID,
-  stores: IStores
-): IAtom | undefined {
-  if (itemId === undefined) {
-    return undefined;
-  }
-
-  let item: IAtom;
-  if (stores.savedStore.saved.get(itemId) !== undefined) {
-    item = stores.savedStore.saved.get(itemId);
-  } else if (stores.baseStore.history.has(itemId)) {
-    item = stores.baseStore.history.get(itemId);
-  }
-  // else {
-  //   item = getItemFromAnyRelated(stores, itemId);
-  // }
-  else if (stores.baseStore.relatedAll.has(itemId)) {
-    item = stores.baseStore.relatedAll.get(itemId);
-  } else {
-    item = undefined;
-  }
-
-  return item;
-}
 export function addSaved(itemId: AtomID, stores: IStores): void {
   if (itemId === undefined) {
     return;
@@ -52,10 +27,11 @@ export function addSaved(itemId: AtomID, stores: IStores): void {
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
 
-  const item = getItemFromAnyStores(itemId, stores);
+  // const item = getItemFromAnyStores(itemId, stores);
+  const item = stores.baseStore.getHistoryItem(itemId);
 
-  if (item === undefined) {
-    api_getItemsFromTitlesFromWeb_blocking(
+  if (item === undefined || item.image_url === "") {
+    api_getItemsFromTitlesFromWebWithGoodImages_blocking(
       stores.uiStore.selectedAtom.title,
       lang,
       exclusion_patterns_items
@@ -122,7 +98,7 @@ export function removeSaved(itemId: AtomID, stores: IStores): void {
         .catch(() => {
           // console.log("network error, error in unsaved");
         });
-    }, delay_api_in_s);
+    }, delay_api_in_ms);
   } else {
     // console.log("impossible to unsave: Atoms present in Custom Knowbooks");
   }
@@ -138,7 +114,7 @@ export function getSavedAtomsFromIds(
 
   const result = list_atoms.map((id) => {
     if (stores.savedStore.saved.has(id)) {
-      return stores.savedStore.saved.get(id);
+      return stores.baseStore.getHistoryItem(id);
     } else {
       // console.log("not in saved", id);
       return undefined;
@@ -167,19 +143,6 @@ export function renameKnowbook(
     .then(
       // action(
       () => {
-        // const knowbooks_list: IKnowbook[] = [];
-        // stores.knowbookStore.knowbooks.forEach((knowbook, key_name) => {
-        //   if (key_name !== name) {
-        //     knowbooks_list.push(knowbook);
-        //   } else {
-        //     const knowbook_with_new_name = knowbook;
-        //     knowbook_with_new_name.name = new_name;
-        //     knowbooks_list.push(knowbook_with_new_name);
-        //   }
-        // });
-        // stores.knowbookStore.clearKnowbooks();
-        // stores.knowbookStore.setKnowbooksFromList(knowbooks_list);
-
         stores.knowbookStore.renameKnowbook(name, new_name);
       }
       // )
@@ -200,8 +163,7 @@ export function deleteKnowbook(name: KnowbookID, stores: IStores) {
     .then(
       // action(
       () => {
-        // stores.knowbookStore.knowbooks.delete(name);
-        stores.knowbookStore.deleteKnowbooks(name);
+        stores.knowbookStore.deleteKnowbook(name);
       }
       // )
     )
@@ -225,14 +187,6 @@ export function addItemInKnowbook(
   }
 
   if (stores.knowbookStore.knowbooks.has(knowbookID)) {
-    // api_addItemInKnowbook(knowbookID, atomId)
-    //   .then(() => {
-    //     stores.knowbookStore.addItemInKnowbook(knowbookID, atomId);
-    //   })
-    //   .catch((error) => {
-    //     // console.log("error in adding item in knowbook");
-    //   });
-
     stores.knowbookStore.addItemInKnowbook(
       knowbookID,
       atomId,
@@ -243,14 +197,10 @@ export function addItemInKnowbook(
         knowbookID,
         atomId,
         stores.baseStore.paramsPage.lang
-      )
-        // .then(() => {
-        //   console.log("added in knowbook successfully");
-        // })
-        .catch(() => {
-          // console.log("network error, error in unsaved");
-        });
-    }, delay_api_in_s);
+      ).catch(() => {
+        // console.log("network error, error in unsaved");
+      });
+    }, delay_api_in_ms);
   } else {
     const newKnowbook: IKnowbook = {
       id: -1, //id not used in front but only in back
@@ -258,17 +208,6 @@ export function addItemInKnowbook(
       name: knowbookID,
       items: [atomId],
     };
-    // api_addKnowbook(knowbookID)
-    //   .then(() => {
-    //     api_addItemInKnowbook(knowbookID, atomId);
-    //   })
-    //   .then(() => {
-    //     stores.knowbookStore.setKnowbooks(knowbookID, newKnowbook);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error in creating knowbook and adding item");
-    //     // console.log(error);
-    //   });
 
     stores.knowbookStore.setKnowbooks(knowbookID, newKnowbook);
     setTimeout(() => {
@@ -280,14 +219,11 @@ export function addItemInKnowbook(
             stores.baseStore.paramsPage.lang
           );
         })
-        // .then(() => {
-        //   console.log("added in knowbook successfully");
-        // })
         .catch((error) => {
           // console.log("error in creating knowbook and adding item");
           // console.log(error);
         });
-    }, delay_api_in_s);
+    }, delay_api_in_ms);
   }
 }
 
@@ -304,15 +240,6 @@ export function removeItemFromKnowbook(
   if (stores.knowbookStore.knowbooks.has(knowbookID)) {
     let knowbook_updated = stores.knowbookStore.knowbooks.get(knowbookID);
     if (knowbook_updated !== undefined) {
-      // const knowbook_backup: IKnowbook = knowbook_updated;
-
-      //OLD
-      // knowbook_updated.items = knowbook_updated.items.filter((itemId) => {
-      //   return itemId !== atomId;
-      // });
-
-      // this.knowbooks.set(knowbookID, knowbook_updated);
-
       api_removeItemFromKnowbook(
         knowbookID,
         atomId,
@@ -363,7 +290,7 @@ export function isItemInKnowbook(
   knowbookId: KnowbookID,
   stores: IStores
 ): boolean {
-  const knowbook = stores.knowbookStore.knowbooks.get(knowbookId);
+  const knowbook: IKnowbook = stores.knowbookStore.knowbooks.get(knowbookId);
   if (knowbook !== undefined) {
     const knowbookContentId = knowbook.items;
     return knowbookContentId.includes(atomId);
@@ -393,17 +320,17 @@ export function IsItemInAnyKnowbook(atomId: AtomID, stores: IStores): boolean {
 export function ItemsInNoKnowbook(stores: IStores): IAtom[] {
   const itemsIdList: AtomID[] = [];
 
-  stores.savedStore.saved.forEach((item) => {
+  stores.savedStore.saved.forEach((itemId) => {
     const knowbookIds: KnowbookID[] = Array.from(
       stores.knowbookStore.knowbooks.keys()
     );
     for (let knowbookId of knowbookIds) {
-      const inside = isItemInKnowbook(item.id, knowbookId, stores);
+      const inside = isItemInKnowbook(itemId, knowbookId, stores);
       if (inside) {
         return;
       }
     }
-    itemsIdList.push(item.id);
+    itemsIdList.push(itemId);
     return;
   });
 

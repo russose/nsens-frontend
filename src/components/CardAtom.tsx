@@ -1,5 +1,5 @@
 import { Box, IconButton } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { configGeneral } from "../config/globals";
 import { AtomID, ButtonIDType, handlerT, IconT } from "../config/globals";
 import { IStores } from "../stores/RootStore";

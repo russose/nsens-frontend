@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import CardAtomGrid from "../../src/components/CardAtomGrid";

@@ -1,5 +1,5 @@
 import { Box } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import DialogLoading from "../src/components/DialogLoading";
 import { configPaths } from "../src/config/globals";
@@ -9,7 +9,7 @@ import { useStores } from "../src/stores/RootStoreHook";
 const Index: React.FunctionComponent = (props) => {
   const stores = useStores();
 
-  getParamsPageFromContext(stores)
+  getParamsPageFromContext()
     .then((paramsPageContext) => {
       if (paramsPageContext !== undefined) {
         goPage(

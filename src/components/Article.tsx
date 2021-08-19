@@ -1,5 +1,5 @@
 import React from "react";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 // import Separator from "./Separator";
 import { Box, Link, Text } from "gestalt";
 import { ROOT_URL_WIKIPEDIA } from "../config/configURLs";

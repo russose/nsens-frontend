@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { IAtom } from "../config/globals";
 import { onEditKnowbooks } from "../handlers/handlers_Knowbooks";

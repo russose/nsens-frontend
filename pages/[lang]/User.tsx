@@ -1,5 +1,5 @@
 import { Box, Button } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import React from "react";

@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import {
   IPage,
@@ -37,7 +37,7 @@ const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
       <CardAtomGrid
         id="Saved"
         stores={stores}
-        atoms={Array.from(stores.savedStore.saved.values())}
+        atoms={stores.savedStore.savedItems}
         isItemSaved_handler={isItemSaved(stores)}
         isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}

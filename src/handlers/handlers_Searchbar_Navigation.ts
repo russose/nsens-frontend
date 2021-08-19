@@ -11,29 +11,21 @@ import {
 } from "../libs/helpersBase";
 import { IStores } from "../stores/RootStore";
 
+function setFeedFromMostviewedAndRelatedLocal(stores: IStores): void {
+  const amount_item_displayed =
+    stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+  setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+}
+
 /*******************Logo*************************** */
-export const onTapLogo =
-  (
-    stores: IStores
-    // GUI_CONFIG: GUI_CONFIG_T
-  ) =>
-  (): void => {
-    // const itemId = stores.baseStore.getRandomItemIdFromAnywhere(stores);
-    // const item = stores.baseStore.getItemFromAnywhere(itemId, stores);
+export const onTapLogo = (stores: IStores) => (): void => {
+  goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
 
-    //Go Article Page
-    // stores.baseStore.goPageArticle(
-    //   stores.baseStore.paramsPage,
-    //   itemId,
-    //   item.title,
-    //   GUI_CONFIG
-    // );
-    goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
-
-    const amount_item_displayed =
-      stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
-    setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
-  };
+  // const amount_item_displayed =
+  //   stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+  // setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+  setFeedFromMostviewedAndRelatedLocal(stores);
+};
 
 /*******************Searchbar*************************** */
 
@@ -48,9 +40,10 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   if (stores.uiStore.searchPattern.length > 0) {
     setFeedFromSearch(stores, stores.uiStore.searchPattern);
   } else {
-    const amount_item_displayed =
-      stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
-    setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+    // const amount_item_displayed =
+    //   stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+    // setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+    setFeedFromMostviewedAndRelatedLocal(stores);
   }
   goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
 };
@@ -60,9 +53,10 @@ export const onSearchHomeKeyboard =
   (input: { event: eventT; value: string }): void => {
     if (input.event.key === "Enter") {
       if (stores.uiStore.searchPattern.length === 0) {
-        const amount_item_displayed =
-          stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
-        setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+        // const amount_item_displayed =
+        //   stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
+        // setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
+        setFeedFromMostviewedAndRelatedLocal(stores);
       } else {
         onSearchHomeSubmit(stores)();
       }

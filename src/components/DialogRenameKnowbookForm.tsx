@@ -1,5 +1,5 @@
 import { Box, Button, Modal, TextField, Text } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { handlerT, RoundingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 
@@ -56,14 +56,14 @@ const DialogRenameKnowbookForm: React.FunctionComponent<IDialogRenameKnowbookFor
               text={props.label_cancel}
               size={button_icon_size}
               onClick={props.handler_cancel}
-              inline
+              fullWidth
             />
             <Button
               accessibilityLabel="rename knowbook"
               text={props.label_rename}
               size={button_icon_size}
               onClick={props.handler_rename}
-              inline
+              fullWidth
             />
           </Box>
         </Box>

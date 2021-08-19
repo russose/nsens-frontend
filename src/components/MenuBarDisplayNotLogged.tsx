@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { ButtonIDType, configPaths, IButton } from "../config/globals";
 import { IStores } from "../stores/RootStore";

@@ -90,7 +90,7 @@ export async function api_searchFromWeb(
   }
 }
 
-export async function api_getItemsFromTitlesFromWeb_blocking(
+export async function api_getItemsFromTitlesFromWebWithGoodImages_blocking(
   titles_string: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]

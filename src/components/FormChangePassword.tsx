@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { Box, TextField, Button } from "gestalt";
 import { ColorT, handlerT, RoundingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
@@ -96,7 +96,7 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
             size={button_icon_size}
             onClick={props.handler_button("sendValidationCode")}
             color="blue"
-            inline
+            fullWidth
           />
         </Box>
         <Box paddingX={1}>
@@ -106,7 +106,7 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
             size={button_icon_size}
             onClick={props.handler_button("changePassword")}
             color="red"
-            inline
+            fullWidth
           />
         </Box>
       </Box>

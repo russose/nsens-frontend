@@ -1,5 +1,5 @@
 import { Group } from "@visx/group";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import dynamic from "next/dynamic";
 import React from "react";
 import { isMobile } from "../../libs/helpersBase";

@@ -1,9 +1,5 @@
 import Router from "next/router";
 import {
-  ROOT_URL_WIKIPEDIA_ACTION,
-  ROOT_URL_WIKIPEDIA_REST,
-} from "../config/configURLs";
-import {
   ConfigDisplay,
   configGeneral,
   ConfigLanguage,
@@ -14,12 +10,7 @@ import {
   IparamsPage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import {
-  api_getItemsFeaturedFromWeb,
-  api_getItemsRandomFromWeb,
-  api_searchFromWeb,
-} from "./apiItems";
-import { getCleanImage } from "./fetchBase";
+import { api_getItemsFeaturedFromWeb, api_searchFromWeb } from "./apiItems";
 import { DateToStringWithZero, shuffleSized } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
@@ -28,22 +19,9 @@ export function isMobile(stores: IStores): boolean {
   return result;
 }
 
-// export function isMobile(GUI_CONFIG_id: string): boolean {
-//   const result: boolean =
-//     // GUI_CONFIG_id.includes(ConfigDisplay.small) ||
-//     GUI_CONFIG_id.includes(ConfigDisplay.mobile);
-
-//   return result;
-// }
-
-export async function getParamsPageFromContext(
-  stores: IStores
-): Promise<IparamsPage> {
+export async function getParamsPageFromContext(): Promise<IparamsPage> {
   if (process.browser) {
-    stores.baseStore.setscreenNoSSR();
-    // const max_width_mobile = configGeneral.max_width_mobile;
-    // const isMobile: boolean =
-    //   hasTouchScreen(window) || window.innerWidth < max_width_mobile;
+    // stores.baseStore.setscreenNoSSR();
 
     const language_navigator = navigator.language;
     let paramsPage_lang: ConfigLanguage;
@@ -54,73 +32,11 @@ export async function getParamsPageFromContext(
     } else {
       paramsPage_lang = ConfigLanguage.en;
     }
-    //paramsPage_lang = ConfigLanguage.fr;
-
-    // let paramsPage_display: ConfigDisplay;
-    // if (isMobile) {
-    //   paramsPage_display = ConfigDisplay.mobile;
-    // } else {
-    //   if (
-    //     stores.baseStore.screen.width >
-    //     configGeneral.extra_large_screen_breakpoint
-    //   ) {
-    //     paramsPage_display = ConfigDisplay.extra;
-    //   } else if (
-    //     stores.baseStore.screen.width > configGeneral.large_screen_breakpoint
-    //   ) {
-    //     paramsPage_display = ConfigDisplay.large;
-    //   } else {
-    //     paramsPage_display = ConfigDisplay.desktop;
-    //   }
-    // }
-    // return { lang: paramsPage_lang, display: paramsPage_display };
 
     return { lang: paramsPage_lang };
   }
   return undefined;
 }
-
-// export async function getParamsPageFromContext(
-//   stores: IStores
-// ): Promise<IparamsPage> {
-//   if (process.browser) {
-//     stores.baseStore.setscreenNoSSR();
-//     const max_width_mobile = configGeneral.max_width_mobile;
-//     const isMobile: boolean =
-//       hasTouchScreen(window) || window.innerWidth < max_width_mobile;
-
-//     const language_navigator = navigator.language;
-//     let paramsPage_lang: ConfigLanguage;
-//     if (language_navigator.includes("fr")) {
-//       paramsPage_lang = ConfigLanguage.fr;
-//     } else if (language_navigator.includes("it")) {
-//       paramsPage_lang = ConfigLanguage.it;
-//     } else {
-//       paramsPage_lang = ConfigLanguage.en;
-//     }
-//     //paramsPage_lang = ConfigLanguage.fr;
-
-//     let paramsPage_display: ConfigDisplay;
-//     if (isMobile) {
-//       paramsPage_display = ConfigDisplay.mobile;
-//     } else {
-//       if (
-//         stores.baseStore.screen.width >
-//         configGeneral.extra_large_screen_breakpoint
-//       ) {
-//         paramsPage_display = ConfigDisplay.extra;
-//       } else if (
-//         stores.baseStore.screen.width > configGeneral.large_screen_breakpoint
-//       ) {
-//         paramsPage_display = ConfigDisplay.large;
-//       } else {
-//         paramsPage_display = ConfigDisplay.desktop;
-//       }
-//     }
-//     return { lang: paramsPage_lang, display: paramsPage_display };
-//   }
-//   return undefined;
-// }
 
 function removeBigImage(atoms: IAtom[]): IAtom[] {
   const atoms_without_images = atoms.map((item) => {
@@ -169,35 +85,8 @@ export async function initialyzeMostviewed(stores: IStores) {
     );
   }
 
-  //**************************************************************** */
-  // Remove images very big
-  // const atoms_without_images = atoms.map((item) => {
-  //   let atom_without_image = item;
-  //   atom_without_image.image_url = "";
-  //   return atom_without_image;
-  // });
   const atoms_without_images = removeBigImage(atoms);
-
   stores.baseStore.setMostviewed(atoms_without_images);
-
-  atoms.forEach((item) => {
-    getCleanImage(
-      item,
-      ROOT_URL_WIKIPEDIA_REST(lang),
-      ROOT_URL_WIKIPEDIA_ACTION(lang),
-      lang
-    )
-      .then((item) => {
-        stores.baseStore.setMostviewedSingle(item);
-        if (stores.baseStore.feed.has(item.id)) {
-          stores.baseStore.setFeedSingle(item);
-        }
-      })
-      .catch((error) => {
-        // console.log(error);
-      });
-  });
-  //**************************************************************** */
 }
 
 export function setFeedFromSearch(
@@ -212,31 +101,11 @@ export function setFeedFromSearch(
 
   api_searchFromWeb(searchPattern, lang, exclusion_patterns_items)
     .then((atoms) => {
+      stores.baseStore.clearFeed();
       const atoms_without_images = removeBigImage(atoms);
       stores.baseStore.setFeed(atoms_without_images);
-
-      atoms.forEach((item) => {
-        getCleanImage(
-          item,
-          ROOT_URL_WIKIPEDIA_REST(lang),
-          ROOT_URL_WIKIPEDIA_ACTION(lang),
-          lang
-        )
-          .then((item) => {
-            // if (stores.baseStore.feed.has(item.id)) {
-            stores.baseStore.setFeedSingle(item);
-            // }
-          })
-          .catch((error) => {
-            // console.log(error);
-          });
-      });
     })
-    // .then(() => {
-    //   //LOG SEARCHED ITEM, DISABLED
-    //   _log(LogActionType.search, searchPattern);
-    // })
-    .catch((error) => {
+    .catch(() => {
       // console.log("error in seach from pattern");
     });
 }
@@ -245,8 +114,8 @@ export function setFeedFromMostviewedAndRelated(
   stores: IStores,
   amount_item_displayed: number
 ): void {
-  const related: IAtom[] = stores.baseStore.getAllRelatedItems();
-  const mostviewed: IAtom[] = Array.from(stores.baseStore.mostviewed.values());
+  const related: IAtom[] = stores.savedStore.relatedAllItemsFromSaved;
+  const mostviewed: IAtom[] = stores.baseStore.mostviewedItems;
 
   const ratio_related: number = configGeneral.feed.ratio_related;
   const related_size = related.length;
@@ -256,61 +125,53 @@ export function setFeedFromMostviewedAndRelated(
   );
   const amount_random_and_mostviewed = amount_item_displayed - amount_related;
   // const amount_mostviewed = amount_item_displayed - amount_related;
-  const ratio_mostviewed_over_randow: number =
-    configGeneral.feed.ratio_mostviewed_over_randow;
-  const amount_mostviewed =
-    amount_random_and_mostviewed * ratio_mostviewed_over_randow;
-  const amount_random =
-    amount_random_and_mostviewed * (1 - ratio_mostviewed_over_randow);
+  // const ratio_mostviewed_over_randow: number =
+  //   configGeneral.feed.ratio_mostviewed_over_randow;
+  // const amount_mostviewed =
+  //   amount_random_and_mostviewed * ratio_mostviewed_over_randow;
+  // const amount_random =
+  //   amount_random_and_mostviewed * (1 - ratio_mostviewed_over_randow);
+
+  const amount_mostviewed = amount_random_and_mostviewed;
 
   const related_items = shuffleSized(related, amount_related);
   const mostviewed_items = shuffleSized(mostviewed, amount_mostviewed);
 
   let feed_items: IAtom[] = related_items.concat(mostviewed_items);
 
-  if (ratio_mostviewed_over_randow !== 1) {
-    const lang = stores.baseStore.paramsPage.lang;
-    const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
+  stores.baseStore.clearFeed();
+  stores.baseStore.setFeed(shuffleSized(feed_items, amount_item_displayed));
 
-    api_getItemsRandomFromWeb(lang, exclusion_patterns_items, amount_random)
-      .then((atoms) => {
-        // const random_items: IAtom[] = atoms;
-        // feed_items = feed_items.concat(random_items);
-        // stores.baseStore.setFeed(
-        //   shuffleSized(feed_items, amount_item_displayed)
-        // );
+  //Randow ITems desactivated right now
+  // if (ratio_mostviewed_over_randow !== 1) {
+  //   const lang = stores.baseStore.paramsPage.lang;
+  //   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
 
-        const atoms_without_images = removeBigImage(atoms);
+  //   api_getItemsRandomFromWeb(lang, exclusion_patterns_items, amount_random)
+  //     .then((random_atoms) => {
+  //       // const random_atoms_without_images = addImageToItems(
+  //       //   stores,
+  //       //   random_atoms,
+  //       //   lang
+  //       // );
+  //       const random_atoms_without_images: IAtom[] =
+  //         removeBigImage(random_atoms);
 
-        const random_items: IAtom[] = atoms_without_images;
-        feed_items = feed_items.concat(random_items);
-        stores.baseStore.setFeed(
-          shuffleSized(feed_items, amount_item_displayed)
-        );
+  //       feed_items = feed_items.concat(random_atoms_without_images);
+  //       stores.baseStore.setFeed(
+  //         shuffleSized(feed_items, amount_item_displayed)
+  //       );
+  //     })
+  //     .catch(() => {
+  //       // console.log("error in seach from pattern");
+  //     });
+  // } else {
+  //   stores.baseStore.setFeed(shuffleSized(feed_items, amount_item_displayed));
+  // }
+}
 
-        atoms.forEach((item) => {
-          getCleanImage(
-            item,
-            ROOT_URL_WIKIPEDIA_REST(lang),
-            ROOT_URL_WIKIPEDIA_ACTION(lang),
-            lang
-          )
-            .then((item) => {
-              // if (stores.baseStore.feed.has(item.id)) {
-              stores.baseStore.setFeedSingle(item);
-              // }
-            })
-            .catch((error) => {
-              // console.log(error);
-            });
-        });
-      })
-      .catch((error) => {
-        // console.log("error in seach from pattern");
-      });
-  } else {
-    stores.baseStore.setFeed(shuffleSized(feed_items, amount_item_displayed));
-  }
+export function isHome(router: any): boolean {
+  return router.route === configPaths.rootPath;
 }
 
 export function goPage(
@@ -344,15 +205,3 @@ export function goUserHandler(stores: IStores) {
     input.event.preventDefault();
   };
 }
-
-// Used if Icon Tap goes in random article
-// export function getRandomItemIdFromAnywhere(stores: IStores): AtomID {
-//   const history_ids = Array.from(stores.baseStore.history.keys());
-//   const relatedAll_ids = Array.from(stores.baseStore.relatedAll.keys());
-//   const saved_ids = Array.from(stores.savedStore.saved.keys());
-//   const all_ids: AtomID[] = history_ids
-//     .concat(relatedAll_ids)
-//     .concat(saved_ids);
-
-//   return shuffleSized(all_ids, 1)[0];
-// }

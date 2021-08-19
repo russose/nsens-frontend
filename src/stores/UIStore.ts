@@ -1,7 +1,9 @@
 import { observable, action, makeObservable } from "mobx";
 import { AtomID, IparamsAtom, KnowbookID } from "../config/globals";
+import { RootStore } from "./RootStore";
 
 export class UIStore {
+  $rootStore: RootStore;
   private $searchPattern: string = "";
   private $selectedAtom: IparamsAtom = { id: "", title: "" };
   private $articleContent: string = "";
@@ -26,7 +28,8 @@ export class UIStore {
 
   private $showLoading: boolean = false;
 
-  constructor() {
+  constructor(rootStore: RootStore) {
+    this.$rootStore = rootStore;
     makeObservable<
       UIStore,
       | "$searchPattern"

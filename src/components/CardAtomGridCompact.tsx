@@ -1,5 +1,5 @@
 import { Box } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { configPaths } from "../config/globals";
 import { handlerT, IAtom, PaddingT } from "../config/globals";

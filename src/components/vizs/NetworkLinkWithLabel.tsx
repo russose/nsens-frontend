@@ -1,7 +1,7 @@
 import { LinkProvidedProps } from "@visx/network/lib/types";
 import { LinkVerticalLine } from "@visx/shape";
 import { Text } from "@visx/text";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { group_name } from "../../config/globals";
 
 const black = "#000000";

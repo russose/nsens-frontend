@@ -1,5 +1,5 @@
 import { Box, Text } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { RoundingT, SizeT } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
 

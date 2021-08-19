@@ -8,7 +8,7 @@ const card_compact_vizs_size = 120;
 // const card_compact_vizs_size = card_size * 0.5;
 
 export const configDataDesktop: configDataDisplay = {
-  test_color: "blue",
+  displayFeedIncrement: 2,
   amount_item_displayed: 50,
   max_nodes_network: 110,
   // min_width_network: 500,

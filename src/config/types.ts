@@ -104,10 +104,17 @@ export interface IKnowbookFull {
 }
 
 export interface IKnowbookStatic extends IKnowbookFull {
-  // id: number; //internal ide for back only (database)
-  // name: KnowbookID;
-  // items: IAtom[];
   name_display: string;
+}
+
+export interface IRelatedAtom {
+  relation: string;
+  item: IAtom;
+}
+
+export interface IRelatedAtomFull {
+  relation: string;
+  item: IAtom;
 }
 
 export interface IStaticKnowbookDefinition {
@@ -115,11 +122,6 @@ export interface IStaticKnowbookDefinition {
   display?: string;
   lang: string | ConfigLanguage;
   items?: string[];
-}
-
-export interface IRelatedAtom {
-  relation: string;
-  item: IAtom;
 }
 
 export enum LogActionType {

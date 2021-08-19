@@ -60,21 +60,46 @@ export function prepareArticle(article: string): string {
   return article_clean;
 }
 export const empty_value_atom = "";
-export function newAtom(id: AtomID, lang: ConfigLanguage): IAtom {
-  const atom = {
-    id: id,
-    wikibase_item: empty_value_atom,
-    pageid_wp: -1,
-    title: empty_value_atom,
-    title_en: empty_value_atom,
-    language: lang,
-    image_url: empty_value_atom,
-    image_width: -1,
-    image_height: -1,
-    thumbnail_url: empty_value_atom,
-    related: empty_value_atom,
-  };
-  return atom;
+export function newAtom(
+  id: AtomID,
+  lang: ConfigLanguage,
+  itemToCopy: IAtom = undefined
+): IAtom {
+  if (itemToCopy === undefined && (id === undefined || lang === undefined)) {
+    return undefined;
+  }
+
+  if (itemToCopy === undefined) {
+    const atom = {
+      id: id,
+      wikibase_item: empty_value_atom,
+      pageid_wp: -1,
+      title: empty_value_atom,
+      title_en: empty_value_atom,
+      language: lang,
+      image_url: empty_value_atom,
+      image_width: -1,
+      image_height: -1,
+      thumbnail_url: empty_value_atom,
+      related: empty_value_atom,
+    };
+    return atom;
+  } else {
+    const item_copy: IAtom = {
+      id: itemToCopy.id,
+      wikibase_item: itemToCopy.wikibase_item,
+      pageid_wp: itemToCopy.pageid_wp,
+      title: itemToCopy.title,
+      title_en: itemToCopy.title_en,
+      language: itemToCopy.language,
+      image_url: itemToCopy.image_url,
+      image_width: itemToCopy.image_width,
+      image_height: itemToCopy.image_height,
+      thumbnail_url: itemToCopy.thumbnail_url,
+      related: itemToCopy.related,
+    };
+    return item_copy;
+  }
 }
 
 export function getRandomImageFromItems(items: IAtom[]): string {

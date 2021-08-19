@@ -1,9 +1,10 @@
 import React from "react";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { Box } from "gestalt";
 import { ColorT, reactComponentT } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
 import { configGeneral } from "../../config/globals";
+import VisibilitySensorFeed from "../VisibilitySensorFeed";
 
 interface IPageLayoutProps {
   stores: IStores;
@@ -80,6 +81,7 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
               </Box>
             </Box>
           </Box>
+          <VisibilitySensorFeed stores={props.stores} />
         </Box>
         <Box padding={0} position="fixed" bottom width="100%">
           {props.bottom}

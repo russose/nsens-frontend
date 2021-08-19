@@ -22,7 +22,14 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       /****************Core Blocking*******************************/
       stores.baseStore.setInitCompleted(initStateCat.core, false);
 
-      stores.baseStore.setscreenNoSSR();
+      //To be checked if buggy...
+      stores.baseStore.clearHistory();
+      stores.baseStore.clearRelated();
+      stores.savedStore.clearSaved();
+      stores.knowbookStore.clearStaticKnowbooks();
+      stores.knowbookStore.clearKnowbooks();
+
+      // stores.baseStore.setscreenNoSSR();
       await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
         paramsPage
       );
@@ -41,12 +48,6 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
     } else if (stores.baseStore.initCompleted.core !== true) {
       return;
     }
-
-    // if (stores.baseStore.initCompleted.display === undefined) {
-    //   stores.baseStore.setInitCompleted(initStateCat.display, false);
-    //   stores.baseStore.setGUICONFIGFromDisplay(ConfigDisplay.desktop);
-    //   stores.baseStore.setInitCompleted(initStateCat.display, true);
-    // }
 
     if (stores.baseStore.initCompleted.staticKnowbooks === undefined) {
       stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);
@@ -67,7 +68,7 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
         await helpersInitializeLogged.initializeSavedLogged(stores);
       } else {
         stores.savedStore.clearSaved();
-        stores.baseStore.clearRelatedAndRelatedAll();
+        stores.baseStore.clearRelated();
       }
 
       setFeedFromMostviewedAndRelated(
@@ -119,7 +120,7 @@ export async function initializeStaticKnowbooks(stores: IStores) {
       };
       stores.knowbookStore.setStaticKnowbooks(knowbook.name, knowbook);
 
-      //IMPORTANT
+      //IMPORTANT: not necessary anymore with new implementation of AllRelatedItemsFromSaved
       //add static knowbook items in history (for getItemFromAnyRelated), with their related items
       //related items added in "related" BUT NOT in RelatedAll used in feed
       stores.baseStore.setHistory(knowbook.items);
@@ -136,106 +137,3 @@ export async function initializeStaticKnowbooks(stores: IStores) {
     // console.log("error in getting static knowbooks...");
   }
 }
-
-// export async function initializeApp_Old(
-//   stores: IStores,
-//   paramsPage: IparamsPage
-// ) {
-//   // stores.uiStore.setShowLoading(true);
-//   // await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
-//   //   paramsPage
-//   // );
-//   try {
-//     if (stores.baseStore.initCompleted.app === undefined) {
-//       stores.baseStore.setInitCompleted(initStateCat.app, false);
-
-//       stores.baseStore.setscreenNoSSR();
-//       await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
-//         paramsPage
-//       );
-
-//       const user = await api_getUser();
-//       stores.baseStore.setUser({ username: user });
-
-//       initializeSaved(stores);
-
-//       stores.baseStore.setInitCompleted(initStateCat.app, true);
-//     }
-//   } catch (error) {
-//     // console.log(error);
-//   }
-
-//   // stores.uiStore.setShowLoading(false);
-// }
-
-// export async function initializeSaved(stores: IStores) {
-//   // stores.uiStore.setShowLoading(true);
-//   if (stores.baseStore.initCompleted.saved === undefined) {
-//     stores.baseStore.setInitCompleted(initStateCat.saved, false);
-//     if (stores.baseStore.isLogged) {
-//       const helpersInitializeLogged = await import("./helpersInitializeLogged");
-//       await helpersInitializeLogged.initializeSavedLogged(stores);
-//     } else {
-//       stores.savedStore.clearSaved();
-//       stores.baseStore.clearRelatedAndRelatedAll();
-//     }
-//     stores.baseStore.setInitCompleted(initStateCat.saved, true);
-//   }
-//   // stores.uiStore.setShowLoading(false);
-// }
-
-// export async function initializeFeed(stores: IStores) {
-//   // stores.uiStore.setShowLoading(true);
-//   if (
-//     stores.baseStore.initCompleted.feed === undefined &&
-//     stores.baseStore.initCompleted.app === true
-//   ) {
-//     // try {
-//     stores.baseStore.setInitCompleted(initStateCat.feed, false);
-
-//     const amount_item_displayed =
-//       stores.baseStore.GUI_CONFIG.display.amount_item_displayed;
-//     await initialyzeMostviewed(stores);
-//     setFeedFromMostviewedAndRelated(stores, amount_item_displayed);
-
-//     stores.baseStore.setInitCompleted(initStateCat.feed, true);
-
-//     // } catch (error) {
-//     //   console.log(error);
-//     // }
-//   }
-//   // stores.uiStore.setShowLoading(false);
-// }
-
-// export async function initializeKnowbooks(stores: IStores) {
-//   // stores.uiStore.setShowLoading(true);
-//   // try {
-//   if (
-//     stores.baseStore.initCompleted.staticKnowbooks === undefined &&
-//     stores.baseStore.initCompleted.app === true
-//   ) {
-//     stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);
-//     await initializeStaticKnowbooks(stores);
-//     stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, true);
-//   }
-//   // } catch (error) {
-//   //   // console.log(error);
-//   // }
-
-//   if (
-//     stores.baseStore.initCompleted.knowbooks === undefined &&
-//     stores.baseStore.initCompleted.app === true
-//   ) {
-//     stores.baseStore.setInitCompleted(initStateCat.knowbooks, false);
-
-//     if (stores.baseStore.isLogged) {
-//       const helpersInitializeLogged = await import("./helpersInitializeLogged");
-//       await helpersInitializeLogged.initializeKnowbooksLogged(stores);
-//     } else {
-//       stores.knowbookStore.clearKnowbooks();
-//     }
-//     stores.baseStore.setInitCompleted(initStateCat.knowbooks, true);
-//   }
-
-//   // stores.uiStore.setShowLoading(false);
-// }

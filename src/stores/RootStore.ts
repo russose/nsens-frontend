@@ -16,11 +16,11 @@ export interface IStores {
 
 export class RootStore {
   private $stores: IStores = {
-    baseStore: new BaseStore(),
-    savedStore: new SavedStore(),
-    uiStore: new UIStore(),
-    graphStore: new GraphStore(),
-    knowbookStore: new KnowkookStore(),
+    baseStore: new BaseStore(this),
+    savedStore: new SavedStore(this),
+    uiStore: new UIStore(this),
+    graphStore: new GraphStore(this),
+    knowbookStore: new KnowkookStore(this),
   };
 
   public stores(): IStores {

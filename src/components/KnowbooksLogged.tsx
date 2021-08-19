@@ -1,5 +1,5 @@
 import React from "react";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { IStores } from "../stores/RootStore";
 import CardKnowGridSpecial from "./CardKnowGridSpecial";
 import CardKnowGrid from "./CardKnowGrid";

@@ -1,4 +1,4 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { IStores } from "../../stores/RootStore";
 import { ConfigDisplay } from "../../config/globals";
@@ -10,7 +10,8 @@ interface IAppLayoutProps {
   stores: IStores;
 }
 
-const Media_ = observer(Media);
+// const Media_ = observer(Media);
+const Media_ = Media;
 
 const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
   const stores = props.stores;

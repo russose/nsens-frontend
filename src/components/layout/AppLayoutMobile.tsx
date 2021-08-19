@@ -1,5 +1,5 @@
 import { Box, Image, TapArea } from "gestalt";
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import SearchBar from "../SearchBar";
 import MenuBarNavigation from "../MenuBarNavigation";
@@ -16,6 +16,7 @@ import { IStores } from "../../stores/RootStore";
 import { ConfigDisplay, configPaths } from "../../config/globals";
 import dynamic from "next/dynamic";
 import MenuBarDisplayNotLogged from "../MenuBarDisplayNotLogged";
+import { isHome } from "../../libs/helpersBase";
 
 const DialogsLoggedDynamic = dynamic(() => import("../DialogsLogged"));
 
@@ -99,8 +100,10 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
     </>
   );
 
-  const free_space_buttom_mobile = !router.pathname.includes(
-    configPaths.pages.ItemArticle
+  const free_space_buttom_mobile = !(
+    router.pathname.includes(configPaths.pages.ItemArticle) ||
+    router.pathname.includes(configPaths.pages.StaticArticles) ||
+    isHome(router)
   ) && <Box height="50vh" />;
 
   return (
