@@ -12,52 +12,26 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/getDataStaticKnowbooks";
 import { initializeApp } from "../../../src/libs/helpersInitialize";
-import { readRelatedFromItem } from "../../../src/libs/helpersRelated";
-import {
-  makeArrayFlat,
-  shuffleSizedRemoveDoublesFilterIds,
-} from "../../../src/libs/utils";
 import { useStores } from "../../../src/stores/RootStoreHook";
+import { getRelatedItemsForItemsShuffleSized_Static } from "../../../src/libs/helpersRelated";
 
 const KnowbookLoggedDynamic = dynamic(
   () => import("../../../src/components/KnowbookLogged")
 );
 
-function getRelatedItemsFromItems(
-  items: IAtom[],
-  amount_item_displayed: number
-): IAtom[] {
-  const itemIds_to_exclude = items.map((item) => {
-    return item.id;
-  });
-  const related_list: IAtom[][] = items.map((item) => {
-    return readRelatedFromItem(item).map((related) => {
-      return related.item;
-    });
-  });
-  const related_flat: IAtom[] = makeArrayFlat(related_list);
-
-  const related_shuffledSized_no_doubles_array_filtered =
-    shuffleSizedRemoveDoublesFilterIds(
-      related_flat,
-      itemIds_to_exclude,
-      amount_item_displayed
-    );
-  return related_shuffledSized_no_doubles_array_filtered;
-}
-
 const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  // initializeKnowbooks(stores);
-  if (stores.baseStore.initCompleted.core !== true) {
+  if (
+    stores.baseStore.initCompleted.core !== true ||
+    stores.baseStore.initCompleted.staticKnowbooks !== true
+  ) {
     //Not yet initialyzed
     return <></>;
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  // const items = props.items;
   const name_display = props.name_display;
   let items: IAtom[];
   if (
@@ -68,9 +42,14 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
     items = [];
   }
 
-  const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
+  const amount_item_displayed =
+    GUI_CONFIG.display.display.amount_item_displayed;
 
-  const related_items = getRelatedItemsFromItems(items, amount_item_displayed);
+  const related_items = getRelatedItemsForItemsShuffleSized_Static(
+    stores,
+    items,
+    amount_item_displayed
+  );
 
   let content;
   if (!stores.baseStore.isLogged) {

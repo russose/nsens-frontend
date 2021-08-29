@@ -1,9 +1,4 @@
-import {
-  AtomID,
-  ConfigDisplay,
-  ConfigLanguage,
-  IAtom,
-} from "../config/globals";
+import { AtomID, ConfigLanguage, IAtom } from "../config/globals";
 
 export const empty_handler = () => {};
 
@@ -162,6 +157,16 @@ export function isInstalled(): boolean {
   return result;
 }
 
+export function shuffleArray(array: any[]): any[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * i);
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
+
 export function shuffleSized(
   array: any[],
   amount_item_displayed: number
@@ -169,39 +174,6 @@ export function shuffleSized(
   const shuffled = shuffleArray(array);
   const shuffled_sized = shuffled.slice(0, amount_item_displayed);
   return shuffled_sized;
-}
-
-export function shuffleSizedRemoveDoublesFilterIds(
-  items: IAtom[],
-  itemIds: AtomID[],
-  amount_item_displayed: number
-): IAtom[] {
-  if (items === undefined) {
-    return [];
-  }
-
-  const related_shuffledSized: IAtom[] = shuffleSized(
-    items,
-    amount_item_displayed
-  );
-
-  //Remove duplicated items since related from different items could overlap
-  const related_shuffledSized_no_doubles = new Map();
-  related_shuffledSized.forEach((item: IAtom) => {
-    related_shuffledSized_no_doubles.set(item.id, item);
-  });
-
-  const related_shuffledSized_no_doubles_array: IAtom[] = Array.from(
-    related_shuffledSized_no_doubles.values()
-  );
-
-  // Enlever les items de itemIds
-  const related_shuffledSized_no_doubles_array_filtered =
-    related_shuffledSized_no_doubles_array.filter((item: IAtom) => {
-      return !itemIds.includes(item.id);
-    });
-
-  return related_shuffledSized_no_doubles_array_filtered;
 }
 
 export function wait() {
@@ -250,16 +222,6 @@ export function entierAleatoire(min: number, max: number): number {
 
 //   return Array.from(array_Map.values());
 // }
-
-export function shuffleArray(array: any[]): any[] {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * i);
-    const temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-  return array;
-}
 
 export function makeArrayFlat(array: any[]): any[] {
   return [].concat(...array);

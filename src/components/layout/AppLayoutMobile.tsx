@@ -104,7 +104,7 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
     router.pathname.includes(configPaths.pages.ItemArticle) ||
     router.pathname.includes(configPaths.pages.StaticArticles) ||
     isHome(router)
-  ) && <Box height="50vh" />;
+  ) && <Box height="15vh" />;
 
   return (
     <>

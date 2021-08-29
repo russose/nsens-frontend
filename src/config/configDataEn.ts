@@ -8,8 +8,10 @@ export const configDataEn: configDataLanguage = {
     title_page_base: "n.Sens",
   },
   about: {
+    // slogan:
+    //   "Explore, understand, perform. Maintain the taste of truth and be ready for a fantastic journey...",
     slogan:
-      "Explore, understand, perform. Maintain the taste of truth and be ready for a fantastic journey...",
+      "A new way to explore knowledge. Draw the big picture and build a new desirable future.",
     features: [
       {
         title: "Find",

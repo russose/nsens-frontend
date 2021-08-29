@@ -1,34 +1,58 @@
-import {
-  AtomID,
-  EXCLUSION_PATTERNS,
-  IAtom,
-  IRelatedAtom,
-} from "../config/globals";
+import { AtomID, IAtom, IRelatedAtomFull } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import {
-  empty_value_atom,
-  makeArrayFlat,
-  shuffleSizedRemoveDoublesFilterIds,
-} from "./utils";
-import { api_getRelatedFromWeb_blocking } from "./apiRelated";
+import { removeSavedFromItems } from "./helpersBase";
+import { empty_value_atom, makeArrayFlat, shuffleSized } from "./utils";
+
+export function readRelatedStringFromItem(item: IAtom): IRelatedAtomFull[] {
+  if (item !== undefined && item.related !== empty_value_atom) {
+    const related: IRelatedAtomFull[] = JSON.parse(item.related);
+    return related;
+  } else {
+    return [];
+  }
+}
 
 export function initialyzeRelatedFromSaved(stores: IStores): void {
   stores.savedStore.savedItems.forEach((item: IAtom) => {
     if (item.related !== empty_value_atom) {
       // const related: IRelatedAtom[] = JSON.parse(item.related);
-      const related: IRelatedAtom[] = readRelatedFromItem(item);
-      stores.baseStore.setRelated(item.id, related);
+      const relatedFull: IRelatedAtomFull[] = readRelatedStringFromItem(item);
+      stores.baseStore.setRelated(item.id, relatedFull);
     }
   });
 }
 
-export function readRelatedFromItem(item: IAtom): IRelatedAtom[] {
-  if (item !== undefined && item.related !== empty_value_atom) {
-    const related: IRelatedAtom[] = JSON.parse(item.related);
-    return related;
-  } else {
+function shuffleSizedRemoveDoublesFilterIds(
+  items: AtomID[],
+  itemToRemoveIds: AtomID[],
+  amount_item_displayed: number
+): AtomID[] {
+  if (items === undefined) {
     return [];
   }
+
+  const items_shuffledSized: AtomID[] = shuffleSized(
+    items,
+    amount_item_displayed
+  );
+
+  //Remove duplicated items since related from different items could overlap
+  const items_shuffledSized_no_doubles = new Set<AtomID>();
+  items_shuffledSized.forEach((item: AtomID) => {
+    items_shuffledSized_no_doubles.add(item);
+  });
+
+  const items_shuffledSized_no_doubles_array: AtomID[] = Array.from(
+    items_shuffledSized_no_doubles.values()
+  );
+
+  // Enlever les items de itemIds
+  const items_shuffledSized_no_doubles_array_filtered =
+    items_shuffledSized_no_doubles_array.filter((id: AtomID) => {
+      return !itemToRemoveIds.includes(id);
+    });
+
+  return items_shuffledSized_no_doubles_array_filtered;
 }
 
 export function getRelatedItemsForItemsShuffleSized(
@@ -40,11 +64,11 @@ export function getRelatedItemsForItemsShuffleSized(
     return [];
   }
 
-  const related_list: IAtom[][] = itemIds.map((id) => {
+  const related_list: AtomID[][] = itemIds.map((id) => {
     return stores.baseStore.getRelatedItems(id);
   });
 
-  const related_flat: IAtom[] = makeArrayFlat(related_list);
+  const related_flat: AtomID[] = makeArrayFlat(related_list);
 
   const related_shuffledSized_no_doubles_array_filtered =
     shuffleSizedRemoveDoublesFilterIds(
@@ -52,31 +76,44 @@ export function getRelatedItemsForItemsShuffleSized(
       itemIds,
       amount_item_displayed
     );
-  return related_shuffledSized_no_doubles_array_filtered;
-}
 
-export async function fetchRelatedAndUpdateStores(
-  stores: IStores,
-  itemId: AtomID,
-  title: string
-): Promise<void> {
-  if (
-    stores.baseStore.related.has(itemId) &&
-    stores.baseStore.related.get(itemId) !== undefined
-  ) {
-    return;
-  }
-
-  const lang = stores.baseStore.paramsPage.lang;
-  const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
-
-  const relatedItems_no_generic_item = await api_getRelatedFromWeb_blocking(
-    itemId,
-    title,
-    lang,
-    exclusion_patterns_items
+  const items: IAtom[] = stores.baseStore.getHistoryItems(
+    related_shuffledSized_no_doubles_array_filtered
   );
 
-  //With no duplicates by construction
-  stores.baseStore.setRelated(itemId, relatedItems_no_generic_item);
+  const items_noSaved = removeSavedFromItems(stores, items);
+
+  return items_noSaved;
+}
+
+export function getRelatedItemsForItemsShuffleSized_Static(
+  stores: IStores,
+  items: IAtom[],
+  amount_item_displayed: number
+): IAtom[] {
+  const related_list: AtomID[][] = items.map((item) => {
+    return readRelatedStringFromItem(item).map((related) => {
+      return related.item.id;
+    });
+  });
+  const related_flat: AtomID[] = makeArrayFlat(related_list);
+
+  const itemIds_to_exclude = items.map((item) => {
+    return item.id;
+  });
+
+  const related_shuffledSized_no_doubles_array_filtered =
+    shuffleSizedRemoveDoublesFilterIds(
+      related_flat,
+      itemIds_to_exclude,
+      amount_item_displayed
+    );
+
+  const items_: IAtom[] = stores.baseStore.getHistoryItems(
+    related_shuffledSized_no_doubles_array_filtered
+  );
+
+  const items_noSaved = removeSavedFromItems(stores, items_);
+
+  return items_noSaved;
 }

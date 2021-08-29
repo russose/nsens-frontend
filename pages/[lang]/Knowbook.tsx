@@ -28,43 +28,9 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
 
   const router = useRouter();
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const amount_item_displayed = GUI_CONFIG.display.amount_item_displayed;
+  const amount_item_displayed =
+    GUI_CONFIG.display.display.amount_item_displayed;
   const selected_knowbook = router.query.title as string;
-
-  // const content = (
-  //   <>
-  //     <CardAtomGrid
-  //       id="knowbooks"
-  //       stores={stores}
-  //       atoms={getKnowbookAtomsList(selected_knowbook, stores)}
-  //       isItemSaved_handler={isItemSaved(stores)}
-  //       isItemSavedActionable_handler={isItemSavedActivated(stores)}
-  //       saved_handler={onSaved(stores)}
-  //       edit_handler={onEditKnowbooks(stores)}
-  //     />
-  //     <Separator with_line={false} />
-  //     <Separator with_line={true} />
-  //     <Box padding={3}>
-  //       <Heading size="md">{Related_title}</Heading>
-  //     </Box>
-  //     {/* <Separator with_line={false} /> */}
-  //     <CardAtomGrid
-  //       id="knowbooks_related"
-  //       stores={stores}
-  //       atoms={getRelatedItemsForItems(
-  //         stores,
-  //         getKnowbookAtomsList(selected_knowbook, stores).map((item: IAtom) => {
-  //           return item.id;
-  //         }),
-  //         amount_item_displayed
-  //       )}
-  //       isItemSaved_handler={isItemSaved(stores)}
-  //       isItemSavedActionable_handler={isItemSavedActivated(stores)}
-  //       saved_handler={onSaved(stores)}
-  //       edit_handler={onEditKnowbooks(stores)}
-  //     />
-  //   </>
-  // );
 
   return (
     <AppLayout stores={stores}>

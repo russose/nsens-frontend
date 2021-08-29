@@ -2,18 +2,15 @@ import { staticKnowbooks } from "../config/configStaticKnowbooks";
 import {
   IKnowbookStatic,
   IparamsPage,
-  IRelatedAtom,
   initStateCat,
   ConfigDisplay,
+  IRelatedAtomFull,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { api_getStaticKnowbooksLocal } from "./apiItems";
 import { api_getUser } from "./apiUser";
-import {
-  initialyzeMostviewed,
-  setFeedFromMostviewedAndRelated,
-} from "./helpersBase";
-import { readRelatedFromItem } from "./helpersRelated";
+import { setFeedFromMostviewedAndRelated } from "./helpersBase";
+import { readRelatedStringFromItem } from "./helpersRelated";
 
 export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
   try {
@@ -21,6 +18,8 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       stores.uiStore.setShowLoading(true);
       /****************Core Blocking*******************************/
       stores.baseStore.setInitCompleted(initStateCat.core, false);
+
+      stores.baseStore.initDateLastMostviewed();
 
       //To be checked if buggy...
       stores.baseStore.clearHistory();
@@ -40,7 +39,7 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       stores.baseStore.setUser({ username: user });
 
       //Mostviewed
-      await initialyzeMostviewed(stores);
+      // await fetchNewMostviewed(stores);
 
       stores.baseStore.setInitCompleted(initStateCat.core, true);
       /************************************************************/
@@ -52,8 +51,7 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
     if (stores.baseStore.initCompleted.staticKnowbooks === undefined) {
       stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, false);
       //Static knowbooks
-      // await initializeStaticKnowbooks(stores);
-      initializeStaticKnowbooks(stores);
+      await initializeStaticKnowbooks(stores);
       stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, true);
     }
 
@@ -65,16 +63,15 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
         const helpersInitializeLogged = await import(
           "./helpersInitializeLogged"
         );
+
         await helpersInitializeLogged.initializeSavedLogged(stores);
       } else {
         stores.savedStore.clearSaved();
         stores.baseStore.clearRelated();
       }
 
-      setFeedFromMostviewedAndRelated(
-        stores,
-        stores.baseStore.GUI_CONFIG.display.amount_item_displayed
-      );
+      // Init dynamic Feed
+      setFeedFromMostviewedAndRelated(stores);
 
       //Knowbooks
       if (stores.baseStore.isLogged) {
@@ -102,9 +99,6 @@ export async function initializeStaticKnowbooks(stores: IStores) {
     );
   });
 
-  //   image_paths_list = image_paths_list.filter((item) => {
-  //     return item !== "";
-  //   });
   try {
     for (const item of staticKnowbooks_local) {
       const knowbook_json: any = await api_getStaticKnowbooksLocal(
@@ -120,17 +114,20 @@ export async function initializeStaticKnowbooks(stores: IStores) {
       };
       stores.knowbookStore.setStaticKnowbooks(knowbook.name, knowbook);
 
+      // COMMENT TO BE REMOVE WHEN WELL TESTED
       //IMPORTANT: not necessary anymore with new implementation of AllRelatedItemsFromSaved
       //add static knowbook items in history (for getItemFromAnyRelated), with their related items
       //related items added in "related" BUT NOT in RelatedAll used in feed
+
       stores.baseStore.setHistory(knowbook.items);
       knowbook.items.forEach((item) => {
-        const related: IRelatedAtom[] = readRelatedFromItem(item);
+        const related: IRelatedAtomFull[] = readRelatedStringFromItem(item);
         stores.baseStore.setRelated(item.id, related);
-        const related_items = related.map((related) => {
-          return related.item;
-        });
-        stores.baseStore.setHistory(related_items);
+
+        // const related_items = related.map((related) => {
+        //   return related.item;
+        // });
+        // stores.baseStore.setHistory(related_items);
       });
     }
   } catch (err) {

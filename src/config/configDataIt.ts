@@ -8,8 +8,10 @@ export const configDataIt: configDataLanguage = {
     title_page_base: "n.Sens",
   },
   about: {
+    // slogan:
+    //   "Esplorare, capire, agire. Lasciarsi trasportare gustandosi la ricerca...",
     slogan:
-      "Esplorare, capire, agire. Lasciarsi trasportare gustandosi la ricerca...",
+      "Un modo nuovo di esplorare la conoscenza. Metti in contesto e costruisci un nuovo futuro desiderabile.",
     features: [
       {
         title: "Trova",

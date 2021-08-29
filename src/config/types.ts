@@ -25,6 +25,12 @@ export type configDataDisplay = typeof configDataMobile;
 
 export type configDataLanguage = typeof configDataFr;
 
+export interface IDate {
+  year: number;
+  month: number;
+  day: number;
+}
+
 export interface IGUICONFIG {
   // id: string;
   language: configDataLanguage;
@@ -109,7 +115,7 @@ export interface IKnowbookStatic extends IKnowbookFull {
 
 export interface IRelatedAtom {
   relation: string;
-  item: IAtom;
+  item: AtomID;
 }
 
 export interface IRelatedAtomFull {
@@ -136,11 +142,19 @@ export enum LogActionType {
   loginUser = "loginUser",
 }
 
-export interface INode extends IAtom {
+// export interface INode extends IAtom {
+//   x: number;
+//   y: number;
+//   relation_name: string;
+//   pos: number;
+// }
+
+export interface INode {
   x: number;
   y: number;
   relation_name: string;
   pos: number;
+  item: AtomID;
 }
 
 export interface ILink {

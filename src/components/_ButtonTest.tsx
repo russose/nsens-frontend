@@ -20,7 +20,7 @@ const _ButtonTest: React.FunctionComponent<IButtonTestProps> = (props) => {
         displayLabel={true}
         path={undefined}
         onClick={() => {
-          stores.baseStore.incrementFeedDisplay();
+          stores.baseStore.incrementAmountFeedDisplayed();
         }}
       />
     </Box>

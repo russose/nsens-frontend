@@ -5,22 +5,21 @@ import {
   ROOT_URL_WIKIPEDIA_ACTION,
   ROOT_URL_WIKIPEDIA_REST,
 } from "../config/configURLs";
-
 import {
   configFetching,
   configPaths,
   EXCLUSION_PATTERNS,
   IAtom,
-  IRelatedAtom,
+  IRelatedAtomFull,
   IStaticKnowbookDefinition,
   is_testing_mode,
 } from "../config/globals";
-import { api_getRelatedFromWeb_blocking } from "./apiRelated";
 import {
   buildListStringSeparated,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking,
 } from "./fetchBase";
-import { ItemsBestYearFromWikipedia } from "./fetchBestServer";
+import { ItemsBestYearFromWikipediaCleanImage_blocking } from "./fetchBestServer";
+import { fetchRelatedCleanImage_blocking } from "./fetchRelated";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import { DateToStringWithZero } from "./utils";
 import { readFileJson, writeFileJson } from "./utilsServer";
@@ -106,7 +105,7 @@ async function getConfigDataGuiStaticKnowbooks(
   let items: IAtom[];
   if (findItemFromstaticKnowbooksDefinition(nameOrPeriod).items === undefined) {
     if (!nameOrPeriod.includes("-")) {
-      items = await ItemsBestYearFromWikipedia(
+      items = await ItemsBestYearFromWikipediaCleanImage_blocking(
         nameOrPeriod,
         "",
         configFetching.amount_data_fetched_items,
@@ -120,7 +119,7 @@ async function getConfigDataGuiStaticKnowbooks(
       const years: any[] = nameOrPeriod.split("-");
       const year_start = years[0];
       const year_end = years[1];
-      items = await ItemsBestYearFromWikipedia(
+      items = await ItemsBestYearFromWikipediaCleanImage_blocking(
         year_start,
         year_end,
         configFetching.amount_data_fetched_items,
@@ -138,7 +137,7 @@ async function getConfigDataGuiStaticKnowbooks(
     const list_of_Pages_titles_string =
       buildListStringSeparated(list_of_Pages_titles);
     items =
-      await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
+      await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking(
         list_of_Pages_titles_string,
         ROOT_URL_WIKIPEDIA_REST(lang),
         ROOT_URL_WIKIPEDIA_ACTION(lang),
@@ -150,12 +149,16 @@ async function getConfigDataGuiStaticKnowbooks(
 
     let items_with_related: IAtom[] = [];
     for (const item of items) {
-      const related: IRelatedAtom[] = await api_getRelatedFromWeb_blocking(
+      const related: IRelatedAtomFull[] = await fetchRelatedCleanImage_blocking(
         item.id,
         item.title,
+        configFetching.amount_related,
+        ROOT_URL_WIKIPEDIA_REST(lang),
+        ROOT_URL_WIKIPEDIA_ACTION(lang),
         lang,
         exclusion_patterns_items
       );
+
       item.related = JSON.stringify(related);
       items_with_related.push(item);
     }

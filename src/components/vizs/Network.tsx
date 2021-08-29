@@ -3,7 +3,7 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configPaths, group_name } from "../../config/globals";
+import { configPaths, group_name, IAtom } from "../../config/globals";
 import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
 import {
   isItemSaved,
@@ -33,6 +33,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   const node_dx = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
   const node_dy = GUI_CONFIG.display.atom_compact_vizs_sizes.height;
   const path_Itemview = configPaths.pages.ItemArticle;
+
   let node;
   if (props.node.relation_name === group_name) {
     node = (
@@ -42,10 +43,11 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
         width={node_dx}
         height={node_dy}
       >
-        <NodeGroup stores={stores} title={props.node.title} />
+        <NodeGroup stores={stores} title={props.node.item} />
       </foreignObject>
     );
   } else {
+    const item: IAtom = stores.baseStore.getHistoryItem(props.node.item);
     node = (
       <foreignObject
         x={-node_dx / 2}
@@ -54,17 +56,17 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
         height={node_dy}
       >
         <CardAtomCompact
-          key={`cardAtomNetwork-${props.node.id}`}
-          id={props.node.id}
+          key={`cardAtomNetwork-${item.id}`}
+          id={item.id}
           stores={stores}
-          title={props.node.title}
-          image_url={props.node.image_url}
+          title={item.title}
+          image_url={item.image_url}
           pathname={path_Itemview}
-          queryObject={{ title: props.node.title, id: props.node.id }}
-          saved_enabled={isItemSaved(stores)(props.node.id)}
-          saved_actionable={isItemSavedActivated(stores)(props.node.id)}
-          saved_handler={onSaved(stores)(props.node.id)}
-          edit_handler={onEditKnowbooks(stores)(props.node.id)}
+          queryObject={{ title: item.title, id: item.id }}
+          saved_enabled={isItemSaved(stores)(item.id)}
+          saved_actionable={isItemSavedActivated(stores)(item.id)}
+          saved_handler={onSaved(stores)(item.id)}
+          edit_handler={onEditKnowbooks(stores)(item.id)}
           forVizs={true}
         />
       </foreignObject>

@@ -1,17 +1,19 @@
-import { AtomID, configFetching } from "../config/globals";
 import {
   ConfigLanguage,
   IAtom,
-  IRelatedAtom,
   JSONDataT,
+  AtomID,
+  configFetching,
+  IRelatedAtomFull,
 } from "../config/globals";
 import { fetch_data_wikidata } from "./fetch";
 import {
   buildListStringSeparated,
   filterItems,
   improveImageFromWikipediaParallel_blocking,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage,
   ItemsRelatedFromWikipediaRaw,
+  removeBigImages,
 } from "./fetchBase";
 
 const max_size_api = configFetching.max_size_chunk_api;
@@ -20,7 +22,7 @@ const max_size_api = configFetching.max_size_chunk_api;
  * Interface
  */
 
-export async function fetchRelated_blocking(
+export async function fetchRelatedCleanImage_blocking(
   itemId: AtomID,
   title: string,
   amount: number,
@@ -28,18 +30,74 @@ export async function fetchRelated_blocking(
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
-): Promise<IRelatedAtom[]> {
+): Promise<IRelatedAtomFull[]> {
   if (itemId === undefined || title === undefined) {
     return;
   }
 
-  // const relatedItems_wikipedia: IRelatedAtom[] =
-  //   await api_getRelatedFromWikipediaFromWeb(title, lang);
-  // const relatedItems_wikidata: IRelatedAtom[] =
-  //   await api_getRelatedFromWikidataFromWeb(itemId, lang);
+  const relatedWithoutImage_filtered: IRelatedAtomFull[] =
+    await fetchRelatedWithoutImage(
+      itemId,
+      title,
+      amount,
+      ROOT_URL_REST_API,
+      ROOT_URL_ACTION_API,
+      lang,
+      exclusion_patterns
+    );
 
-  const relatedItems_wikipedia: IRelatedAtom[] =
-    await ItemsRelatedFromWikipedia_blocking(
+  const ItemsWithoutImageMap = new Map<AtomID, IAtom>();
+  relatedWithoutImage_filtered.forEach(
+    (related_itemWithoutImage: IRelatedAtomFull) => {
+      const item: IAtom = related_itemWithoutImage.item;
+      ItemsWithoutImageMap.set(item.id, item);
+    }
+  );
+
+  const atomsList_filtered: IAtom[] = Array.from(ItemsWithoutImageMap.values());
+
+  const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
+    atomsList_filtered,
+    ROOT_URL_ACTION_API,
+    ROOT_URL_REST_API,
+    lang
+  );
+
+  const ItemsCleanImageMap = new Map<AtomID, IAtom>();
+  atomsListWithImages.forEach((itemCleanImage) => {
+    // const item: IAtom = related_itemWithoutImage.item;
+    ItemsCleanImageMap.set(itemCleanImage.id, itemCleanImage);
+  });
+
+  const relatedCleanImage_filtered: IRelatedAtomFull[] =
+    relatedWithoutImage_filtered.map(
+      (related_itemWithoutImage: IRelatedAtomFull) => {
+        const related_itemCleanImage = related_itemWithoutImage;
+        related_itemCleanImage.item = ItemsCleanImageMap.get(
+          related_itemWithoutImage.item.id
+        );
+        return related_itemCleanImage;
+      }
+    );
+
+  return relatedCleanImage_filtered;
+}
+
+export async function fetchRelatedWithoutImage(
+  itemId: AtomID,
+  title: string,
+  amount: number,
+  ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
+  lang: ConfigLanguage,
+  exclusion_patterns: string[]
+): Promise<IRelatedAtomFull[]> {
+  if (itemId === undefined || title === undefined) {
+    return;
+  }
+
+  const relatedItems_wikipedia: IRelatedAtomFull[] =
+    await ItemsRelatedFromWikipediaWithoutImage(
       title,
       // itemId,
       amount,
@@ -49,10 +107,10 @@ export async function fetchRelated_blocking(
       exclusion_patterns
     );
 
-  const relatedItems_wikidata: IRelatedAtom[] =
-    await ItemsFromWikidata_blocking(
+  const relatedItems_wikidata: IRelatedAtomFull[] =
+    await ItemsFromWikidataWithoutImage(
       itemId,
-      ROOT_URL_REST_API,
+      // ROOT_URL_REST_API,
       ROOT_URL_ACTION_API,
       lang,
       exclusion_patterns
@@ -66,17 +124,9 @@ export async function fetchRelated_blocking(
     relatedItems_no_doubles.set(related.item.id, related);
   });
 
-  const relatedItems_no_doubles_array: IRelatedAtom[] = Array.from(
+  const relatedItems_no_doubles_array: IRelatedAtomFull[] = Array.from(
     relatedItems_no_doubles.values()
   );
-
-  // Remove items containing ":" for Portal or other generic item (main filtered in wikidata fetching)
-  // const relatedItems_no_generic_item: IRelatedAtom[] =
-  //   relatedItems_no_doubles_array.filter((relatedItem) => {
-  //     const exclusion_condition: boolean = relatedItem.item.title.includes(":");
-  //     return !exclusion_condition;
-  //   });
-  // return relatedItems_no_generic_item;
 
   return relatedItems_no_doubles_array;
 }
@@ -85,14 +135,14 @@ export async function fetchRelated_blocking(
  *
  */
 
-async function ItemsRelatedFromWikipedia_blocking(
+async function ItemsRelatedFromWikipediaWithoutImage(
   title: string,
   amount: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
-): Promise<IRelatedAtom[]> {
+): Promise<IRelatedAtomFull[]> {
   const atomsList = await ItemsRelatedFromWikipediaRaw(
     title,
     amount,
@@ -101,45 +151,42 @@ async function ItemsRelatedFromWikipedia_blocking(
     lang
   );
 
-  // const atomsListWithImages = await filterAndGetCleanImages_blocking(
-  //   atomsList,
-  //   ROOT_URL_REST_API,
+  const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
+  // const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
+  //   atomsList_filtered,
   //   ROOT_URL_ACTION_API,
-  //   lang,
-  //   exclusion_patterns
+  //   ROOT_URL_REST_API,
+  //   lang
   // );
 
-  const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
-  const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
-    atomsList_filtered,
-    ROOT_URL_ACTION_API,
-    ROOT_URL_REST_API,
-    lang
-  );
+  const atomsList_filtered_without_images: IAtom[] =
+    removeBigImages(atomsList_filtered);
 
-  const related: IRelatedAtom[] = atomsListWithImages.map((item: IAtom) => {
-    return { relation: "wikipedia", item: item };
-  });
+  const related: IRelatedAtomFull[] = atomsList_filtered_without_images.map(
+    (item: IAtom) => {
+      return { relation: "wikipedia", item: item };
+    }
+  );
 
   return related;
 }
 
-async function ItemsFromWikidata_blocking(
+async function ItemsFromWikidataWithoutImage(
   itemId: string,
-  ROOT_URL_REST_API: string,
+  // ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
-): Promise<IRelatedAtom[]> {
+): Promise<IRelatedAtomFull[]> {
   //
-  async function ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel_blocking(
+  async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImageParallel(
     list_of_PageTitle_string: string[]
   ): Promise<IAtom[][]> {
     const myBigPromise = await Promise.all(
       list_of_PageTitle_string.map((PageTitle_string: string) => {
-        return ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
+        return ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
           PageTitle_string,
-          ROOT_URL_REST_API,
+          // ROOT_URL_REST_API,
           ROOT_URL_ACTION_API,
           -1,
           "titles",
@@ -195,13 +242,13 @@ async function ItemsFromWikidata_blocking(
     );
 
     const items_chunked: IAtom[][] =
-      await ItemsFromSearchOrRandomOrTitlesCleanImagesFromWikipediaParallel_blocking(
+      await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImageParallel(
         list_of_PageTitle_string
       );
     // const items_flat: IAtom[] = makeArrayFlat(items_chunked)
     const items_flat: IAtom[] = [].concat(...items_chunked);
 
-    let related_items: IRelatedAtom[] = items_flat.map((item: IAtom) => {
+    let related_items: IRelatedAtomFull[] = items_flat.map((item: IAtom) => {
       if (item === undefined) {
         return undefined;
       }
@@ -219,7 +266,7 @@ async function ItemsFromWikidata_blocking(
       }
 
       // item["related"] = itemId + "|" + prop;
-      const related: IRelatedAtom = { relation: prop, item: item };
+      const related: IRelatedAtomFull = { relation: prop, item: item };
       return related;
     });
 

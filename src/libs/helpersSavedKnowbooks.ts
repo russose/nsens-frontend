@@ -1,12 +1,15 @@
 import {
   AtomID,
+  ConfigLanguage,
   EXCLUSION_PATTERNS,
   IAtom,
   IKnowbook,
+  IRelatedAtomFull,
   KnowbookID,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { api_getItemsFromTitlesFromWebWithGoodImages_blocking } from "./apiItems";
+import { api_getItemsFromTitlesFromWebCleanImage_blocking } from "./apiItems";
+import { api_getRelatedFromWebCleanImage_blocking } from "./apiRelated";
 import {
   api_addItemInKnowbook,
   api_addKnowbook,
@@ -16,7 +19,6 @@ import {
   api_save,
   api_unsave,
 } from "./apiUserData";
-import { fetchRelatedAndUpdateStores } from "./helpersRelated";
 
 const delay_api_in_ms = 5000;
 
@@ -27,51 +29,71 @@ export function addSaved(itemId: AtomID, stores: IStores): void {
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
 
-  // const item = getItemFromAnyStores(itemId, stores);
   const item = stores.baseStore.getHistoryItem(itemId);
 
   if (item === undefined || item.image_url === "") {
-    api_getItemsFromTitlesFromWebWithGoodImages_blocking(
+    //Introduced some bugs if delays are not introduced (see setTimeout)
+    stores.savedStore.setSaved([item], false); //to not freeze UI
+    api_getItemsFromTitlesFromWebCleanImage_blocking(
       stores.uiStore.selectedAtom.title,
       lang,
       exclusion_patterns_items
     )
       .then((items) => {
-        stores.baseStore.setHistory(items);
-        performSaved(items[0], stores);
+        performSavedWithRelated(
+          stores,
+          items[0],
+          lang,
+          exclusion_patterns_items
+        );
       })
       .catch(() => {
         // console.log("network error, error in unsaved");
       });
   } else {
-    performSaved(item, stores);
+    //Introduced some bugs if delays are not introduced (see setTimeout)
+    stores.savedStore.setSaved([item], false); //to not freeze UI
+    performSavedWithRelated(stores, item, lang, exclusion_patterns_items);
   }
 }
 
-function performSaved(item: IAtom, stores: IStores): void {
+function performSavedWithRelated(
+  stores: IStores,
+  item: IAtom,
+  lang: ConfigLanguage,
+  exclusion_patterns: string[]
+): void {
   if (item === undefined) {
     return;
   }
 
-  const itemId = item.id;
+  // Desactivé car risque de corruption de données si les images ne sont pas encore synchronisées dans History quand fait le save()
+  // if (stores.baseStore.related.has(item.id)) {
+  //   api_save(item);
+  //   stores.savedStore.setSaved([item], true); //force update of item in history with all information
+  //   return;
+  // }
 
-  //Introduced some bugs if delays are not introduced (see setTimeout)
-  stores.savedStore.setSaved([item]); //to not freeze UI
-
-  fetchRelatedAndUpdateStores(stores, item.id, item.title) //take time
+  api_getRelatedFromWebCleanImage_blocking(
+    item.id,
+    item.title,
+    lang,
+    exclusion_patterns
+  )
+    .then((relatedList: IRelatedAtomFull[]) => {
+      stores.baseStore.setRelated(item.id, relatedList);
+    })
     .then(() => {
-      item.related = JSON.stringify(stores.baseStore.getRelated(itemId));
+      item.related = JSON.stringify(stores.baseStore.getRelatedFull(item.id));
       return item;
     })
     .then((item) => {
       api_save(item);
-      // return item;
+      stores.savedStore.setSaved([item], true); //force update of item in history with all information
     })
-    // .then((item) => {
-    //   stores.savedStore.setSaved([item]);
-    // })
-    .catch((e) => {
-      stores.savedStore.deleteSaved(itemId);
+
+    .catch((error) => {
+      stores.savedStore.deleteSaved(item.id);
     });
 }
 
@@ -81,14 +103,6 @@ export function removeSaved(itemId: AtomID, stores: IStores): void {
   }
 
   if (!IsItemInAnyKnowbook(itemId, stores)) {
-    // api_unsave(itemId)
-    //   .then(() => {
-    //     stores.savedStore.deleteSaved(itemId);
-    //   })
-    //   .catch(() => {
-    //     // console.log("network error, error in unsaved");
-    //   });
-
     stores.savedStore.deleteSaved(itemId);
     setTimeout(() => {
       api_unsave(itemId, stores.baseStore.paramsPage.lang)
@@ -140,13 +154,9 @@ export function renameKnowbook(
   }
 
   api_renameKnowbook(name, new_name, stores.baseStore.paramsPage.lang)
-    .then(
-      // action(
-      () => {
-        stores.knowbookStore.renameKnowbook(name, new_name);
-      }
-      // )
-    )
+    .then(() => {
+      stores.knowbookStore.renameKnowbook(name, new_name);
+    })
     .catch((error) => {
       // console.log("error in renaming knowbook");
     });
@@ -160,13 +170,9 @@ export function deleteKnowbook(name: KnowbookID, stores: IStores) {
     return;
   }
   api_removeKnowbook(name, stores.baseStore.paramsPage.lang)
-    .then(
-      // action(
-      () => {
-        stores.knowbookStore.deleteKnowbook(name);
-      }
-      // )
-    )
+    .then(() => {
+      stores.knowbookStore.deleteKnowbook(name);
+    })
     .catch((error) => {
       // console.log("error in removing knowbook");
     });

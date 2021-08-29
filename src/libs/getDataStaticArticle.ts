@@ -16,7 +16,7 @@ import {
   languages_activated,
 } from "../config/globals";
 import { fetchArticle } from "./fetch";
-import { ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking } from "./fetchBase";
+import { ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking } from "./fetchBase";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import { readFileJson, writeFileJson } from "./utilsServer";
 
@@ -127,7 +127,7 @@ async function getConfigDataStaticArticles(
   );
 
   const items: IAtom[] =
-    await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
+    await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking(
       title,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),

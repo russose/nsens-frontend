@@ -8,8 +8,10 @@ export const configDataFr = {
     title_page_base: "n.Sens",
   },
   about: {
+    // slogan:
+    //   "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
     slogan:
-      "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
+      "Explorer la connaissance autrement. Replacer dans le contexte général et bâtir un nouveau future désirable.",
     features: [
       {
         title: "Trouver",

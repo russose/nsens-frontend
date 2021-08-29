@@ -12,90 +12,41 @@ const width_image_thumbnail = configFetching.width_image_thumbnail;
 
 const cache_duration_in_sec = configFetching.cache_duration_in_sec;
 
-// export async function filterAndGetCleanImages_blocking(
-//   atomsList: IAtom[],
-//   ROOT_URL_REST_API: string,
-//   ROOT_URL_ACTION_API: string,
-//   lang: ConfigLanguage,
-//   exclusion_patterns: string[]
-// ): Promise<IAtom[]> {
-//   if (atomsList === undefined || atomsList.length === 0) {
-//     return [];
-//   }
-//   //Remove undefined
-//   const atomsList_no_undefined = atomsList.filter((item) => {
-//     return item !== undefined;
-//   });
-//   const atomsList_filtered = filterAtomListFromPatterns(
-//     atomsList_no_undefined,
-//     exclusion_patterns
-//   );
-//   const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
-//     atomsList_filtered,
-//     ROOT_URL_ACTION_API,
-//     ROOT_URL_REST_API,
-//     lang
-//   );
-//   return atomsListWithImages;
-// }
-
-//Only used in API, to be refactored without blocking
-// export async function ItemsFeaturedCleanImagesFromWikipedia_blocking(
-//   year: string,
-//   month: string,
-//   day: string,
-//   ROOT_URL_REST_API: string,
-//   ROOT_URL_ACTION_API: string,
-//   lang: ConfigLanguage,
-//   exclusion_patterns: string[]
-// ): Promise<IAtom[]> {
-//   const atomsList = await getFeaturedAtomsFromWikipedia(
-//     year,
-//     month,
-//     day,
-//     ROOT_URL_REST_API,
-//     lang
-//   );
-
-//   const atomsListWithImages = await filterAndGetCleanImages_blocking(
-//     atomsList,
-//     ROOT_URL_REST_API,
-//     ROOT_URL_ACTION_API,
-//     lang,
-//     exclusion_patterns
-//   );
-
-//   return atomsListWithImages;
-// }
-
 /**
  * Interfaces
  */
 
-export async function getCleanImage(
-  atom: IAtom,
+export function removeBigImages(items: IAtom[]): IAtom[] {
+  const items_without_image: IAtom[] = items.map((item) => {
+    const item_without_image: IAtom = item;
+    item_without_image.image_url = "";
+    return item_without_image;
+  });
+
+  return items_without_image;
+}
+
+export async function getCleanImage_blocking(
+  atomsList: IAtom[],
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage
-): Promise<IAtom> {
-  if (atom === undefined) {
-    return undefined;
+): Promise<IAtom[]> {
+  if (atomsList === undefined || atomsList.length === 0) {
+    return [];
   }
 
-  const atomWithCleanImage = await improveImageFromWikipediaParallel_blocking(
-    [atom],
+  const atomsWithCleanImage = await improveImageFromWikipediaParallel_blocking(
+    atomsList,
     ROOT_URL_ACTION_API,
     ROOT_URL_REST_API,
     lang
   );
-  return atomWithCleanImage[0];
+  return atomsWithCleanImage;
 }
 
 export function filterItems(
   atomsList: IAtom[],
-  // ROOT_URL_REST_API: string,
-  // ROOT_URL_ACTION_API: string,
-  // lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): IAtom[] {
   if (atomsList === undefined || atomsList.length === 0) {
@@ -105,20 +56,16 @@ export function filterItems(
   const atomsList_no_undefined = atomsList.filter((item) => {
     return item !== undefined;
   });
+
   const atomsList_filtered = filterAtomListFromPatterns(
     atomsList_no_undefined,
     exclusion_patterns
   );
-  // const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
-  //   atomsList_filtered,
-  //   ROOT_URL_ACTION_API,
-  //   ROOT_URL_REST_API,
-  //   lang
-  // );
+
   return atomsList_filtered;
 }
 
-export async function ItemsFeaturedFromWikipedia(
+export async function ItemsFeaturedFromWikipediaWithoutImage(
   year: string,
   month: string,
   day: string,
@@ -137,18 +84,13 @@ export async function ItemsFeaturedFromWikipedia(
 
   const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
 
-  // const atomsListWithImages = await filterAndGetCleanImages_blocking(
-  //   atomsList,
-  //   ROOT_URL_REST_API,
-  //   ROOT_URL_ACTION_API,
-  //   lang,
-  //   exclusion_patterns
-  // );
+  const atomsList_filtered_without_images: IAtom[] =
+    removeBigImages(atomsList_filtered);
 
-  return atomsList_filtered;
+  return atomsList_filtered_without_images;
 }
 
-export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipedia(
+export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
   pattern_or_titles: string,
   // ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
@@ -174,18 +116,13 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipedia(
 
   const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
 
-  // const atomsListWithImages = await filterAndGetCleanImages_blocking(
-  //   atomsList,
-  //   ROOT_URL_REST_API,
-  //   ROOT_URL_ACTION_API,
-  //   lang,
-  //   exclusion_patterns
-  // );
+  const atomsList_filtered_without_images: IAtom[] =
+    removeBigImages(atomsList_filtered);
 
-  return atomsList_filtered;
+  return atomsList_filtered_without_images;
 }
 
-export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
+export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking(
   pattern_or_titles: string,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
@@ -195,34 +132,37 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFrom
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
-  const list_of_PageIds = await idsFromSearchOrRandomOrTitlesFromWikipedia(
-    pattern_or_titles,
-    ROOT_URL_ACTION_API,
-    nb_items,
-    mode
-  );
+  // const list_of_PageIds = await idsFromSearchOrRandomOrTitlesFromWikipedia(
+  //   pattern_or_titles,
+  //   ROOT_URL_ACTION_API,
+  //   nb_items,
+  //   mode
+  // );
 
-  const list_of_Pages_string = buildListStringSeparated(list_of_PageIds);
-  const atomsList = await getAtomsFromWikipediaAction(
-    list_of_Pages_string,
-    ROOT_URL_ACTION_API,
-    lang
-  );
-  const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
+  // const list_of_Pages_string = buildListStringSeparated(list_of_PageIds);
+  // const atomsList = await getAtomsFromWikipediaAction(
+  //   list_of_Pages_string,
+  //   ROOT_URL_ACTION_API,
+  //   lang
+  // );
+  // const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
+
+  const atomsList_filtered =
+    await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
+      pattern_or_titles,
+      ROOT_URL_ACTION_API,
+      nb_items,
+      mode,
+      lang,
+      exclusion_patterns
+    );
+
   const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
     atomsList_filtered,
     ROOT_URL_ACTION_API,
     ROOT_URL_REST_API,
     lang
   );
-
-  // const atomsListWithImages = await filterAndGetCleanImages_blocking(
-  //   atomsList,
-  //   ROOT_URL_REST_API,
-  //   ROOT_URL_ACTION_API,
-  //   lang,
-  //   exclusion_patterns
-  // );
 
   return atomsListWithImages;
 }
@@ -247,7 +187,7 @@ export function buildListStringSeparated(array: string[]): string {
 }
 
 //Mostviewed from QUERY API NOT WORKING WELL, RETURNING OFTEN emply []
-export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
+async function idsFromSearchOrRandomOrTitlesFromWikipedia(
   pattern_or_titles: string, //Not used for "random", can be any value
   ROOT_URL_ACTION_API: string,
   nb_atoms: number, //Not used for "titles", can be any value
@@ -399,7 +339,7 @@ export async function idsFromSearchOrRandomOrTitlesFromWikipedia(
   }
 }
 
-export async function getAtomsFromWikipediaAction(
+async function getAtomsFromWikipediaAction(
   list_of_Pages_ids: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage
@@ -432,11 +372,14 @@ export async function getAtomsFromWikipediaAction(
     if (data["query"] === undefined) {
       return [];
     }
-
     //Extract relevant information to keep
     const list_information_atoms: IAtom[] = [];
     Object.values(data["query"]["pages"]).forEach((item: JSONDataT) => {
-      if (item["pageprops"] !== undefined) {
+      if (
+        item["pageprops"] !== undefined &&
+        item["pageprops"]["wikibase_item"] !== undefined &&
+        item["title"] !== undefined
+      ) {
         const id = item["pageprops"]["wikibase_item"];
         const atom = newAtom(id, lang);
         atom.wikibase_item = item["pageprops"]["wikibase_item"];
@@ -476,7 +419,7 @@ export async function getAtomsFromWikipediaAction(
 
     return list_information_atoms_ordered;
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return [];
   }
 }
@@ -496,7 +439,7 @@ interface IImage {
   thumbwidth: number;
 }
 
-export async function getAllPageImagesReducedFromWikipediaAction(
+async function getAllPageImagesReducedFromWikipediaAction(
   title: string,
   width: number,
   ROOT_URL_ACTION_API: string
@@ -554,7 +497,7 @@ export async function getAllPageImagesReducedFromWikipediaAction(
   }
 }
 
-export async function improveImageFromWikipedia(
+async function improveImageFromWikipedia_blocking(
   item: IAtom,
   ROOT_URL_ACTION_API: string,
   ROOT_URL_REST_API: string,
@@ -736,7 +679,7 @@ export async function improveImageFromWikipediaParallel_blocking(
 
   const myBigPromise = await Promise.all(
     list_information_atoms.map((item: IAtom) => {
-      return improveImageFromWikipedia(
+      return improveImageFromWikipedia_blocking(
         item,
         ROOT_URL_ACTION_API,
         ROOT_URL_REST_API,
@@ -806,7 +749,7 @@ export async function ItemsRelatedFromWikipediaRaw(
 /**
  * Featured Items
  */
-export async function getFeaturedAtomsFromWikipedia(
+async function getFeaturedAtomsFromWikipedia(
   year: string,
   month: string,
   day: string,

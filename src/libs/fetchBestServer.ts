@@ -1,8 +1,4 @@
 import {
-  ROOT_URL_WIKIPEDIA_ACTION,
-  ROOT_URL_WIKIPEDIA_REST,
-} from "../config/configURLs";
-import {
   ConfigLanguage,
   configPaths,
   EXCLUSION_PATTERNS,
@@ -12,9 +8,7 @@ import {
 import { fetch_data_wiki_rest } from "./fetch";
 import {
   buildListStringSeparated,
-  filterItems,
-  improveImageFromWikipediaParallel_blocking,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking,
 } from "./fetchBase";
 import { DateToStringWithZero } from "./utils";
 import { writeFileJson } from "./utilsServer";
@@ -23,7 +17,7 @@ import { writeFileJson } from "./utilsServer";
  * Interface
  */
 
-export async function ItemsBestYearFromWikipedia(
+export async function ItemsBestYearFromWikipediaCleanImage_blocking(
   year_start: string,
   year_end: string,
   amount: number,
@@ -39,51 +33,47 @@ export async function ItemsBestYearFromWikipedia(
       year_start,
       amount,
       ROOT_URL_WIKIMEDIA_TOP_REST,
-      // ROOT_URL_ACTION_API,
+      ROOT_URL_REST_API,
+      ROOT_URL_ACTION_API,
       lang,
       exclusion_patterns
     );
   } else {
-    atomsList = await ItemsBestMultiYearFromWikipediaRaw(
+    atomsList = await ItemsBestMultiYearFromWikipediaRawCleanImage_blocking(
       year_start,
       year_end,
       amount,
       ROOT_URL_WIKIMEDIA_TOP_REST,
-      // ROOT_URL_ACTION_API,
+      ROOT_URL_REST_API,
+      ROOT_URL_ACTION_API,
       lang,
       exclusion_patterns
     );
   }
 
-  // const atomsListWithImages = await filterAndGetCleanImages_blocking(
-  //   atomsList,
-  //   ROOT_URL_REST_API,
+  // const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
+  // const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
+  //   atomsList_filtered,
   //   ROOT_URL_ACTION_API,
-  //   lang,
-  //   exclusion_patterns
+  //   ROOT_URL_REST_API,
+  //   lang
   // );
 
-  const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
-  const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
-    atomsList_filtered,
-    ROOT_URL_ACTION_API,
-    ROOT_URL_REST_API,
-    lang
-  );
-
-  return atomsListWithImages;
+  // return atomsListWithImages;
+  return atomsList;
 }
 
 /**
  * Top Items for many years
  */
 
-async function ItemsBestMultiYearFromWikipediaRaw(
+async function ItemsBestMultiYearFromWikipediaRawCleanImage_blocking(
   year_start: string,
   year_end: string,
   amount: number,
   ROOT_URL_WIKIMEDIA_TOP_REST: string,
-  // ROOT_URL_ACTION_API: string,
+  ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
@@ -190,10 +180,10 @@ async function ItemsBestMultiYearFromWikipediaRaw(
     buildListStringSeparated(list_of_PageTitles);
 
   const atomsList: IAtom[] =
-    await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
+    await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking(
       list_of_PageTitles_string,
-      ROOT_URL_WIKIPEDIA_REST(lang),
-      ROOT_URL_WIKIPEDIA_ACTION(lang),
+      ROOT_URL_REST_API,
+      ROOT_URL_ACTION_API,
       amount,
       "titles",
       lang,
@@ -211,7 +201,8 @@ async function ItemsBestYearFromWikipediaRaw(
   year: string,
   amount: number,
   ROOT_URL_WIKIMEDIA_TOP_REST: string,
-  // ROOT_URL_ACTION_API: string,
+  ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
@@ -305,10 +296,10 @@ async function ItemsBestYearFromWikipediaRaw(
       buildListStringSeparated(list_of_PageTitles);
 
     const atomsList =
-      await ItemsFromSearchOrRandomOrTitlesOrMostviewedCleanImagesFromWikipedia_blocking(
+      await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking(
         list_of_PageTitles_string,
-        ROOT_URL_WIKIPEDIA_REST(lang),
-        ROOT_URL_WIKIPEDIA_ACTION(lang),
+        ROOT_URL_REST_API,
+        ROOT_URL_ACTION_API,
         amount,
         "titles",
         lang,

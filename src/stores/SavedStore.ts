@@ -1,12 +1,12 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { AtomID, IAtom } from "../config/globals";
+import { shuffleArray } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
 export class SavedStore {
   $rootStore: RootStore;
 
   private $saved = observable.set<AtomID>();
-  private $relatedAllItemsFromSaved = new Set<AtomID>();
 
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
@@ -16,6 +16,7 @@ export class SavedStore {
       setSaved: action,
       clearSaved: action,
       deleteSaved: action,
+      allRelatedIdsFromSavedNotSaved: computed,
     });
   }
 
@@ -23,7 +24,6 @@ export class SavedStore {
     return this.$saved;
   }
   get savedItems(): IAtom[] {
-    // return stores.baseStore.getHistoryItems(this.saved);
     return this.$rootStore
       .stores()
       .baseStore.getHistoryItems(Array.from(this.$saved));
@@ -34,41 +34,38 @@ export class SavedStore {
   }
   deleteSaved(key: AtomID): void {
     this.$saved.delete(key);
-    // const saved_filtered: AtomID[] = this.saved.filter((id) => {
-    //   return id !== key;
-    // });
-    // // ATTENTION, PAS CERTAIN QUE CA FONCTIONNE PARFAITEMENT AVEC MOBX...
-    // this.$saved = saved_filtered;
   }
 
-  setSaved(atoms: IAtom[]): void {
+  setSaved(atoms: IAtom[], forceUpdateHistory: boolean): void {
     if (atoms === undefined || atoms.length === 0) {
       return;
     }
-
     atoms.forEach((item) => {
       this.$saved.add(item.id);
     });
-
-    this.$rootStore.stores().baseStore.setHistory(atoms);
+    this.$rootStore.stores().baseStore.setHistory(atoms, forceUpdateHistory);
   }
 
-  get relatedAllItemsFromSaved(): IAtom[] {
-    const ids: AtomID[] = Array.from(this.$relatedAllItemsFromSaved);
-    return this.$rootStore.stores().baseStore.getHistoryItems(ids);
-  }
+  get allRelatedIdsFromSavedNotSaved(): AtomID[] {
+    const max_items_amount = 100;
+    const savedIds_shuffled: AtomID[] = shuffleArray(Array.from(this.$saved));
+    const allRelatedIdsFromSavedNotSaved_ = new Set<AtomID>();
 
-  refreshRelatedAllItemsFromSaved(): void {
-    const savedIds: AtomID[] = Array.from(this.$saved);
-
-    this.$relatedAllItemsFromSaved.clear();
-    savedIds.forEach((id) => {
-      const relatedItems = this.$rootStore
+    for (const id of savedIds_shuffled) {
+      if (allRelatedIdsFromSavedNotSaved_.size > max_items_amount) {
+        break;
+      }
+      const relatedItemsIds = this.$rootStore
         .stores()
         .baseStore.getRelatedItems(id);
-      relatedItems.forEach((item) => {
-        this.$relatedAllItemsFromSaved.add(item.id);
+
+      relatedItemsIds.forEach((item) => {
+        if (!this.$saved.has(item)) {
+          allRelatedIdsFromSavedNotSaved_.add(item);
+        }
       });
-    });
+    }
+
+    return shuffleArray(Array.from(allRelatedIdsFromSavedNotSaved_));
   }
 }

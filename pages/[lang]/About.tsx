@@ -64,6 +64,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
       instruction={GUI_CONFIG.language.user.install_instructions}
     />
   );
+  // const installation_instructions = <></>;
 
   const contacts = (
     <Contacts

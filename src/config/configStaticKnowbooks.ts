@@ -1,6 +1,24 @@
 import { ConfigLanguage, IStaticKnowbookDefinition } from "./globals";
 
 export const staticKnowbooks: IStaticKnowbookDefinition[] = [
+  {
+    nameOrPeriod: "Infinis",
+    lang: ConfigLanguage.fr,
+    items: [
+      "Physique quantique",
+      "Relativité générale",
+      "Calculateur quantique",
+      "Infini",
+      "Intrication quantique",
+      "Voie lactée",
+      "Exoplanète",
+      "Système solaire",
+      "Trou noir",
+    ],
+  },
+];
+
+export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
   { nameOrPeriod: "2016-2020", lang: "" },
   { nameOrPeriod: "2021", lang: "" },
   {

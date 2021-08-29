@@ -33,7 +33,8 @@ const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
             <CardAtomGridCompact
               id={`NetworkFlat-${key_value[0]}`}
               stores={props.stores}
-              atoms={key_value[1]}
+              // atoms={key_value[1]}
+              atoms={props.stores.baseStore.getHistoryItems(key_value[1])}
               isItemSaved_handler={isItemSaved(props.stores)}
               isItemSavedActionable_handler={isItemSavedActivated(props.stores)}
               saved_handler={onSaved(props.stores)}

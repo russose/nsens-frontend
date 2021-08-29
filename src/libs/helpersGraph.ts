@@ -13,14 +13,15 @@ import {
   ILink,
   INode,
   IRelatedAtom,
+  IRelatedAtomFull,
 } from "../config/globals";
-import { fetchRelatedAndUpdateStores } from "./helpersRelated";
 import { IStores } from "../stores/RootStore";
-import { newAtom } from "./utils";
-import { api_getItemsFromTitlesFromWebWithGoodImages_blocking } from "./apiItems";
+import { api_getItemsFromTitlesFromWebCleanImage_blocking } from "./apiItems";
+import { api_getRelatedFromWebWithoutImage } from "./apiRelated";
 
 export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
-  const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
+  // const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
+  const related: IRelatedAtom[] = stores.baseStore.related.get(root_itemId);
   if (
     root_itemId === undefined ||
     related === undefined ||
@@ -29,14 +30,16 @@ export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
     return;
   }
 
-  const relatedMap_local = new Map<string, IAtom[]>();
+  // const relatedMap_local = new Map<string, IAtom[]>();
+  const relatedMap_local = new Map<string, AtomID[]>();
 
   related.forEach((el) => {
     const key = el.relation;
     if (!relatedMap_local.has(key)) {
       relatedMap_local.set(key, [el.item]);
     } else {
-      const item_list: IAtom[] = relatedMap_local.get(key);
+      // const item_list: IAtom[] = relatedMap_local.get(key);
+      const item_list: AtomID[] = relatedMap_local.get(key);
       item_list.push(el.item);
       relatedMap_local.set(key, item_list);
     }
@@ -65,28 +68,26 @@ export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
   stores.graphStore.setRootItemId(root_itemId);
 }
 
-export function setGraph(
-  root_item: IAtom,
+export function initGraph(
+  rootId: AtomID,
   stores: IStores,
   x0: number,
   y0: number
 ): void {
-  if (root_item === undefined) {
+  if (rootId === undefined) {
     return;
   }
 
-  setRelatedMap(root_item.id, stores);
+  setRelatedMap(rootId, stores);
 
   const rootNode: INode = {
     x: x0,
     y: y0,
     pos: 0,
     relation_name: "",
-    ...root_item,
+    item: rootId,
   };
 
-  // this.graph.nodes = [rootNode];
-  // this.graph.links = [];
   const graph: IGraph = { nodes: [rootNode], links: [] };
 
   stores.graphStore.relatedMap.forEach((items_list_for_relation, key) => {
@@ -97,10 +98,8 @@ export function setGraph(
         y: y0,
         pos: graph.nodes.length,
         relation_name: group_name,
-        ...newAtom(key, stores.baseStore.paramsPage.lang),
+        item: key, //Contains name of the group
       };
-      node_group.title = key;
-      // node_group.related = "group";
 
       graph.nodes.push(node_group);
       graph.links.push({
@@ -108,13 +107,13 @@ export function setGraph(
         target: graph.nodes[node_group.pos],
       });
 
-      items_list_for_relation.forEach((item: IAtom) => {
+      items_list_for_relation.forEach((itemId: AtomID) => {
         const node: INode = {
           x: x0,
           y: y0,
           pos: graph.nodes.length,
           relation_name: "",
-          ...item,
+          item: itemId,
         };
         graph.nodes.push(node);
 
@@ -130,7 +129,7 @@ export function setGraph(
         y: y0,
         pos: graph.nodes.length,
         relation_name: key,
-        ...items_list_for_relation[0],
+        item: items_list_for_relation[0],
       };
       graph.nodes.push(node);
       graph.links.push({
@@ -140,7 +139,6 @@ export function setGraph(
     }
   });
 
-  //New line
   stores.graphStore.setGraph(graph.nodes, graph.links);
 }
 
@@ -219,11 +217,10 @@ export function renderGraph(
   const baseStore = stores.baseStore;
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
-  // let root_item: IAtom = getItemFromAnyStores(root_itemId, stores);
   let root_item: IAtom = stores.baseStore.getHistoryItem(root_itemId);
 
   if (root_item === undefined) {
-    api_getItemsFromTitlesFromWebWithGoodImages_blocking(
+    api_getItemsFromTitlesFromWebCleanImage_blocking(
       stores.uiStore.selectedAtom.title,
       lang,
       exclusion_patterns_items
@@ -233,45 +230,37 @@ export function renderGraph(
     return;
   }
 
-  if (baseStore.getRelated(root_itemId) === undefined) {
+  // if (baseStore.getRelated(root_itemId) === undefined) {
+  if (!baseStore.related.has(root_itemId)) {
     stores.uiStore.setShowLoading(true);
-    fetchRelatedAndUpdateStores(stores, root_item.id, root_item.title)
-      .then(
-        // action(
-        () => {
-          setGraph(root_item, stores, width / 2, height / 2);
+    api_getRelatedFromWebWithoutImage(
+      root_item.id,
+      root_item.title,
+      lang,
+      exclusion_patterns_items
+    )
+      .then((relatedList: IRelatedAtomFull[]) => {
+        //With no duplicates by construction
+        stores.baseStore.setRelated(root_item.id, relatedList);
+        const relatedIds = relatedList.map((related) => {
+          return related.item.id;
+        });
+        for (const id of relatedIds) {
+          stores.baseStore.setGoodImageInHistoryItem(id);
+          // .then(() => {
+          //   setGraph(root_item, stores, width / 2, height / 2);
+          // });
         }
-        // )
-      )
-      .then(
-        // action(
-        () => {
-          runSimulation(width / 2, height / 2, stores);
-          stores.uiStore.setShowLoading(false);
-        }
-        // )
-      );
+      })
+      .then(() => {
+        initGraph(root_itemId, stores, width / 2, height / 2);
+      })
+      .then(() => {
+        runSimulation(width / 2, height / 2, stores);
+        stores.uiStore.setShowLoading(false);
+      });
   } else if (root_itemId !== stores.graphStore.rootItemId) {
-    setGraph(root_item, stores, width / 2, height / 2);
+    initGraph(root_itemId, stores, width / 2, height / 2);
     runSimulation(width / 2, height / 2, stores);
-    // stores.uiStore.setShowLoading(false);
   }
-  // stores.uiStore.setShowLoading(false);
 }
-
-// export function renderRelatedMap(root_itemId: AtomID, stores: IStores): void {
-//   const root_item = getItemFromAnywhere(root_itemId, stores);
-//   if (root_item === undefined) {
-//     return;
-//   }
-
-//   if (stores.baseStore.getRelated(root_itemId) === undefined) {
-//     fetchRelatedAndUpdateStores(stores, root_item.id, root_item.title).then(
-//       () => {
-//         setRelatedMap(root_itemId, stores);
-//       }
-//     );
-//   } else if (root_itemId !== stores.graphStore.rootItemId) {
-//     setRelatedMap(root_itemId, stores);
-//   }
-// }

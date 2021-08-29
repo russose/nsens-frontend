@@ -1,15 +1,18 @@
-//
-
 const card_size = 220;
 const card_compact_size = "30vw";
+// const card_compact_vizs_size = 120;
 const card_compact_vizs_size = 120;
 // const card_size_ = 250;
 // const card_compact_size = card_size_ * 0.8;
 // const card_compact_vizs_size = card_size_ * 0.5;
 
 export const configDataMobile = {
-  displayFeedIncrement: 2,
-  amount_item_displayed: 50,
+  display: {
+    amount_item_displayed: 50,
+    displayFeedIncrement: 5,
+    amount_mostview_for_each_related: 2, //Should be >=1
+    feed_time_increment_ms: 500,
+  },
   max_nodes_network: 1,
   // min_width_network: 500,
   heightTopAndBottom: 190,

@@ -6,24 +6,23 @@ import {
   AtomID,
   configFetching,
   ConfigLanguage,
-  IRelatedAtom,
+  IRelatedAtomFull,
 } from "../config/globals";
-import { fetchRelated_blocking } from "./fetchRelated";
+import {
+  fetchRelatedCleanImage_blocking,
+  fetchRelatedWithoutImage,
+} from "./fetchRelated";
 
-// export const max_amount_data_fetched_items =
-//   configFetching.amount_data_fetched_items;
-// export const url_wikipedia_action = URLs.ROOT_URL_WIKIPEDIA_ACTION;
-// export const url_wikipedia_rest = URLs.ROOT_URL_WIKIPEDIA_REST;
 const amount_related = configFetching.amount_related;
 
-export async function api_getRelatedFromWeb_blocking(
+export async function api_getRelatedFromWebWithoutImage(
   itemId: AtomID,
   title: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
-): Promise<IRelatedAtom[]> {
+): Promise<IRelatedAtomFull[]> {
   try {
-    return fetchRelated_blocking(
+    return fetchRelatedWithoutImage(
       itemId,
       title,
       amount_related,
@@ -38,39 +37,24 @@ export async function api_getRelatedFromWeb_blocking(
   }
 }
 
-// export async function api_getRelatedFromWikipediaFromWeb(
-//   // itemId: AtomID,
-//   title: string,
-//   lang: ConfigLanguage
-// ): Promise<IRelatedAtom[]> {
-//   try {
-//     return ItemsRelatedFromWikipedia(
-//       title,
-//       // itemId,
-//       amount_related,
-//       ROOT_URL_WIKIPEDIA_REST(lang),
-//       ROOT_URL_WIKIPEDIA_ACTION(lang),
-//       lang
-//     );
-//   } catch (error) {
-//     // console.log(error);
-//     return [];
-//   }
-// }
-
-// export async function api_getRelatedFromWikidataFromWeb(
-//   itemId: AtomID,
-//   lang: ConfigLanguage
-// ): Promise<IRelatedAtom[]> {
-//   try {
-//     return ItemsFromWikidata(
-//       itemId,
-//       ROOT_URL_WIKIPEDIA_REST(lang),
-//       ROOT_URL_WIKIPEDIA_ACTION(lang),
-//       lang
-//     );
-//   } catch (error) {
-//     // console.log(error);
-//     return [];
-//   }
-// }
+export async function api_getRelatedFromWebCleanImage_blocking(
+  itemId: AtomID,
+  title: string,
+  lang: ConfigLanguage,
+  exclusion_patterns: string[]
+): Promise<IRelatedAtomFull[]> {
+  try {
+    return fetchRelatedCleanImage_blocking(
+      itemId,
+      title,
+      amount_related,
+      ROOT_URL_WIKIPEDIA_REST(lang),
+      ROOT_URL_WIKIPEDIA_ACTION(lang),
+      lang,
+      exclusion_patterns
+    );
+  } catch (error) {
+    // console.log(error);
+    return [];
+  }
+}

@@ -38,12 +38,6 @@ export const configGeneral = {
   },
   successMessage: "you can now login...",
   loginDuration: 2000,
-  feed: {
-    ratio_related: 0.6,
-    // WARNING: if ratio_mostviewed_over_randow not 1, improve implementation to store randow in the same way as mostviewed
-    // to avoid big fetching at when displaying homepage !!
-    // ratio_mostviewed_over_randow: 1, //DESACTIVATED - when 0.5, as many mostviewed as random.
-  },
 };
 
 export function EXCLUSION_PATTERNS(lang: ConfigLanguage): string[] {

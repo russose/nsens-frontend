@@ -1,7 +1,7 @@
 import Router from "next/router";
 import {
+  AtomID,
   ConfigDisplay,
-  configGeneral,
   ConfigLanguage,
   configPaths,
   eventT,
@@ -10,8 +10,11 @@ import {
   IparamsPage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { api_getItemsFeaturedFromWeb, api_searchFromWeb } from "./apiItems";
-import { DateToStringWithZero, shuffleSized } from "./utils";
+import {
+  api_getItemsFeaturedFromWebWithoutImage,
+  api_searchFromWebWithoutImage,
+} from "./apiItems";
+import { DateToStringWithZero, shuffleArray } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
   const result: boolean =
@@ -38,55 +41,38 @@ export async function getParamsPageFromContext(): Promise<IparamsPage> {
   return undefined;
 }
 
-function removeBigImage(atoms: IAtom[]): IAtom[] {
-  const atoms_without_images = atoms.map((item) => {
-    let atom_without_image = item;
-    atom_without_image.image_url = "";
-    return atom_without_image;
-  });
+export function removeSavedFromItems(stores: IStores, items: IAtom[]): IAtom[] {
+  if (!stores.baseStore.isLogged || items === undefined || items.length === 0) {
+    return items;
+  }
 
-  return atoms_without_images;
+  const items_filtered: IAtom[] = items.filter((item) => {
+    if (item === undefined) {
+      return false;
+    } else {
+      return !stores.savedStore.saved.has(item.id);
+    }
+  });
+  return items_filtered;
 }
 
-export async function initialyzeMostviewed(stores: IStores) {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate(); //Current day may not work around 0h
-
+export async function fetchNewMostviewed(stores: IStores): Promise<IAtom[]> {
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items: string[] = EXCLUSION_PATTERNS(lang);
 
-  let atoms = await api_getItemsFeaturedFromWeb(
-    DateToStringWithZero(year),
-    DateToStringWithZero(month),
-    DateToStringWithZero(day),
-    lang,
-    exclusion_patterns_items
-  );
-
-  if (atoms.length === 0) {
-    atoms = await api_getItemsFeaturedFromWeb(
-      DateToStringWithZero(year),
-      DateToStringWithZero(month),
-      DateToStringWithZero(day - 1),
+  let items: IAtom[] = [];
+  while (items.length === 0) {
+    items = await api_getItemsFeaturedFromWebWithoutImage(
+      DateToStringWithZero(stores.baseStore.dateLastMostviewed.year),
+      DateToStringWithZero(stores.baseStore.dateLastMostviewed.month),
+      DateToStringWithZero(stores.baseStore.dateLastMostviewed.day),
       lang,
       exclusion_patterns_items
     );
+    stores.baseStore.decreaseDateLastMostviewed();
   }
 
-  if (atoms.length === 0) {
-    atoms = await api_getItemsFeaturedFromWeb(
-      DateToStringWithZero(year),
-      DateToStringWithZero(month - 1),
-      DateToStringWithZero(30),
-      lang,
-      exclusion_patterns_items
-    );
-  }
-
-  const atoms_without_images = removeBigImage(atoms);
-  stores.baseStore.setMostviewed(atoms_without_images);
+  return items;
 }
 
 export function setFeedFromSearch(
@@ -99,75 +85,67 @@ export function setFeedFromSearch(
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
 
-  api_searchFromWeb(searchPattern, lang, exclusion_patterns_items)
+  api_searchFromWebWithoutImage(searchPattern, lang, exclusion_patterns_items)
     .then((atoms) => {
+      stores.baseStore.setModeFeedDisplayedIsSearch(true);
       stores.baseStore.clearFeed();
-      const atoms_without_images = removeBigImage(atoms);
-      stores.baseStore.setFeed(atoms_without_images);
+      stores.baseStore.setFeed(atoms);
+      stores.baseStore.initAmountFeedDisplayed();
     })
     .catch(() => {
       // console.log("error in seach from pattern");
     });
 }
-
-export function setFeedFromMostviewedAndRelated(
-  stores: IStores,
-  amount_item_displayed: number
-): void {
-  const related: IAtom[] = stores.savedStore.relatedAllItemsFromSaved;
-  const mostviewed: IAtom[] = stores.baseStore.mostviewedItems;
-
-  const ratio_related: number = configGeneral.feed.ratio_related;
-  const related_size = related.length;
-  const amount_related = Math.min(
-    Math.round(amount_item_displayed * ratio_related),
-    related_size
-  );
-  const amount_random_and_mostviewed = amount_item_displayed - amount_related;
-  // const amount_mostviewed = amount_item_displayed - amount_related;
-  // const ratio_mostviewed_over_randow: number =
-  //   configGeneral.feed.ratio_mostviewed_over_randow;
-  // const amount_mostviewed =
-  //   amount_random_and_mostviewed * ratio_mostviewed_over_randow;
-  // const amount_random =
-  //   amount_random_and_mostviewed * (1 - ratio_mostviewed_over_randow);
-
-  const amount_mostviewed = amount_random_and_mostviewed;
-
-  const related_items = shuffleSized(related, amount_related);
-  const mostviewed_items = shuffleSized(mostviewed, amount_mostviewed);
-
-  let feed_items: IAtom[] = related_items.concat(mostviewed_items);
+export function setFeedFromMostviewedAndRelated(stores: IStores): void {
+  stores.baseStore.setModeFeedDisplayedIsSearch(false);
 
   stores.baseStore.clearFeed();
-  stores.baseStore.setFeed(shuffleSized(feed_items, amount_item_displayed));
+  let mixedIds: AtomID[];
+  if (!stores.baseStore.isLogged) {
+    mixedIds = stores.baseStore.mostviewedIds;
+  } else {
+    mixedIds = Mix2Array(
+      stores.baseStore.mostviewedIds,
+      stores.savedStore.allRelatedIdsFromSavedNotSaved,
+      stores.baseStore.GUI_CONFIG.display.display
+        .amount_mostview_for_each_related
+    );
+  }
+  const mixedNoSaved: IAtom[] = removeSavedFromItems(
+    stores,
+    stores.baseStore.getHistoryItems(mixedIds)
+  );
 
-  //Randow ITems desactivated right now
-  // if (ratio_mostviewed_over_randow !== 1) {
-  //   const lang = stores.baseStore.paramsPage.lang;
-  //   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
+  stores.baseStore.setFeed(mixedNoSaved);
+  stores.baseStore.initAmountFeedDisplayed();
+}
 
-  //   api_getItemsRandomFromWeb(lang, exclusion_patterns_items, amount_random)
-  //     .then((random_atoms) => {
-  //       // const random_atoms_without_images = addImageToItems(
-  //       //   stores,
-  //       //   random_atoms,
-  //       //   lang
-  //       // );
-  //       const random_atoms_without_images: IAtom[] =
-  //         removeBigImage(random_atoms);
+export function Mix2Array(
+  main: AtomID[],
+  second: AtomID[],
+  increment: number
+): AtomID[] {
+  let mixed: AtomID[] = [];
+  let ix_1 = 0;
+  let ix_2 = 0;
 
-  //       feed_items = feed_items.concat(random_atoms_without_images);
-  //       stores.baseStore.setFeed(
-  //         shuffleSized(feed_items, amount_item_displayed)
-  //       );
-  //     })
-  //     .catch(() => {
-  //       // console.log("error in seach from pattern");
-  //     });
-  // } else {
-  //   stores.baseStore.setFeed(shuffleSized(feed_items, amount_item_displayed));
-  // }
+  while (ix_1 + increment <= main.length) {
+    let newSecond: AtomID[];
+    if (ix_2 < second.length) {
+      newSecond = [second[ix_2]];
+    } else {
+      newSecond = [];
+    }
+
+    const newElements: AtomID[] = shuffleArray(
+      main.slice(ix_1, ix_1 + increment).concat(newSecond)
+    );
+
+    mixed = mixed.concat(newElements);
+    ix_1 = ix_1 + increment;
+    ix_2 = ix_2 + 1;
+  }
+  return mixed;
 }
 
 export function isHome(router: any): boolean {
