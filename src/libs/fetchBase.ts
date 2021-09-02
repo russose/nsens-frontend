@@ -419,7 +419,7 @@ async function getAtomsFromWikipediaAction(
 
     return list_information_atoms_ordered;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return [];
   }
 }

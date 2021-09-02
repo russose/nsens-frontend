@@ -10,9 +10,10 @@ import {
   isItemSavedActivated,
   onSaved,
 } from "../../handlers/handlers_Saved";
+import { isMobile } from "../../libs/helpersBase";
 import { IStores } from "../../stores/RootStore";
 import { useStores } from "../../stores/RootStoreHook";
-import CardAtomCompact from "../CardAtomCompact";
+import CardAtomCompactViz from "../CardAtomCompactViz";
 import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
 import NodeGroup from "./NodeGroup";
 
@@ -32,7 +33,8 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const node_dx = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
   const node_dy = GUI_CONFIG.display.atom_compact_vizs_sizes.height;
-  const path_Itemview = configPaths.pages.ItemArticle;
+  // const path_Itemview = configPaths.pages.ItemArticle;
+  const path_link = configPaths.pages.ItemNetwork;
 
   let node;
   if (props.node.relation_name === group_name) {
@@ -55,19 +57,20 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
         width={node_dx}
         height={node_dy}
       >
-        <CardAtomCompact
+        <CardAtomCompactViz
           key={`cardAtomNetwork-${item.id}`}
           id={item.id}
           stores={stores}
           title={item.title}
           image_url={item.image_url}
-          pathname={path_Itemview}
+          // pathname={path_Itemview}
+          pathname={path_link}
           queryObject={{ title: item.title, id: item.id }}
           saved_enabled={isItemSaved(stores)(item.id)}
           saved_actionable={isItemSavedActivated(stores)(item.id)}
           saved_handler={onSaved(stores)(item.id)}
           edit_handler={onEditKnowbooks(stores)(item.id)}
-          forVizs={true}
+          CompactExtra={isMobile(stores)}
         />
       </foreignObject>
     );

@@ -87,7 +87,9 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
               accessibilityLabel="ok"
               icon="cancel"
               bgColor="transparent"
-              iconColor={configGeneral.colors.iconColorDefault as any}
+              iconColor={
+                configGeneral.colors.iconColorDefaultNotSelected as any
+              }
               size={button_icon_size}
               onClick={props.handler_cancel}
             />
@@ -95,7 +97,9 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
               accessibilityLabel="ok"
               icon="check-circle"
               bgColor="transparent"
-              iconColor={configGeneral.colors.iconColorDefault as any}
+              iconColor={
+                configGeneral.colors.iconColorDefaultNotSelected as any
+              }
               size={button_icon_size}
               onClick={props.handler_confirm(props.id)}
             />

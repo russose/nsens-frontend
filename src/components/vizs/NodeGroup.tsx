@@ -33,7 +33,7 @@ const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
       rounding={rounding}
       padding={1}
       width={node_dx}
-      height={node_dy * 0.4}
+      height={node_dy * 0.7}
     >
       <Box
         height="100%"

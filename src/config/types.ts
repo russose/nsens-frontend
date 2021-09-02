@@ -59,6 +59,8 @@ export enum ButtonIDType {
   EDIT = "EDIT",
   VIZS = "VIZS",
   ARTICLE = "ARTICLE",
+
+  SEPARATOR = "SEPARATOR",
 }
 
 export interface IButton {

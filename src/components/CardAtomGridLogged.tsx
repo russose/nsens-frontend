@@ -14,7 +14,7 @@ export type ICardAtomGridLoggedProps = {
   stores: IStores;
   id: string;
   items: IAtom[];
-  static?: boolean;
+  // static?: boolean;
 };
 
 const CardAtomGridLogged: React.FunctionComponent<ICardAtomGridLoggedProps> = (
@@ -30,7 +30,7 @@ const CardAtomGridLogged: React.FunctionComponent<ICardAtomGridLoggedProps> = (
       isItemSavedActionable_handler={isItemSavedActivated(stores)}
       saved_handler={onSaved(stores)}
       edit_handler={onEditKnowbooks(stores)}
-      static={props.static}
+      // static={props.static}
     />
   );
 };

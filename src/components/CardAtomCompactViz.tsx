@@ -1,11 +1,13 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
 import { AtomID, ButtonIDType, handlerT, IconT } from "../config/globals";
-import CardGenericCompact from "./CardGenericCompact";
 import { IStores } from "../stores/RootStore";
 import { configGeneral } from "../config/globals";
+import React from "react";
+import CardGenericCompact from "./CardGenericCompact";
+import CardGenericCompactExtra from "./CardGenericCompactExtra";
 
-interface ICardAtomCompactProps {
+interface ICardAtomCompactVizProps {
   id: AtomID;
   stores: IStores;
   title: string;
@@ -16,30 +18,25 @@ interface ICardAtomCompactProps {
   saved_enabled: boolean;
   saved_handler: handlerT;
   edit_handler: handlerT;
+  CompactExtra?: boolean;
 }
 
-const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
+const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
+  let size_icon: IconT = GUI_CONFIG.display.size_icon_card;
   const color_item = configGeneral.colors.item_compact_color;
   const color_image = configGeneral.colors.item_color_image;
-  let card_sizes = GUI_CONFIG.display.atom_compact_sizes;
+  let card_sizes = GUI_CONFIG.display.atom_compact_vizs_sizes;
+  if (props.CompactExtra === true) {
+    size_icon = "xs";
+  }
+
   const buttons_all = GUI_CONFIG.language.buttons;
 
-  return (
-    <CardGenericCompact
-      id={props.id}
-      stores={props.stores}
-      title={props.title}
-      image_url={props.image_url}
-      color={color_item}
-      color_image={color_image}
-      sizes={card_sizes}
-      pathname={props.pathname}
-      queryObject={props.queryObject}
-    >
+  const icons = (
+    <>
       <Box paddingX={0}>
         <IconButton
           accessibilityLabel="save"
@@ -65,8 +62,38 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
           />
         )}
       </Box>
+    </>
+  );
+
+  return props.CompactExtra ? (
+    <CardGenericCompactExtra
+      id={props.id}
+      stores={props.stores}
+      title={props.title}
+      image_url={props.image_url}
+      color={color_item}
+      color_image={color_image}
+      sizes={card_sizes}
+      pathname={props.pathname}
+      queryObject={props.queryObject}
+    >
+      {icons}
+    </CardGenericCompactExtra>
+  ) : (
+    <CardGenericCompact
+      id={props.id}
+      stores={props.stores}
+      title={props.title}
+      image_url={props.image_url}
+      color={color_item}
+      color_image={color_image}
+      sizes={card_sizes}
+      pathname={props.pathname}
+      queryObject={props.queryObject}
+    >
+      {icons}
     </CardGenericCompact>
   );
 };
 
-export default observer(CardAtomCompact);
+export default observer(CardAtomCompactViz);

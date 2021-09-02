@@ -43,7 +43,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
           <IconButton
             accessibilityLabel="edit"
             icon={buttons_all[ButtonIDType.EDIT].icon as IconT}
-            iconColor={configGeneral.colors.iconColorDefault as any}
+            iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
             size={size_icon}
             onClick={props.edit_handler}
           />
@@ -55,8 +55,8 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
           icon={buttons_all[ButtonIDType.SAVE].icon as IconT}
           iconColor={
             props.saved_enabled
-              ? "red"
-              : (configGeneral.colors.iconColorDefault as any)
+              ? (configGeneral.colors.iconColorDefaultSelected as any)
+              : (configGeneral.colors.iconColorDefaultNotSelected as any)
           }
           size={size_icon}
           onClick={props.saved_handler}

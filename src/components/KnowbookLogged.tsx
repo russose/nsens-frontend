@@ -10,7 +10,7 @@ interface IKnowbookLoggedProps {
   stores: IStores;
   items: IAtom[];
   related_items: IAtom[];
-  static?: boolean;
+  // static?: boolean;
 }
 
 const KnowbookLogged: React.FunctionComponent<IKnowbookLoggedProps> = (
@@ -48,7 +48,7 @@ const KnowbookLogged: React.FunctionComponent<IKnowbookLoggedProps> = (
         id="KnowbookStaticLogged"
         stores={stores}
         items={props.items}
-        static={props.static}
+        // static={props.static}
       />
       {related_component}
     </>

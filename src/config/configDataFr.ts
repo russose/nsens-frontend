@@ -10,8 +10,7 @@ export const configDataFr = {
   about: {
     // slogan:
     //   "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
-    slogan:
-      "Explorer la connaissance autrement. Replacer dans le contexte général et bâtir un nouveau future désirable.",
+    slogan: "Explorer la connaissance autrement",
     features: [
       {
         title: "Trouver",
@@ -65,6 +64,10 @@ export const configDataFr = {
     VIZS: {
       label: "Vizs",
       icon: ICONS.VIZS,
+    },
+    SEPARATOR: {
+      label: "",
+      icon: ICONS.SEPARATOR,
     },
   },
   knowbooks: {

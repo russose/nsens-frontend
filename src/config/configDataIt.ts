@@ -10,8 +10,7 @@ export const configDataIt: configDataLanguage = {
   about: {
     // slogan:
     //   "Esplorare, capire, agire. Lasciarsi trasportare gustandosi la ricerca...",
-    slogan:
-      "Un modo nuovo di esplorare la conoscenza. Metti in contesto e costruisci un nuovo futuro desiderabile.",
+    slogan: "Esplora la conoscenza in un modo nuovo",
     features: [
       {
         title: "Trova",
@@ -63,6 +62,10 @@ export const configDataIt: configDataLanguage = {
     VIZS: {
       label: "Vizs",
       icon: ICONS.VIZS,
+    },
+    SEPARATOR: {
+      label: "",
+      icon: ICONS.SEPARATOR,
     },
   },
   knowbooks: {

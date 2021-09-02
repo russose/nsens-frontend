@@ -45,7 +45,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           <IconButton
             accessibilityLabel="clear"
             icon="clear"
-            iconColor={configGeneral.colors.iconColorDefault as any}
+            iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
             size={size_icon}
             onClick={props.delete_handler}
           />
@@ -57,7 +57,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           <IconButton
             accessibilityLabel="edit"
             icon="edit"
-            iconColor={configGeneral.colors.iconColorDefault as any}
+            iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
             size={size_icon}
             onClick={props.edit_handler}
           />

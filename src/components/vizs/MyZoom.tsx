@@ -26,21 +26,26 @@ const MyZoom: React.FunctionComponent<IMyZoomProps> = (props) => {
 
   return (
     <>
-      <Zoom
+      <Zoom<SVGSVGElement>
         width={width}
         height={height}
         scaleXMin={1 / scaleFactor}
         scaleXMax={scaleFactor}
         scaleYMin={1 / scaleFactor}
         scaleYMax={scaleFactor}
-        transformMatrix={initialTransform}
+        initialTransformMatrix={initialTransform}
       >
         {(zoom: any) => (
           <div className="relative">
             <svg
               width={width}
               height={height}
-              style={{ cursor: zoom.isDragging ? "grabbing" : "grab" }}
+              // style={{ cursor: zoom.isDragging ? "grabbing" : "grab" }}
+              style={{
+                cursor: zoom.isDragging ? "grabbing" : "grab",
+                touchAction: "none",
+              }}
+              ref={zoom.containerRef}
             >
               <rect
                 width={width}
@@ -59,6 +64,7 @@ const MyZoom: React.FunctionComponent<IMyZoomProps> = (props) => {
                 }}
               />
               <Group transform={zoom.toString()}>{props.children}</Group>
+              {/* <g transform={zoom.toString()}>{props.children}</g> */}
             </svg>
           </div>
         )}

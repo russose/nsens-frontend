@@ -19,14 +19,17 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       /****************Core Blocking*******************************/
       stores.baseStore.setInitCompleted(initStateCat.core, false);
 
-      stores.baseStore.initDateLastMostviewed();
-
-      //To be checked if buggy...
-      stores.baseStore.clearHistory();
-      stores.baseStore.clearRelated();
-      stores.savedStore.clearSaved();
-      stores.knowbookStore.clearStaticKnowbooks();
-      stores.knowbookStore.clearKnowbooks();
+      // stores.baseStore.initDateLastMostviewed();
+      // stores.baseStore.clearHistory();
+      // stores.baseStore.clearFeed();
+      // stores.baseStore.clearMostviewed();
+      // stores.baseStore.clearRelated();
+      // stores.savedStore.clearSaved();
+      // stores.knowbookStore.clearStaticKnowbooks();
+      // stores.knowbookStore.clearKnowbooks();
+      stores.baseStore.init();
+      stores.knowbookStore.init();
+      stores.savedStore.init();
 
       // stores.baseStore.setscreenNoSSR();
       await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(

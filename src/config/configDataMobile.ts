@@ -1,7 +1,6 @@
 const card_size = 220;
 const card_compact_size = "30vw";
-// const card_compact_vizs_size = 120;
-const card_compact_vizs_size = 120;
+const card_compact_vizs_size = 70;
 // const card_size_ = 250;
 // const card_compact_size = card_size_ * 0.8;
 // const card_compact_vizs_size = card_size_ * 0.5;
@@ -9,13 +8,13 @@ const card_compact_vizs_size = 120;
 export const configDataMobile = {
   display: {
     amount_item_displayed: 50,
-    displayFeedIncrement: 5,
+    displayFeedIncrement: 8,
     amount_mostview_for_each_related: 2, //Should be >=1
-    feed_time_increment_ms: 500,
+    feed_time_increment_ms: 200,
   },
-  max_nodes_network: 1,
+  max_nodes_network: 30,
   // min_width_network: 500,
-  heightTopAndBottom: 190,
+  heightTopAndBottom: 200,
   heightArticle: "90vh",
   heightUser: 500,
   heightChangePassword: "45vh",
@@ -80,7 +79,7 @@ export const configDataMobile = {
     smPadding: 1,
     padding: 1,
     title_card_size: "sm",
-    max_title_size: 33,
+    max_title_size: 20,
   },
   About: {
     ratio_page_number: 1300,

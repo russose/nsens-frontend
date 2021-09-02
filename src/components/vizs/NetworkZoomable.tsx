@@ -2,7 +2,6 @@ import { Group } from "@visx/group";
 import { observer } from "mobx-react-lite";
 import dynamic from "next/dynamic";
 import React from "react";
-import { isMobile } from "../../libs/helpersBase";
 import { renderGraph } from "../../libs/helpersGraph";
 import { IStores } from "../../stores/RootStore";
 import MyZoom from "./MyZoom";
@@ -25,14 +24,18 @@ export type INetworkZoomableProps = {
 const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   props
 ) => {
-  const margin = 5;
-  const size_factor = 4; //4
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const max_nodes_network = GUI_CONFIG.display.max_nodes_network;
-  // const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;
 
-  const width = props.width * 0.95 - margin;
-  const height = props.height * 0.95 - margin;
+  // const margin = 5;
+  // const size_factor = 4; //4
+  // const width = props.width * 0.95 - margin;
+  // const height = props.height * 0.95 - margin;
+
+  const margin = 5;
+  const size_factor = 4; //4
+  const width = props.width - margin;
+  const height = props.height - margin;
 
   const amount_nodes = Array.from(
     props.stores.graphStore.relatedMap.values()
@@ -41,7 +44,9 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   }, 0);
   function networkNodeDisplayed(): boolean {
     // return amount_nodes < max_nodes_network;
-    return !isMobile(props.stores) && amount_nodes < max_nodes_network;
+    // return !isMobile(props.stores) && amount_nodes < max_nodes_network;
+    // return true;
+    return amount_nodes < max_nodes_network;
   }
 
   return (

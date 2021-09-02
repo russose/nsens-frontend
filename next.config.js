@@ -4,9 +4,7 @@ const runtimeCaching = require("./runtimeCaching");
 module.exports = withPWA({
   trailingSlash: true,
   reactStrictMode: true,
-  future: {
-    webpack5: true,
-  },
+  unstable_JsPreload: false, // TO BE TESTED TO BE SURE IT IMPROVE THE PERFS
   pwa: {
     dest: "public",
     disable: process.env.NODE_ENV === "development",

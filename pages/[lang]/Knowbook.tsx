@@ -45,7 +45,7 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
           }),
           amount_item_displayed
         )}
-        static={false}
+        // static={false}
       />
     </AppLayout>
   );

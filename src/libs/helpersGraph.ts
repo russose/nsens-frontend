@@ -18,6 +18,7 @@ import {
 import { IStores } from "../stores/RootStore";
 import { api_getItemsFromTitlesFromWebCleanImage_blocking } from "./apiItems";
 import { api_getRelatedFromWebWithoutImage } from "./apiRelated";
+import { isMobile } from "./helpersBase";
 
 export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
   // const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
@@ -245,11 +246,13 @@ export function renderGraph(
         const relatedIds = relatedList.map((related) => {
           return related.item.id;
         });
-        for (const id of relatedIds) {
-          stores.baseStore.setGoodImageInHistoryItem(id);
-          // .then(() => {
-          //   setGraph(root_item, stores, width / 2, height / 2);
-          // });
+        if (!isMobile(stores)) {
+          for (const id of relatedIds) {
+            stores.baseStore.setGoodImageInHistoryItem(id);
+            // .then(() => {
+            //   setGraph(root_item, stores, width / 2, height / 2);
+            // });
+          }
         }
       })
       .then(() => {

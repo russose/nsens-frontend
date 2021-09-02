@@ -21,7 +21,8 @@ const CardAtomGridCompact: React.FunctionComponent<ICardAtomGridCompactProps> =
     const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
     const card_sizes_compact = GUI_CONFIG.display.atom_compact_sizes;
 
-    const path_Itemview = configPaths.pages.ItemArticle;
+    // const path_Itemview = configPaths.pages.ItemArticle;
+    const path_link = configPaths.pages.ItemNetwork;
 
     if (
       props.atoms === undefined ||
@@ -47,7 +48,8 @@ const CardAtomGridCompact: React.FunctionComponent<ICardAtomGridCompactProps> =
                   stores={props.stores}
                   title={item.title}
                   image_url={item.image_url}
-                  pathname={path_Itemview}
+                  // pathname={path_Itemview}
+                  pathname={path_link}
                   queryObject={{ title: item.title, id: item.id }}
                   saved_enabled={props.isItemSaved_handler(item.id)}
                   saved_actionable={props.isItemSavedActionable_handler(

@@ -30,19 +30,36 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
 
   // const display = true;
 
+  const display_viz: boolean = router.pathname.includes(
+    configPaths.pages.ItemNetwork
+  );
+
   const buttons: IButton[] = [
     {
       Id: ButtonIDType.ARTICLE,
+      iconColor: !display_viz
+        ? configGeneral.colors.iconColorDefaultSelected
+        : configGeneral.colors.iconColorDefaultNotSelected,
       // hidden: router.pathname.includes(configPaths.pages.ItemArticle),
     },
     {
       Id: ButtonIDType.VIZS,
+      iconColor: display_viz
+        ? configGeneral.colors.iconColorDefaultSelected
+        : configGeneral.colors.iconColorDefaultNotSelected,
       // hidden: router.pathname.includes(configPaths.pages.ItemNetwork),
+    },
+    {
+      Id: ButtonIDType.SEPARATOR,
+      onClick: undefined,
+      iconColor: configGeneral.colors.iconColorDefaultNotSelected,
+      // iconColor: "white",
+      disabled: true,
     },
     {
       Id: ButtonIDType.SAVE,
       onClick: goUserHandler(props.stores)(),
-      iconColor: configGeneral.colors.iconColorDefault,
+      iconColor: configGeneral.colors.iconColorDefaultNotSelected,
     },
     {
       Id: ButtonIDType.EDIT,
@@ -94,20 +111,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     />
   );
 
-  return (
-    <>
-      {/* {props.isMobile ? (
-        <Box column={12}>{menuBarButton}</Box>
-      ) : (
-        <Box display="flex" direction="column" flex="grow" alignItems="end">
-          <Box padding={0} column={4} smColumn={3} mdColumn={3} lgColumn={2}>
-            {display && menuBarButton}
-          </Box>
-        </Box>
-      )} */}
-      {display && menuBarButton}
-    </>
-  );
+  return <>{display && menuBarButton}</>;
 };
 
 export default observer(MenuBarDisplay);

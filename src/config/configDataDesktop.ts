@@ -10,13 +10,13 @@ const card_compact_vizs_size = 120;
 export const configDataDesktop: configDataDisplay = {
   display: {
     amount_item_displayed: 50,
-    displayFeedIncrement: 10,
+    displayFeedIncrement: 16,
     amount_mostview_for_each_related: 2,
-    feed_time_increment_ms: 500,
+    feed_time_increment_ms: 200,
   },
   max_nodes_network: 110,
   // min_width_network: 500,
-  heightTopAndBottom: 200,
+  heightTopAndBottom: 250,
   heightArticle: "87vh",
   heightUser: 500,
   heightChangePassword: "40vh",

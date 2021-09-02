@@ -10,7 +10,7 @@ export type ICardAtomGridNotLoggedProps = {
   stores: IStores;
   id: string;
   items: IAtom[];
-  static?: boolean;
+  // static?: boolean;
 };
 
 const CardAtomGridNotLogged: React.FunctionComponent<ICardAtomGridNotLoggedProps> =
@@ -28,7 +28,7 @@ const CardAtomGridNotLogged: React.FunctionComponent<ICardAtomGridNotLoggedProps
         }}
         saved_handler={goUserHandler(stores)}
         edit_handler={empty_handler}
-        static={props.static}
+        // static={props.static}
       />
     );
   };

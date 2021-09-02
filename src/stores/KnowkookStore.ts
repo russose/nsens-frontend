@@ -16,6 +16,7 @@ export class KnowkookStore {
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
     makeObservable<KnowkookStore>(this, {
+      init: action,
       setKnowbooks: action,
       clearStaticKnowbooks: action,
       clearKnowbooks: action,
@@ -30,6 +31,12 @@ export class KnowkookStore {
   /**
    * Knowbook
    */
+
+  init() {
+    this.clearStaticKnowbooks();
+    this.clearKnowbooks();
+  }
+
   get knowbooks() {
     return this.$knowbooks;
   }

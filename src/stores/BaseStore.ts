@@ -83,6 +83,7 @@ export class BaseStore {
       $initCompleted: observable,
       $amountFeedDisplayed: observable,
       $increaseFeedDisplayed: observable,
+      init: action,
       setInitCompleted: action,
       setUser: action,
       initAmountFeedDisplayed: action,
@@ -91,6 +92,7 @@ export class BaseStore {
       setHistory: action,
       clearHistory: action,
       setMostviewed: action,
+      clearMostviewed: action,
       clearFeed: action,
       setFeed: action,
       setGoodImageInHistoryItem: action,
@@ -101,6 +103,14 @@ export class BaseStore {
       feedItemsToDisplay: computed,
       mostviewedIds: computed,
     });
+  }
+
+  init() {
+    this.initDateLastMostviewed();
+    this.clearHistory();
+    this.clearFeed();
+    this.clearMostviewed();
+    this.clearRelated();
   }
 
   /**  General **/
@@ -268,6 +278,10 @@ export class BaseStore {
     }
     atoms.forEach((item) => this.$mostviewed.add(item.id));
     this.setHistory(atoms);
+  }
+
+  clearMostviewed(): void {
+    this.$mostviewed.clear();
   }
 
   clearFeed(): void {

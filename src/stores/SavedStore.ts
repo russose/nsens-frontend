@@ -12,12 +12,17 @@ export class SavedStore {
     this.$rootStore = rootStore;
 
     makeObservable<SavedStore>(this, {
+      init: action,
       savedItems: computed,
       setSaved: action,
       clearSaved: action,
       deleteSaved: action,
       allRelatedIdsFromSavedNotSaved: computed,
     });
+  }
+
+  init() {
+    this.clearSaved();
   }
 
   get saved() {

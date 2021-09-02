@@ -59,7 +59,7 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
           stores={stores}
           items={items}
           related_items={related_items}
-          static={true}
+          // static={true}
         />
       </>
     );
@@ -70,7 +70,7 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
           stores={stores}
           items={items}
           related_items={related_items}
-          static={true}
+          // static={true}
         />
       </>
     );

@@ -26,7 +26,7 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
   const path_ = props.path === undefined ? path_empty : props.path;
   const iconColor_ =
     props.iconColor === undefined
-      ? configGeneral.colors.iconColorDefault
+      ? configGeneral.colors.iconColorDefaultNotSelected
       : props.iconColor;
   const disabled_ = props.disabled === undefined ? false : props.disabled;
   const onClick_ = props.onClick === undefined ? () => {} : props.onClick;

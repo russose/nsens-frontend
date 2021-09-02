@@ -34,7 +34,8 @@ export const configGeneral = {
     headers: "white",
     item_color_image: "rgb(220, 220, 220)",
     knowbook_color_image: "rgb(245, 245, 245)",
-    iconColorDefault: "darkGray",
+    iconColorDefaultNotSelected: "darkGray",
+    iconColorDefaultSelected: "red",
   },
   successMessage: "you can now login...",
   loginDuration: 2000,
@@ -165,6 +166,8 @@ export const ICONS = {
   ARTICLE: "menu",
 
   VIZS: "globe",
+
+  SEPARATOR: "dash",
 };
 
 export const configButtonsPath = {
@@ -176,6 +179,7 @@ export const configButtonsPath = {
   EDIT: configPaths.pages.empty,
   ARTICLE: configPaths.pages.ItemArticle,
   VIZS: configPaths.pages.ItemNetwork,
+  SEPARATOR: "",
 };
 
 export const api_issue_text: string = "issue in loging or network";

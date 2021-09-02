@@ -20,6 +20,8 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
   props
 ) => {
   const stores = props.stores;
+
+  //List only updated properties regarding the NotLogged buttons
   const buttons_update: IButton[] = [
     {
       Id: ButtonIDType.ARTICLE,
@@ -28,12 +30,15 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
       Id: ButtonIDType.VIZS,
     },
     {
+      Id: ButtonIDType.SEPARATOR,
+    },
+    {
       Id: ButtonIDType.SAVE,
       onClick: onSaved(stores)(stores.uiStore.selectedAtom.id),
       disabled: !isItemSavedActivated(stores)(stores.uiStore.selectedAtom.id),
       iconColor: isItemSaved(stores)(stores.uiStore.selectedAtom.id)
-        ? "red"
-        : configGeneral.colors.iconColorDefault,
+        ? configGeneral.colors.iconColorDefaultSelected
+        : configGeneral.colors.iconColorDefaultNotSelected,
     },
     {
       Id: ButtonIDType.EDIT,
