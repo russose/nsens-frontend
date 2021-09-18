@@ -20,6 +20,7 @@ import { ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_bloc
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import { readFileJson, writeFileJson } from "./utilsServer";
 
+const amount_data_fetched_items = configFetching.amount_data_fetched_items;
 const testing_mode = is_testing_mode;
 
 export interface IPageStaticArticle extends IPage {
@@ -131,7 +132,7 @@ async function getConfigDataStaticArticles(
       title,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),
-      configFetching.amount_data_fetched_items,
+      amount_data_fetched_items,
       "titles",
       lang,
       exclusion_patterns_items
@@ -166,7 +167,6 @@ export const I_getStaticPaths: GetStaticPaths = async (context) => {
 };
 export const I_getStaticProps: GetStaticProps = async (context) => {
   const data = await getConfigDataStaticArticles(context.params);
-  // const data = {};
   if (!data) {
     return {
       notFound: true,

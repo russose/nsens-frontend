@@ -10,7 +10,6 @@ interface IKnowbookLoggedProps {
   stores: IStores;
   items: IAtom[];
   related_items: IAtom[];
-  // static?: boolean;
 }
 
 const KnowbookLogged: React.FunctionComponent<IKnowbookLoggedProps> = (
@@ -18,7 +17,7 @@ const KnowbookLogged: React.FunctionComponent<IKnowbookLoggedProps> = (
 ) => {
   const stores = props.stores;
   const Related_title =
-    stores.baseStore.GUI_CONFIG.language.knowbooks.Related_title;
+    stores.baseStore.GUI_CONFIG.language.knowbooks_User.Related_title;
 
   let related_component;
   if (props.related_items.length === 0) {

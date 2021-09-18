@@ -38,8 +38,8 @@ const VisibilitySensorFeed: React.FunctionComponent<IVisibilitySensorFeedProps> 
           onEnter={OnEnter(props.stores)}
           onLeave={OnLeave(props.stores)}
         />
-        <Box color="transparent" height="15vh"></Box>
-        {/* <Box color="red" height="15vh"></Box> */}
+        <Box color="transparent" height="25vh"></Box>
+        {/* <Box color="red" height="25vh"></Box> */}
       </>
     );
   };

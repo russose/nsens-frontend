@@ -51,7 +51,19 @@ export const onSearchHomeKeyboard =
 
 /*******************Navigation*************************** */
 
-export const onMenuButtonPath = (buttonId: ButtonIDType): string => {
-  const path = configButtonsPath[buttonId];
-  return path;
-};
+export const onMenuButtonPath =
+  (stores: IStores) =>
+  (buttonId: ButtonIDType): string => {
+    if (buttonId === ButtonIDType.ARTICLE) {
+      const IsInAnyStaticKnowbook: boolean =
+        stores.knowbookStore.allItemsInStaticKnowbooks.has(
+          stores.uiStore.selectedAtom.id
+        );
+
+      if (IsInAnyStaticKnowbook) {
+        return configPaths.pages.StaticArticles;
+      }
+    }
+
+    return configButtonsPath[buttonId];
+  };

@@ -2,6 +2,7 @@ import Router from "next/router";
 import {
   AtomID,
   ConfigDisplay,
+  configGeneral,
   ConfigLanguage,
   configPaths,
   eventT,
@@ -88,9 +89,9 @@ export function setFeedFromSearch(
   api_searchFromWebWithoutImage(searchPattern, lang, exclusion_patterns_items)
     .then((atoms) => {
       stores.baseStore.setModeFeedDisplayedIsSearch(true);
+      stores.baseStore.initAmountFeedDisplayed();
       stores.baseStore.clearFeed();
       stores.baseStore.setFeed(atoms);
-      stores.baseStore.initAmountFeedDisplayed();
     })
     .catch(() => {
       // console.log("error in seach from pattern");
@@ -99,25 +100,18 @@ export function setFeedFromSearch(
 export function setFeedFromMostviewedAndRelated(stores: IStores): void {
   stores.baseStore.setModeFeedDisplayedIsSearch(false);
 
+  stores.baseStore.initAmountFeedDisplayed();
   stores.baseStore.clearFeed();
-  let mixedIds: AtomID[];
-  if (!stores.baseStore.isLogged) {
-    mixedIds = stores.baseStore.mostviewedIds;
-  } else {
-    mixedIds = Mix2Array(
-      stores.baseStore.mostviewedIds,
-      stores.savedStore.allRelatedIdsFromSavedNotSaved,
-      stores.baseStore.GUI_CONFIG.display.display
-        .amount_mostview_for_each_related
-    );
-  }
-  const mixedNoSaved: IAtom[] = removeSavedFromItems(
-    stores,
-    stores.baseStore.getHistoryItems(mixedIds)
+
+  const mixedIds: AtomID[] = Mix2Array(
+    stores.baseStore.mostviewedIds,
+    stores.baseStore.allRelatedIdsForHome,
+    configGeneral.display.amount_mostview_for_each_related
   );
 
-  stores.baseStore.setFeed(mixedNoSaved);
-  stores.baseStore.initAmountFeedDisplayed();
+  const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
+
+  stores.baseStore.setFeed(mixedItems);
 }
 
 export function Mix2Array(

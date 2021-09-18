@@ -1,0 +1,61 @@
+import { observer } from "mobx-react-lite";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
+import React from "react";
+import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
+import KnowbookLogged from "../../src/components/KnowbookLogged";
+import AppLayout from "../../src/components/layout/AppLayout";
+import { configGeneral, IAtom } from "../../src/config/globals";
+import {
+  IPage,
+  I_getStaticPaths,
+  I_getStaticProps,
+} from "../../src/libs/getDataParamsPage";
+import { initializeApp } from "../../src/libs/helpersInitialize";
+import { getRelatedItemsForItemsShuffleSized } from "../../src/libs/helpersRelated";
+import { getKnowbookAtomsList } from "../../src/libs/helpersSavedKnowbooks";
+import { useStores } from "../../src/stores/RootStoreHook";
+
+const Knowbook: React.FunctionComponent<IPage> = (props) => {
+  const stores = useStores();
+  const paramsPage = props.paramsPage;
+  initializeApp(stores, paramsPage);
+  // initializeKnowbooks(stores);
+  if (stores.baseStore.initCompleted.core !== true) {
+    //Not yet initialyzed
+    return <></>;
+  }
+
+  const router = useRouter();
+  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
+  const amount_item_displayed =
+    GUI_CONFIG.display.display.amount_item_displayed;
+  const selected_knowbook = router.query.title as string;
+
+  return (
+    <AppLayout stores={stores}>
+      <SEOHeaderTitle stores={stores} title={selected_knowbook} />
+      <KnowbookLogged
+        stores={stores}
+        items={getKnowbookAtomsList(selected_knowbook, stores)}
+        related_items={getRelatedItemsForItemsShuffleSized(
+          stores,
+          getKnowbookAtomsList(selected_knowbook, stores).map((item: IAtom) => {
+            return item.id;
+          }),
+          amount_item_displayed
+        )}
+        // static={false}
+      />
+    </AppLayout>
+  );
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  return await I_getStaticProps(context);
+};
+export const getStaticPaths: GetStaticPaths = async (context) => {
+  return await I_getStaticPaths(context);
+};
+
+export default observer(Knowbook);

@@ -31,6 +31,22 @@ export function filterAtomListFromPatterns(
   return atomList_filterned;
 }
 
+export function filterTitlesListFromPatterns(
+  TitleList: string[],
+  patterns: string[]
+): string[] {
+  if (TitleList === undefined || TitleList.length === 0) {
+    return [];
+  }
+  let TitleList_filterned: string[] = TitleList;
+  patterns.forEach((pattern: string) => {
+    TitleList_filterned = TitleList_filterned.filter((title) => {
+      return title !== pattern;
+    });
+  });
+  return TitleList_filterned;
+}
+
 export function prepareArticle(article: string): string {
   const href_with_including_a_regex = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/gi;
   const link_open_regex = /<\s*a[^>]*>/gi;
@@ -176,10 +192,21 @@ export function shuffleSized(
   return shuffled_sized;
 }
 
-export function wait() {
+export function waitForMessage(
+  duration_in_seconds: number,
+  message_after: string
+) {
   setTimeout(() => {
-    console.log("after waiting!!!!");
-  }, 5000);
+    console.log(message_after);
+  }, duration_in_seconds);
+}
+
+export function sleep(milliseconds: number) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 }
 
 // export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {
@@ -223,9 +250,22 @@ export function entierAleatoire(min: number, max: number): number {
 //   return Array.from(array_Map.values());
 // }
 
+/************************** Chunk ************************ */
+export function chunk(array: any[], size: number): any[][] {
+  const chunked_arr = [];
+  let index = 0;
+  while (index < array.length) {
+    chunked_arr.push(array.slice(index, size + index));
+    index += size;
+  }
+  return chunked_arr;
+}
+
 export function makeArrayFlat(array: any[]): any[] {
   return [].concat(...array);
 }
+
+/********************************************************** */
 
 export function capitalizeFirstLetter(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);

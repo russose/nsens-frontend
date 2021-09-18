@@ -1,28 +1,16 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { staticKnowbooks } from "../config/configStaticKnowbooks";
-import {
-  ROOT_URL_WIKIMEDIA_TOP_REST,
-  ROOT_URL_WIKIPEDIA_ACTION,
-  ROOT_URL_WIKIPEDIA_REST,
-} from "../config/configURLs";
 import {
   configFetching,
+  ConfigLanguage,
   configPaths,
-  EXCLUSION_PATTERNS,
   IAtom,
-  IRelatedAtomFull,
-  IStaticKnowbookDefinition,
-  is_testing_mode,
 } from "../config/globals";
-import {
-  buildListStringSeparated,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking,
-} from "./fetchBase";
-import { ItemsBestYearFromWikipediaCleanImage_blocking } from "./fetchBestServer";
-import { fetchRelatedCleanImage_blocking } from "./fetchRelated";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
-import { DateToStringWithZero } from "./utils";
-import { readFileJson, writeFileJson } from "./utilsServer";
+import {
+  buildAllStaticKnowbooks,
+  getAllStaticKnowbooks,
+} from "./getDataStaticKnowbooksHelpers";
+import { readFileJson } from "./utilsServer";
 
 export interface IPageStaticKnowbooks extends IPage {
   nameOrPeriod: string;
@@ -30,24 +18,16 @@ export interface IPageStaticKnowbooks extends IPage {
   items?: IAtom[];
 }
 
-function findItemFromstaticKnowbooksDefinition(
-  nameOrPeriod: string
-): IStaticKnowbookDefinition {
-  return staticKnowbooks.filter((item: any) => {
-    return item.nameOrPeriod === nameOrPeriod;
-  })[0];
-}
+const refreshAllStaticKnowbooks =
+  configFetching.staticKnowbooks.refreshAllStaticKnowbooks;
 
-function getAllConfigStaticKnowbooks() {
+async function getAllConfigStaticKnowbooks() {
+  const allStaticKnowbooks = await getAllStaticKnowbooks();
   let guiConfigList: any = [];
-
-  staticKnowbooks.forEach((itemStaticKnowbooks) => {
+  allStaticKnowbooks.forEach((itemStaticKnowbooks) => {
     guiConfigList = guiConfigList.concat(
       getAllConfigGui().map((item_params) => {
-        if (
-          itemStaticKnowbooks.lang === "" ||
-          itemStaticKnowbooks.lang === item_params.params.lang
-        ) {
+        if (itemStaticKnowbooks.lang === item_params.params.lang) {
           return {
             params: {
               ...item_params.params,
@@ -71,134 +51,42 @@ function getAllConfigStaticKnowbooks() {
 async function getConfigDataGuiStaticKnowbooks(
   params: any
 ): Promise<IPageStaticKnowbooks> {
-  const lang = params.lang;
+  const lang: ConfigLanguage = params.lang;
   const display = params.display;
   const nameOrPeriod = params.nameOrPeriod;
-
-  const exclusion_patterns_items: string[] = EXCLUSION_PATTERNS(lang);
 
   const static_path =
     configPaths.static.knowbooks + lang + "/" + nameOrPeriod + ".txt";
 
-  const date = new Date();
-  const current_year = date.getFullYear();
+  // const date = new Date();
+  // const current_year = date.getFullYear();
 
-  if (nameOrPeriod !== DateToStringWithZero(current_year) || is_testing_mode) {
-    try {
-      const staticKnowbook_with_items: any = await readFileJson(static_path);
-      // const staticKnowbook_without_items = {
-      //   nameOrPeriod: staticKnowbook_with_items.nameOrPeriod,
-      //   name_display: staticKnowbook_with_items.name_display,
-      // };
-      // console.log(static_path + " used from cache");
-      const guiConfigDataBestKnowbooks: IPageStaticKnowbooks = {
-        paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
-          .paramsPage,
-        ...staticKnowbook_with_items,
-      };
-      return guiConfigDataBestKnowbooks;
-    } catch {
-      // console.log(static_path + " not found, fetched from internet...");
-    }
+  // Toujours traiter l'année en cours donc ignorer
+  // if (nameOrPeriod !== DateToStringWithZero(current_year) || is_testing_mode) {
+  try {
+    const staticKnowbook_with_items: any = await readFileJson(static_path);
+
+    const guiConfigDataBestKnowbooks: IPageStaticKnowbooks = {
+      paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
+        .paramsPage,
+      ...staticKnowbook_with_items,
+    };
+    return guiConfigDataBestKnowbooks;
+  } catch {
+    console.log(
+      "disk files not found for Static Knowbooks, you need to generate them"
+    );
   }
-
-  let items: IAtom[];
-  if (findItemFromstaticKnowbooksDefinition(nameOrPeriod).items === undefined) {
-    if (!nameOrPeriod.includes("-")) {
-      items = await ItemsBestYearFromWikipediaCleanImage_blocking(
-        nameOrPeriod,
-        "",
-        configFetching.amount_data_fetched_items,
-        ROOT_URL_WIKIMEDIA_TOP_REST(lang),
-        ROOT_URL_WIKIPEDIA_REST(lang),
-        ROOT_URL_WIKIPEDIA_ACTION(lang),
-        lang,
-        exclusion_patterns_items
-      );
-    } else {
-      const years: any[] = nameOrPeriod.split("-");
-      const year_start = years[0];
-      const year_end = years[1];
-      items = await ItemsBestYearFromWikipediaCleanImage_blocking(
-        year_start,
-        year_end,
-        configFetching.amount_data_fetched_items,
-        ROOT_URL_WIKIMEDIA_TOP_REST(lang),
-        ROOT_URL_WIKIPEDIA_REST(lang),
-        ROOT_URL_WIKIPEDIA_ACTION(lang),
-        lang,
-        exclusion_patterns_items
-      );
-    }
-  } else {
-    const list_of_Pages_titles =
-      findItemFromstaticKnowbooksDefinition(nameOrPeriod).items;
-
-    const list_of_Pages_titles_string =
-      buildListStringSeparated(list_of_Pages_titles);
-    items =
-      await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking(
-        list_of_Pages_titles_string,
-        ROOT_URL_WIKIPEDIA_REST(lang),
-        ROOT_URL_WIKIPEDIA_ACTION(lang),
-        configFetching.amount_data_fetched_items,
-        "titles",
-        lang,
-        exclusion_patterns_items
-      );
-
-    let items_with_related: IAtom[] = [];
-    for (const item of items) {
-      const related: IRelatedAtomFull[] = await fetchRelatedCleanImage_blocking(
-        item.id,
-        item.title,
-        configFetching.amount_related,
-        ROOT_URL_WIKIPEDIA_REST(lang),
-        ROOT_URL_WIKIPEDIA_ACTION(lang),
-        lang,
-        exclusion_patterns_items
-      );
-
-      item.related = JSON.stringify(related);
-      items_with_related.push(item);
-    }
-    items = items_with_related;
-  }
-
-  let name_display = "";
-  staticKnowbooks.forEach((staticKnowbook) => {
-    if (staticKnowbook.nameOrPeriod === nameOrPeriod) {
-      name_display =
-        staticKnowbook.display !== undefined
-          ? staticKnowbook.display
-          : staticKnowbook.nameOrPeriod;
-    }
-  });
-
-  const staticKnowbook_with_items: any = {
-    nameOrPeriod: nameOrPeriod,
-    name_display: name_display,
-    items: items,
-  };
-
-  // const staticKnowbook_without_items: any = {
-  //   nameOrPeriod: nameOrPeriod,
-  //   name_display: name_display,
-  // };
-
-  const guiConfigDataBestKnowbooks: IPageStaticKnowbooks = {
-    paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
-      .paramsPage,
-    ...staticKnowbook_with_items,
-  };
-
-  await writeFileJson(static_path, staticKnowbook_with_items);
-
-  return guiConfigDataBestKnowbooks;
+  // }
 }
 
 export const I_getStaticPaths: GetStaticPaths = async (context) => {
-  const paths = getAllConfigStaticKnowbooks();
+  if (refreshAllStaticKnowbooks) {
+    await buildAllStaticKnowbooks();
+  }
+
+  const paths = await getAllConfigStaticKnowbooks();
+
   return {
     paths,
     fallback: false,

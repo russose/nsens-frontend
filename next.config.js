@@ -5,6 +5,9 @@ module.exports = withPWA({
   trailingSlash: true,
   reactStrictMode: true,
   unstable_JsPreload: false, // TO BE TESTED TO BE SURE IT IMPROVE THE PERFS
+  experimental: {
+    staticPageGenerationTimeout: 600000,
+  },
   pwa: {
     dest: "public",
     disable: process.env.NODE_ENV === "development",

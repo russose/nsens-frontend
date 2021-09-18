@@ -1,10 +1,11 @@
-import { observable, action, makeObservable } from "mobx";
+import { observable, action, makeObservable, computed } from "mobx";
 import {
   AtomID,
   ConfigLanguage,
   IKnowbook,
   IKnowbookStatic,
   KnowbookID,
+  StaticKnowbookFamilyType,
 } from "../config/globals";
 import { RootStore } from "./RootStore";
 
@@ -26,6 +27,8 @@ export class KnowkookStore {
       addItemInKnowbook: action,
       removeItemFromKnowbook: action,
       renameKnowbook: action,
+      allItemsInStaticKnowbooks: computed,
+      itemsInStaticKnowbooksForHome: computed,
     });
   }
   /**
@@ -131,5 +134,31 @@ export class KnowkookStore {
     // console.log(knowbook.name);
     this.knowbooks.delete(name);
     this.knowbooks.set(new_name, knowbook);
+  }
+
+  itemsInStaticKnowbooks(ids: KnowbookID[]): Set<AtomID> {
+    const itemsInStaticKnowbooks_ = new Set<AtomID>();
+    for (let knowbookId of ids) {
+      this.staticKnowbooks.get(knowbookId).items.forEach((item) => {
+        itemsInStaticKnowbooks_.add(item.id);
+      });
+    }
+    return itemsInStaticKnowbooks_;
+  }
+
+  get allItemsInStaticKnowbooks(): Set<AtomID> {
+    const knowbookIds: KnowbookID[] = Array.from(this.staticKnowbooks.keys());
+    return this.itemsInStaticKnowbooks(knowbookIds);
+  }
+
+  get itemsInStaticKnowbooksForHome(): Set<AtomID> {
+    const knowbookIds: KnowbookID[] = [];
+    this.staticKnowbooks.forEach((staticknowbook, name) => {
+      if (staticknowbook.type !== StaticKnowbookFamilyType.TREND) {
+        knowbookIds.push(name);
+      }
+    });
+
+    return this.itemsInStaticKnowbooks(knowbookIds);
   }
 }

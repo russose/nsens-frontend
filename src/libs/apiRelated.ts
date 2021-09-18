@@ -13,7 +13,8 @@ import {
   fetchRelatedWithoutImage,
 } from "./fetchRelated";
 
-const amount_related = configFetching.amount_related;
+const amount_related_wikipedia = configFetching.amount_related_wikipedia;
+const amount_max_by_node_wikidata = configFetching.amount_max_by_node_wikidata;
 
 export async function api_getRelatedFromWebWithoutImage(
   itemId: AtomID,
@@ -25,7 +26,8 @@ export async function api_getRelatedFromWebWithoutImage(
     return fetchRelatedWithoutImage(
       itemId,
       title,
-      amount_related,
+      amount_related_wikipedia,
+      amount_max_by_node_wikidata,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),
       lang,
@@ -47,7 +49,8 @@ export async function api_getRelatedFromWebCleanImage_blocking(
     return fetchRelatedCleanImage_blocking(
       itemId,
       title,
-      amount_related,
+      amount_related_wikipedia,
+      amount_max_by_node_wikidata,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),
       lang,

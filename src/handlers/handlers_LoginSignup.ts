@@ -13,7 +13,7 @@ import { initializeApp } from "../libs/helpersInitialize";
 export const onChangeLanguage =
   (stores: IStores, language: ConfigLanguage) => (): void => {
     stores.baseStore.setInitCompleted(initStateCat.core, undefined);
-    stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, undefined);
+    // stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, undefined);
     stores.baseStore.setInitCompleted(initStateCat.userData, undefined);
 
     const paramsPage: IparamsPage = {

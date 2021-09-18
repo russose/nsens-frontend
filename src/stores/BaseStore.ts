@@ -21,6 +21,7 @@ import {
   configDataLanguage,
   IRelatedAtomFull,
   IDate,
+  configGeneral,
 } from "../config/globals";
 import { api_getCleanImageFromWeb_blocking } from "../libs/apiItems";
 import {
@@ -28,12 +29,12 @@ import {
   Mix2Array,
   removeSavedFromItems,
 } from "../libs/helpersBase";
-import { newAtom } from "../libs/utils";
+import { newAtom, shuffleArray } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
 interface IInitState {
   [initStateCat.core]: boolean;
-  [initStateCat.staticKnowbooks]: boolean;
+  // [initStateCat.staticKnowbooks]: boolean;
   [initStateCat.userData]: boolean;
 }
 
@@ -41,7 +42,7 @@ export class BaseStore {
   $rootStore: RootStore;
   private $initCompleted: IInitState = {
     [initStateCat.core]: undefined,
-    [initStateCat.staticKnowbooks]: undefined,
+    // [initStateCat.staticKnowbooks]: undefined,
     [initStateCat.userData]: undefined,
   };
 
@@ -102,6 +103,7 @@ export class BaseStore {
       mostviewedItems: computed,
       feedItemsToDisplay: computed,
       mostviewedIds: computed,
+      allRelatedIdsForHome: computed,
     });
   }
 
@@ -340,15 +342,15 @@ export class BaseStore {
   setIncreaseFeedDisplayed(value: boolean): void {
     this.$increaseFeedDisplayed = value;
   }
-  get amountFeedDisplayed() {
-    return this.$amountFeedDisplayed;
-  }
+  // get amountFeedDisplayed() {
+  //   return this.$amountFeedDisplayed;
+  // }
   incrementAmountFeedDisplayed(): void {
-    let increment = this.$GUI_CONFIG.display.display.displayFeedIncrement;
+    const increment = this.GUI_CONFIG.display.display.displayFeedIncrement;
     this.$amountFeedDisplayed = this.$amountFeedDisplayed + increment;
   }
   initAmountFeedDisplayed() {
-    let increment = this.$GUI_CONFIG.display.display.displayFeedIncrement;
+    const increment = this.GUI_CONFIG.display.display.displayFeedIncrement;
     this.$amountFeedDisplayed = increment;
   }
 
@@ -363,7 +365,7 @@ export class BaseStore {
         if (this.increaseFeedDisplayed) {
           this.incrementAmountFeedDisplayed();
         }
-      }, this.GUI_CONFIG.display.display.feed_time_increment_ms);
+      }, configGeneral.display.feed_time_increment_ms);
     }
 
     const requireFetchNewMostviewed =
@@ -379,21 +381,20 @@ export class BaseStore {
           );
           this.setMostviewed(itemsWithoutSaved);
 
-          let mixedIds: AtomID[];
-          if (!this.isLogged) {
-            mixedIds = this.mostviewedIds;
-          } else {
-            mixedIds = Mix2Array(
-              this.mostviewedIds,
-              this.$rootStore.stores().savedStore
-                .allRelatedIdsFromSavedNotSaved,
-              this.GUI_CONFIG.display.display.amount_mostview_for_each_related
-            );
-          }
-          const mixed: IAtom[] = this.getHistoryItems(mixedIds);
+          // let mixedIds: AtomID[];
+          // if (!this.isLogged) {
+          //   mixedIds = this.mostviewedIds;
+          // } else {
+          const mixedIds: AtomID[] = Mix2Array(
+            this.mostviewedIds,
+            this.allRelatedIdsForHome,
+            configGeneral.display.amount_mostview_for_each_related
+          );
+          // }
+          const mixedItems: IAtom[] = this.getHistoryItems(mixedIds);
 
           // this.setFeed(itemsWithoutSaved);
-          this.setFeed(mixed);
+          this.setFeed(mixedItems);
         })
         .catch(() => {
           // console.log("error in seach from pattern");
@@ -407,6 +408,54 @@ export class BaseStore {
     }
 
     return this.getHistoryItems(itemsId);
+  }
+
+  get allRelatedIdsForHome(): AtomID[] {
+    // const max_items_amount = 200;
+    const min_size_saved_to_display_related = 5;
+
+    if (
+      this.$rootStore.stores().baseStore.isLogged &&
+      this.$rootStore.stores().savedStore.saved.size >
+        min_size_saved_to_display_related
+    ) {
+      // Get all related items of saved items with relation "wikipedia"
+      const ids_shuffled: AtomID[] = shuffleArray(
+        Array.from(this.$rootStore.stores().savedStore.saved)
+      );
+      const output = new Set<AtomID>();
+
+      for (const id of ids_shuffled) {
+        // if (output.size > max_items_amount) {
+        //   break;
+        // }
+        //Only Wikipedia relations
+        const related_only_wikipedia: IRelatedAtom[] = this.$rootStore
+          .stores()
+          .baseStore.related.get(id)
+          .filter((related) => {
+            return related.relation === configGeneral.relation_name_wikipedia;
+          });
+        const relatedItemsIds_only_wikipedia: AtomID[] =
+          related_only_wikipedia.map((related) => {
+            return related.item;
+          });
+        relatedItemsIds_only_wikipedia.forEach((id) => {
+          if (!this.$rootStore.stores().savedStore.saved.has(id)) {
+            output.add(id);
+          }
+        });
+      }
+      return shuffleArray(Array.from(output));
+    } else {
+      const ids_shuffled: AtomID[] = shuffleArray(
+        Array.from(
+          this.$rootStore.stores().knowbookStore.itemsInStaticKnowbooksForHome
+        )
+      );
+
+      return ids_shuffled;
+    }
   }
 
   /**  Related **/

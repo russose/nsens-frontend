@@ -1,29 +1,34 @@
 import { ConfigLanguage, IStaticKnowbookDefinition } from "./globals";
+import { StaticKnowbookFamilyType } from "./types";
 
-export const staticKnowbooks: IStaticKnowbookDefinition[] = [
-  {
-    nameOrPeriod: "Infinis",
-    lang: ConfigLanguage.fr,
-    items: [
-      "Physique quantique",
-      "Relativité générale",
-      "Calculateur quantique",
-      "Infini",
-      "Intrication quantique",
-      "Voie lactée",
-      "Exoplanète",
-      "Système solaire",
-      "Trou noir",
-    ],
-  },
+export const staticTrendFeaturedKnowbooks: IStaticKnowbookDefinition[] = [
+  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2016-2020" },
+  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2021" },
+  // {
+  //   type: StaticKnowbookFamilyType.FEATURED,
+  //   nameOrPeriod: "Infinis",
+  //   lang: ConfigLanguage.fr,
+  //   items: [
+  //     "Physique quantique",
+  //     "Relativité générale",
+  //     "Calculateur quantique",
+  //     "Infini",
+  //     "Intrication quantique",
+  //     "Voie lactée",
+  //     "Exoplanète",
+  //     "Système solaire",
+  //     "Trou noir",
+  //   ],
+  // },
 ];
 
-export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
-  { nameOrPeriod: "2016-2020", lang: "" },
-  { nameOrPeriod: "2021", lang: "" },
+export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
+  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2016-2020" },
+  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2021" },
   {
+    type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Ecologie_Developpement_Durable",
-    display: "Ecologie et Développement Durable",
+    name_display: "Ecologie et Développement Durable",
     lang: ConfigLanguage.fr,
     items: [
       "Classification scientifique des espèces",
@@ -44,6 +49,7 @@ export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
     ],
   },
   {
+    type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Infinis",
     lang: ConfigLanguage.fr,
     items: [
@@ -59,6 +65,7 @@ export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
     ],
   },
   {
+    type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Philosophie",
     lang: ConfigLanguage.fr,
     items: [
@@ -90,6 +97,7 @@ export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
     ],
   },
   {
+    type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Ecologia",
     lang: ConfigLanguage.it,
     items: [
@@ -103,6 +111,7 @@ export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
     ],
   },
   {
+    type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Infinito",
     lang: ConfigLanguage.it,
     items: [
@@ -116,6 +125,7 @@ export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
     ],
   },
   {
+    type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Ecology",
     lang: ConfigLanguage.en,
     items: [
@@ -129,6 +139,7 @@ export const staticKnowbooks_: IStaticKnowbookDefinition[] = [
     ],
   },
   {
+    type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Infinity",
     lang: ConfigLanguage.en,
     items: [

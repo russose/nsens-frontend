@@ -3,20 +3,21 @@ import {
   IAtom,
   JSONDataT,
   AtomID,
-  configFetching,
   IRelatedAtomFull,
+  configGeneral,
+  configFetching,
 } from "../config/globals";
 import { fetch_data_wikidata } from "./fetch";
 import {
-  buildListStringSeparated,
   filterItems,
   improveImageFromWikipediaParallel_blocking,
-  ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage,
+  ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_chunked_Parallel,
   ItemsRelatedFromWikipediaRaw,
   removeBigImages,
 } from "./fetchBase";
 
-const max_size_api = configFetching.max_size_chunk_api;
+const relation_name_wikipedia = configGeneral.relation_name_wikipedia;
+const amount_wikipedia_max = configFetching.amount_wikipedia_max;
 
 /**
  * Interface
@@ -25,7 +26,8 @@ const max_size_api = configFetching.max_size_chunk_api;
 export async function fetchRelatedCleanImage_blocking(
   itemId: AtomID,
   title: string,
-  amount: number,
+  amount_wikipedia: number,
+  amount_max_by_node_wikidata: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
@@ -39,7 +41,8 @@ export async function fetchRelatedCleanImage_blocking(
     await fetchRelatedWithoutImage(
       itemId,
       title,
-      amount,
+      amount_wikipedia,
+      amount_max_by_node_wikidata,
       ROOT_URL_REST_API,
       ROOT_URL_ACTION_API,
       lang,
@@ -58,14 +61,13 @@ export async function fetchRelatedCleanImage_blocking(
 
   const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
     atomsList_filtered,
-    ROOT_URL_ACTION_API,
     ROOT_URL_REST_API,
+    ROOT_URL_ACTION_API,
     lang
   );
 
   const ItemsCleanImageMap = new Map<AtomID, IAtom>();
   atomsListWithImages.forEach((itemCleanImage) => {
-    // const item: IAtom = related_itemWithoutImage.item;
     ItemsCleanImageMap.set(itemCleanImage.id, itemCleanImage);
   });
 
@@ -86,7 +88,8 @@ export async function fetchRelatedCleanImage_blocking(
 export async function fetchRelatedWithoutImage(
   itemId: AtomID,
   title: string,
-  amount: number,
+  amount_wikipedia: number,
+  amount_max_by_node_wikidata: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
@@ -100,21 +103,29 @@ export async function fetchRelatedWithoutImage(
     await ItemsRelatedFromWikipediaWithoutImage(
       title,
       // itemId,
-      amount,
+      amount_wikipedia,
       ROOT_URL_REST_API,
       ROOT_URL_ACTION_API,
       lang,
       exclusion_patterns
     );
 
-  const relatedItems_wikidata: IRelatedAtomFull[] =
+  let relatedItems_wikidata: IRelatedAtomFull[] =
     await ItemsFromWikidataWithoutImage(
       itemId,
+      amount_max_by_node_wikidata,
       // ROOT_URL_REST_API,
       ROOT_URL_ACTION_API,
       lang,
       exclusion_patterns
     );
+
+  if (relatedItems_wikidata.length > amount_wikipedia_max) {
+    relatedItems_wikidata = relatedItems_wikidata.slice(
+      0,
+      amount_wikipedia_max
+    );
+  }
 
   const relatedItems = relatedItems_wikidata.concat(relatedItems_wikipedia);
 
@@ -137,7 +148,7 @@ export async function fetchRelatedWithoutImage(
 
 async function ItemsRelatedFromWikipediaWithoutImage(
   title: string,
-  amount: number,
+  amount_wikipedia: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
@@ -145,26 +156,20 @@ async function ItemsRelatedFromWikipediaWithoutImage(
 ): Promise<IRelatedAtomFull[]> {
   const atomsList = await ItemsRelatedFromWikipediaRaw(
     title,
-    amount,
+    amount_wikipedia,
     ROOT_URL_REST_API,
     ROOT_URL_ACTION_API,
     lang
   );
 
   const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
-  // const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
-  //   atomsList_filtered,
-  //   ROOT_URL_ACTION_API,
-  //   ROOT_URL_REST_API,
-  //   lang
-  // );
 
   const atomsList_filtered_without_images: IAtom[] =
     removeBigImages(atomsList_filtered);
 
   const related: IRelatedAtomFull[] = atomsList_filtered_without_images.map(
     (item: IAtom) => {
-      return { relation: "wikipedia", item: item };
+      return { relation: relation_name_wikipedia, item: item };
     }
   );
 
@@ -173,30 +178,13 @@ async function ItemsRelatedFromWikipediaWithoutImage(
 
 async function ItemsFromWikidataWithoutImage(
   itemId: string,
+  amount_max_by_node_wikidata: number,
   // ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtomFull[]> {
   //
-  async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImageParallel(
-    list_of_PageTitle_string: string[]
-  ): Promise<IAtom[][]> {
-    const myBigPromise = await Promise.all(
-      list_of_PageTitle_string.map((PageTitle_string: string) => {
-        return ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
-          PageTitle_string,
-          // ROOT_URL_REST_API,
-          ROOT_URL_ACTION_API,
-          -1,
-          "titles",
-          lang,
-          exclusion_patterns
-        );
-      })
-    );
-    return myBigPromise;
-  }
 
   if (itemId === undefined) {
     return [];
@@ -211,8 +199,8 @@ async function ItemsFromWikidataWithoutImage(
       return [];
     }
 
-    const mapping_label = new Map<string, string>();
-    const mapping_prop = new Map<string, string>();
+    const mapping_id_label = new Map<string, string>();
+    const mapping_id_prop = new Map<string, string>();
     const mapping_label_prop = new Map<string, string>();
 
     Object.values(result).forEach((item: JSONDataT) => {
@@ -225,35 +213,68 @@ async function ItemsFromWikidataWithoutImage(
         const key = key_list[key_list.length - 1];
         const label = item["EntityLabel"]["value"];
         const prop = item["propLabel"]["value"];
-        mapping_label.set(key, label);
-        mapping_prop.set(key, prop);
+        mapping_id_label.set(key, label);
+        mapping_id_prop.set(key, prop);
         mapping_label_prop.set(label, prop);
       }
     });
 
-    const mapping_label_chunked = chunk(
-      Array.from(mapping_label.values()),
-      max_size_api
-    );
-    const list_of_PageTitle_string = mapping_label_chunked.map(
-      (PageTitle_string: string[]) => {
-        return buildListStringSeparated(PageTitle_string);
+    // IMPORTANT CLEANING TO REMOVE PROPS HAVING TOO MANY LABELS
+    const mapping_prop_amount = new Map<string, number>();
+    mapping_id_prop.forEach((value, key) => {
+      if (!mapping_prop_amount.has(value)) {
+        mapping_prop_amount.set(value, 1);
+      } else {
+        mapping_prop_amount.set(value, mapping_prop_amount.get(value) + 1);
       }
-    );
+    });
+    //Cleaning mapping_prop_amount
+    mapping_prop_amount.forEach((value, key) => {
+      if (mapping_prop_amount.get(key) < amount_max_by_node_wikidata) {
+        mapping_prop_amount.delete(key);
+      }
+    });
+    //Cleaning items mappings for problematic props
+    mapping_prop_amount.forEach((amount, prop_to_be_removed) => {
+      //
+      mapping_label_prop.forEach((prop, label) => {
+        if (prop === prop_to_be_removed) {
+          mapping_label_prop.delete(label);
+        }
+      });
+      //
+      mapping_id_prop.forEach((prop, id) => {
+        if (prop === prop_to_be_removed) {
+          mapping_id_prop.delete(id);
+        }
+      });
+      //
+      mapping_id_label.forEach((label, id) => {
+        if (!mapping_id_prop.has(id)) {
+          mapping_id_label.delete(id);
+        }
+      });
+    });
 
-    const items_chunked: IAtom[][] =
-      await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImageParallel(
-        list_of_PageTitle_string
+    // if (mapping_prop_amount.size !== 0) {
+    //   console.log(mapping_prop_amount);
+    // }
+
+    const items_flat: IAtom[] =
+      await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_chunked_Parallel(
+        Array.from(mapping_id_label.values()),
+        // ROOT_URL_REST_API,
+        ROOT_URL_ACTION_API,
+        lang,
+        exclusion_patterns
       );
-    // const items_flat: IAtom[] = makeArrayFlat(items_chunked)
-    const items_flat: IAtom[] = [].concat(...items_chunked);
 
     let related_items: IRelatedAtomFull[] = items_flat.map((item: IAtom) => {
       if (item === undefined) {
         return undefined;
       }
 
-      const prop_from_id = mapping_prop.get(item["id"]);
+      const prop_from_id = mapping_id_prop.get(item["id"]);
       const prop_from_label = mapping_label_prop.get(item["title"]);
 
       let prop: string;
@@ -310,14 +331,4 @@ function my_sparqlQuery_related(
   group by ?var ?propLabel ?Entity ?EntityLabel order by desc(?propLabel)`;
 
   return sparqlQuery;
-}
-
-function chunk(array: any[], size: number) {
-  const chunked_arr = [];
-  let index = 0;
-  while (index < array.length) {
-    chunked_arr.push(array.slice(index, size + index));
-    index += size;
-  }
-  return chunked_arr;
 }

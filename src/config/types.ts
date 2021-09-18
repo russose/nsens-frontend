@@ -17,7 +17,7 @@ export enum ConfigDisplay {
 export enum initStateCat {
   core = "core",
   // display = "display",
-  staticKnowbooks = "staticKnowbooks",
+  // staticKnowbooks = "staticKnowbooks",
   userData = "userData",
 }
 
@@ -52,7 +52,9 @@ export interface IparamsAtom {
 
 export enum ButtonIDType {
   HOME = "HOME",
-  KNOWBOOKS = "KNOWBOOKS",
+  KNOWBOOKS_USER = "KNOWBOOKS_USER",
+  KNOWBOOKS_FEATURED = "KNOWBOOKS_FEATURED",
+
   LOGIN = "LOGIN",
   INFO = "INFO",
   SAVE = "SAVE",
@@ -112,7 +114,22 @@ export interface IKnowbookFull {
 }
 
 export interface IKnowbookStatic extends IKnowbookFull {
+  type: StaticKnowbookFamilyType;
   name_display: string;
+}
+
+export enum StaticKnowbookFamilyType {
+  FEATURED = "FEATURED",
+  TREND = "TREND",
+  VITAL = "VITAL",
+}
+
+export interface IStaticKnowbookDefinition {
+  type: StaticKnowbookFamilyType;
+  nameOrPeriod: string;
+  name_display?: string;
+  lang?: ConfigLanguage;
+  items?: AtomID[];
 }
 
 export interface IRelatedAtom {
@@ -123,13 +140,6 @@ export interface IRelatedAtom {
 export interface IRelatedAtomFull {
   relation: string;
   item: IAtom;
-}
-
-export interface IStaticKnowbookDefinition {
-  nameOrPeriod: string;
-  display?: string;
-  lang: string | ConfigLanguage;
-  items?: string[];
 }
 
 export enum LogActionType {
@@ -143,13 +153,6 @@ export enum LogActionType {
   createUser = "createUser",
   loginUser = "loginUser",
 }
-
-// export interface INode extends IAtom {
-//   x: number;
-//   y: number;
-//   relation_name: string;
-//   pos: number;
-// }
 
 export interface INode {
   x: number;
@@ -172,7 +175,6 @@ export interface IGraph {
 export interface IFeature {
   title: string;
   description: string;
-  // image_url: string;
   icon: IconT;
 }
 

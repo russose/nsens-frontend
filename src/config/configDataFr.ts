@@ -10,7 +10,7 @@ export const configDataFr = {
   about: {
     // slogan:
     //   "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
-    slogan: "Explorer la connaissance autrement",
+    slogan: "Explorer la Connaissance Libre autrement",
     features: [
       {
         title: "Trouver",
@@ -37,10 +37,15 @@ export const configDataFr = {
       label: "Accueil",
       icon: ICONS.HOME,
     },
-    KNOWBOOKS: {
+    KNOWBOOKS_USER: {
       label: "Carnets",
       icon: ICONS.KNOWBOOKS,
     },
+    KNOWBOOKS_FEATURED: {
+      label: "Sélection",
+      icon: ICONS.FEATURED,
+    },
+
     LOGIN: {
       label: "User",
       icon: ICONS.LOGIN,
@@ -58,23 +63,27 @@ export const configDataFr = {
       icon: ICONS.EDIT,
     },
     ARTICLE: {
-      label: "Article",
+      label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
     VIZS: {
       label: "Vizs",
       icon: ICONS.VIZS,
     },
+
     SEPARATOR: {
       label: "",
       icon: ICONS.SEPARATOR,
     },
   },
-  knowbooks: {
-    knowbooks_title: "Carnets",
+  knowbooks_User: {
+    knowbooks_title: "Mes Carnets",
     AllSaved_title: "Sauvés (tous)",
     None_Title: "Aucun Carnet",
     Related_title: "A découvrir :",
+  },
+  knowbooks_Featured: {
+    knowbooks_title: "Sélection",
   },
   editKnowbook: {
     title: "Mise à jour des carnets",

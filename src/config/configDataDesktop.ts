@@ -9,10 +9,8 @@ const card_compact_vizs_size = 120;
 
 export const configDataDesktop: configDataDisplay = {
   display: {
-    amount_item_displayed: 50,
     displayFeedIncrement: 16,
-    amount_mostview_for_each_related: 2,
-    feed_time_increment_ms: 200,
+    amount_item_displayed: 50,
   },
   max_nodes_network: 110,
   // min_width_network: 500,

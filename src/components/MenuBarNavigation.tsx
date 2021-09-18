@@ -22,7 +22,10 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
       Id: ButtonIDType.HOME,
     },
     {
-      Id: ButtonIDType.KNOWBOOKS,
+      Id: ButtonIDType.KNOWBOOKS_FEATURED,
+    },
+    {
+      Id: ButtonIDType.KNOWBOOKS_USER,
     },
     {
       Id: ButtonIDType.LOGIN,

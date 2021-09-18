@@ -16,7 +16,8 @@ export function prepare_url(root_url: string, params: Object): string {
   return root_url + "?origin=*" + encodeURI(query);
 }
 
-export async function fetch_data_wikipedia_action(
+// let amount_error = 0;
+export async function fetch_data_wiki_action(
   ROOT_URL: string,
   PARAMS: Object,
   output_URL: boolean
@@ -25,6 +26,8 @@ export async function fetch_data_wikipedia_action(
     // headers: { "User-Agent": userAgentString },
     method: "get",
     url: prepare_url(ROOT_URL, PARAMS),
+  }).catch((error: any) => {
+    // console.log("fetching error, amount: ", amount_error++);
   });
 
   const data = await res.data;

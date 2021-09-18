@@ -1,9 +1,15 @@
-import { IAtom, ConfigLanguage, configPaths } from "../config/globals";
+import {
+  IAtom,
+  ConfigLanguage,
+  configPaths,
+  IStaticKnowbookDefinition,
+  configGeneral,
+} from "../config/globals";
 import {
   ItemsFeaturedFromWikipediaWithoutImage,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking,
-  getCleanImage_blocking,
+  improveImageFromWikipediaParallel_blocking,
 } from "./fetchBase";
 import { configFetching } from "../config/globals";
 import {
@@ -24,7 +30,7 @@ export async function api_getCleanImageFromWeb_blocking(
   lang: ConfigLanguage
 ): Promise<IAtom[]> {
   try {
-    const items: IAtom[] = await getCleanImage_blocking(
+    const items: IAtom[] = await improveImageFromWikipediaParallel_blocking(
       atoms,
       ROOT_URL_WIKIPEDIA_REST(lang),
       ROOT_URL_WIKIPEDIA_ACTION(lang),
@@ -108,19 +114,38 @@ export async function api_getItemsFromTitlesFromWebCleanImage_blocking(
   }
 }
 
-export async function api_getStaticKnowbooksLocal(
+export async function api_getStaticKnowbookLocal(
   name: string,
   lang: ConfigLanguage
-): Promise<object> {
+): Promise<IStaticKnowbookDefinition> {
   try {
-    return fetch_data_local(
+    const result: IStaticKnowbookDefinition = (await fetch_data_local(
       configPaths.static.knowbooks.split("/")[1] +
         "/" +
         lang +
         "/" +
         name +
         ".txt"
-    );
+    )) as IStaticKnowbookDefinition;
+
+    return result;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
+}
+
+export async function api_getAllStaticKnowbooksLocal(): Promise<
+  IStaticKnowbookDefinition[]
+> {
+  try {
+    const result: IStaticKnowbookDefinition[] = (await fetch_data_local(
+      configPaths.static.knowbooks.split("/")[1] +
+        "/" +
+        configGeneral.staticKnowbooks.name_allStaticKnowbooks
+    )) as IStaticKnowbookDefinition[];
+
+    return result;
   } catch (error) {
     // console.log(error);
     return [];

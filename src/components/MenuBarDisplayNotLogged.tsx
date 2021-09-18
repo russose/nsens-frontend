@@ -12,7 +12,6 @@ interface IMenuBarDisplayProps {
   stores: IStores;
 
   buttons?: IButton[];
-  // isMobile: boolean;
 }
 
 const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
@@ -27,7 +26,6 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
     router.pathname.includes(configPaths.pages.ItemArticle) ||
     router.pathname.includes(configPaths.pages.ItemNetwork) ||
     router.pathname.includes(configPaths.pages.StaticArticles);
-
   // const display = true;
 
   const display_viz: boolean = router.pathname.includes(

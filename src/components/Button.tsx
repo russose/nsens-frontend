@@ -32,15 +32,9 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
   const onClick_ = props.onClick === undefined ? () => {} : props.onClick;
 
   let query_;
-  if (
-    props.path === configPaths.pages.ItemArticle ||
-    props.path === configPaths.pages.ItemNetwork
-  ) {
-    const paramsItem: IparamsAtom = props.stores.uiStore.selectedAtom;
-    query_ = { ...props.stores.baseStore.paramsPage, ...paramsItem };
-  } else {
-    query_ = props.stores.baseStore.paramsPage;
-  }
+
+  const paramsItem: IparamsAtom = props.stores.uiStore.selectedAtom;
+  query_ = { ...props.stores.baseStore.paramsPage, ...paramsItem };
 
   let labetText = <></>;
   if (props.displayLabel) {

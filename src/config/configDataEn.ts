@@ -10,7 +10,7 @@ export const configDataEn: configDataLanguage = {
   about: {
     // slogan:
     //   "Explore, understand, perform. Maintain the taste of truth and be ready for a fantastic journey...",
-    slogan: "A new way to explore knowledge",
+    slogan: "A new way to explore Open Knowledge",
     features: [
       {
         title: "Find",
@@ -35,10 +35,15 @@ export const configDataEn: configDataLanguage = {
       label: "Home",
       icon: ICONS.HOME,
     },
-    KNOWBOOKS: {
+    KNOWBOOKS_USER: {
       label: "Notebooks",
       icon: ICONS.KNOWBOOKS,
     },
+    KNOWBOOKS_FEATURED: {
+      label: "Featured",
+      icon: ICONS.FEATURED,
+    },
+
     LOGIN: {
       label: "User",
       icon: ICONS.LOGIN,
@@ -56,23 +61,27 @@ export const configDataEn: configDataLanguage = {
       icon: ICONS.EDIT,
     },
     ARTICLE: {
-      label: "Article",
+      label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
     VIZS: {
       label: "Vizs",
       icon: ICONS.VIZS,
     },
+
     SEPARATOR: {
       label: "",
       icon: ICONS.SEPARATOR,
     },
   },
-  knowbooks: {
-    knowbooks_title: "Notebooks",
+  knowbooks_User: {
+    knowbooks_title: "My Notebooks",
     AllSaved_title: "Saved (all)",
     None_Title: "In no notebook",
     Related_title: "Explore :",
+  },
+  knowbooks_Featured: {
+    knowbooks_title: "Featured",
   },
   editKnowbook: {
     title: "Update Notebooks",

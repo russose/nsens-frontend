@@ -1,7 +1,12 @@
 import { configFetching } from "../config/globals";
 import { ConfigLanguage, IAtom, JSONDataT } from "../config/globals";
-import { filterAtomListFromPatterns, newAtom } from "./utils";
-import { fetch_data_wiki_rest, fetch_data_wikipedia_action } from "./fetch";
+import {
+  chunk,
+  filterAtomListFromPatterns,
+  makeArrayFlat,
+  newAtom,
+} from "./utils";
+import { fetch_data_wiki_rest, fetch_data_wiki_action } from "./fetch";
 import { ROOT_URL_WIKIPEDIA_ACTION } from "../config/configURLs";
 
 const amount_data_fetched_related_for_images =
@@ -11,6 +16,8 @@ const ROOT_URL_WIKIPEDIA_EN = ROOT_URL_WIKIPEDIA_ACTION(ConfigLanguage.en);
 const width_image_thumbnail = configFetching.width_image_thumbnail;
 
 const cache_duration_in_sec = configFetching.cache_duration_in_sec;
+
+const max_size_api = configFetching.max_size_chunk_api;
 
 /**
  * Interfaces
@@ -24,25 +31,6 @@ export function removeBigImages(items: IAtom[]): IAtom[] {
   });
 
   return items_without_image;
-}
-
-export async function getCleanImage_blocking(
-  atomsList: IAtom[],
-  ROOT_URL_REST_API: string,
-  ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage
-): Promise<IAtom[]> {
-  if (atomsList === undefined || atomsList.length === 0) {
-    return [];
-  }
-
-  const atomsWithCleanImage = await improveImageFromWikipediaParallel_blocking(
-    atomsList,
-    ROOT_URL_ACTION_API,
-    ROOT_URL_REST_API,
-    lang
-  );
-  return atomsWithCleanImage;
 }
 
 export function filterItems(
@@ -63,6 +51,35 @@ export function filterItems(
   );
 
   return atomsList_filtered;
+}
+
+export async function improveImageFromWikipediaParallel_blocking(
+  atomsList: IAtom[],
+  ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
+  lang: ConfigLanguage
+): Promise<IAtom[]> {
+  if (atomsList === undefined || atomsList.length === 0) {
+    return [];
+  }
+
+  const myBigPromise = await Promise.all(
+    atomsList.map((item: IAtom) => {
+      return improveImageFromWikipedia_blocking(
+        item,
+        ROOT_URL_REST_API,
+        ROOT_URL_ACTION_API,
+        lang
+      );
+      // .catch((e) => {
+      //   console.log(e);
+      //   console.log(" => error in Promise All fetchRelatedCleanImage_blocking");
+      //   return undefined;
+      // });
+    })
+  );
+
+  return myBigPromise;
 }
 
 export async function ItemsFeaturedFromWikipediaWithoutImage(
@@ -122,6 +139,55 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWi
   return atomsList_filtered_without_images;
 }
 
+export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_chunked_Parallel(
+  itemTitles: string[],
+  // ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
+  lang: ConfigLanguage,
+  exclusion_patterns: string[]
+): Promise<IAtom[]> {
+  async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_Parallel(
+    list_of_PageTitle_string: string[]
+  ): Promise<IAtom[][]> {
+    const myBigPromise = await Promise.all(
+      list_of_PageTitle_string.map((PageTitle_string: string) => {
+        return ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
+          PageTitle_string,
+          // ROOT_URL_REST_API,
+          ROOT_URL_ACTION_API,
+          -1,
+          "titles",
+          lang,
+          exclusion_patterns
+        );
+        // .catch((e) => {
+        //   console.log(e);
+        //   console.log(" => error in Promise All 3");
+        //   return undefined;
+        // });
+      })
+    );
+    return myBigPromise;
+  }
+
+  const itemTitles_chunked: string[][] = chunk(itemTitles, max_size_api);
+
+  const list_of_PageTitle_string = itemTitles_chunked.map(
+    (PageTitle_string: string[]) => {
+      return buildListStringSeparated(PageTitle_string);
+    }
+  );
+
+  const items_chunked: IAtom[][] =
+    await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_Parallel(
+      list_of_PageTitle_string
+    );
+
+  const items_flat: IAtom[] = makeArrayFlat(items_chunked);
+
+  return items_flat;
+}
+
 export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking(
   pattern_or_titles: string,
   ROOT_URL_REST_API: string,
@@ -132,21 +198,6 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCl
   lang: ConfigLanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
-  // const list_of_PageIds = await idsFromSearchOrRandomOrTitlesFromWikipedia(
-  //   pattern_or_titles,
-  //   ROOT_URL_ACTION_API,
-  //   nb_items,
-  //   mode
-  // );
-
-  // const list_of_Pages_string = buildListStringSeparated(list_of_PageIds);
-  // const atomsList = await getAtomsFromWikipediaAction(
-  //   list_of_Pages_string,
-  //   ROOT_URL_ACTION_API,
-  //   lang
-  // );
-  // const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
-
   const atomsList_filtered =
     await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
       pattern_or_titles,
@@ -159,8 +210,8 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCl
 
   const atomsListWithImages = await improveImageFromWikipediaParallel_blocking(
     atomsList_filtered,
-    ROOT_URL_ACTION_API,
     ROOT_URL_REST_API,
+    ROOT_URL_ACTION_API,
     lang
   );
 
@@ -242,7 +293,7 @@ async function idsFromSearchOrRandomOrTitlesFromWikipedia(
   }
 
   try {
-    const data = await fetch_data_wikipedia_action(
+    const data = await fetch_data_wiki_action(
       ROOT_URL_ACTION_API,
       PARAMS,
       false
@@ -363,7 +414,7 @@ async function getAtomsFromWikipediaAction(
       maxage: cache_duration_in_sec, //1 semaine pour le cache
     };
 
-    const data = await fetch_data_wikipedia_action(
+    const data = await fetch_data_wiki_action(
       ROOT_URL_ACTION_API,
       PARAMS,
       false
@@ -462,7 +513,7 @@ async function getAllPageImagesReducedFromWikipediaAction(
       maxage: cache_duration_in_sec, //1 semaine pour le cache
     };
 
-    const data = await fetch_data_wikipedia_action(
+    const data = await fetch_data_wiki_action(
       ROOT_URL_ACTION_API,
       PARAMS,
       false
@@ -498,14 +549,16 @@ async function getAllPageImagesReducedFromWikipediaAction(
 }
 
 async function improveImageFromWikipedia_blocking(
-  item: IAtom,
-  ROOT_URL_ACTION_API: string,
+  item_input: IAtom,
   ROOT_URL_REST_API: string,
+  ROOT_URL_ACTION_API: string,
   lang: ConfigLanguage
 ): Promise<IAtom> {
-  if (item === undefined) {
-    return item;
+  if (item_input === undefined) {
+    return item_input;
   }
+
+  const item = { ...item_input };
 
   function isValidImage(image: IImage): boolean {
     // ["jpg", "JPG", "png", "PNG", "tif", "TIF", "svg", "SVG"]
@@ -662,33 +715,6 @@ async function improveImageFromWikipedia_blocking(
   item.image_width = best_image.thumbwidth;
 
   return item;
-}
-
-export async function improveImageFromWikipediaParallel_blocking(
-  list_information_atoms: IAtom[],
-  ROOT_URL_ACTION_API: string,
-  ROOT_URL_REST_API: string,
-  lang: ConfigLanguage
-): Promise<IAtom[]> {
-  if (
-    list_information_atoms === undefined ||
-    list_information_atoms.length === 0
-  ) {
-    return [];
-  }
-
-  const myBigPromise = await Promise.all(
-    list_information_atoms.map((item: IAtom) => {
-      return improveImageFromWikipedia_blocking(
-        item,
-        ROOT_URL_ACTION_API,
-        ROOT_URL_REST_API,
-        lang
-      );
-    })
-  );
-
-  return myBigPromise;
 }
 
 /**

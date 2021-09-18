@@ -10,7 +10,7 @@ export const configDataIt: configDataLanguage = {
   about: {
     // slogan:
     //   "Esplorare, capire, agire. Lasciarsi trasportare gustandosi la ricerca...",
-    slogan: "Esplora la conoscenza in un modo nuovo",
+    slogan: "Esplora la conoscenza libera in un modo nuovo",
     features: [
       {
         title: "Trova",
@@ -35,10 +35,15 @@ export const configDataIt: configDataLanguage = {
       label: "Home",
       icon: ICONS.HOME,
     },
-    KNOWBOOKS: {
+    KNOWBOOKS_USER: {
       label: "Documenti",
       icon: ICONS.KNOWBOOKS,
     },
+    KNOWBOOKS_FEATURED: {
+      label: "Speciale",
+      icon: ICONS.FEATURED,
+    },
+
     LOGIN: {
       label: "Utente",
       icon: ICONS.LOGIN,
@@ -56,23 +61,27 @@ export const configDataIt: configDataLanguage = {
       icon: ICONS.EDIT,
     },
     ARTICLE: {
-      label: "Articolo",
+      label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
     VIZS: {
       label: "Vizs",
       icon: ICONS.VIZS,
     },
+
     SEPARATOR: {
       label: "",
       icon: ICONS.SEPARATOR,
     },
   },
-  knowbooks: {
-    knowbooks_title: "Documenti",
+  knowbooks_User: {
+    knowbooks_title: "I Miei Documenti",
     AllSaved_title: "Salvati (tutti)",
     None_Title: "Nessun Documento",
     Related_title: "Da scoprire :",
+  },
+  knowbooks_Featured: {
+    knowbooks_title: "Selezione",
   },
   editKnowbook: {
     title: "Aggiorna documenti",
