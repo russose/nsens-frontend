@@ -5,7 +5,7 @@ import React from "react";
 import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
 import KnowbookLogged from "../../src/components/KnowbookLogged";
 import AppLayout from "../../src/components/layout/AppLayout";
-import { configGeneral, IAtom } from "../../src/config/globals";
+import { IAtom } from "../../src/config/globals";
 import {
   IPage,
   I_getStaticPaths,
@@ -15,6 +15,7 @@ import { initializeApp } from "../../src/libs/helpersInitialize";
 import { getRelatedItemsForItemsShuffleSized } from "../../src/libs/helpersRelated";
 import { getKnowbookAtomsList } from "../../src/libs/helpersSavedKnowbooks";
 import { useStores } from "../../src/stores/RootStoreHook";
+import ContentLoading from "../../src/components/ContentLoading";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -23,13 +24,13 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
   // initializeKnowbooks(stores);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const router = useRouter();
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const amount_item_displayed =
-    GUI_CONFIG.display.display.amount_item_displayed;
+  const amount_related_displayed =
+    GUI_CONFIG.display.display.amount_related_displayed;
   const selected_knowbook = router.query.title as string;
 
   return (
@@ -43,7 +44,7 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
           getKnowbookAtomsList(selected_knowbook, stores).map((item: IAtom) => {
             return item.id;
           }),
-          amount_item_displayed
+          amount_related_displayed
         )}
         // static={false}
       />

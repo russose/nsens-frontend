@@ -18,6 +18,7 @@ import {
 } from "../../src/handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../src/handlers/handlers_Knowbooks";
 import { initializeApp } from "../../src/libs/helpersInitialize";
+import ContentLoading from "../../src/components/ContentLoading";
 
 const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -26,10 +27,10 @@ const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
   // initializeKnowbooks(stores);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const title = GUI_CONFIG.language.knowbooks_User.AllSaved_title;
+  const title = GUI_CONFIG.language.SEO.title_description.KnowbookSaved.title;
 
   return (
     <AppLayout stores={stores}>

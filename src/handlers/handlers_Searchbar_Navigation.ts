@@ -1,5 +1,5 @@
 import {
-  ButtonIDType,
+  TButtonID,
   configButtonsPath,
   configPaths,
   eventT,
@@ -53,15 +53,15 @@ export const onSearchHomeKeyboard =
 
 export const onMenuButtonPath =
   (stores: IStores) =>
-  (buttonId: ButtonIDType): string => {
-    if (buttonId === ButtonIDType.ARTICLE) {
+  (buttonId: TButtonID): string => {
+    if (buttonId === TButtonID.ARTICLE) {
       const IsInAnyStaticKnowbook: boolean =
         stores.knowbookStore.allItemsInStaticKnowbooks.has(
           stores.uiStore.selectedAtom.id
         );
 
       if (IsInAnyStaticKnowbook) {
-        return configPaths.pages.StaticArticles;
+        return configPaths.pages.StaticArticle;
       }
     }
 

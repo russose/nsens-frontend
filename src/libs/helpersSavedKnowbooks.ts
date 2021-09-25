@@ -1,6 +1,6 @@
 import {
   AtomID,
-  ConfigLanguage,
+  Tlanguage,
   EXCLUSION_PATTERNS,
   IAtom,
   IKnowbook,
@@ -60,7 +60,7 @@ export function addSaved(itemId: AtomID, stores: IStores): void {
 function performSavedWithRelated(
   stores: IStores,
   item: IAtom,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): void {
   if (item === undefined) {

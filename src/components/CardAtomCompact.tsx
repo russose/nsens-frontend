@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
-import { AtomID, ButtonIDType, handlerT, IconT } from "../config/globals";
+import { AtomID, TButtonID, handlerT, IconT } from "../config/globals";
 import CardGenericCompact from "./CardGenericCompact";
 import { IStores } from "../stores/RootStore";
 import { configGeneral } from "../config/globals";
@@ -43,7 +43,7 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
       <Box paddingX={0}>
         <IconButton
           accessibilityLabel="save"
-          icon={buttons_all[ButtonIDType.SAVE].icon as IconT}
+          icon={buttons_all[TButtonID.SAVE].icon as IconT}
           iconColor={
             props.saved_enabled
               ? (configGeneral.colors.iconColorDefaultSelected as any)
@@ -58,7 +58,7 @@ const CardAtomCompact: React.FunctionComponent<ICardAtomCompactProps> = (
         {props.saved_enabled && (
           <IconButton
             accessibilityLabel="edit"
-            icon={buttons_all[ButtonIDType.EDIT].icon as IconT}
+            icon={buttons_all[TButtonID.EDIT].icon as IconT}
             iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
             size={size_icon}
             onClick={props.edit_handler}

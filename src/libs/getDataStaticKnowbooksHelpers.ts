@@ -8,13 +8,14 @@ import {
 import {
   configFetching,
   configGeneral,
-  ConfigLanguage,
+  Tlanguage,
   configPaths,
   EXCLUSION_PATTERNS,
   IAtom,
   IRelatedAtomFull,
   IStaticKnowbookDefinition,
   StaticKnowbookFamilyType,
+  languages_activated,
 } from "../config/globals";
 import {
   improveImageFromWikipediaParallel_blocking,
@@ -35,9 +36,9 @@ const amount_best = configFetching.staticKnowbooks.amount_best;
 
 const start_time_all = Date.now();
 
-async function getKnowbookFromAllStaticKnowbooks(
+export async function getKnowbookFromAllStaticKnowbooks(
   nameOrPeriod: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   allStaticKnowbooks: IStaticKnowbookDefinition[]
 ): Promise<IStaticKnowbookDefinition> {
   return allStaticKnowbooks.filter((item: IStaticKnowbookDefinition) => {
@@ -53,22 +54,31 @@ export async function getAllStaticKnowbooks(): Promise<
   let allStaticKnowbooks: IStaticKnowbookDefinition[];
   const name_allStaticKnowbooks =
     configGeneral.staticKnowbooks.name_allStaticKnowbooks;
-  const allStaticKnowbooks_path =
-    configPaths.static.knowbooks + name_allStaticKnowbooks;
+  const allStaticKnowbooks_path_base =
+    // configPaths.static.knowbooks_location + name_allStaticKnowbooks;
+    configPaths.static.knowbooks_location;
 
   try {
     allStaticKnowbooks = (await readFileJson(
-      allStaticKnowbooks_path
+      allStaticKnowbooks_path_base,
+      name_allStaticKnowbooks
     )) as IStaticKnowbookDefinition[];
 
     return allStaticKnowbooks;
   } catch {
-    console.log(" =>", allStaticKnowbooks_path, "not found..., generate it...");
+    console.log(
+      " =>",
+      allStaticKnowbooks_path_base + name_allStaticKnowbooks,
+      "not found..., generate it..."
+    );
 
     allStaticKnowbooks = [];
     const topLevelPattern_ =
       configGeneral.staticKnowbooks.vitalKnowbooks_topLevelPattern;
-    const languages_list = Object.values(ConfigLanguage);
+    // const languages_list = Object.values(Tlanguage);
+    const languages_list = Object.values(Tlanguage).filter((language) => {
+      return languages_activated.includes(language);
+    });
 
     const staticTrendFeaturedKnowbooks_ = staticTrendFeaturedKnowbooks;
 
@@ -121,14 +131,22 @@ export async function getAllStaticKnowbooks(): Promise<
     const allStaticKnowbooks_Vitals =
       await buildVitalStaticKnowbooksAllLanguages(
         topLevelPattern_,
-        ROOT_URL_WIKIPEDIA_ACTION(ConfigLanguage.en),
+        ROOT_URL_WIKIPEDIA_ACTION(Tlanguage.en),
         URLs.ROOT_URL_WIKIDATA_ACTION,
         languages_list
       );
     allStaticKnowbooks = allStaticKnowbooks.concat(allStaticKnowbooks_Vitals);
 
-    await writeFileJson(allStaticKnowbooks_path, allStaticKnowbooks);
-    console.log(" =>", allStaticKnowbooks_path, "saved on disk");
+    await writeFileJson(
+      allStaticKnowbooks_path_base,
+      name_allStaticKnowbooks,
+      allStaticKnowbooks
+    );
+    console.log(
+      " =>",
+      allStaticKnowbooks_path_base + name_allStaticKnowbooks,
+      "saved on disk"
+    );
     await sleep(sleep_in_ms);
     return allStaticKnowbooks;
   }
@@ -138,7 +156,7 @@ async function addImagesAndGetRelatedCleanImage_chunked_Parallel(
   list_of_items: IAtom[],
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   async function treatment(item_: IAtom): Promise<IAtom> {
@@ -206,19 +224,20 @@ async function addImagesAndGetRelatedCleanImage_chunked_Parallel(
 
 async function buildOneStaticKnowbooks(
   nameOrPeriod: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   allStaticKnowbooks: IStaticKnowbookDefinition[]
 ): Promise<void> {
   const exclusion_patterns: string[] = EXCLUSION_PATTERNS(lang);
-  const static_path =
-    configPaths.static.knowbooks + lang + "/" + nameOrPeriod + ".txt";
+  const static_path_base = configPaths.static.knowbooks_location + lang + "/";
+  //  + nameOrPeriod + ".txt";
+  const static_name = nameOrPeriod + ".txt";
 
   try {
-    await readFileJson(static_path);
-    console.log(static_path, "already exist, skipping...");
+    await readFileJson(static_path_base, static_name);
+    console.log(static_path_base + static_name, "already exist, skipping...");
     return;
   } catch {
-    console.log(static_path, "creation...");
+    console.log(static_path_base + static_name, "creation...");
   }
 
   const start_time = Date.now();
@@ -273,7 +292,7 @@ async function buildOneStaticKnowbooks(
     items: items,
   };
 
-  await writeFileJson(static_path, staticKnowbook_with_items);
+  await writeFileJson(static_path_base, static_name, staticKnowbook_with_items);
 
   console.log("**** Summary Page *********");
   console.log(nameOrPeriod);

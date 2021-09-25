@@ -1,4 +1,4 @@
-import { IAtom, AtomID, IKnowbook, ConfigLanguage } from "../config/globals";
+import { IAtom, AtomID, IKnowbook, Tlanguage } from "../config/globals";
 import { my_api } from "./fetch";
 
 /**
@@ -17,7 +17,7 @@ export async function api_save(atom: IAtom): Promise<IAtom> {
 
 export async function api_unsave(
   itemId: AtomID,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IAtom> {
   try {
     const res = await my_api(
@@ -32,7 +32,7 @@ export async function api_unsave(
   }
 }
 
-export async function api_getSavedList(lang: ConfigLanguage): Promise<IAtom[]> {
+export async function api_getSavedList(lang: Tlanguage): Promise<IAtom[]> {
   try {
     const res = await my_api("get", "/saved" + "/" + lang, {});
     return res.data;
@@ -46,7 +46,7 @@ export async function api_getSavedList(lang: ConfigLanguage): Promise<IAtom[]> {
  */
 
 export async function api_getKnowbooksList(
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IKnowbook[]> {
   try {
     const res = await my_api("get", "/knowbooks/OnlyIds" + "/" + lang, {});
@@ -59,7 +59,7 @@ export async function api_getKnowbooksList(
 
 export async function api_addKnowbook(
   name: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<string> {
   try {
     const knowbook = { name: name, language: lang };
@@ -74,7 +74,7 @@ export async function api_addKnowbook(
 export async function api_renameKnowbook(
   name: string,
   new_name: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<string> {
   try {
     const res = await my_api(
@@ -91,7 +91,7 @@ export async function api_renameKnowbook(
 
 export async function api_removeKnowbook(
   name: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<string> {
   try {
     const res = await my_api("delete", "/knowbooks/" + lang + "/" + name, {});
@@ -118,7 +118,7 @@ export async function api_removeKnowbook(
 export async function api_addItemInKnowbook(
   name: string,
   id: AtomID,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IKnowbook | undefined> {
   try {
     const res = await my_api(
@@ -136,7 +136,7 @@ export async function api_addItemInKnowbook(
 export async function api_removeItemFromKnowbook(
   name: string,
   id: AtomID,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IKnowbook> {
   try {
     const res = await my_api(

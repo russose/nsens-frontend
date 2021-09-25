@@ -1,12 +1,12 @@
 import { createMedia } from "@artsy/fresnel";
-import { ConfigDisplay } from "./types";
+import { TDisplay } from "./types";
 
 const AppMedia = createMedia({
   breakpoints: {
-    [ConfigDisplay.mobile]: 0,
-    [ConfigDisplay.desktop]: 640,
-    [ConfigDisplay.large]: 1400,
-    [ConfigDisplay.extra]: 2500,
+    [TDisplay.mobile]: 0,
+    [TDisplay.desktop]: 640,
+    [TDisplay.large]: 1400,
+    [TDisplay.extra]: 2500,
   },
 });
 

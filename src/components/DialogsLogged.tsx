@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite";
 import { IStores } from "../stores/RootStore";
 import DialogEditKnowbooks from "./DialogEditKnowbooks";
 import DialogRenameKnowbooks from "./DialogRenameKnowbooks";
-import DialogLoading from "./DialogLoading";
 
 interface IDialogsLoggedProps {
   stores: IStores;
@@ -16,7 +15,6 @@ const DialogsLogged: React.FunctionComponent<IDialogsLoggedProps> = (props) => {
     <>
       <DialogEditKnowbooks stores={stores} />
       <DialogRenameKnowbooks stores={stores} />
-      <DialogLoading stores={stores} />
     </>
   );
 };

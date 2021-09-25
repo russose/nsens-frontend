@@ -15,10 +15,10 @@ import {
   IparamsPage,
   IRelatedAtom,
   IUser,
-  ConfigDisplay,
+  TDisplay,
   initStateCat,
-  ConfigLanguage,
-  configDataLanguage,
+  Tlanguage,
+  TconfigDataLanguage,
   IRelatedAtomFull,
   IDate,
   configGeneral,
@@ -163,22 +163,22 @@ export class BaseStore {
     return this.$GUI_CONFIG;
   }
 
-  setGUICONFIGFromDisplay(display: ConfigDisplay) {
+  setGUICONFIGFromDisplay(display: TDisplay) {
     if (display === this.$GUI_CONFIG.currentDisplay) {
       return;
     }
 
-    if (display === ConfigDisplay.mobile) {
+    if (display === TDisplay.mobile) {
       this.$GUI_CONFIG.display = configDataMobile;
-    } else if (display === ConfigDisplay.desktop) {
+    } else if (display === TDisplay.desktop) {
       this.$GUI_CONFIG.display = configDataDesktop;
-    } else if (display === ConfigDisplay.large) {
+    } else if (display === TDisplay.large) {
       this.$GUI_CONFIG.display = configDataDesktop;
       this.$GUI_CONFIG.display.atom_sizes.lgColumn =
         configDataSpecialScreen.large.atom_sizes_column;
       this.$GUI_CONFIG.display.knowbook_sizes.lgColumn =
         configDataSpecialScreen.large.knowbook_sizes_column;
-    } else if (display === ConfigDisplay.extra) {
+    } else if (display === TDisplay.extra) {
       this.$GUI_CONFIG.display = configDataDesktop;
       // GUI_CONFIG__.display.About.features.lgColumn =
       //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
@@ -196,15 +196,15 @@ export class BaseStore {
       return;
     }
     const lang = paramsPage.lang;
-    let configDataLang: configDataLanguage;
+    let configDataLang: TconfigDataLanguage;
 
-    if (lang === ConfigLanguage.fr) {
+    if (lang === Tlanguage.fr) {
       const configDataFr = await import("../config/configDataFr");
       configDataLang = configDataFr.configDataFr;
-    } else if (lang === ConfigLanguage.it) {
+    } else if (lang === Tlanguage.it) {
       const configDataIt = await import("../config/configDataIt");
       configDataLang = configDataIt.configDataIt;
-    } else if (lang === ConfigLanguage.en) {
+    } else if (lang === Tlanguage.en) {
       const configDataEn = await import("../config/configDataEn");
       configDataLang = configDataEn.configDataEn;
     }
@@ -430,22 +430,26 @@ export class BaseStore {
         //   break;
         // }
         //Only Wikipedia relations
-        const related_only_wikipedia: IRelatedAtom[] = this.$rootStore
-          .stores()
-          .baseStore.related.get(id)
-          .filter((related) => {
-            return related.relation === configGeneral.relation_name_wikipedia;
+
+        if (this.$rootStore.stores().baseStore.related.get(id) !== undefined) {
+          const related_only_wikipedia: IRelatedAtom[] = this.$rootStore
+            .stores()
+            .baseStore.related.get(id)
+            .filter((related) => {
+              return related.relation === configGeneral.relation_name_wikipedia;
+            });
+          const relatedItemsIds_only_wikipedia: AtomID[] =
+            related_only_wikipedia.map((related) => {
+              return related.item;
+            });
+          relatedItemsIds_only_wikipedia.forEach((id) => {
+            if (!this.$rootStore.stores().savedStore.saved.has(id)) {
+              output.add(id);
+            }
           });
-        const relatedItemsIds_only_wikipedia: AtomID[] =
-          related_only_wikipedia.map((related) => {
-            return related.item;
-          });
-        relatedItemsIds_only_wikipedia.forEach((id) => {
-          if (!this.$rootStore.stores().savedStore.saved.has(id)) {
-            output.add(id);
-          }
-        });
+        }
       }
+
       return shuffleArray(Array.from(output));
     } else {
       const ids_shuffled: AtomID[] = shuffleArray(

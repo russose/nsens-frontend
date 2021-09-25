@@ -10,9 +10,8 @@ import {
   onSearchHomeText,
   onTapLogo,
 } from "../../handlers/handlers_Searchbar_Navigation";
-import DialogLoading from "../DialogLoading";
 import { IStores } from "../../stores/RootStore";
-import { ConfigDisplay, configPaths } from "../../config/globals";
+import { TDisplay, configPaths } from "../../config/globals";
 import dynamic from "next/dynamic";
 import MenuBarDisplayNotLogged from "../MenuBarDisplayNotLogged";
 
@@ -25,7 +24,7 @@ const MenuBarDisplayLoggedDynamic = dynamic(
 
 interface IAppLayoutProps {
   stores: IStores;
-  display: ConfigDisplay;
+  display: TDisplay;
 }
 
 const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
@@ -126,9 +125,9 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
       <PageLayoutHybrid stores={stores} top={top_desktop} bottom={<></>}>
         {display_desktop}
         {props.children}
+        {dialogs_Logged}
       </PageLayoutHybrid>
-      <DialogLoading stores={stores} />
-      {dialogs_Logged}
+      {/* {dialogs_Logged} */}
     </>
   );
 };

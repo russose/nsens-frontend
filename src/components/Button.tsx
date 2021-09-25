@@ -31,10 +31,13 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
   const disabled_ = props.disabled === undefined ? false : props.disabled;
   const onClick_ = props.onClick === undefined ? () => {} : props.onClick;
 
-  let query_;
-
   const paramsItem: IparamsAtom = props.stores.uiStore.selectedAtom;
-  query_ = { ...props.stores.baseStore.paramsPage, ...paramsItem };
+  const query_ =
+    path_.includes(configPaths.pages.ItemArticle) ||
+    path_.includes(configPaths.pages.ItemNetwork) ||
+    path_.includes(configPaths.pages.StaticArticle)
+      ? { ...props.stores.baseStore.paramsPage, ...paramsItem }
+      : { ...props.stores.baseStore.paramsPage };
 
   let labetText = <></>;
   if (props.displayLabel) {

@@ -1,7 +1,7 @@
 import { observable, action, makeObservable, computed } from "mobx";
 import {
   AtomID,
-  ConfigLanguage,
+  Tlanguage,
   IKnowbook,
   IKnowbookStatic,
   KnowbookID,
@@ -75,7 +75,7 @@ export class KnowkookStore {
   addItemInKnowbook(
     knowbookID: KnowbookID,
     atomId: AtomID,
-    lang: ConfigLanguage
+    lang: Tlanguage
   ): void {
     if (!this.$knowbooks.has(knowbookID)) {
       return;
@@ -99,7 +99,7 @@ export class KnowkookStore {
   removeItemFromKnowbook(
     knowbookID: KnowbookID,
     atomId: AtomID,
-    lang: ConfigLanguage
+    lang: Tlanguage
   ): void {
     if (!this.$knowbooks.has(knowbookID)) {
       return;

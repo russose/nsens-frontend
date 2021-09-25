@@ -25,7 +25,7 @@ const CardKnowGridStatic: React.FunctionComponent<ICardKnowGridStaticProps> = (
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
-  const path_knowbook = configPaths.pages.StaticKnowbooks;
+  const path_knowbook = configPaths.pages.StaticKnowbook;
 
   if (
     props.knowbooks === undefined ||

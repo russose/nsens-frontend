@@ -1,16 +1,46 @@
-import { configDataLanguage, ConfigLanguage, ICONS } from "./globals";
+import {
+  TconfigDataLanguage,
+  Tlanguage,
+  ICONS,
+  TButtonID,
+  TPages,
+} from "./globals";
 
-export const configDataIt: configDataLanguage = {
+export const configDataIt: TconfigDataLanguage = {
   searchBar: "Cerca...",
   source_wikipedia: "Sorgente: Wikipedia",
   SEO: {
     // canonical: "https://www.nsens.org/it/Mobile/About/",
     title_page_base: "n.Sens",
+    title_description: {
+      [TPages.Home]: { title: "???", description: "???" },
+      [TPages.About]: {
+        title: "Esplora la conoscenza libera in un modo nuovo",
+        description: "???",
+      },
+      [TPages.User]: { title: "", description: "???" },
+      [TPages.ChangePassword]: {
+        title: "Modifica la password",
+        description: "???",
+      },
+      [TPages.ItemArticle]: { title: "", description: "???" },
+      [TPages.ItemNetwork]: { title: "", description: "???" },
+      [TPages.StaticArticle]: { title: "", description: "???" },
+      [TPages.Knowbooks_Featured]: { title: "Selezione", description: "???" },
+      [TPages.StaticKnowbook]: { title: "", description: "???" },
+      [TPages.Knowbooks_User]: {
+        title: "I Miei Documenti",
+        description: "???",
+      },
+      [TPages.Knowbook]: { title: "", description: "???" },
+      [TPages.KnowbookSaved]: { title: "Salvati (tutti)", description: "???" },
+      [TPages.KnowbookNone]: { title: "Nessun Documento", description: "???" },
+    },
   },
   about: {
     // slogan:
     //   "Esplorare, capire, agire. Lasciarsi trasportare gustandosi la ricerca...",
-    slogan: "Esplora la conoscenza libera in un modo nuovo",
+    // slogan: "Esplora la conoscenza libera in un modo nuovo",
     features: [
       {
         title: "Trova",
@@ -31,53 +61,51 @@ export const configDataIt: configDataLanguage = {
     ],
   },
   buttons: {
-    HOME: {
+    [TButtonID.HOME]: {
       label: "Home",
       icon: ICONS.HOME,
     },
-    KNOWBOOKS_USER: {
+    [TButtonID.KNOWBOOKS_USER]: {
       label: "Documenti",
       icon: ICONS.KNOWBOOKS,
     },
-    KNOWBOOKS_FEATURED: {
+    [TButtonID.KNOWBOOKS_FEATURED]: {
       label: "Speciale",
       icon: ICONS.FEATURED,
     },
-
-    LOGIN: {
+    [TButtonID.LOGIN]: {
       label: "Utente",
       icon: ICONS.LOGIN,
     },
-    INFO: {
+    [TButtonID.INFO]: {
       label: "Info",
       icon: ICONS.INFO,
     },
-    SAVE: {
+    [TButtonID.SAVE]: {
       label: "Salva",
       icon: ICONS.SAVE,
     },
-    EDIT: {
+    [TButtonID.EDIT]: {
       label: "Modifica",
       icon: ICONS.EDIT,
     },
-    ARTICLE: {
+    [TButtonID.ARTICLE]: {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    VIZS: {
+    [TButtonID.VIZS]: {
       label: "Vizs",
       icon: ICONS.VIZS,
     },
-
-    SEPARATOR: {
+    [TButtonID.SEPARATOR]: {
       label: "",
       icon: ICONS.SEPARATOR,
     },
   },
   knowbooks_User: {
-    knowbooks_title: "I Miei Documenti",
-    AllSaved_title: "Salvati (tutti)",
-    None_Title: "Nessun Documento",
+    // knowbooks_title: "I Miei Documenti",
+    // AllSaved_title: "Salvati (tutti)",
+    // None_Title: "Nessun Documento",
     Related_title: "Da scoprire :",
   },
   knowbooks_Featured: {
@@ -93,7 +121,7 @@ export const configDataIt: configDataLanguage = {
     cancel_label: "Annulla",
   },
   changePassword: {
-    title: "Modifica la password",
+    // title: "Modifica la password",
     password_placeholder: "Nuova password",
     placeholder_validationCode: "Codice di convalida ricevuto per email",
     label_sendValidationCode: "1-Recevi il codice di convalida",
@@ -123,9 +151,9 @@ export const configDataIt: configDataLanguage = {
         "Riscarigare la paggina, riempire i campi et aspettare qualque secondi prima di registrarsi",
     },
     languages: {
-      [ConfigLanguage.fr]: "Francese",
-      [ConfigLanguage.it]: "Italiano",
-      [ConfigLanguage.en]: "Inglese",
+      [Tlanguage.fr]: "Francese",
+      [Tlanguage.it]: "Italiano",
+      [Tlanguage.en]: "Inglese",
     },
   },
 };

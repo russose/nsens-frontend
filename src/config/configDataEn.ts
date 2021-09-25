@@ -1,16 +1,40 @@
-import { configDataLanguage, ConfigLanguage, ICONS } from "./globals";
+import {
+  TconfigDataLanguage,
+  Tlanguage,
+  ICONS,
+  TPages,
+  TButtonID,
+} from "./globals";
 
-export const configDataEn: configDataLanguage = {
+export const configDataEn: TconfigDataLanguage = {
   searchBar: "Search...",
   source_wikipedia: "Source: Wikipedia",
   SEO: {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
     title_page_base: "n.Sens",
+    title_description: {
+      [TPages.Home]: { title: "???", description: "???" },
+      [TPages.About]: {
+        title: "A new way to explore Open Knowledge",
+        description: "???",
+      },
+      [TPages.User]: { title: "", description: "???" },
+      [TPages.ChangePassword]: { title: "Update password", description: "???" },
+      [TPages.ItemArticle]: { title: "", description: "???" },
+      [TPages.ItemNetwork]: { title: "", description: "???" },
+      [TPages.StaticArticle]: { title: "", description: "???" },
+      [TPages.Knowbooks_Featured]: { title: "Featured", description: "???" },
+      [TPages.StaticKnowbook]: { title: "", description: "???" },
+      [TPages.Knowbooks_User]: { title: "My Notebooks", description: "???" },
+      [TPages.Knowbook]: { title: "", description: "???" },
+      [TPages.KnowbookSaved]: { title: "Saved (all)", description: "???" },
+      [TPages.KnowbookNone]: { title: "In no notebook", description: "???" },
+    },
   },
   about: {
     // slogan:
     //   "Explore, understand, perform. Maintain the taste of truth and be ready for a fantastic journey...",
-    slogan: "A new way to explore Open Knowledge",
+    // slogan: "A new way to explore Open Knowledge",
     features: [
       {
         title: "Find",
@@ -31,53 +55,51 @@ export const configDataEn: configDataLanguage = {
     ],
   },
   buttons: {
-    HOME: {
+    [TButtonID.HOME]: {
       label: "Home",
       icon: ICONS.HOME,
     },
-    KNOWBOOKS_USER: {
+    [TButtonID.KNOWBOOKS_USER]: {
       label: "Notebooks",
       icon: ICONS.KNOWBOOKS,
     },
-    KNOWBOOKS_FEATURED: {
+    [TButtonID.KNOWBOOKS_FEATURED]: {
       label: "Featured",
       icon: ICONS.FEATURED,
     },
-
-    LOGIN: {
+    [TButtonID.LOGIN]: {
       label: "User",
       icon: ICONS.LOGIN,
     },
-    INFO: {
+    [TButtonID.INFO]: {
       label: "Info",
       icon: ICONS.INFO,
     },
-    SAVE: {
+    [TButtonID.SAVE]: {
       label: "Save",
       icon: ICONS.SAVE,
     },
-    EDIT: {
+    [TButtonID.EDIT]: {
       label: "Modify",
       icon: ICONS.EDIT,
     },
-    ARTICLE: {
+    [TButtonID.ARTICLE]: {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    VIZS: {
+    [TButtonID.VIZS]: {
       label: "Vizs",
       icon: ICONS.VIZS,
     },
-
-    SEPARATOR: {
+    [TButtonID.SEPARATOR]: {
       label: "",
       icon: ICONS.SEPARATOR,
     },
   },
   knowbooks_User: {
-    knowbooks_title: "My Notebooks",
-    AllSaved_title: "Saved (all)",
-    None_Title: "In no notebook",
+    // knowbooks_title: "My Notebooks",
+    // AllSaved_title: "Saved (all)",
+    // None_Title: "In no notebook",
     Related_title: "Explore :",
   },
   knowbooks_Featured: {
@@ -93,7 +115,7 @@ export const configDataEn: configDataLanguage = {
     cancel_label: "Cancel",
   },
   changePassword: {
-    title: "Update password",
+    // title: "Update password",
     password_placeholder: "New password",
     placeholder_validationCode: "Verification code received by email",
     label_sendValidationCode: "1-Receive validation code",
@@ -123,9 +145,9 @@ export const configDataEn: configDataLanguage = {
         "Refresh page, fill user fields and wait few seconds before registering",
     },
     languages: {
-      [ConfigLanguage.fr]: "French",
-      [ConfigLanguage.it]: "Italian",
-      [ConfigLanguage.en]: "English",
+      [Tlanguage.fr]: "French",
+      [Tlanguage.it]: "Italian",
+      [Tlanguage.en]: "English",
     },
   },
 };

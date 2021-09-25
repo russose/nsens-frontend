@@ -13,7 +13,7 @@ const CatchupMessage: React.FunctionComponent<ICatchupMessageProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const type = "warning";
+  const type = "info";
 
   return (
     <>

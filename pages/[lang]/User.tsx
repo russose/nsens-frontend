@@ -22,6 +22,7 @@ import {
 import { goPage } from "../../src/libs/helpersBase";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import { useStores } from "../../src/stores/RootStoreHook";
+import ContentLoading from "../../src/components/ContentLoading";
 
 //CSS in JS Styles not supported in SSR
 const CatchupMessageDynamic = dynamic(
@@ -35,7 +36,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
   initializeApp(stores, paramsPage);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;

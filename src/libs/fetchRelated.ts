@@ -1,5 +1,5 @@
 import {
-  ConfigLanguage,
+  Tlanguage,
   IAtom,
   JSONDataT,
   AtomID,
@@ -17,7 +17,7 @@ import {
 } from "./fetchBase";
 
 const relation_name_wikipedia = configGeneral.relation_name_wikipedia;
-const amount_wikipedia_max = configFetching.amount_wikipedia_max;
+// const amount_wikipedia_max = configFetching.amount_wikipedia_max;
 
 /**
  * Interface
@@ -30,7 +30,7 @@ export async function fetchRelatedCleanImage_blocking(
   amount_max_by_node_wikidata: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtomFull[]> {
   if (itemId === undefined || title === undefined) {
@@ -92,7 +92,7 @@ export async function fetchRelatedWithoutImage(
   amount_max_by_node_wikidata: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtomFull[]> {
   if (itemId === undefined || title === undefined) {
@@ -120,12 +120,12 @@ export async function fetchRelatedWithoutImage(
       exclusion_patterns
     );
 
-  if (relatedItems_wikidata.length > amount_wikipedia_max) {
-    relatedItems_wikidata = relatedItems_wikidata.slice(
-      0,
-      amount_wikipedia_max
-    );
-  }
+  // if (relatedItems_wikidata.length > amount_wikipedia_max) {
+  //   relatedItems_wikidata = relatedItems_wikidata.slice(
+  //     0,
+  //     amount_wikipedia_max
+  //   );
+  // }
 
   const relatedItems = relatedItems_wikidata.concat(relatedItems_wikipedia);
 
@@ -151,7 +151,7 @@ async function ItemsRelatedFromWikipediaWithoutImage(
   amount_wikipedia: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtomFull[]> {
   const atomsList = await ItemsRelatedFromWikipediaRaw(
@@ -181,7 +181,7 @@ async function ItemsFromWikidataWithoutImage(
   amount_max_by_node_wikidata: number,
   // ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtomFull[]> {
   //

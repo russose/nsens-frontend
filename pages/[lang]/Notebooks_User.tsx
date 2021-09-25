@@ -14,6 +14,7 @@ import { initializeApp } from "../../src/libs/helpersInitialize";
 import dynamic from "next/dynamic";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 import Separator from "../../src/components/Separator";
+import ContentLoading from "../../src/components/ContentLoading";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 
 const KnowbooksLoggedDynamic = dynamic(
@@ -32,12 +33,12 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   // initializeKnowbooks(stores);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
 
-  const title = GUI_CONFIG.language.knowbooks_User.knowbooks_title;
+  const title = GUI_CONFIG.language.SEO.title_description.Knowbooks_User.title;
 
   let message;
   let knowbooksUser;

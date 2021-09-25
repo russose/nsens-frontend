@@ -1,6 +1,6 @@
 import {
   JSONDataT,
-  ConfigLanguage,
+  Tlanguage,
   IStaticKnowbookDefinition,
   configFetching,
   StaticKnowbookFamilyType,
@@ -11,8 +11,8 @@ import { capitalizeFirstLetter, chunk } from "./utils";
 
 const max_size_api = configFetching.max_size_chunk_api;
 
-type itemTitleT = string;
-type vitalTreeMapT = Map<string, itemTitleT[]>;
+// type itemTitleT = string;
+type vitalTreeMapT = Map<string, string[]>; //CAT => itemTitles
 
 /**
  * Interfaces
@@ -22,7 +22,7 @@ export async function buildVitalStaticKnowbooksAllLanguages(
   topLevelPattern: string,
   ROOT_URL_ACTION_API: string,
   ROOT_URL_WIKIDATA_ACTION: string,
-  langs: ConfigLanguage[]
+  langs: Tlanguage[]
 ): Promise<IStaticKnowbookDefinition[]> {
   const vitalKnowbooksEnglish = await buildVitalStaticKnowbooksEnglish(
     topLevelPattern,
@@ -38,7 +38,7 @@ export async function buildVitalStaticKnowbooksAllLanguages(
   const vitalKnowbooksAllLanguages_FirstLetterCap =
     vitalKnowbooksAllLanguages.map((knowbook) => {
       const knowbook_ = knowbook;
-      knowbook_.name_display = capitalizeFirstLetter(knowbook_.name_display);
+      knowbook_.name_display = capitalizeFirstLetter(knowbook_.nameOrPeriod);
       return knowbook_;
     });
 
@@ -52,10 +52,10 @@ export async function buildVitalStaticKnowbooksAllLanguages(
 async function vitalStaticKnowbooksAllLanguages(
   vitalKnowbooksEnglish: IStaticKnowbookDefinition[],
   ROOT_URL_WIKIDATA_ACTION: string,
-  langs: ConfigLanguage[]
+  langs: Tlanguage[]
 ): Promise<IStaticKnowbookDefinition[]> {
   const languages_without_English = langs.filter((language) => {
-    return language !== ConfigLanguage.en;
+    return language !== Tlanguage.en;
   });
 
   const vitalKnowbooksAllLanguages: IStaticKnowbookDefinition[] = [
@@ -63,30 +63,93 @@ async function vitalStaticKnowbooksAllLanguages(
   ];
 
   for (const knowbookEnglish of vitalKnowbooksEnglish) {
-    const items_to_find_in_other_languages: itemTitleT[] = [
-      knowbookEnglish.nameOrPeriod,
-    ].concat(knowbookEnglish.items);
+    // const items_to_find_in_other_languages: string[] = [
+    //   knowbookEnglish.nameOrPeriod,
+    // ].concat(knowbookEnglish.items);
 
-    const items_in_other_languages_Map: Map<ConfigLanguage, itemTitleT[]> =
-      await getTitlesinAllLanguages_chunked(
-        items_to_find_in_other_languages,
+    const cathegory_to_find_in_other_languages: string =
+      knowbookEnglish.nameOrPeriod;
+
+    const titles_to_find_in_other_languages: string[] = knowbookEnglish.items;
+
+    // const items_in_other_languages_Map: Map<Tlanguage, string[]> =
+    //   await getTitlesinAllLanguages_chunked(
+    //     items_to_find_in_other_languages,
+    //     ROOT_URL_WIKIDATA_ACTION,
+    //     languages_without_English
+    //   );
+
+    let cathegory_in_other_languages_Map: Map<Tlanguage, string[]> =
+      await getLabelsinAllLanguages(
+        [cathegory_to_find_in_other_languages],
         ROOT_URL_WIKIDATA_ACTION,
         languages_without_English
       );
 
-    if (items_in_other_languages_Map !== undefined) {
-      const languages_of_Map = Array.from(items_in_other_languages_Map.keys());
-      languages_of_Map.forEach((lang) => {
-        const items_in_other_languages = items_in_other_languages_Map.get(lang);
-        const name = items_in_other_languages[0];
-        const items = items_in_other_languages.slice(1);
+    const condition_cathegory_not_found: boolean =
+      cathegory_in_other_languages_Map.get(languages_without_English[0])
+        .length === 0;
+
+    if (condition_cathegory_not_found) {
+      const cathegory_to_find_in_other_languages_first_word =
+        cathegory_to_find_in_other_languages.split(" ")[0];
+
+      console.log(cathegory_to_find_in_other_languages, "not found");
+      console.log(
+        cathegory_to_find_in_other_languages_first_word,
+        "used instead..."
+      );
+      cathegory_in_other_languages_Map = await getLabelsinAllLanguages(
+        [cathegory_to_find_in_other_languages_first_word],
+        ROOT_URL_WIKIDATA_ACTION,
+        languages_without_English
+      );
+    }
+
+    // console.log(cathegory_in_other_languages_Map);
+
+    const titles_in_other_languages_Map: Map<Tlanguage, string[]> =
+      await getTitlesinAllLanguages_chunked(
+        titles_to_find_in_other_languages,
+        ROOT_URL_WIKIDATA_ACTION,
+        languages_without_English
+      );
+
+    // if (items_in_other_languages_Map !== undefined) {
+    //   const languages_of_Map = Array.from(items_in_other_languages_Map.keys());
+    //   languages_of_Map.forEach((lang) => {
+    //     const items_in_other_languages = items_in_other_languages_Map.get(lang);
+    //     const name = items_in_other_languages[0];
+    //     const items = items_in_other_languages.slice(1);
+
+    //     const vitalKnowbook: IStaticKnowbookDefinition = {
+    //       type: StaticKnowbookFamilyType.VITAL,
+    //       nameOrPeriod: name,
+    //       name_display: name,
+    //       lang: lang,
+    //       items: items,
+    //     };
+    //     vitalKnowbooksAllLanguages.push(vitalKnowbook);
+    //   });
+    // }
+
+    if (
+      titles_in_other_languages_Map !== undefined &&
+      cathegory_in_other_languages_Map !== undefined
+    ) {
+      languages_without_English.forEach((lang) => {
+        const cathegory_in_other_languages =
+          cathegory_in_other_languages_Map.get(lang);
+        const titles_in_other_languages =
+          titles_in_other_languages_Map.get(lang);
+        const name = cathegory_in_other_languages[0];
 
         const vitalKnowbook: IStaticKnowbookDefinition = {
           type: StaticKnowbookFamilyType.VITAL,
           nameOrPeriod: name,
           name_display: name,
           lang: lang,
-          items: items,
+          items: titles_in_other_languages,
         };
         vitalKnowbooksAllLanguages.push(vitalKnowbook);
       });
@@ -99,24 +162,23 @@ async function vitalStaticKnowbooksAllLanguages(
 /********************************************************************************/
 
 async function getTitlesinAllLanguages_chunked(
-  itemTitles: itemTitleT[],
+  itemTitles: string[],
   ROOT_URL_WIKIDATA_ACTION: string,
-  langs: ConfigLanguage[]
-): Promise<Map<ConfigLanguage, itemTitleT[]>> {
-  const itemTitles_chunked: itemTitleT[][] = chunk(itemTitles, max_size_api);
+  langs: Tlanguage[]
+): Promise<Map<Tlanguage, string[]>> {
+  const itemTitles_chunked: string[][] = chunk(itemTitles, max_size_api);
 
-  const titlesMap_chunked: Map<ConfigLanguage, itemTitleT[]>[] = [];
+  const titlesMap_chunked: Map<Tlanguage, string[]>[] = [];
   for (const itemTitles_ of itemTitles_chunked) {
-    const output_i: Map<ConfigLanguage, itemTitleT[]> =
-      await getTitlesinAllLanguages(
-        itemTitles_,
-        ROOT_URL_WIKIDATA_ACTION,
-        langs
-      );
+    const output_i: Map<Tlanguage, string[]> = await getTitlesinAllLanguages(
+      itemTitles_,
+      ROOT_URL_WIKIDATA_ACTION,
+      langs
+    );
     titlesMap_chunked.push(output_i);
   }
 
-  const titlesMap: Map<ConfigLanguage, itemTitleT[]> = new Map();
+  const titlesMap: Map<Tlanguage, string[]> = new Map();
   titlesMap_chunked.forEach((titlesMap_part) => {
     titlesMap_part.forEach((value, key) => {
       if (titlesMap.get(key) !== undefined) {
@@ -130,19 +192,19 @@ async function getTitlesinAllLanguages_chunked(
   return titlesMap;
 }
 
-async function getTitlesinAllLanguages(
-  itemTitles: itemTitleT[],
+async function getLabelsinAllLanguages(
+  cathegoryLabels: string[],
   ROOT_URL_WIKIDATA_ACTION: string,
-  langs: ConfigLanguage[]
-): Promise<Map<ConfigLanguage, itemTitleT[]>> {
-  const titles = buildListStringSeparated(itemTitles);
+  langs: Tlanguage[]
+): Promise<Map<Tlanguage, string[]>> {
+  const labels = buildListStringSeparated(cathegoryLabels);
   const languages = buildListStringSeparated(langs);
 
   const PARAMS = {
     action: "wbgetentities",
     format: "json",
     sites: "enwiki",
-    titles: titles,
+    titles: labels,
     props: "labels",
     languages: languages,
     utf8: 1,
@@ -160,9 +222,9 @@ async function getTitlesinAllLanguages(
       return undefined;
     }
 
-    const itemTitlesMap = new Map<ConfigLanguage, itemTitleT[]>();
+    const itemLabelsMap = new Map<Tlanguage, string[]>();
     langs.forEach((lang) => {
-      itemTitlesMap.set(lang, []);
+      itemLabelsMap.set(lang, []);
     });
 
     Object.values(data["entities"]).forEach((item: JSONDataT) => {
@@ -171,8 +233,70 @@ async function getTitlesinAllLanguages(
           if (label["language"] !== undefined && label["value"] !== undefined) {
             const lang = label["language"];
             const value = label["value"];
+            const itemLabels = itemLabelsMap.get(lang);
+            itemLabels.push(value);
+            itemLabelsMap.set(lang, itemLabels);
+          }
+        });
+      }
+    });
+
+    return itemLabelsMap;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
+}
+
+async function getTitlesinAllLanguages(
+  itemTitles: string[],
+  ROOT_URL_WIKIDATA_ACTION: string,
+  langs: Tlanguage[]
+): Promise<Map<Tlanguage, string[]>> {
+  const titles = buildListStringSeparated(itemTitles);
+  const languages = buildListStringSeparated(
+    langs.map((lang) => {
+      return lang + "wiki";
+    })
+  );
+
+  const PARAMS = {
+    action: "wbgetentities",
+    format: "json",
+    sites: "enwiki",
+    titles: titles,
+    props: "sitelinks/urls",
+    sitefilter: languages,
+    // sitefilter: "enwiki|frwiki|itwiki",
+    utf8: 1,
+    // maxage: cache_duration_in_sec, //1 semaine pour le cache
+  };
+
+  try {
+    const data = await fetch_data_wiki_action(
+      ROOT_URL_WIKIDATA_ACTION,
+      PARAMS,
+      false
+    );
+
+    if (data["entities"] === undefined) {
+      return undefined;
+    }
+
+    const itemTitlesMap = new Map<Tlanguage, string[]>();
+    langs.forEach((lang) => {
+      itemTitlesMap.set(lang, []);
+    });
+
+    Object.values(data["entities"]).forEach((item: JSONDataT) => {
+      if (item["sitelinks"] !== undefined) {
+        Object.values(item["sitelinks"]).forEach((siteId: JSONDataT) => {
+          if (siteId["site"] !== undefined && siteId["title"] !== undefined) {
+            const lang_wiki = siteId["site"];
+            const lang = lang_wiki.split("wiki")[0];
+            const title = siteId["title"];
             const itemTitles = itemTitlesMap.get(lang);
-            itemTitles.push(value);
+            itemTitles.push(title);
             itemTitlesMap.set(lang, itemTitles);
           }
         });
@@ -205,7 +329,7 @@ async function buildVitalStaticKnowbooksEnglish(
       type: StaticKnowbookFamilyType.VITAL,
       nameOrPeriod: category,
       name_display: category,
-      lang: ConfigLanguage.en,
+      lang: Tlanguage.en,
       items: vitalTreeMap.get(category),
     });
   }
@@ -217,7 +341,7 @@ async function buildVitalTree(
   topLevelPattern: string,
   ROOT_URL_ACTION_API: string
 ): Promise<vitalTreeMapT> {
-  const vitalTreeMap: vitalTreeMapT = new Map<string, itemTitleT[]>();
+  const vitalTreeMap: vitalTreeMapT = new Map<string, string[]>();
 
   const categories: string[] = await fetchCategoryMembers(
     topLevelPattern,
@@ -225,7 +349,7 @@ async function buildVitalTree(
   );
 
   for (const category of categories) {
-    const articleTitles: itemTitleT[] = await fetchCategoryMembers(
+    const articleTitles: string[] = await fetchCategoryMembers(
       category,
       ROOT_URL_ACTION_API
     );
@@ -236,7 +360,7 @@ async function buildVitalTree(
   //Clean Map
   for (const category of categories) {
     const category_clean: string = category.split("in ")[1];
-    const articleTitles_clean: itemTitleT[] = vitalTreeMap
+    const articleTitles_clean: string[] = vitalTreeMap
       .get(category)
       .map((title) => {
         return title.split(":")[1];

@@ -75,6 +75,7 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
           </MyZoom>
         ) : (
           <NetworkFlatDynamic rootItemId={props.itemId} stores={props.stores} />
+          // <NetworkFlat rootItemId={props.itemId} stores={props.stores} />
         )}
       </>
     </>

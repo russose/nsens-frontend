@@ -1,5 +1,5 @@
 import { configFetching } from "../config/globals";
-import { ConfigLanguage, IAtom, JSONDataT } from "../config/globals";
+import { Tlanguage, IAtom, JSONDataT } from "../config/globals";
 import {
   chunk,
   filterAtomListFromPatterns,
@@ -11,7 +11,7 @@ import { ROOT_URL_WIKIPEDIA_ACTION } from "../config/configURLs";
 
 const amount_data_fetched_related_for_images =
   configFetching.amount_data_fetched_related_for_images;
-const ROOT_URL_WIKIPEDIA_EN = ROOT_URL_WIKIPEDIA_ACTION(ConfigLanguage.en);
+const ROOT_URL_WIKIPEDIA_EN = ROOT_URL_WIKIPEDIA_ACTION(Tlanguage.en);
 
 const width_image_thumbnail = configFetching.width_image_thumbnail;
 
@@ -57,7 +57,7 @@ export async function improveImageFromWikipediaParallel_blocking(
   atomsList: IAtom[],
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IAtom[]> {
   if (atomsList === undefined || atomsList.length === 0) {
     return [];
@@ -88,7 +88,7 @@ export async function ItemsFeaturedFromWikipediaWithoutImage(
   day: string,
   ROOT_URL_REST_API: string,
   // ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   const atomsList = await getFeaturedAtomsFromWikipedia(
@@ -114,7 +114,7 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWi
   nb_items: number,
   mode: "search" | "titles" | "random",
   // | "mostviewed" //Mostviewed from QUERY API NOT WORKING WELL, RETURNING OFTEN emply [] => Desactivated
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   const list_of_PageIds = await idsFromSearchOrRandomOrTitlesFromWikipedia(
@@ -143,7 +143,7 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWi
   itemTitles: string[],
   // ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_Parallel(
@@ -195,7 +195,7 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCl
   nb_items: number,
   mode: "search" | "titles" | "random",
   // | "mostviewed" Mostviewed from QUERY API NOT WORKING WELL, RETURNING OFTEN emply [] => Desactivated
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   const atomsList_filtered =
@@ -393,7 +393,7 @@ async function idsFromSearchOrRandomOrTitlesFromWikipedia(
 async function getAtomsFromWikipediaAction(
   list_of_Pages_ids: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
   // nb_images: number
 ): Promise<IAtom[]> {
   try {
@@ -552,7 +552,7 @@ async function improveImageFromWikipedia_blocking(
   item_input: IAtom,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IAtom> {
   if (item_input === undefined) {
     return item_input;
@@ -650,7 +650,7 @@ async function improveImageFromWikipedia_blocking(
     const atomsList = await getAtomsFromWikipediaAction(
       ids_en[0],
       ROOT_URL_WIKIPEDIA_EN,
-      ConfigLanguage.en
+      Tlanguage.en
     );
     const item_en: IAtom = atomsList[0];
     if (item_en !== undefined) {
@@ -727,7 +727,7 @@ export async function ItemsRelatedFromWikipediaRaw(
   amount: number,
   ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IAtom[]> {
   if (title === undefined) {
     return [];
@@ -780,7 +780,7 @@ async function getFeaturedAtomsFromWikipedia(
   month: string,
   day: string,
   ROOT_URL_REST_API: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IAtom[]> {
   try {
     const data: JSONDataT = await fetch_data_wiki_rest(

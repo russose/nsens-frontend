@@ -12,6 +12,7 @@ import {
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import { useStores } from "../../src/stores/RootStoreHook";
+import ContentLoading from "../../src/components/ContentLoading";
 
 const ItemNetworkNoSSRDynamic = dynamic(
   () => import("../../src/components/ItemNetworkNoSSR"),
@@ -24,7 +25,7 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   initializeApp(stores, paramsPage);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const router = useRouter();

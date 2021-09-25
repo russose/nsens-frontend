@@ -18,6 +18,7 @@ import {
 import { ItemsInNoKnowbook } from "../../src/libs/helpersSavedKnowbooks";
 import { useStores } from "../../src/stores/RootStoreHook";
 import { initializeApp } from "../../src/libs/helpersInitialize";
+import ContentLoading from "../../src/components/ContentLoading";
 
 const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -26,10 +27,10 @@ const KnowbookSpecialNone: React.FunctionComponent<IPage> = (props) => {
   // initializeKnowbooks(stores);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const title = GUI_CONFIG.language.knowbooks_User.None_Title;
+  const title = GUI_CONFIG.language.SEO.title_description.KnowbookNone.title;
 
   return (
     <AppLayout stores={stores}>

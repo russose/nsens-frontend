@@ -12,8 +12,7 @@ import {
   I_getStaticProps,
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
-import DialogLoading from "../../src/components/DialogLoading";
-import { Box } from "gestalt";
+import ContentLoading from "../../src/components/ContentLoading";
 
 const CardAtomGridLoggedDynamic = dynamic(
   () => import("../../src/components/CardAtomGridLogged")
@@ -25,18 +24,10 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 
   initializeApp(stores, paramsPage);
 
-  if (stores.baseStore.initCompleted.core !== true) {
+  // Initialyzed until userData to avoid allRelatedIdsForHome being refreshed 1000s times because of home update
+  if (stores.baseStore.initCompleted.userData !== true) {
     //Not yet initialyzed
-    return (
-      <Box
-        height="100vh"
-        display="flex"
-        direction="column"
-        justifyContent="center"
-      >
-        <DialogLoading stores={stores} />
-      </Box>
-    );
+    return <ContentLoading stores={stores} />;
   }
 
   let page_content;

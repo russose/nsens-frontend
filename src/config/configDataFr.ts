@@ -1,4 +1,4 @@
-import { ConfigLanguage, ICONS } from "./globals";
+import { Tlanguage, ICONS, TButtonID, TPages } from "./globals";
 
 export const configDataFr = {
   searchBar: "Rechercher...",
@@ -6,11 +6,32 @@ export const configDataFr = {
   SEO: {
     // canonical: "https://www.nsens.org/fr/Mobile/About/",
     title_page_base: "n.Sens",
+    title_description: {
+      [TPages.Home]: { title: "???", description: "???" },
+      [TPages.About]: {
+        title: "Explorer la Connaissance Libre autrement",
+        description: "???",
+      },
+      [TPages.User]: { title: "", description: "???" },
+      [TPages.ChangePassword]: {
+        title: "Modifier votre mot de passe",
+        description: "???",
+      },
+      [TPages.ItemArticle]: { title: "", description: "???" },
+      [TPages.ItemNetwork]: { title: "", description: "???" },
+      [TPages.StaticArticle]: { title: "", description: "???" },
+      [TPages.Knowbooks_Featured]: { title: "Sélection", description: "???" },
+      [TPages.StaticKnowbook]: { title: "", description: "???" },
+      [TPages.Knowbooks_User]: { title: "Mes Carnets", description: "???" },
+      [TPages.Knowbook]: { title: "", description: "???" },
+      [TPages.KnowbookSaved]: { title: "Sauvés (tous)", description: "???" },
+      [TPages.KnowbookNone]: { title: "Aucun Carnet", description: "???" },
+    },
   },
   about: {
     // slogan:
     //   "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
-    slogan: "Explorer la Connaissance Libre autrement",
+    // slogan: "Explorer la Connaissance Libre autrement",
     features: [
       {
         title: "Trouver",
@@ -33,57 +54,55 @@ export const configDataFr = {
     ],
   },
   buttons: {
-    HOME: {
+    [TButtonID.HOME]: {
       label: "Accueil",
       icon: ICONS.HOME,
     },
-    KNOWBOOKS_USER: {
+    [TButtonID.KNOWBOOKS_USER]: {
       label: "Carnets",
       icon: ICONS.KNOWBOOKS,
     },
-    KNOWBOOKS_FEATURED: {
+    [TButtonID.KNOWBOOKS_FEATURED]: {
       label: "Sélection",
       icon: ICONS.FEATURED,
     },
-
-    LOGIN: {
+    [TButtonID.LOGIN]: {
       label: "User",
       icon: ICONS.LOGIN,
     },
-    INFO: {
+    [TButtonID.INFO]: {
       label: "Info",
       icon: ICONS.INFO,
     },
-    SAVE: {
+    [TButtonID.SAVE]: {
       label: "Sauver",
       icon: ICONS.SAVE,
     },
-    EDIT: {
+    [TButtonID.EDIT]: {
       label: "Modifier",
       icon: ICONS.EDIT,
     },
-    ARTICLE: {
+    [TButtonID.ARTICLE]: {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    VIZS: {
+    [TButtonID.VIZS]: {
       label: "Vizs",
       icon: ICONS.VIZS,
     },
-
-    SEPARATOR: {
+    [TButtonID.SEPARATOR]: {
       label: "",
       icon: ICONS.SEPARATOR,
     },
   },
   knowbooks_User: {
-    knowbooks_title: "Mes Carnets",
-    AllSaved_title: "Sauvés (tous)",
-    None_Title: "Aucun Carnet",
+    // knowbooks_title: "Mes Carnets",
+    // AllSaved_title: "Sauvés (tous)",
+    // None_Title: "Aucun Carnet",
     Related_title: "A découvrir :",
   },
   knowbooks_Featured: {
-    knowbooks_title: "Sélection",
+    // knowbooks_title: "Sélection",
   },
   editKnowbook: {
     title: "Mise à jour des carnets",
@@ -95,7 +114,7 @@ export const configDataFr = {
     cancel_label: "Annuler",
   },
   changePassword: {
-    title: "Modifier votre mot de passe",
+    // title: "Modifier votre mot de passe",
     password_placeholder: "Nouveau mot de passe",
     placeholder_validationCode: "Code de vérification reçu par email",
     label_sendValidationCode: "1-Recevoir code validation",
@@ -126,9 +145,9 @@ export const configDataFr = {
         "Rafraîchir la page, remplir les champs et attendre quelques secondes avant de s'enregistrer",
     },
     languages: {
-      [ConfigLanguage.fr]: "Francais",
-      [ConfigLanguage.it]: "Italien",
-      [ConfigLanguage.en]: "Anglais",
+      [Tlanguage.fr]: "Francais",
+      [Tlanguage.it]: "Italien",
+      [Tlanguage.en]: "Anglais",
     },
   },
 };

@@ -1,5 +1,5 @@
 import {
-  ConfigLanguage,
+  Tlanguage,
   configPaths,
   EXCLUSION_PATTERNS,
   JSONDataT,
@@ -17,7 +17,7 @@ export async function TitlesBestYearsFromWikipedia(
   year_end: string,
   amount: number,
   ROOT_URL_WIKIMEDIA_TOP_REST: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<string[]> {
   let list_of_PageTitles: string[];
@@ -54,7 +54,7 @@ async function TitlesItemsBestMultiYearFromWikipediaRaw(
   year_start: string,
   year_end: string,
   ROOT_URL_WIKIMEDIA_TOP_REST: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<string[]> {
   if (year_start === undefined || year_end === undefined) {
     return [];
@@ -133,17 +133,22 @@ async function TitlesItemsBestMultiYearFromWikipediaRaw(
     }
   });
 
-  const static_path_views =
+  const static_path_views_base =
     configPaths.static.base_cache +
     configPaths.static.cache_nbviews +
     lang +
-    "/" +
-    year_start +
-    "-" +
-    year_end +
-    ".json";
+    "/";
+  // +
+  // year_start +
+  // "-" +
+  // year_end +
+  // ".json";
 
-  await writeFileJson(static_path_views, bestItems_sorted);
+  await writeFileJson(
+    static_path_views_base,
+    year_start + "-" + year_end + ".json",
+    bestItems_sorted
+  );
 
   const list_of_PageTitles = bestItems_sorted.map((item) => {
     return item[0];
@@ -159,7 +164,7 @@ async function TitlesItemsBestMultiYearFromWikipediaRaw(
 async function TitlesItemsBestYearFromWikipediaRaw(
   year: string,
   ROOT_URL_WIKIMEDIA_TOP_REST: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<string[]> {
   if (year === undefined) {
     return [];
@@ -227,15 +232,20 @@ async function TitlesItemsBestYearFromWikipediaRaw(
 
     // console.log(bestItems_sorted);
 
-    const static_path_views =
+    const static_path_views_base =
       configPaths.static.base_cache +
       configPaths.static.cache_nbviews +
       lang +
-      "/" +
-      year +
-      ".json";
+      "/";
+    // +
+    // year +
+    // ".json";
 
-    await writeFileJson(static_path_views, bestItems_sorted);
+    await writeFileJson(
+      static_path_views_base,
+      year + ".json",
+      bestItems_sorted
+    );
 
     const list_of_PageTitles = bestItems_sorted.map((item) => {
       return item[0];

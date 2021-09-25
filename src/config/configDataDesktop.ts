@@ -1,4 +1,4 @@
-import { configDataDisplay } from "./globals";
+import { TconfigDataDisplay } from "./globals";
 
 const card_size = 220;
 const card_compact_size = "10vh";
@@ -7,10 +7,10 @@ const card_compact_vizs_size = 120;
 // const card_compact_size = card_size * 0.8;
 // const card_compact_vizs_size = card_size * 0.5;
 
-export const configDataDesktop: configDataDisplay = {
+export const configDataDesktop: TconfigDataDisplay = {
   display: {
-    displayFeedIncrement: 16,
-    amount_item_displayed: 50,
+    displayFeedIncrement: 32,
+    amount_related_displayed: 50,
   },
   max_nodes_network: 110,
   // min_width_network: 500,

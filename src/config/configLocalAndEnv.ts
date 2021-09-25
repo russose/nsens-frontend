@@ -1,12 +1,12 @@
 //Warning: different between back and front
 
-import { ConfigLanguage } from "./globals";
+import { Tlanguage, TPages } from "./globals";
 
 export const is_testing_mode = true;
-export const languages_activated: ConfigLanguage[] = [
-  ConfigLanguage.fr,
-  ConfigLanguage.it,
-  ConfigLanguage.en,
+export const languages_activated: Tlanguage[] = [
+  Tlanguage.fr,
+  Tlanguage.it,
+  Tlanguage.en,
 ];
 
 const e = "comvacv_msens";
@@ -68,11 +68,10 @@ export const configGeneral = {
 
 export const configFetching = {
   userAgent: "n.Sens/1.0 (https://www.nsens.org; " + getEmail() + ")",
-  amount_data_fetched_items: 50,
+  amount_data_fetched_items_searched: 50,
   max_size_chunk_api: 49,
   amount_related_wikipedia: 10,
   amount_max_by_node_wikidata: 40,
-  amount_wikipedia_max: 150,
   amount_data_fetched_related_for_images: 2,
   width_image_thumbnail: 300,
   cache_duration_in_sec: "2628000", //1 Mois pour le cache
@@ -98,23 +97,27 @@ export const configPaths = {
   image_landing: "/landing_graph.webp",
   image_install: "/install.webp",
   pages: {
-    About: "/About",
-    Home: "/",
-    Knowbooks_User: "/Notebooks_User",
-    Knowbooks_Trend_Featured: "/Notebooks_Featured",
-    Knowbook: "/Notebook",
-    KnowbookSaved: "/NotebookSpecialSaved",
-    KnowbookNone: "/NotebookSpecialNone",
-    ItemArticle: "/ItemArticle",
-    ItemNetwork: "/ItemNetwork",
-    User: "/User",
-    ChangePassword: "/ChangePassword",
-    StaticKnowbooks: "/Static_Notebooks/[nameOrPeriod]",
-    StaticArticles: "/Static_Articles/[title]",
+    [TPages.Home]: "/",
+    [TPages.About]: "/About",
+    [TPages.User]: "/User",
+    [TPages.ChangePassword]: "/ChangePassword",
+
+    [TPages.ItemArticle]: "/ItemArticle",
+    [TPages.ItemNetwork]: "/ItemNetwork",
+    [TPages.StaticArticle]: "/Static_Articles/[title]",
+
+    [TPages.Knowbooks_Featured]: "/Notebooks_Featured",
+    [TPages.StaticKnowbook]: "/Static_Notebooks/[nameOrPeriod]",
+
+    [TPages.Knowbooks_User]: "/Notebooks_User",
+    [TPages.Knowbook]: "/Notebook",
+    [TPages.KnowbookSaved]: "/NotebookSpecialSaved",
+    [TPages.KnowbookNone]: "/NotebookSpecialNone",
+
     empty: "",
   },
   static: {
-    knowbooks: "public/staticKnowbooks/",
+    knowbooks_location: "public/staticKnowbooks/",
     base_cache: "cache/",
     cache_articles: "articles/",
     cache_nbviews: "nb_views/",
@@ -143,13 +146,13 @@ export const ICONS = {
 
   VIZS: "globe",
 
-  SEPARATOR: "dash",
+  SEPARATOR: "ellipsis",
 };
 
 export const configButtonsPath = {
   HOME: configPaths.pages.Home,
   KNOWBOOKS_USER: configPaths.pages.Knowbooks_User,
-  KNOWBOOKS_FEATURED: configPaths.pages.Knowbooks_Trend_Featured,
+  KNOWBOOKS_FEATURED: configPaths.pages.Knowbooks_Featured,
   LOGIN: configPaths.pages.User,
   INFO: configPaths.pages.About,
   SAVE: configPaths.pages.empty,
@@ -163,8 +166,8 @@ export const api_issue_text: string = "issue in loging or network";
 
 export const group_name = "group";
 
-export function EXCLUSION_PATTERNS(lang: ConfigLanguage): string[] {
-  if (lang === ConfigLanguage.fr) {
+export function EXCLUSION_PATTERNS(lang: Tlanguage): string[] {
+  if (lang === Tlanguage.fr) {
     return [
       "Accueil",
       "Main_Page",
@@ -179,7 +182,7 @@ export function EXCLUSION_PATTERNS(lang: ConfigLanguage): string[] {
       "Fichier:",
       "Aide:",
     ];
-  } else if (lang === ConfigLanguage.it) {
+  } else if (lang === Tlanguage.it) {
     return [
       "_Accueil",
       "Pagina_principale",
@@ -193,7 +196,7 @@ export function EXCLUSION_PATTERNS(lang: ConfigLanguage): string[] {
       "File:",
       "Aiuto:",
     ];
-  } else if (lang === ConfigLanguage.en) {
+  } else if (lang === Tlanguage.en) {
     return [
       "_Accueil",
       "Main_Page",

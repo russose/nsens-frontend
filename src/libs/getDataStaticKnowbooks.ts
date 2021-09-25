@@ -1,21 +1,22 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   configFetching,
-  ConfigLanguage,
+  Tlanguage,
   configPaths,
-  IAtom,
+  IStaticKnowbookDefinition,
 } from "../config/globals";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import {
   buildAllStaticKnowbooks,
   getAllStaticKnowbooks,
+  getKnowbookFromAllStaticKnowbooks,
 } from "./getDataStaticKnowbooksHelpers";
 import { readFileJson } from "./utilsServer";
 
 export interface IPageStaticKnowbooks extends IPage {
   nameOrPeriod: string;
   name_display: string;
-  items?: IAtom[];
+  // items?: IAtom[];
 }
 
 const refreshAllStaticKnowbooks =
@@ -51,12 +52,12 @@ async function getAllConfigStaticKnowbooks() {
 async function getConfigDataGuiStaticKnowbooks(
   params: any
 ): Promise<IPageStaticKnowbooks> {
-  const lang: ConfigLanguage = params.lang;
-  const display = params.display;
+  const lang: Tlanguage = params.lang;
+  // const display = params.display;
   const nameOrPeriod = params.nameOrPeriod;
 
-  const static_path =
-    configPaths.static.knowbooks + lang + "/" + nameOrPeriod + ".txt";
+  const static_path_base = configPaths.static.knowbooks_location + lang + "/";
+  //  + nameOrPeriod + ".txt";
 
   // const date = new Date();
   // const current_year = date.getFullYear();
@@ -64,14 +65,38 @@ async function getConfigDataGuiStaticKnowbooks(
   // Toujours traiter l'année en cours donc ignorer
   // if (nameOrPeriod !== DateToStringWithZero(current_year) || is_testing_mode) {
   try {
-    const staticKnowbook_with_items: any = await readFileJson(static_path);
+    const staticKnowbook_with_items: any = await readFileJson(
+      static_path_base,
+      nameOrPeriod + ".txt"
+    );
 
-    const guiConfigDataBestKnowbooks: IPageStaticKnowbooks = {
-      paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
-        .paramsPage,
+    //************************** CHECKS ****************************************
+    if (false) {
+      const allStaticKnowbooks = await getAllStaticKnowbooks();
+      const staticKnowbook: IStaticKnowbookDefinition =
+        await getKnowbookFromAllStaticKnowbooks(
+          nameOrPeriod,
+          lang,
+          allStaticKnowbooks
+        );
+      const difference =
+        staticKnowbook.items.length - staticKnowbook_with_items.items.length;
+      if (difference !== 0) {
+        console.log("Some items not found in this notebook: ");
+        console.log(nameOrPeriod, lang);
+        console.log("Amount: ", difference);
+      }
+    }
+
+    //************************** CHECKS ****************************************
+
+    const guiConfigDataStaticKnowbooks: IPageStaticKnowbooks = {
+      // paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
+      paramsPage: (await getDataParamsPage({ lang: lang })).paramsPage,
       ...staticKnowbook_with_items,
     };
-    return guiConfigDataBestKnowbooks;
+
+    return guiConfigDataStaticKnowbooks;
   } catch {
     console.log(
       "disk files not found for Static Knowbooks, you need to generate them"

@@ -1,7 +1,7 @@
 import { Box, RadioButton } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ConfigLanguage } from "../config/globals";
+import { Tlanguage } from "../config/globals";
 import { onChangeLanguage } from "../handlers/handlers_LoginSignup";
 import { IStores } from "../stores/RootStore";
 
@@ -15,7 +15,7 @@ const LanguageSelector: React.FunctionComponent<ILanguageSelectorProps> = (
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const rounding = GUI_CONFIG.display.rounding_menu;
 
-  const languages_list = Object.values(ConfigLanguage);
+  const languages_list = Object.values(Tlanguage);
 
   return (
     <Box
@@ -26,7 +26,7 @@ const LanguageSelector: React.FunctionComponent<ILanguageSelectorProps> = (
       borderStyle="shadow"
       rounding={rounding as any}
     >
-      {languages_list.map((language: ConfigLanguage) => {
+      {languages_list.map((language: Tlanguage) => {
         return (
           <Box key={`'box'-${language}`} alignItems="center">
             <RadioButton

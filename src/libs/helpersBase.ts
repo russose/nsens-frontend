@@ -1,9 +1,9 @@
 import Router from "next/router";
 import {
   AtomID,
-  ConfigDisplay,
+  TDisplay,
   configGeneral,
-  ConfigLanguage,
+  Tlanguage,
   configPaths,
   eventT,
   EXCLUSION_PATTERNS,
@@ -19,7 +19,7 @@ import { DateToStringWithZero, shuffleArray } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
   const result: boolean =
-    stores.baseStore.GUI_CONFIG.currentDisplay === ConfigDisplay.mobile;
+    stores.baseStore.GUI_CONFIG.currentDisplay === TDisplay.mobile;
   return result;
 }
 
@@ -28,13 +28,13 @@ export async function getParamsPageFromContext(): Promise<IparamsPage> {
     // stores.baseStore.setscreenNoSSR();
 
     const language_navigator = navigator.language;
-    let paramsPage_lang: ConfigLanguage;
+    let paramsPage_lang: Tlanguage;
     if (language_navigator.includes("fr")) {
-      paramsPage_lang = ConfigLanguage.fr;
+      paramsPage_lang = Tlanguage.fr;
     } else if (language_navigator.includes("it")) {
-      paramsPage_lang = ConfigLanguage.it;
+      paramsPage_lang = Tlanguage.it;
     } else {
-      paramsPage_lang = ConfigLanguage.en;
+      paramsPage_lang = Tlanguage.en;
     }
 
     return { lang: paramsPage_lang };

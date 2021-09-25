@@ -22,6 +22,7 @@ import Installation from "../../src/components/Installation";
 import Contacts from "../../src/components/Contacts";
 import { Box, Image } from "gestalt";
 import { isMobile } from "../../src/libs/helpersBase";
+import ContentLoading from "../../src/components/ContentLoading";
 
 const About: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -29,11 +30,11 @@ const About: React.FunctionComponent<IPage> = (props) => {
   initializeApp(stores, paramsPage);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const slogan = GUI_CONFIG.language.about.slogan;
+  const slogan = GUI_CONFIG.language.SEO.title_description.About.title;
   // const description = GUI_CONFIG.language.about.description;
   const path_logo = configPaths.image_logo_B;
   const path_image_main = configPaths.image_landing;
@@ -79,7 +80,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
   const main_image = (
     <Box padding={0} height={ratio_image} width="100%">
       <Image
-        alt={GUI_CONFIG.language.about.slogan}
+        alt={GUI_CONFIG.language.SEO.title_description.About.title}
         color="transparent"
         fit="contain"
         naturalHeight={1}

@@ -11,9 +11,9 @@ import {
   onSearchHomeText,
   onTapLogo,
 } from "../../handlers/handlers_Searchbar_Navigation";
-import DialogLoading from "../DialogLoading";
+// import DialogLoading from "../ContentLoading";
 import { IStores } from "../../stores/RootStore";
-import { ConfigDisplay, configPaths } from "../../config/globals";
+import { TDisplay, configPaths } from "../../config/globals";
 import dynamic from "next/dynamic";
 import MenuBarDisplayNotLogged from "../MenuBarDisplayNotLogged";
 import { isHome } from "../../libs/helpersBase";
@@ -27,7 +27,7 @@ const MenuBarDisplayLoggedDynamic = dynamic(
 
 interface IAppLayoutProps {
   stores: IStores;
-  display: ConfigDisplay;
+  display: TDisplay;
 }
 
 const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
@@ -100,20 +100,23 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
     </>
   );
 
+  // IMPORTANT: ce free space évite aussi que le menu du bas disparaisse (50vh pour avoir un contenu qui dépasse les 100vh)
   const free_space_buttom_mobile = !(
     router.pathname.includes(configPaths.pages.ItemArticle) ||
-    router.pathname.includes(configPaths.pages.StaticArticles) ||
+    router.pathname.includes(configPaths.pages.ItemNetwork) ||
+    router.pathname.includes(configPaths.pages.StaticArticle) ||
     isHome(router)
-  ) && <Box height="15vh" />;
+  ) && <Box height="50vh" />;
 
   return (
     <>
       <PageLayoutHybrid stores={stores} top={top_mobile} bottom={menu_mobile}>
         {props.children}
         {free_space_buttom_mobile}
+        {dialogs_Logged}
       </PageLayoutHybrid>
-      <DialogLoading stores={stores} />
-      {dialogs_Logged}
+      {/* <DialogLoading stores={stores} /> */}
+      {/* {dialogs_Logged} */}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { IStores } from "../../stores/RootStore";
-import { ConfigDisplay } from "../../config/globals";
+import { TDisplay } from "../../config/globals";
 import { Media } from "../../config/media";
 import AppLayoutMobile from "./AppLayoutMobile";
 import AppLayoutDesktop from "./AppLayoutDesktop";
@@ -18,23 +18,23 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
 
   return (
     <>
-      <Media_ at={ConfigDisplay.mobile}>
-        <AppLayoutMobile stores={stores} display={ConfigDisplay.mobile}>
+      <Media_ at={TDisplay.mobile}>
+        <AppLayoutMobile stores={stores} display={TDisplay.mobile}>
           {props.children}
         </AppLayoutMobile>
       </Media_>
-      <Media_ at={ConfigDisplay.desktop}>
-        <AppLayoutDesktop stores={stores} display={ConfigDisplay.desktop}>
+      <Media_ at={TDisplay.desktop}>
+        <AppLayoutDesktop stores={stores} display={TDisplay.desktop}>
           {props.children}
         </AppLayoutDesktop>
       </Media_>
-      <Media_ at={ConfigDisplay.large}>
-        <AppLayoutDesktop stores={stores} display={ConfigDisplay.large}>
+      <Media_ at={TDisplay.large}>
+        <AppLayoutDesktop stores={stores} display={TDisplay.large}>
           {props.children}
         </AppLayoutDesktop>
       </Media_>
-      <Media_ greaterThanOrEqual={ConfigDisplay.extra}>
-        <AppLayoutDesktop stores={stores} display={ConfigDisplay.extra}>
+      <Media_ greaterThanOrEqual={TDisplay.extra}>
+        <AppLayoutDesktop stores={stores} display={TDisplay.extra}>
           {props.children}
         </AppLayoutDesktop>
       </Media_>

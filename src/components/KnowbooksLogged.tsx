@@ -19,8 +19,10 @@ const KnowbooksLogged: React.FunctionComponent<IKnowbooksLoggedProps> = (
 ) => {
   const stores = props.stores;
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const knowbook_all_title = GUI_CONFIG.language.knowbooks_User.AllSaved_title;
-  const knowbook_none_title = GUI_CONFIG.language.knowbooks_User.None_Title;
+  const knowbook_all_title =
+    GUI_CONFIG.language.SEO.title_description.KnowbookSaved.title;
+  const knowbook_none_title =
+    GUI_CONFIG.language.SEO.title_description.KnowbookNone.title;
   const knowbook_all_image = configPaths.knowbook_all_image;
   const knowbook_none_image = configPaths.knowbook_none_image;
   const pathKnowbookSaved = configPaths.pages.KnowbookSaved;

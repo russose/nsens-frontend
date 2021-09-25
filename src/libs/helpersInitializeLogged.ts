@@ -5,7 +5,7 @@ import { initialyzeRelatedFromSaved } from "./helpersRelated";
 export async function initializeSavedLogged(stores: IStores) {
   try {
     const saved = await api_getSavedList(stores.baseStore.paramsPage.lang);
-    stores.savedStore.setSaved(saved, true);
+    await stores.savedStore.setSaved(saved, true);
     initialyzeRelatedFromSaved(stores);
   } catch (error) {
     // console.log(error);

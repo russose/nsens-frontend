@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType, configPaths, IButton } from "../config/globals";
+import { TButtonID, configPaths, IButton } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
 import { configGeneral } from "../config/globals";
@@ -25,7 +25,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
   const display: boolean =
     router.pathname.includes(configPaths.pages.ItemArticle) ||
     router.pathname.includes(configPaths.pages.ItemNetwork) ||
-    router.pathname.includes(configPaths.pages.StaticArticles);
+    router.pathname.includes(configPaths.pages.StaticArticle);
   // const display = true;
 
   const display_viz: boolean = router.pathname.includes(
@@ -34,33 +34,33 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
 
   const buttons: IButton[] = [
     {
-      Id: ButtonIDType.ARTICLE,
+      Id: TButtonID.ARTICLE,
       iconColor: !display_viz
         ? configGeneral.colors.iconColorDefaultSelected
         : configGeneral.colors.iconColorDefaultNotSelected,
       // hidden: router.pathname.includes(configPaths.pages.ItemArticle),
     },
     {
-      Id: ButtonIDType.VIZS,
+      Id: TButtonID.VIZS,
       iconColor: display_viz
         ? configGeneral.colors.iconColorDefaultSelected
         : configGeneral.colors.iconColorDefaultNotSelected,
       // hidden: router.pathname.includes(configPaths.pages.ItemNetwork),
     },
     {
-      Id: ButtonIDType.SEPARATOR,
+      Id: TButtonID.SEPARATOR,
       onClick: undefined,
       iconColor: configGeneral.colors.iconColorDefaultNotSelected,
       // iconColor: "white",
       disabled: true,
     },
     {
-      Id: ButtonIDType.SAVE,
+      Id: TButtonID.SAVE,
       onClick: goUserHandler(props.stores)(),
       iconColor: configGeneral.colors.iconColorDefaultNotSelected,
     },
     {
-      Id: ButtonIDType.EDIT,
+      Id: TButtonID.EDIT,
       onClick: empty_handler,
       hidden: true,
     },

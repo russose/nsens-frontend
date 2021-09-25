@@ -1,17 +1,36 @@
 import type { configDataFr } from "./configDataFr";
 import type { configDataMobile } from "./configDataMobile";
 
-export enum ConfigLanguage {
+export enum Tlanguage {
   fr = "fr",
   it = "it",
   en = "en",
 }
 
-export enum ConfigDisplay {
+export enum TDisplay {
   mobile = "Mobile",
   desktop = "Desktop",
   large = "Large",
   extra = "Extra",
+}
+
+export enum TPages {
+  Home = "Home",
+  About = "About",
+  User = "User",
+  ChangePassword = "ChangePassword",
+
+  ItemArticle = "ItemArticle",
+  ItemNetwork = "ItemNetwork",
+  StaticArticle = "StaticArticle",
+
+  Knowbooks_Featured = "Knowbooks_Featured",
+  StaticKnowbook = "StaticKnowbook",
+
+  Knowbooks_User = "Knowbooks_User",
+  Knowbook = "Knowbook",
+  KnowbookSaved = "KnowbookSaved",
+  KnowbookNone = "KnowbookNone",
 }
 
 export enum initStateCat {
@@ -21,9 +40,9 @@ export enum initStateCat {
   userData = "userData",
 }
 
-export type configDataDisplay = typeof configDataMobile;
+export type TconfigDataDisplay = typeof configDataMobile;
 
-export type configDataLanguage = typeof configDataFr;
+export type TconfigDataLanguage = typeof configDataFr;
 
 export interface IDate {
   year: number;
@@ -33,15 +52,15 @@ export interface IDate {
 
 export interface IGUICONFIG {
   // id: string;
-  language: configDataLanguage;
-  display: configDataDisplay;
+  language: TconfigDataLanguage;
+  display: TconfigDataDisplay;
 
-  currentDisplay: ConfigDisplay;
+  currentDisplay: TDisplay;
   // currentLanguage: string; //already covered by IparamsPage.lang
 }
 
 export interface IparamsPage {
-  lang: ConfigLanguage;
+  lang: Tlanguage;
   // display: ConfigDisplay;
 }
 
@@ -50,7 +69,7 @@ export interface IparamsAtom {
   title: string;
 }
 
-export enum ButtonIDType {
+export enum TButtonID {
   HOME = "HOME",
   KNOWBOOKS_USER = "KNOWBOOKS_USER",
   KNOWBOOKS_FEATURED = "KNOWBOOKS_FEATURED",
@@ -66,7 +85,7 @@ export enum ButtonIDType {
 }
 
 export interface IButton {
-  Id: ButtonIDType;
+  Id: TButtonID;
   iconColor?: IconT; //handler
   disabled?: boolean;
   hidden?: boolean;
@@ -89,7 +108,7 @@ export interface IAtom {
   pageid_wp: number;
   title: string;
   title_en: string;
-  language: ConfigLanguage;
+  language: Tlanguage;
   image_url: string;
   image_width: number;
   image_height: number;
@@ -100,7 +119,7 @@ export interface IAtom {
 export interface IKnowbook {
   id: number;
   name: KnowbookID;
-  language: ConfigLanguage;
+  language: Tlanguage;
   //creation_date: Date;
   //update_date: Date;
   items: AtomID[];
@@ -109,7 +128,7 @@ export interface IKnowbook {
 export interface IKnowbookFull {
   id: number; //internal ide for back only (database)
   name: KnowbookID;
-  language: ConfigLanguage;
+  language: Tlanguage;
   items: IAtom[];
 }
 
@@ -128,7 +147,7 @@ export interface IStaticKnowbookDefinition {
   type: StaticKnowbookFamilyType;
   nameOrPeriod: string;
   name_display?: string;
-  lang?: ConfigLanguage;
+  lang?: Tlanguage;
   items?: AtomID[];
 }
 
@@ -142,7 +161,7 @@ export interface IRelatedAtomFull {
   item: IAtom;
 }
 
-export enum LogActionType {
+export enum TLogAction {
   search = "search",
   save = "save",
   archive = "archive",

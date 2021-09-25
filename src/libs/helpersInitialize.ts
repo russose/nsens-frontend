@@ -2,9 +2,10 @@ import {
   IKnowbookStatic,
   IparamsPage,
   initStateCat,
-  ConfigDisplay,
+  TDisplay,
   IRelatedAtomFull,
   IStaticKnowbookDefinition,
+  TPages,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
@@ -31,10 +32,10 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
         paramsPage
       );
 
-      stores.baseStore.setGUICONFIGFromDisplay(ConfigDisplay.mobile);
+      stores.baseStore.setGUICONFIGFromDisplay(TDisplay.mobile);
 
-      const user = await api_getUser();
-      stores.baseStore.setUser({ username: user });
+      // const user = await api_getUser();
+      // stores.baseStore.setUser({ username: user });
 
       //Static knowbooks
       await initializeStaticKnowbooks(stores);
@@ -49,12 +50,14 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
     if (stores.baseStore.initCompleted.userData === undefined) {
       stores.baseStore.setInitCompleted(initStateCat.userData, false);
 
+      const user = await api_getUser();
+      stores.baseStore.setUser({ username: user });
+
       // Saved Items
       if (stores.baseStore.isLogged) {
         const helpersInitializeLogged = await import(
           "./helpersInitializeLogged"
         );
-
         await helpersInitializeLogged.initializeSavedLogged(stores);
       } else {
         stores.savedStore.clearSaved();
@@ -73,10 +76,11 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       } else {
         stores.knowbookStore.clearKnowbooks();
       }
+
       stores.baseStore.setInitCompleted(initStateCat.userData, true);
     }
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 }
 
@@ -91,9 +95,9 @@ export async function initializeStaticKnowbooks(stores: IStores) {
   });
 
   try {
-    for (const item of staticKnowbooks_local) {
+    for (const staticKnowbook of staticKnowbooks_local) {
       const knowbook_json: any = await api_getStaticKnowbookLocal(
-        item.nameOrPeriod,
+        staticKnowbook.nameOrPeriod,
         lang
       );
       const knowbook: IKnowbookStatic = {

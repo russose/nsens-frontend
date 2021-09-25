@@ -1,5 +1,5 @@
 import {
-  ConfigLanguage,
+  Tlanguage,
   eventT,
   initStateCat,
   IparamsPage,
@@ -11,7 +11,7 @@ import { goPage } from "../libs/helpersBase";
 import { initializeApp } from "../libs/helpersInitialize";
 
 export const onChangeLanguage =
-  (stores: IStores, language: ConfigLanguage) => (): void => {
+  (stores: IStores, language: Tlanguage) => (): void => {
     stores.baseStore.setInitCompleted(initStateCat.core, undefined);
     // stores.baseStore.setInitCompleted(initStateCat.staticKnowbooks, undefined);
     stores.baseStore.setInitCompleted(initStateCat.userData, undefined);

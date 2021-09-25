@@ -1,6 +1,6 @@
 import {
   IAtom,
-  ConfigLanguage,
+  Tlanguage,
   configPaths,
   IStaticKnowbookDefinition,
   configGeneral,
@@ -18,8 +18,8 @@ import {
 } from "../config/configURLs";
 import { fetch_data_local } from "./fetch";
 
-export const amount_data_fetched_items =
-  configFetching.amount_data_fetched_items;
+export const amount_data_fetched_items_searched =
+  configFetching.amount_data_fetched_items_searched;
 
 /**
  * From Web (Client side directly)
@@ -27,7 +27,7 @@ export const amount_data_fetched_items =
 
 export async function api_getCleanImageFromWeb_blocking(
   atoms: IAtom[],
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IAtom[]> {
   try {
     const items: IAtom[] = await improveImageFromWikipediaParallel_blocking(
@@ -48,7 +48,7 @@ export async function api_getItemsFeaturedFromWebWithoutImage(
   year: string,
   month: string,
   day: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   try {
@@ -71,7 +71,7 @@ export async function api_getItemsFeaturedFromWebWithoutImage(
 
 export async function api_searchFromWebWithoutImage(
   searchPattern: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   try {
@@ -80,7 +80,7 @@ export async function api_searchFromWebWithoutImage(
         searchPattern,
         // ROOT_URL_WIKIPEDIA_REST(lang),
         ROOT_URL_WIKIPEDIA_ACTION(lang),
-        amount_data_fetched_items,
+        amount_data_fetched_items_searched,
         "search",
         lang,
         exclusion_patterns
@@ -95,7 +95,7 @@ export async function api_searchFromWebWithoutImage(
 
 export async function api_getItemsFromTitlesFromWebCleanImage_blocking(
   titles_string: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   try {
@@ -116,11 +116,11 @@ export async function api_getItemsFromTitlesFromWebCleanImage_blocking(
 
 export async function api_getStaticKnowbookLocal(
   name: string,
-  lang: ConfigLanguage
+  lang: Tlanguage
 ): Promise<IStaticKnowbookDefinition> {
   try {
     const result: IStaticKnowbookDefinition = (await fetch_data_local(
-      configPaths.static.knowbooks.split("/")[1] +
+      configPaths.static.knowbooks_location.split("/")[1] +
         "/" +
         lang +
         "/" +
@@ -140,7 +140,7 @@ export async function api_getAllStaticKnowbooksLocal(): Promise<
 > {
   try {
     const result: IStaticKnowbookDefinition[] = (await fetch_data_local(
-      configPaths.static.knowbooks.split("/")[1] +
+      configPaths.static.knowbooks_location.split("/")[1] +
         "/" +
         configGeneral.staticKnowbooks.name_allStaticKnowbooks
     )) as IStaticKnowbookDefinition[];

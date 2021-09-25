@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ButtonIDType, IButton } from "../config/globals";
+import { TButtonID, IButton } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
   isItemSaved,
@@ -24,16 +24,16 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
   //List only updated properties regarding the NotLogged buttons
   const buttons_update: IButton[] = [
     {
-      Id: ButtonIDType.ARTICLE,
+      Id: TButtonID.ARTICLE,
     },
     {
-      Id: ButtonIDType.VIZS,
+      Id: TButtonID.VIZS,
     },
     {
-      Id: ButtonIDType.SEPARATOR,
+      Id: TButtonID.SEPARATOR,
     },
     {
-      Id: ButtonIDType.SAVE,
+      Id: TButtonID.SAVE,
       onClick: onSaved(stores)(stores.uiStore.selectedAtom.id),
       disabled: !isItemSavedActivated(stores)(stores.uiStore.selectedAtom.id),
       iconColor: isItemSaved(stores)(stores.uiStore.selectedAtom.id)
@@ -41,7 +41,7 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
         : configGeneral.colors.iconColorDefaultNotSelected,
     },
     {
-      Id: ButtonIDType.EDIT,
+      Id: TButtonID.EDIT,
       onClick: onEditKnowbooks(stores)(stores.uiStore.selectedAtom.id),
       hidden: !isItemSaved(stores)(stores.uiStore.selectedAtom.id),
     },

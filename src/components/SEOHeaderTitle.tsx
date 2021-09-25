@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Heading } from "gestalt";
 import {
-  ConfigLanguage,
+  Tlanguage,
   handlerT,
   JSONDataT,
   RoundingT,
@@ -41,8 +41,8 @@ const SEOHeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   );
 
   function alternate_links(): any[] {
-    const alternate = Object.values(ConfigLanguage).map(
-      (language: ConfigLanguage, key) => {
+    const alternate = Object.values(Tlanguage).map(
+      (language: Tlanguage, key) => {
         return (
           <link
             key={`link-alternate-${path_full}-${key}`}
@@ -59,7 +59,7 @@ const SEOHeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
         key={`link-alternate-default-${path_full}`}
         rel="alternate"
         hrefLang="x-default"
-        href={"/" + ConfigLanguage.en + path_full.substring(3)}
+        href={"/" + Tlanguage.en + path_full.substring(3)}
       />
     );
 

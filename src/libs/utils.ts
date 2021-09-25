@@ -1,4 +1,4 @@
-import { AtomID, ConfigLanguage, IAtom } from "../config/globals";
+import { AtomID, Tlanguage, IAtom } from "../config/globals";
 
 export const empty_handler = () => {};
 
@@ -48,6 +48,9 @@ export function filterTitlesListFromPatterns(
 }
 
 export function prepareArticle(article: string): string {
+  if (article === undefined || article === null) {
+    return "issue with this article";
+  }
   const href_with_including_a_regex = /<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/gi;
   const link_open_regex = /<\s*a[^>]*>/gi;
   const link_close_regex = /<\s*\/a[^>]*>/gi;
@@ -73,7 +76,7 @@ export function prepareArticle(article: string): string {
 export const empty_value_atom = "";
 export function newAtom(
   id: AtomID,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   itemToCopy: IAtom = undefined
 ): IAtom {
   if (itemToCopy === undefined && (id === undefined || lang === undefined)) {
@@ -268,6 +271,9 @@ export function makeArrayFlat(array: any[]): any[] {
 /********************************************************** */
 
 export function capitalizeFirstLetter(string: string): string {
+  if (string === undefined || string.length === 0) {
+    return string;
+  }
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 /**

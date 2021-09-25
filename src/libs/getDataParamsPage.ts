@@ -1,22 +1,26 @@
-import {
-  ConfigLanguage,
-  IparamsPage,
-  languages_activated,
-} from "../config/globals";
+import { Tlanguage, IparamsPage, languages_activated } from "../config/globals";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 export interface IPage {
   paramsPage: IparamsPage;
 }
 
-export function getAllConfigGui() {
-  const languages_list = Object.values(ConfigLanguage).filter((language) => {
+interface IParamsContent {
+  lang: Tlanguage;
+}
+
+export interface IParamsBase {
+  params: IParamsContent;
+}
+
+export function getAllConfigGui(): IParamsBase[] {
+  const languages_list = Object.values(Tlanguage).filter((language) => {
     return languages_activated.includes(language);
   });
   // const displays_list: ConfigDisplay[] = Object.values(ConfigDisplay);
 
   // const guiConfigList: any[] = [];
-  const guiConfigList: any[] = languages_list.map((language) => {
+  const guiConfigList: IParamsBase[] = languages_list.map((language) => {
     return { params: { lang: language } };
   });
   // languages_list.forEach((language) => {
@@ -60,7 +64,7 @@ export const I_getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const I_getStaticPaths: GetStaticPaths = async (context) => {
-  const paths = getAllConfigGui();
+  const paths = getAllConfigGui() as any;
   return {
     paths,
     fallback: false,

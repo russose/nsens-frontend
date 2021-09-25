@@ -73,31 +73,14 @@ export async function my_api(
   return res;
 }
 
-// export async function fetchArticle(
-//   title: string,
-//   ROOT_URL: string
-// ): Promise<string> {
-//   const res = await axios({
-//     method: "get",
-//     headers: {
-//       // "Api-User-Agent": userAgentString,
-//       Accept: "text/html",
-//     },
-//     // baseURL: ROOT_URL + "html/",  //DSKTOP
-//     baseURL: ROOT_URL + "mobile-html/", //MOBILE
-//     url: title + "?redirect=true",
-//   });
-
-//   const data = await res.data;
-
-//   return data;
-// }
 export async function fetchArticle(
   title: string,
   ROOT_URL: string
 ): Promise<string> {
+  const title_ = title.replace(/\//g, "_");
+
   const data = await fetch_data_wiki_rest(
-    title + "?redirect=true",
+    title_ + "?redirect=true",
     ROOT_URL + "page/mobile-html/" //MOBILE,
     // ROOT_URL + "html/",  //DSKTOP
   );

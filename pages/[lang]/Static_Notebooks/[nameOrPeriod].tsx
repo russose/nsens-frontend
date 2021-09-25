@@ -43,13 +43,13 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
     items = [];
   }
 
-  const amount_item_displayed =
-    GUI_CONFIG.display.display.amount_item_displayed;
+  const amount_related_displayed =
+    GUI_CONFIG.display.display.amount_related_displayed;
 
   const related_items = getRelatedItemsForItemsShuffleSized_Static(
     stores,
     items,
-    amount_item_displayed
+    amount_related_displayed
   );
 
   let content;

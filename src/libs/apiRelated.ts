@@ -5,7 +5,7 @@ import {
 import {
   AtomID,
   configFetching,
-  ConfigLanguage,
+  Tlanguage,
   IRelatedAtomFull,
 } from "../config/globals";
 import {
@@ -19,7 +19,7 @@ const amount_max_by_node_wikidata = configFetching.amount_max_by_node_wikidata;
 export async function api_getRelatedFromWebWithoutImage(
   itemId: AtomID,
   title: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtomFull[]> {
   try {
@@ -42,7 +42,7 @@ export async function api_getRelatedFromWebWithoutImage(
 export async function api_getRelatedFromWebCleanImage_blocking(
   itemId: AtomID,
   title: string,
-  lang: ConfigLanguage,
+  lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IRelatedAtomFull[]> {
   try {

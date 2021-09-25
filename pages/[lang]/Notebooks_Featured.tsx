@@ -13,6 +13,7 @@ import { useStores } from "../../src/stores/RootStoreHook";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 import KnowbooksStatic from "../../src/components/KnowbooksStatic";
+import ContentLoading from "../../src/components/ContentLoading";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 
 // const topLevelPattern_ = "Category:Wikipedia level-2 vital articles by topic";
@@ -31,12 +32,13 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   // initializeKnowbooks(stores);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
 
-  const title = GUI_CONFIG.language.knowbooks_Featured.knowbooks_title;
+  const title =
+    GUI_CONFIG.language.SEO.title_description.Knowbooks_Featured.title;
 
   return (
     <AppLayout stores={stores}>

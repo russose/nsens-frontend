@@ -5,6 +5,7 @@ import { ColorT, reactComponentT } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
 import { configGeneral } from "../../config/globals";
 import VisibilitySensorFeed from "../VisibilitySensorFeed";
+import ContentLoading from "../ContentLoading";
 
 interface IPageLayoutProps {
   stores: IStores;
@@ -20,6 +21,8 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
   // const heightHeader = 60;
   const heightBody =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightBody;
+
+  // props.stores.uiStore.setShowLoading(true);
 
   return (
     <>
@@ -70,15 +73,19 @@ const PageLayoutHybrid: React.FunctionComponent<IPageLayoutProps> = (props) => {
             alignItems="center"
           >
             <Box column={12} smColumn={12} mdColumn={12} lgColumn={12}>
-              <Box
-                color={color_background}
-                display="flex"
-                direction="column"
-                justifyContent="between"
-                overflow="auto"
-              >
-                {props.children}
-              </Box>
+              {!props.stores.uiStore.showLoading ? (
+                <Box
+                  color={color_background}
+                  display="flex"
+                  direction="column"
+                  justifyContent="between"
+                  overflow="auto"
+                >
+                  {props.children}
+                </Box>
+              ) : (
+                <ContentLoading stores={props.stores} />
+              )}
             </Box>
           </Box>
           <VisibilitySensorFeed stores={props.stores} />

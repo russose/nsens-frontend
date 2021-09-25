@@ -1,9 +1,9 @@
-import { ConfigLanguage, IStaticKnowbookDefinition } from "./globals";
+import { Tlanguage, IStaticKnowbookDefinition } from "./globals";
 import { StaticKnowbookFamilyType } from "./types";
 
 export const staticTrendFeaturedKnowbooks: IStaticKnowbookDefinition[] = [
   { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2016-2020" },
-  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2021" },
+  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2020" },
   // {
   //   type: StaticKnowbookFamilyType.FEATURED,
   //   nameOrPeriod: "Infinis",
@@ -29,7 +29,7 @@ export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
     type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Ecologie_Developpement_Durable",
     name_display: "Ecologie et Développement Durable",
-    lang: ConfigLanguage.fr,
+    lang: Tlanguage.fr,
     items: [
       "Classification scientifique des espèces",
       "Extinction des espèces",
@@ -51,7 +51,7 @@ export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
   {
     type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Infinis",
-    lang: ConfigLanguage.fr,
+    lang: Tlanguage.fr,
     items: [
       "Physique quantique",
       "Relativité générale",
@@ -67,7 +67,7 @@ export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
   {
     type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Philosophie",
-    lang: ConfigLanguage.fr,
+    lang: Tlanguage.fr,
     items: [
       "William James",
       "Blaise Pascal",
@@ -99,7 +99,7 @@ export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
   {
     type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Ecologia",
-    lang: ConfigLanguage.it,
+    lang: Tlanguage.it,
     items: [
       "Ecologia",
       "Sviluppo sostenibile",
@@ -113,7 +113,7 @@ export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
   {
     type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Infinito",
-    lang: ConfigLanguage.it,
+    lang: Tlanguage.it,
     items: [
       "Meccanica quantistica",
       "Relatività generale",
@@ -127,7 +127,7 @@ export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
   {
     type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Ecology",
-    lang: ConfigLanguage.en,
+    lang: Tlanguage.en,
     items: [
       "Ecology",
       "Sustainable development",
@@ -141,7 +141,7 @@ export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
   {
     type: StaticKnowbookFamilyType.FEATURED,
     nameOrPeriod: "Infinity",
-    lang: ConfigLanguage.en,
+    lang: Tlanguage.en,
     items: [
       "Quantum mechanics",
       "General relativity",

@@ -16,6 +16,7 @@ import {
   onChangePassword_text,
 } from "../../src/handlers/handlers_ChangePassword";
 import { initializeApp } from "../../src/libs/helpersInitialize";
+import ContentLoading from "../../src/components/ContentLoading";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -24,11 +25,11 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   initializeApp(stores, paramsPage);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const title = GUI_CONFIG.language.changePassword.title;
+  const title = GUI_CONFIG.language.SEO.title_description.ChangePassword.title;
   const placeholder_username =
     GUI_CONFIG.language.user.loginSignup.username_placeholder;
   const password_placeholder =

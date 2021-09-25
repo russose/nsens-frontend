@@ -39,7 +39,7 @@ export class SavedStore {
     this.$saved.delete(key);
   }
 
-  setSaved(atoms: IAtom[], forceUpdateHistory: boolean): void {
+  async setSaved(atoms: IAtom[], forceUpdateHistory: boolean): Promise<void> {
     if (atoms === undefined || atoms.length === 0) {
       return;
     }

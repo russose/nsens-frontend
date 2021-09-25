@@ -13,6 +13,7 @@ import {
 import { initializeApp } from "../../../src/libs/helpersInitialize";
 import { prepareArticle } from "../../../src/libs/utils";
 import { useStores } from "../../../src/stores/RootStoreHook";
+import ContentLoading from "../../../src/components/ContentLoading";
 
 const ItemStaticArticle: React.FunctionComponent<IPageStaticArticle> = (
   props
@@ -22,7 +23,7 @@ const ItemStaticArticle: React.FunctionComponent<IPageStaticArticle> = (
   initializeApp(stores, paramsPage);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
 
   const item_title = props.title;

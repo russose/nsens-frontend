@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { configGeneral, IButton, RoundingT } from "../config/globals";
-import { ButtonIDType } from "../config/globals";
+import { TButtonID } from "../config/globals";
 import { isMobile } from "../libs/helpersBase";
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
@@ -19,19 +19,19 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
 
   const buttons: IButton[] = [
     {
-      Id: ButtonIDType.HOME,
+      Id: TButtonID.HOME,
     },
     {
-      Id: ButtonIDType.KNOWBOOKS_FEATURED,
+      Id: TButtonID.KNOWBOOKS_FEATURED,
     },
     {
-      Id: ButtonIDType.KNOWBOOKS_USER,
+      Id: TButtonID.KNOWBOOKS_USER,
     },
     {
-      Id: ButtonIDType.LOGIN,
+      Id: TButtonID.LOGIN,
     },
     {
-      Id: ButtonIDType.INFO,
+      Id: TButtonID.INFO,
     },
   ];
 
