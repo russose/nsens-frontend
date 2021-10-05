@@ -11,24 +11,28 @@ export const configDataEn: TconfigDataLanguage = {
   source_wikipedia: "Source: Wikipedia",
   SEO: {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
-    title_page_base: "n.Sens",
+    title_page_base: "n.Sens - A new way to explore Open Knowledge",
+    descirption_page_base: "n.sens is a platform around free knowledge",
     title_description: {
-      [TPages.Home]: { title: "???", description: "???" },
+      [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
-        title: "A new way to explore Open Knowledge",
-        description: "???",
+        title: "About",
+        description: "",
       },
-      [TPages.User]: { title: "", description: "???" },
-      [TPages.ChangePassword]: { title: "Update password", description: "???" },
-      [TPages.ItemArticle]: { title: "", description: "???" },
-      [TPages.ItemNetwork]: { title: "", description: "???" },
-      [TPages.StaticArticle]: { title: "", description: "???" },
-      [TPages.Knowbooks_Featured]: { title: "Featured", description: "???" },
-      [TPages.StaticKnowbook]: { title: "", description: "???" },
-      [TPages.Knowbooks_User]: { title: "My Notebooks", description: "???" },
-      [TPages.Knowbook]: { title: "", description: "???" },
-      [TPages.KnowbookSaved]: { title: "Saved (all)", description: "???" },
-      [TPages.KnowbookNone]: { title: "In no notebook", description: "???" },
+      [TPages.User]: { title: "", description: "" },
+      [TPages.ChangePassword]: { title: "Update password", description: "" },
+      [TPages.ItemArticle]: { title: "", description: "" },
+      [TPages.ItemNetwork]: { title: "", description: "" },
+      [TPages.StaticArticle]: { title: "", description: "" },
+      [TPages.Knowbooks_Featured]: {
+        title: "Featured Notebooks",
+        description: "",
+      },
+      [TPages.StaticKnowbook]: { title: "", description: "" },
+      [TPages.Knowbooks_User]: { title: "My Notebooks", description: "" },
+      [TPages.Knowbook]: { title: "", description: "" },
+      [TPages.KnowbookSaved]: { title: "Saved (all)", description: "" },
+      [TPages.KnowbookNone]: { title: "Without Notebook", description: "" },
     },
   },
   about: {
@@ -38,7 +42,7 @@ export const configDataEn: TconfigDataLanguage = {
     features: [
       {
         title: "Find",
-        description: "Find Wikipedia articles visually",
+        description: "Find Wikipedia articles visually, with graphs and cards",
         icon: "search",
       },
       {

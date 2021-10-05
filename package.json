@@ -21,16 +21,16 @@
   },
   "keywords": [],
   "dependencies": {
-    "@artsy/fresnel": "^3.0.1",
+    "@artsy/fresnel": "^3.0.2",
     "@types/lz-string": "^1.3.34",
     "@visx/group": "^2.1.0",
     "@visx/network": "^2.1.0",
     "@visx/shape": "^2.1.1",
     "@visx/text": "^2.1.1",
     "@visx/zoom": "^2.1.0",
-    "axios": "^0.21.4",
+    "axios": "^0.22.0",
     "d3-force": "^3.0.0",
-    "gestalt": "^35.2.1",
+    "gestalt": "^37.0.1",
     "lz-string": "^1.4.4",
     "mobx": "^6.3.3",
     "mobx-react-lite": "^3.2.1",
@@ -44,14 +44,14 @@
     "@next/bundle-analyzer": "^11.1.2",
     "@types/d3-force": "^3.0.3",
     "@types/gestalt": "^34.3.1",
-    "@types/node": "^16.9.4",
-    "@types/react": "^17.0.21",
-    "dependency-cruiser": "^10.3.0",
-    "next-sitemap": "^1.6.168",
+    "@types/node": "^16.10.2",
+    "@types/react": "^17.0.27",
+    "dependency-cruiser": "^10.3.1",
+    "next-sitemap": "^1.6.173",
     "serve": "^12.0.1",
     "typescript": "^4.4.3"
   },
   "comments": {
     "next-transpile-modules": "used for amCharts or any lib that needs next.config.js"
-  }
+  } 
 }

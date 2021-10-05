@@ -4,6 +4,7 @@ import {
   configPaths,
   IStaticKnowbookDefinition,
   configGeneral,
+  IStaticKnowbookWithItemsDefinition,
 } from "../config/globals";
 import {
   ItemsFeaturedFromWikipediaWithoutImage,
@@ -114,7 +115,7 @@ export async function api_getItemsFromTitlesFromWebCleanImage_blocking(
   }
 }
 
-export async function api_getStaticKnowbookLocal(
+export async function api_getStaticKnowbookWithItemsLocal(
   name: string,
   lang: Tlanguage
 ): Promise<IStaticKnowbookDefinition> {
@@ -145,6 +146,25 @@ export async function api_getAllStaticKnowbooksLocal(): Promise<
         configGeneral.staticKnowbooks.name_allStaticKnowbooks
     )) as IStaticKnowbookDefinition[];
 
+    return result;
+  } catch (error) {
+    // console.log(error);
+    return [];
+  }
+}
+
+export async function api_getAllStaticKnowbooksExtractWithItemsLocal(
+  lang: Tlanguage
+): Promise<IStaticKnowbookWithItemsDefinition[]> {
+  try {
+    const result: IStaticKnowbookWithItemsDefinition[] =
+      (await fetch_data_local(
+        configPaths.static.knowbooks_location.split("/")[1] +
+          "/" +
+          lang +
+          "/" +
+          configGeneral.staticKnowbooks.name_extractStaticKnowbooks
+      )) as IStaticKnowbookWithItemsDefinition[];
     return result;
   } catch (error) {
     // console.log(error);

@@ -7,10 +7,10 @@ const card_compact_vizs_size = 70;
 
 export const configDataMobile = {
   display: {
-    displayFeedIncrement: 16,
-    amount_related_displayed: 50,
+    displayFeedIncrement: 6,
+    amount_related_displayed: 32,
   },
-  max_nodes_network: 30,
+  max_nodes_network: 50,
   // min_width_network: 500,
   heightTopAndBottom: 200,
   heightArticle: "90vh",

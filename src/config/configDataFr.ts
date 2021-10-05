@@ -5,27 +5,35 @@ export const configDataFr = {
   source_wikipedia: "Source: Wikipedia",
   SEO: {
     // canonical: "https://www.nsens.org/fr/Mobile/About/",
-    title_page_base: "n.Sens",
+    title_page_base: "n.Sens - Explorer la Connaissance libre autrement",
+    descirption_page_base:
+      "n.Sens est une plateforme autour de la connaissance libre",
     title_description: {
-      [TPages.Home]: { title: "???", description: "???" },
+      [TPages.Home]: { title: "Accueil", description: "" },
       [TPages.About]: {
-        title: "Explorer la Connaissance Libre autrement",
-        description: "???",
+        title: "Information",
+        description: "",
       },
-      [TPages.User]: { title: "", description: "???" },
+      [TPages.User]: { title: "", description: "" },
       [TPages.ChangePassword]: {
         title: "Modifier votre mot de passe",
-        description: "???",
+        description: "",
       },
-      [TPages.ItemArticle]: { title: "", description: "???" },
-      [TPages.ItemNetwork]: { title: "", description: "???" },
-      [TPages.StaticArticle]: { title: "", description: "???" },
-      [TPages.Knowbooks_Featured]: { title: "Sélection", description: "???" },
-      [TPages.StaticKnowbook]: { title: "", description: "???" },
-      [TPages.Knowbooks_User]: { title: "Mes Carnets", description: "???" },
-      [TPages.Knowbook]: { title: "", description: "???" },
-      [TPages.KnowbookSaved]: { title: "Sauvés (tous)", description: "???" },
-      [TPages.KnowbookNone]: { title: "Aucun Carnet", description: "???" },
+      [TPages.ItemArticle]: { title: "", description: "" },
+      [TPages.ItemNetwork]: { title: "", description: "" },
+      [TPages.StaticArticle]: { title: "", description: "" },
+      [TPages.Knowbooks_Featured]: {
+        title: "Carnets indispensables",
+        description: "",
+      },
+      [TPages.StaticKnowbook]: { title: "", description: "" },
+      [TPages.Knowbooks_User]: { title: "Mes Carnets", description: "" },
+      [TPages.Knowbook]: { title: "", description: "" },
+      [TPages.KnowbookSaved]: {
+        title: "Sauvegardés (tous)",
+        description: "",
+      },
+      [TPages.KnowbookNone]: { title: "Sans carnet", description: "" },
     },
   },
   about: {
@@ -36,7 +44,7 @@ export const configDataFr = {
       {
         title: "Trouver",
         description:
-          "Trouver des articles Wikipedia de façon visuelle et ludique",
+          "Trouver des articles Wikipedia avec des cartes et des graphes, de façon visuelle et ludique",
         icon: "search",
       },
       {
@@ -132,7 +140,7 @@ export const configDataFr = {
     deconnexion: "Se déconnecter",
     changePassword: "Modifier mot de passe",
     catchup_message:
-      "Enregistrez-vous pour sauvegardez votre contenu et personnaliser votre expérience",
+      "Créer un compte pour sauvegardez votre contenu et personnaliser votre expérience",
     loginSignup: {
       username_placeholder: "Email",
       password_placeholder: "Mot de passe",

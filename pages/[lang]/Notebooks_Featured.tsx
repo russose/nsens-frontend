@@ -10,40 +10,41 @@ import {
   I_getStaticProps,
 } from "../../src/libs/getDataParamsPage";
 import { useStores } from "../../src/stores/RootStoreHook";
-import { initializeApp } from "../../src/libs/helpersInitialize";
+import {
+  initializeApp,
+  initializeStaticKnowbooksFullPage,
+} from "../../src/libs/helpersInitialize";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 import KnowbooksStatic from "../../src/components/KnowbooksStatic";
 import ContentLoading from "../../src/components/ContentLoading";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 
-// const topLevelPattern_ = "Category:Wikipedia level-2 vital articles by topic";
-// const languages_list = Object.values(ConfigLanguage);
-// buildVitalStaticKnowbooksAllLanguages(
-//   topLevelPattern_,
-//   ROOT_URL_WIKIPEDIA_ACTION(ConfigLanguage.en),
-//   URLs.ROOT_URL_WIKIDATA_ACTION,
-//   languages_list
-// );
-
 const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
+
   initializeApp(stores, paramsPage);
-  // initializeKnowbooks(stores);
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <ContentLoading stores={stores} />;
   }
 
-  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-
-  const title =
-    GUI_CONFIG.language.SEO.title_description.Knowbooks_Featured.title;
+  initializeStaticKnowbooksFullPage(stores);
+  if (stores.baseStore.initCompleted.staticKnowbooksFull !== true) {
+    //Loading StaticKnowbooks Full (blocking)
+    return <ContentLoading stores={stores} />;
+  }
 
   return (
     <AppLayout stores={stores}>
       <Box>
-        <SEOHeaderTitle stores={stores} title={title} />
+        <SEOHeaderTitle
+          stores={stores}
+          title={
+            stores.baseStore.GUI_CONFIG.language.SEO.title_description
+              .Knowbooks_Featured.title
+          }
+        />
         <KnowbooksStatic stores={stores} />
       </Box>
     </AppLayout>

@@ -29,7 +29,6 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const title = GUI_CONFIG.language.SEO.title_description.ChangePassword.title;
   const placeholder_username =
     GUI_CONFIG.language.user.loginSignup.username_placeholder;
   const password_placeholder =
@@ -121,7 +120,11 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   return (
     <>
       <AppLayout stores={stores}>
-        <SEOHeaderTitle stores={stores} title={title} hidden={false} />
+        <SEOHeaderTitle
+          stores={stores}
+          title={GUI_CONFIG.language.SEO.title_description.ChangePassword.title}
+          hidden={false}
+        />
         {changePasswordForm}
       </AppLayout>
     </>

@@ -24,8 +24,8 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 
   initializeApp(stores, paramsPage);
 
-  // Initialyzed until userData to avoid allRelatedIdsForHome being refreshed 1000s times because of home update
-  if (stores.baseStore.initCompleted.userData !== true) {
+  // To be checked/deleted: Initialyzed until userData to avoid allRelatedIdsForHome being refreshed 1000s times because of home update
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <ContentLoading stores={stores} />;
   }
@@ -56,7 +56,14 @@ const Home: React.FunctionComponent<IPage> = (props) => {
   return (
     <>
       <AppLayout stores={stores}>
-        <SEOHeaderTitle stores={stores} title={undefined} hidden={true} />
+        <SEOHeaderTitle
+          stores={stores}
+          title={
+            stores.baseStore.GUI_CONFIG.language.SEO.title_description.Home
+              .title
+          }
+          hidden={true}
+        />
         {page_content}
       </AppLayout>
     </>

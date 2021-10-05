@@ -3,13 +3,12 @@ import {
   configFetching,
   Tlanguage,
   configPaths,
-  IStaticKnowbookDefinition,
+  IStaticKnowbookWithItemsDefinition,
 } from "../config/globals";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import {
   buildAllStaticKnowbooks,
   getAllStaticKnowbooks,
-  getKnowbookFromAllStaticKnowbooks,
 } from "./getDataStaticKnowbooksHelpers";
 import { readFileJson } from "./utilsServer";
 
@@ -65,30 +64,27 @@ async function getConfigDataGuiStaticKnowbooks(
   // Toujours traiter l'année en cours donc ignorer
   // if (nameOrPeriod !== DateToStringWithZero(current_year) || is_testing_mode) {
   try {
-    const staticKnowbook_with_items: any = await readFileJson(
-      static_path_base,
-      nameOrPeriod + ".txt"
-    );
+    const staticKnowbook_with_items: IStaticKnowbookWithItemsDefinition =
+      (await readFileJson(
+        static_path_base,
+        nameOrPeriod + ".txt"
+      )) as IStaticKnowbookWithItemsDefinition;
 
     //************************** CHECKS ****************************************
-    if (false) {
-      const allStaticKnowbooks = await getAllStaticKnowbooks();
-      const staticKnowbook: IStaticKnowbookDefinition =
-        await getKnowbookFromAllStaticKnowbooks(
-          nameOrPeriod,
-          lang,
-          allStaticKnowbooks
-        );
-      const difference =
-        staticKnowbook.items.length - staticKnowbook_with_items.items.length;
-      if (difference !== 0) {
-        console.log("Some items not found in this notebook: ");
-        console.log(nameOrPeriod, lang);
-        console.log("Amount: ", difference);
-      }
-    }
-
-    //************************** CHECKS ****************************************
+    // const allStaticKnowbooks = await getAllStaticKnowbooks();
+    // const staticKnowbook: IStaticKnowbookDefinition =
+    //   await getKnowbookFromAllStaticKnowbooks(
+    //     nameOrPeriod,
+    //     lang,
+    //     allStaticKnowbooks
+    //   );
+    // const difference =
+    //   staticKnowbook.items.length - staticKnowbook_with_items.items.length;
+    // if (difference !== 0) {
+    //   console.log("Some items not found in this notebook: ");
+    //   console.log(nameOrPeriod, lang);
+    //   console.log("Amount: ", difference);
+    // }
 
     const guiConfigDataStaticKnowbooks: IPageStaticKnowbooks = {
       // paramsPage: (await getDataParamsPage({ lang: lang, display: display }))

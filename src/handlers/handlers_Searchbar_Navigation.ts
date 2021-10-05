@@ -4,16 +4,12 @@ import {
   configPaths,
   eventT,
 } from "../config/globals";
-import {
-  goPage,
-  setFeedFromMostviewedAndRelated,
-  setFeedFromSearch,
-} from "../libs/helpersBase";
+import { goPage, updateHome, setFeedFromSearch } from "../libs/helpersBase";
 import { IStores } from "../stores/RootStore";
 
 /*******************Logo*************************** */
 export const onTapLogo = (stores: IStores) => (): void => {
-  setFeedFromMostviewedAndRelated(stores);
+  updateHome(stores);
   goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
 };
 
@@ -30,7 +26,7 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   if (stores.uiStore.searchPattern.length > 0) {
     setFeedFromSearch(stores, stores.uiStore.searchPattern);
   } else {
-    setFeedFromMostviewedAndRelated(stores);
+    updateHome(stores);
   }
   goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
 };
@@ -40,7 +36,7 @@ export const onSearchHomeKeyboard =
   (input: { event: eventT; value: string }): void => {
     if (input.event.key === "Enter") {
       if (stores.uiStore.searchPattern.length === 0) {
-        setFeedFromMostviewedAndRelated(stores);
+        updateHome(stores);
       } else {
         onSearchHomeSubmit(stores)();
       }

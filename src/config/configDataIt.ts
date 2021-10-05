@@ -11,30 +11,34 @@ export const configDataIt: TconfigDataLanguage = {
   source_wikipedia: "Sorgente: Wikipedia",
   SEO: {
     // canonical: "https://www.nsens.org/it/Mobile/About/",
-    title_page_base: "n.Sens",
+    title_page_base: "n.Sens - Esplora la conoscenza libera in un modo nuovo",
+    descirption_page_base: "???",
     title_description: {
-      [TPages.Home]: { title: "???", description: "???" },
+      [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
-        title: "Esplora la conoscenza libera in un modo nuovo",
-        description: "???",
+        title: "Informazione",
+        description: "",
       },
-      [TPages.User]: { title: "", description: "???" },
+      [TPages.User]: { title: "", description: "" },
       [TPages.ChangePassword]: {
         title: "Modifica la password",
-        description: "???",
+        description: "",
       },
-      [TPages.ItemArticle]: { title: "", description: "???" },
-      [TPages.ItemNetwork]: { title: "", description: "???" },
-      [TPages.StaticArticle]: { title: "", description: "???" },
-      [TPages.Knowbooks_Featured]: { title: "Selezione", description: "???" },
-      [TPages.StaticKnowbook]: { title: "", description: "???" },
+      [TPages.ItemArticle]: { title: "", description: "" },
+      [TPages.ItemNetwork]: { title: "", description: "" },
+      [TPages.StaticArticle]: { title: "", description: "" },
+      [TPages.Knowbooks_Featured]: {
+        title: "Documenti essenziali",
+        description: "",
+      },
+      [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbooks_User]: {
         title: "I Miei Documenti",
-        description: "???",
+        description: "",
       },
-      [TPages.Knowbook]: { title: "", description: "???" },
-      [TPages.KnowbookSaved]: { title: "Salvati (tutti)", description: "???" },
-      [TPages.KnowbookNone]: { title: "Nessun Documento", description: "???" },
+      [TPages.Knowbook]: { title: "", description: "" },
+      [TPages.KnowbookSaved]: { title: "Salvati (tutti)", description: "" },
+      [TPages.KnowbookNone]: { title: "Senza Documento", description: "" },
     },
   },
   about: {
@@ -44,7 +48,8 @@ export const configDataIt: TconfigDataLanguage = {
     features: [
       {
         title: "Trova",
-        description: "Trova e vizualizza ciò che desideri in modo divertente",
+        description:
+          "Trova e vizualizza articoli Wikipedia in modo divertente, con grafici e schede",
         icon: "search",
       },
       {

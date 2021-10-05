@@ -79,8 +79,8 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
       justifyContent="center"
       column={5}
       smColumn={4}
-      mdColumn={3}
-      lgColumn={2}
+      mdColumn={4}
+      lgColumn={3}
     >
       <MenuBarNavigation stores={stores} rounding={rounding} />
     </Box>
@@ -127,7 +127,6 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
         {props.children}
         {dialogs_Logged}
       </PageLayoutHybrid>
-      {/* {dialogs_Logged} */}
     </>
   );
 };

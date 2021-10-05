@@ -36,7 +36,7 @@ export enum TPages {
 export enum initStateCat {
   core = "core",
   // display = "display",
-  // staticKnowbooks = "staticKnowbooks",
+  staticKnowbooksFull = "staticKnowbooksFull",
   userData = "userData",
 }
 
@@ -149,6 +149,14 @@ export interface IStaticKnowbookDefinition {
   name_display?: string;
   lang?: Tlanguage;
   items?: AtomID[];
+}
+
+export interface IStaticKnowbookWithItemsDefinition {
+  type: StaticKnowbookFamilyType;
+  nameOrPeriod: string;
+  name_display: string;
+  lang: Tlanguage;
+  items: IAtom[];
 }
 
 export interface IRelatedAtom {

@@ -27,16 +27,15 @@ const SEOHeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   const color_headers = configGeneral.colors.headers as handlerT;
   const rounding_menu: RoundingT = GUI_CONFIG.display.rounding_menu;
   let title_page = GUI_CONFIG.language.SEO.title_page_base;
-  if (props.title !== undefined) {
-    title_page = title_page + " - " + props.title;
+  if (props.title !== "") {
+    // title_page = title_page + " - " + props.title;
+    title_page = props.title + " | " + title_page;
   }
 
-  // const description = GUI_CONFIG.language.landing.description;
-
-  let description = "";
+  let description = GUI_CONFIG.language.SEO.descirption_page_base;
   Object.values(GUI_CONFIG.language.about.features).forEach(
     (item: JSONDataT) => {
-      description = description + " " + item.description;
+      description = description + " - " + item.description;
     }
   );
 

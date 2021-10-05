@@ -115,8 +115,6 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
         {free_space_buttom_mobile}
         {dialogs_Logged}
       </PageLayoutHybrid>
-      {/* <DialogLoading stores={stores} /> */}
-      {/* {dialogs_Logged} */}
     </>
   );
 };

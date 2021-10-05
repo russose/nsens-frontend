@@ -29,12 +29,16 @@ const KnowbookSpecialSaved: React.FunctionComponent<IPage> = (props) => {
     //Not yet initialyzed
     return <ContentLoading stores={stores} />;
   }
-  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const title = GUI_CONFIG.language.SEO.title_description.KnowbookSaved.title;
 
   return (
     <AppLayout stores={stores}>
-      <SEOHeaderTitle stores={stores} title={title} />
+      <SEOHeaderTitle
+        stores={stores}
+        title={
+          stores.baseStore.GUI_CONFIG.language.SEO.title_description
+            .KnowbookSaved.title
+        }
+      />
       <CardAtomGrid
         id="Saved"
         stores={stores}

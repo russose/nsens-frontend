@@ -26,15 +26,15 @@ import {
 import { api_getCleanImageFromWeb_blocking } from "../libs/apiItems";
 import {
   fetchNewMostviewed,
-  Mix2Array,
   removeSavedFromItems,
+  setFeedFromMostviewedAndRelated,
 } from "../libs/helpersBase";
 import { newAtom, shuffleArray } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
 interface IInitState {
   [initStateCat.core]: boolean;
-  // [initStateCat.staticKnowbooks]: boolean;
+  [initStateCat.staticKnowbooksFull]: boolean;
   [initStateCat.userData]: boolean;
 }
 
@@ -42,7 +42,7 @@ export class BaseStore {
   $rootStore: RootStore;
   private $initCompleted: IInitState = {
     [initStateCat.core]: undefined,
-    // [initStateCat.staticKnowbooks]: undefined,
+    [initStateCat.staticKnowbooksFull]: undefined,
     [initStateCat.userData]: undefined,
   };
 
@@ -68,6 +68,8 @@ export class BaseStore {
   private $feed = observable.set<AtomID>();
   private $mostviewed = observable.set<AtomID>();
   private $dateLastMostviewed: IDate;
+
+  private $allRelatedIdsForHome: AtomID[];
 
   private $related = observable.map<AtomID, IRelatedAtom[]>();
 
@@ -100,10 +102,8 @@ export class BaseStore {
       setRelated: action,
       clearRelated: action,
       isLogged: computed,
-      mostviewedItems: computed,
       feedItemsToDisplay: computed,
       mostviewedIds: computed,
-      allRelatedIdsForHome: computed,
     });
   }
 
@@ -271,9 +271,7 @@ export class BaseStore {
   get mostviewedIds(): AtomID[] {
     return Array.from(this.$mostviewed.keys());
   }
-  get mostviewedItems(): IAtom[] {
-    return this.getHistoryItems(Array.from(this.$mostviewed));
-  }
+
   setMostviewed(atoms: IAtom[]): void {
     if (atoms === undefined || atoms.length === 0) {
       return;
@@ -346,8 +344,10 @@ export class BaseStore {
   //   return this.$amountFeedDisplayed;
   // }
   incrementAmountFeedDisplayed(): void {
+    // console.log(this.$amountFeedDisplayed);
     const increment = this.GUI_CONFIG.display.display.displayFeedIncrement;
     this.$amountFeedDisplayed = this.$amountFeedDisplayed + increment;
+    // console.log(this.$amountFeedDisplayed);
   }
   initAmountFeedDisplayed() {
     const increment = this.GUI_CONFIG.display.display.displayFeedIncrement;
@@ -360,6 +360,7 @@ export class BaseStore {
 
   get feedItemsToDisplay(): IAtom[] {
     if (this.increaseFeedDisplayed) {
+      // if (false) {
       //Important: these 2 if(this.increaseFeedDisplayed) are mandatory to work
       setTimeout(() => {
         if (this.increaseFeedDisplayed) {
@@ -381,20 +382,7 @@ export class BaseStore {
           );
           this.setMostviewed(itemsWithoutSaved);
 
-          // let mixedIds: AtomID[];
-          // if (!this.isLogged) {
-          //   mixedIds = this.mostviewedIds;
-          // } else {
-          const mixedIds: AtomID[] = Mix2Array(
-            this.mostviewedIds,
-            this.allRelatedIdsForHome,
-            configGeneral.display.amount_mostview_for_each_related
-          );
-          // }
-          const mixedItems: IAtom[] = this.getHistoryItems(mixedIds);
-
-          // this.setFeed(itemsWithoutSaved);
-          this.setFeed(mixedItems);
+          setFeedFromMostviewedAndRelated(this.$rootStore.stores());
         })
         .catch(() => {
           // console.log("error in seach from pattern");
@@ -410,9 +398,13 @@ export class BaseStore {
     return this.getHistoryItems(itemsId);
   }
 
-  get allRelatedIdsForHome(): AtomID[] {
+  get allRelatedIdsForHome() {
+    return this.$allRelatedIdsForHome;
+  }
+
+  initAllRelatedIdsForHome() {
     // const max_items_amount = 200;
-    const min_size_saved_to_display_related = 5;
+    const min_size_saved_to_display_related = 10;
 
     if (
       this.$rootStore.stores().baseStore.isLogged &&
@@ -450,7 +442,7 @@ export class BaseStore {
         }
       }
 
-      return shuffleArray(Array.from(output));
+      this.$allRelatedIdsForHome = shuffleArray(Array.from(output));
     } else {
       const ids_shuffled: AtomID[] = shuffleArray(
         Array.from(
@@ -458,7 +450,7 @@ export class BaseStore {
         )
       );
 
-      return ids_shuffled;
+      this.$allRelatedIdsForHome = ids_shuffled;
     }
   }
 

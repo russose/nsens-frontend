@@ -51,7 +51,7 @@ const KnowbooksLogged: React.FunctionComponent<IKnowbooksLoggedProps> = (
       // queryObject: {},
       pathname: pathKnowbookNone,
       queryObject: { ...stores.baseStore.paramsPage },
-      amount: "?",
+      amount: "-",
       edit_handler: undefined,
       delete_handler: undefined,
     },

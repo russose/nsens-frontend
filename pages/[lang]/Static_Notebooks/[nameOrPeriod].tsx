@@ -11,9 +11,13 @@ import {
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/getDataStaticKnowbooks";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
+import {
+  initializeApp,
+  initializeStaticKnowbooksFullPage,
+} from "../../../src/libs/helpersInitialize";
 import { useStores } from "../../../src/stores/RootStoreHook";
 import { getRelatedItemsForItemsShuffleSized_Static } from "../../../src/libs/helpersRelated";
+import ContentLoading from "../../../src/components/ContentLoading";
 
 const KnowbookLoggedDynamic = dynamic(
   () => import("../../../src/components/KnowbookLogged")
@@ -23,14 +27,16 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  if (
-    stores.baseStore.initCompleted.core !== true
-    // ||
-    // stores.baseStore.initCompleted.staticKnowbooks !== true
-  ) {
+  if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
-    return <></>;
+    return <ContentLoading stores={stores} />;
   }
+
+  initializeStaticKnowbooksFullPage(stores);
+  // if (stores.baseStore.initCompleted.staticKnowbooksFull !== true) {
+  //   //Loading StaticKnowbooks Full (blocking)
+  //   return <ContentLoading stores={stores} />;
+  // }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const name_display = props.name_display;

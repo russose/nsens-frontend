@@ -1,4 +1,4 @@
-"use strict";
+// ("use strict");
 
 // Original: https://github.com/shadowwalker/next-pwa/blob/master/cache.js
 // Workbox RuntimeCaching config: https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.RuntimeCachingEntry
@@ -21,7 +21,7 @@ module.exports = [
       cacheName: "google-fonts-stylesheets",
       expiration: {
         maxEntries: 4,
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
       },
     },
   },
@@ -32,7 +32,7 @@ module.exports = [
       cacheName: "static-font-assets",
       expiration: {
         maxEntries: 4,
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
       },
     },
   },
@@ -76,7 +76,7 @@ module.exports = [
       cacheName: "static-js-assets",
       expiration: {
         maxEntries: 320,
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 * days
+        maxAgeSeconds: 6 * 30 * 24 * 60 * 60, // 6*30 * days
       },
     },
   },
@@ -87,7 +87,7 @@ module.exports = [
       cacheName: "static-style-assets",
       expiration: {
         maxEntries: 32,
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 * days
+        maxAgeSeconds: 6 * 30 * 24 * 60 * 60, // 6*30 * days
       },
     },
   },
@@ -180,7 +180,7 @@ module.exports = [
       // if (pathname.startsWith("/api/")) return false;
 
       const pathname = url.pathname;
-      if (pathname.includes(CONFIG_ENV.BACK_URL)) return false;
+      if (pathname.startsWith("/nsens_v1/")) return false;
 
       return true;
     },
@@ -189,7 +189,7 @@ module.exports = [
       cacheName: "others",
       expiration: {
         maxEntries: 320,
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 * days
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 * days
       },
       // networkTimeoutSeconds: 10,
     },

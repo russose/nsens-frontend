@@ -36,10 +36,6 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
     return <ContentLoading stores={stores} />;
   }
 
-  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-
-  const title = GUI_CONFIG.language.SEO.title_description.Knowbooks_User.title;
-
   let message;
   let knowbooksUser;
   if (stores.baseStore.isLogged) {
@@ -59,7 +55,13 @@ const Knowbooks: React.FunctionComponent<IPage> = (props) => {
   return (
     <AppLayout stores={stores}>
       <Box>
-        <SEOHeaderTitle stores={stores} title={title} />
+        <SEOHeaderTitle
+          stores={stores}
+          title={
+            stores.baseStore.GUI_CONFIG.language.SEO.title_description
+              .Knowbooks_User.title
+          }
+        />
         {knowbooksUser}
         {message}
       </Box>

@@ -2,7 +2,10 @@
 
 import { Tlanguage, TPages } from "./globals";
 
-export const is_testing_mode = true;
+export const is_testing_mode = {
+  activated: false,
+  amount_staticArticles: 2,
+};
 export const languages_activated: Tlanguage[] = [
   Tlanguage.fr,
   Tlanguage.it,
@@ -58,6 +61,8 @@ export const configGeneral = {
   },
   staticKnowbooks: {
     name_allStaticKnowbooks: "AllStatic.txt",
+    name_extractStaticKnowbooks: "_AllStaticExtract.txt",
+    amount_extractStaticKnowbooks: 5,
     vitalKnowbooks_topLevelPattern:
       "Category:Wikipedia level-3 vital articles by topic",
   },
@@ -71,7 +76,7 @@ export const configFetching = {
   amount_data_fetched_items_searched: 50,
   max_size_chunk_api: 49,
   amount_related_wikipedia: 10,
-  amount_max_by_node_wikidata: 40,
+  amount_max_by_node_wikidata: 30,
   amount_data_fetched_related_for_images: 2,
   width_image_thumbnail: 300,
   cache_duration_in_sec: "2628000", //1 Mois pour le cache

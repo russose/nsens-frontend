@@ -34,8 +34,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const slogan = GUI_CONFIG.language.SEO.title_description.About.title;
-  // const description = GUI_CONFIG.language.about.description;
+  const slogan = GUI_CONFIG.language.SEO.title_page_base;
   const path_logo = configPaths.image_logo_B;
   const path_image_main = configPaths.image_landing;
   const ratio_logo = GUI_CONFIG.display.About.ratio_logo;
@@ -80,7 +79,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
   const main_image = (
     <Box padding={0} height={ratio_image} width="100%">
       <Image
-        alt={GUI_CONFIG.language.SEO.title_description.About.title}
+        alt={slogan}
         color="transparent"
         fit="contain"
         naturalHeight={1}
@@ -93,7 +92,11 @@ const About: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores}>
-      <SEOHeaderTitle stores={stores} title={slogan} hidden={true} />
+      <SEOHeaderTitle
+        stores={stores}
+        title={GUI_CONFIG.language.SEO.title_description.About.title}
+        hidden={true}
+      />
       <AboutLayoutHybrid
         stores={stores}
         slogan={slogan}

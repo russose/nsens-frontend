@@ -25,8 +25,6 @@ export function isMobile(stores: IStores): boolean {
 
 export async function getParamsPageFromContext(): Promise<IparamsPage> {
   if (process.browser) {
-    // stores.baseStore.setscreenNoSSR();
-
     const language_navigator = navigator.language;
     let paramsPage_lang: Tlanguage;
     if (language_navigator.includes("fr")) {
@@ -97,12 +95,8 @@ export function setFeedFromSearch(
       // console.log("error in seach from pattern");
     });
 }
+
 export function setFeedFromMostviewedAndRelated(stores: IStores): void {
-  stores.baseStore.setModeFeedDisplayedIsSearch(false);
-
-  stores.baseStore.initAmountFeedDisplayed();
-  stores.baseStore.clearFeed();
-
   const mixedIds: AtomID[] = Mix2Array(
     stores.baseStore.mostviewedIds,
     stores.baseStore.allRelatedIdsForHome,
@@ -112,6 +106,15 @@ export function setFeedFromMostviewedAndRelated(stores: IStores): void {
   const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
 
   stores.baseStore.setFeed(mixedItems);
+}
+
+export function updateHome(stores: IStores): void {
+  stores.baseStore.setModeFeedDisplayedIsSearch(false);
+
+  stores.baseStore.initAmountFeedDisplayed();
+  stores.baseStore.clearFeed();
+
+  setFeedFromMostviewedAndRelated(stores);
 }
 
 export function Mix2Array(

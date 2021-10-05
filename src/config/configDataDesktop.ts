@@ -9,7 +9,7 @@ const card_compact_vizs_size = 120;
 
 export const configDataDesktop: TconfigDataDisplay = {
   display: {
-    displayFeedIncrement: 32,
+    displayFeedIncrement: 20,
     amount_related_displayed: 50,
   },
   max_nodes_network: 110,

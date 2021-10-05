@@ -9,13 +9,18 @@ import {
   IAtom,
   is_testing_mode,
   languages_activated,
+  configGeneral,
 } from "../config/globals";
 import { fetchArticle } from "./fetch";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
 import { readFileJson, writeFileJson } from "./utilsServer";
 
 // const amount_data_fetched_items = configFetching.amount_data_fetched_items;
-const testing_mode = is_testing_mode;
+const testing_mode_activated = is_testing_mode.activated;
+const testing_mode_amount_staticArticles =
+  is_testing_mode.amount_staticArticles;
+const name_extractStaticKnowbooks =
+  configGeneral.staticKnowbooks.name_extractStaticKnowbooks;
 
 export interface IPageStaticArticle extends IPage {
   id: AtomID;
@@ -67,7 +72,10 @@ async function getAllConfigStaticArticles() {
       configPaths.static.knowbooks_location + language + "/";
 
     try {
-      const files = await readdir(path_base_knowbooks);
+      const files_ = await readdir(path_base_knowbooks);
+      const files = files_.filter((filename) => {
+        return filename !== name_extractStaticKnowbooks;
+      });
 
       for (const filename of files) {
         // console.log("reading...", filename);
@@ -77,9 +85,12 @@ async function getAllConfigStaticArticles() {
           return item.title;
         });
 
-        if (testing_mode) {
+        if (testing_mode_activated) {
           item_title_list = item_title_list.concat(
-            item_title_list_increment.slice(0, 2)
+            item_title_list_increment.slice(
+              0,
+              testing_mode_amount_staticArticles
+            )
           );
         } else {
           item_title_list = item_title_list.concat(item_title_list_increment);
