@@ -10,12 +10,7 @@ import {
 } from "../../src/libs/getDataParamsPage";
 import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
 import AppLayout from "../../src/components/layout/AppLayout";
-import {
-  configPaths,
-  getEmail,
-  getTwitter,
-  IFeature,
-} from "../../src/config/globals";
+import { configPaths, getEmail, IFeature } from "../../src/config/globals";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import { isInstalled } from "../../src/libs/utils";
 import Installation from "../../src/components/Installation";
@@ -69,7 +64,9 @@ const About: React.FunctionComponent<IPage> = (props) => {
   const contacts = (
     <Contacts
       email={getEmail()}
-      twitter_link={getTwitter()}
+      twitter_link="https://twitter.com/_nsens"
+      pinterest_link="https://pin.it/5G6QCg7"
+      instagram_link="https://www.instagram.com/_nsens"
       text={contact}
       icon_size={32}
       text_size="lg"

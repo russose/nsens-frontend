@@ -1,10 +1,9 @@
-import { configFetching } from "../config/globals";
 import { CONFIG_ENV } from "../config/globals";
 import { URLs } from "../config/configURLs";
 import { JSONDataT } from "../config/globals";
 
 const wikidata_url = URLs.ROOT_URL_WIKIDATA;
-const userAgentString = configFetching.userAgent;
+// const userAgentString = configFetching.userAgent;
 
 const axios = require("axios").default;
 

@@ -31,6 +31,8 @@ export enum TPages {
   Knowbook = "Knowbook",
   KnowbookSaved = "KnowbookSaved",
   KnowbookNone = "KnowbookNone",
+
+  KnowbookMostviewed = "KnowbookMostviewed",
 }
 
 export enum initStateCat {

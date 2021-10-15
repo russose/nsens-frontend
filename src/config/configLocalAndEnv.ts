@@ -19,11 +19,11 @@ export function getEmail(): string {
   return result;
 }
 
-const t = "nwenw";
-export function getTwitter(): string {
-  const result: string = "https://twitter.com/_" + t.replace(/w/g, "s");
-  return result;
-}
+// const t = "nwenw";
+// export function getTwitter(): string {
+//   const result: string = "https://twitter.com/_" + t.replace(/w/g, "s");
+//   return result;
+// }
 
 export const CONFIG_ENV = {
   BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
@@ -37,9 +37,8 @@ export const configGeneral = {
   extra_large_screen_breakpoint: 2500,
   // tiny_screen_breakpoint: 320,
   display: {
-    // amount_item_displayed: 50,
-    // displayFeedIncrement: 16,
-    amount_mostview_for_each_related: 2,
+    // amount_mostview_for_each_related: 2,
+    amount_related_for_each_mostview: 3,
     feed_time_increment_ms: 500,
   },
   colors: {
@@ -72,7 +71,7 @@ export const configGeneral = {
 };
 
 export const configFetching = {
-  userAgent: "n.Sens/1.0 (https://www.nsens.org; " + getEmail() + ")",
+  // userAgent: "n.Sens/1.0 (https://www.nsens.org; " + getEmail() + ")",
   amount_data_fetched_items_searched: 50,
   max_size_chunk_api: 49,
   amount_related_wikipedia: 10,
@@ -118,6 +117,7 @@ export const configPaths = {
     [TPages.Knowbook]: "/Notebook",
     [TPages.KnowbookSaved]: "/NotebookSpecialSaved",
     [TPages.KnowbookNone]: "/NotebookSpecialNone",
+    [TPages.KnowbookMostviewed]: "/NotebookMostviewed",
 
     empty: "",
   },

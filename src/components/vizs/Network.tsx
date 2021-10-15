@@ -11,6 +11,7 @@ import {
   onSaved,
 } from "../../handlers/handlers_Saved";
 import { isMobile } from "../../libs/helpersBase";
+import { path_link } from "../../libs/utils";
 import { IStores } from "../../stores/RootStore";
 import { useStores } from "../../stores/RootStoreHook";
 import CardAtomCompactViz from "../CardAtomCompactViz";
@@ -33,8 +34,8 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const node_dx = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
   const node_dy = GUI_CONFIG.display.atom_compact_vizs_sizes.height;
-  // const path_Itemview = configPaths.pages.ItemArticle;
-  const path_link = configPaths.pages.ItemNetwork;
+  // const path_link = configPaths.pages.ItemArticle;
+  // const path_link = configPaths.pages.ItemNetwork;
 
   let node;
   if (props.node.relation_name === group_name) {
@@ -64,7 +65,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
           title={item.title}
           image_url={item.image_url}
           // pathname={path_Itemview}
-          pathname={path_link}
+          pathname={path_link(item.id, stores)}
           queryObject={{ title: item.title, id: item.id }}
           saved_enabled={isItemSaved(stores)(item.id)}
           saved_actionable={isItemSavedActivated(stores)(item.id)}

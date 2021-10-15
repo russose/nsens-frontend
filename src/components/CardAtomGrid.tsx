@@ -1,8 +1,8 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configPaths } from "../config/globals";
 import { handlerT, IAtom, PaddingT, SizeT } from "../config/globals";
+import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 import CardAtom from "./CardAtom";
 
@@ -26,7 +26,8 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
   // } else {
   //   path_Itemview = configPaths.pages.ItemArticle;
   // }
-  const path_link = configPaths.pages.ItemNetwork;
+
+  // const path_link = configPaths.pages.ItemArticle;
 
   if (
     props.atoms === undefined ||
@@ -61,7 +62,7 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                   title={item.title}
                   image_url={item.image_url}
                   // pathname={path_Itemview}
-                  pathname={path_link}
+                  pathname={path_link(item.id, props.stores)}
                   queryObject={
                     // props.static
                     //   ? { title: item.title }

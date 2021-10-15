@@ -1,8 +1,8 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configPaths } from "../config/globals";
 import { handlerT, IAtom, PaddingT } from "../config/globals";
+import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 import CardAtomCompact from "./CardAtomCompact";
 
@@ -21,8 +21,8 @@ const CardAtomGridCompact: React.FunctionComponent<ICardAtomGridCompactProps> =
     const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
     const card_sizes_compact = GUI_CONFIG.display.atom_compact_sizes;
 
-    // const path_Itemview = configPaths.pages.ItemArticle;
-    const path_link = configPaths.pages.ItemNetwork;
+    // const path_link = configPaths.pages.ItemArticle;
+    // const path_link = configPaths.pages.ItemNetwork;
 
     if (
       props.atoms === undefined ||
@@ -53,7 +53,7 @@ const CardAtomGridCompact: React.FunctionComponent<ICardAtomGridCompactProps> =
                     title={item.title}
                     image_url={item.image_url}
                     // pathname={path_Itemview}
-                    pathname={path_link}
+                    pathname={path_link(item.id, props.stores)}
                     queryObject={{ title: item.title, id: item.id }}
                     saved_enabled={props.isItemSaved_handler(item.id)}
                     saved_actionable={props.isItemSavedActionable_handler(

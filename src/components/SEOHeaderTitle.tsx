@@ -39,6 +39,8 @@ const SEOHeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
     }
   );
 
+  // console.log(description);
+
   function alternate_links(): any[] {
     const alternate = Object.values(Tlanguage).map(
       (language: Tlanguage, key) => {

@@ -1,4 +1,6 @@
-import { AtomID, Tlanguage, IAtom } from "../config/globals";
+import { AtomID, Tlanguage, IAtom, configPaths } from "../config/globals";
+import { IStores } from "../stores/RootStore";
+import { IsItemInAnyStaticKnowbook } from "./helpersSavedKnowbooks";
 
 export const empty_handler = () => {};
 
@@ -129,6 +131,15 @@ export function getRandomImageFromItems(items: IAtom[]): string {
     const image_path =
       image_paths_list[entierAleatoire(0, image_paths_list.length - 1)];
     return image_path;
+  }
+}
+
+export function path_link(id: AtomID, stores: IStores): string {
+  const isStatic: boolean = IsItemInAnyStaticKnowbook(id, stores);
+  if (isStatic) {
+    return configPaths.pages.StaticArticle;
+  } else {
+    return configPaths.pages.ItemArticle;
   }
 }
 

@@ -11,7 +11,7 @@ interface ICardKnowGridSpecialProps {
   cardKnowProps: ICardKnowProps[];
 }
 
-const CardKnowGridSpecial: React.FunctionComponent<ICardKnowGridSpecialProps> =
+const CardKnowListSpecial: React.FunctionComponent<ICardKnowGridSpecialProps> =
   (props) => {
     const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
     const card_sizes = GUI_CONFIG.display.knowbook_sizes;
@@ -19,13 +19,14 @@ const CardKnowGridSpecial: React.FunctionComponent<ICardKnowGridSpecialProps> =
       return <> </>;
     } else {
       return (
-        <Box
-          wrap={true}
-          display="flex"
-          direction="row"
-          flex="grow"
-          justifyContent="around"
-        >
+        // <Box
+        //   wrap={true}
+        //   display="flex"
+        //   direction="row"
+        //   flex="grow"
+        //   justifyContent="around"
+        // >
+        <>
           {props.cardKnowProps.map((item: ICardKnowProps) => {
             return (
               <Box
@@ -54,11 +55,12 @@ const CardKnowGridSpecial: React.FunctionComponent<ICardKnowGridSpecialProps> =
               </Box>
             );
           })}
-        </Box>
+        </>
+        // </Box>
         //   )}
         // </Box>
       );
     }
   };
 
-export default observer(CardKnowGridSpecial);
+export default observer(CardKnowListSpecial);

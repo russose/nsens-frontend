@@ -34,6 +34,10 @@ export const configDataFr = {
         description: "",
       },
       [TPages.KnowbookNone]: { title: "Sans carnet", description: "" },
+      [TPages.KnowbookMostviewed]: {
+        title: "Aujourd'hui",
+        description: "",
+      },
     },
   },
   about: {

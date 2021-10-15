@@ -96,18 +96,6 @@ export function setFeedFromSearch(
     });
 }
 
-export function setFeedFromMostviewedAndRelated(stores: IStores): void {
-  const mixedIds: AtomID[] = Mix2Array(
-    stores.baseStore.mostviewedIds,
-    stores.baseStore.allRelatedIdsForHome,
-    configGeneral.display.amount_mostview_for_each_related
-  );
-
-  const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
-
-  stores.baseStore.setFeed(mixedItems);
-}
-
 export function updateHome(stores: IStores): void {
   stores.baseStore.setModeFeedDisplayedIsSearch(false);
 
@@ -117,11 +105,73 @@ export function updateHome(stores: IStores): void {
   setFeedFromMostviewedAndRelated(stores);
 }
 
-export function Mix2Array(
+export function setFeedFromMostviewedAndRelated(stores: IStores): void {
+  // const mixedIds: AtomID[] = Mix2Array_main_majoritaire(
+  //   stores.baseStore.mostviewedIds,
+  //   stores.baseStore.allRelatedIdsForHome,
+  //   configGeneral.display.amount_mostview_for_each_related
+  // );
+
+  const mixedIds: AtomID[] = Mix2Array_main_minoritaire(
+    stores.baseStore.mostviewedIds,
+    shuffleArray(stores.baseStore.allRelatedIdsForHome),
+    configGeneral.display.amount_related_for_each_mostview
+  );
+
+  if (mixedIds.length === stores.baseStore.feedItemsToDisplay.length) {
+    stores.baseStore.setIncreaseFeedDisplayed(false);
+  }
+
+  const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
+
+  stores.baseStore.setFeed(mixedItems);
+}
+
+export function Mix2Array_main_minoritaire(
   main: AtomID[],
   second: AtomID[],
   increment: number
 ): AtomID[] {
+  if (main.length === 0) {
+    return [];
+  }
+
+  let mixed: AtomID[] = [];
+  let ix_1 = 0;
+  let ix_2 = 0;
+
+  while (ix_2 + increment <= second.length) {
+    let newMain: AtomID[];
+    if (ix_1 < main.length) {
+      newMain = [main[ix_1]];
+    } else {
+      newMain = [];
+    }
+
+    const newElements: AtomID[] = shuffleArray(
+      second.slice(ix_2, ix_2 + increment).concat(newMain)
+    );
+
+    mixed = mixed.concat(newElements);
+    ix_1 = ix_1 + 1;
+    ix_2 = ix_2 + increment;
+  }
+
+  if (main.slice(ix_1).length !== 0) {
+    mixed = mixed.concat(main.slice(ix_1));
+  }
+
+  return mixed;
+}
+
+export function Mix2Array_main_majoritaire(
+  main: AtomID[],
+  second: AtomID[],
+  increment: number
+): AtomID[] {
+  if (main.length === 0) {
+    return [];
+  }
   let mixed: AtomID[] = [];
   let ix_1 = 0;
   let ix_2 = 0;

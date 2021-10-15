@@ -1,7 +1,6 @@
 import { Box, Button } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
-import dynamic from "next/dynamic";
 import React from "react";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 import FormLoginSignup from "../../src/components/FormLoginSignup";
@@ -23,12 +22,13 @@ import { goPage } from "../../src/libs/helpersBase";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import { useStores } from "../../src/stores/RootStoreHook";
 import ContentLoading from "../../src/components/ContentLoading";
+import CatchupMessage from "../../src/components/CatchupMessage";
 
 //CSS in JS Styles not supported in SSR
-const CatchupMessageDynamic = dynamic(
-  () => import("../../src/components/CatchupMessage"),
-  { ssr: false }
-);
+// const CatchupMessageDynamic = dynamic(
+//   () => import("../../src/components/CatchupMessage"),
+//   { ssr: false }
+// );
 
 const User: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -113,9 +113,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
     </Box>
   );
 
-  const catchMessage = (
-    <CatchupMessageDynamic stores={stores} withButton={false} />
-  );
+  const catchMessage = <CatchupMessage stores={stores} withButton={false} />;
 
   let page_content;
   if (!stores.baseStore.isLogged) {

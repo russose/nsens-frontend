@@ -6,6 +6,9 @@ interface IContactsProps {
   text: string;
   email: string;
   twitter_link: string;
+  pinterest_link: string;
+  instagram_link: string;
+
   icon_size: SizeT;
   text_size: SizeT;
 }
@@ -49,6 +52,22 @@ const Contacts: React.FunctionComponent<IContactsProps> = (props) => {
           <Icon
             accessibilityLabel={"twitter"}
             icon="twitter"
+            color="darkGray"
+            size={props.icon_size}
+          />
+        </a>
+        <a href={props.instagram_link} target="_blank">
+          <Icon
+            accessibilityLabel={"Instagram"}
+            icon="camera"
+            color="darkGray"
+            size={props.icon_size}
+          />
+        </a>
+        <a href={props.pinterest_link} target="_blank">
+          <Icon
+            accessibilityLabel={"pinterest"}
+            icon="pinterest"
             color="darkGray"
             size={props.icon_size}
           />

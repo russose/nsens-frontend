@@ -34,18 +34,18 @@ const MenuBarDisplay: React.FunctionComponent<IMenuBarDisplayProps> = (
 
   const buttons: IButton[] = [
     {
-      Id: TButtonID.VIZS,
-      iconColor: display_viz
-        ? configGeneral.colors.iconColorDefaultSelected
-        : configGeneral.colors.iconColorDefaultNotSelected,
-      // hidden: router.pathname.includes(configPaths.pages.ItemNetwork),
-    },
-    {
       Id: TButtonID.ARTICLE,
       iconColor: !display_viz
         ? configGeneral.colors.iconColorDefaultSelected
         : configGeneral.colors.iconColorDefaultNotSelected,
       // hidden: router.pathname.includes(configPaths.pages.ItemArticle),
+    },
+    {
+      Id: TButtonID.VIZS,
+      iconColor: display_viz
+        ? configGeneral.colors.iconColorDefaultSelected
+        : configGeneral.colors.iconColorDefaultNotSelected,
+      // hidden: router.pathname.includes(configPaths.pages.ItemNetwork),
     },
     {
       Id: TButtonID.SEPARATOR,

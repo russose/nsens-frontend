@@ -5,6 +5,8 @@ import {
   eventT,
 } from "../config/globals";
 import { goPage, updateHome, setFeedFromSearch } from "../libs/helpersBase";
+import { IsItemInAnyStaticKnowbook } from "../libs/helpersSavedKnowbooks";
+import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 
 /*******************Logo*************************** */
@@ -51,14 +53,17 @@ export const onMenuButtonPath =
   (stores: IStores) =>
   (buttonId: TButtonID): string => {
     if (buttonId === TButtonID.ARTICLE) {
-      const IsInAnyStaticKnowbook: boolean =
-        stores.knowbookStore.allItemsInStaticKnowbooks.has(
-          stores.uiStore.selectedAtom.id
-        );
+      // const IsInAnyStaticKnowbook: boolean =
+      //   // stores.knowbookStore.allItemsInStaticKnowbooks.has(
+      //   //   stores.uiStore.selectedAtom.id
+      //   // );
+      //   IsItemInAnyStaticKnowbook(stores.uiStore.selectedAtom.id, stores);
 
-      if (IsInAnyStaticKnowbook) {
-        return configPaths.pages.StaticArticle;
-      }
+      // if (IsInAnyStaticKnowbook) {
+      //   return configPaths.pages.StaticArticle;
+      // }
+
+      return path_link(stores.uiStore.selectedAtom.id, stores);
     }
 
     return configButtonsPath[buttonId];

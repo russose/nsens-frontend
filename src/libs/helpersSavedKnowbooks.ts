@@ -323,6 +323,20 @@ export function IsItemInAnyKnowbook(atomId: AtomID, stores: IStores): boolean {
   return false;
 }
 
+export function IsItemInAnyStaticKnowbook(
+  atomId: AtomID,
+  stores: IStores
+): boolean {
+  if (atomId === undefined) {
+    return false;
+  }
+
+  const result: boolean =
+    stores.knowbookStore.allItemsInStaticKnowbooks.has(atomId);
+
+  return result;
+}
+
 export function ItemsInNoKnowbook(stores: IStores): IAtom[] {
   const itemsIdList: AtomID[] = [];
 

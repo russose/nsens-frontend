@@ -39,6 +39,10 @@ export const configDataIt: TconfigDataLanguage = {
       [TPages.Knowbook]: { title: "", description: "" },
       [TPages.KnowbookSaved]: { title: "Salvati (tutti)", description: "" },
       [TPages.KnowbookNone]: { title: "Senza Documento", description: "" },
+      [TPages.KnowbookMostviewed]: {
+        title: "Oggi",
+        description: "",
+      },
     },
   },
   about: {

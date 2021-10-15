@@ -86,10 +86,11 @@ const AboutLayoutHybrid: React.FunctionComponent<IAboutLayoutHybridProps> = (
           display="flex"
           direction="column"
           alignItems="center"
-          column={8}
-          smColumn={4}
-          mdColumn={3}
-          lgColumn={2}
+          paddingY={3}
+          column={12}
+          smColumn={8}
+          mdColumn={6}
+          lgColumn={4}
         >
           {props.contacts}
         </Box>
