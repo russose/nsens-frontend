@@ -4,7 +4,6 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 // import CatchupMessage from "../../src/components/CatchupMessage";
 import FormLoginSignup from "../../src/components/FormLoginSignup";
-import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
 import LanguageSelector from "../../src/components/LanguageSelector";
 import AppLayout from "../../src/components/layout/AppLayout";
 import { configPaths } from "../../src/config/globals";
@@ -23,6 +22,7 @@ import { initializeApp } from "../../src/libs/helpersInitialize";
 import { useStores } from "../../src/stores/RootStoreHook";
 import ContentLoading from "../../src/components/ContentLoading";
 import CatchupMessage from "../../src/components/CatchupMessage";
+import HeaderTitle from "../../src/components/HeaderTitle";
 
 //CSS in JS Styles not supported in SSR
 // const CatchupMessageDynamic = dynamic(
@@ -135,8 +135,8 @@ const User: React.FunctionComponent<IPage> = (props) => {
   }
 
   return (
-    <AppLayout stores={stores}>
-      <SEOHeaderTitle stores={stores} title={title} />
+    <AppLayout stores={stores} titleSEO={title} isBodySVG={false}>
+      <HeaderTitle stores={stores} title={title} />
       <Box
         display="flex"
         direction="column"

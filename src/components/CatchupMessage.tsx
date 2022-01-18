@@ -39,7 +39,10 @@ const CatchupMessage: React.FunctionComponent<ICatchupMessageProps> = (
               title={GUI_CONFIG.language.user.catchup_message}
               message=""
               primaryAction={{
-                label: GUI_CONFIG.language.user.loginSignup.signup_label,
+                label:
+                  GUI_CONFIG.language.user.loginSignup.signup_label +
+                  " / " +
+                  GUI_CONFIG.language.user.loginSignup.login_label,
                 onClick: goUserHandler(props.stores)(),
                 accessibilityLabel: "Se connecter",
               }}

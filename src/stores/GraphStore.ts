@@ -1,6 +1,12 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { AtomID, IGraph, ILink, INode } from "../config/globals";
+import { makeArrayFlat } from "../libs/utils";
 import { RootStore } from "./RootStore";
+
+export interface IRelatedMapFlat {
+  keys: string[];
+  values: AtomID[];
+}
 
 export class GraphStore {
   $rootStore: RootStore;
@@ -17,6 +23,7 @@ export class GraphStore {
       setGraph: action,
       setRelatedMap: action,
       clearRelatedMap: action,
+      relatedMapFlat: computed,
     });
   }
 
@@ -43,5 +50,23 @@ export class GraphStore {
 
   clearRelatedMap(): void {
     this.$relatedMap.clear();
+  }
+
+  get relatedMapFlat(): IRelatedMapFlat {
+    const keys_: string[] = Array.from(this.relatedMap.keys());
+    const valuesList: AtomID[][] = Array.from(this.relatedMap.values());
+
+    const keysList: string[][] = valuesList.map((values, index) => {
+      const keys: string[] = values.map((value) => {
+        return keys_[index];
+      });
+
+      return keys;
+    });
+
+    const keysFlat = makeArrayFlat(keysList);
+    const valuesFlat = makeArrayFlat(valuesList);
+
+    return { keys: keysFlat, values: valuesFlat };
   }
 }

@@ -6,6 +6,7 @@ import {
   IKnowbook,
   IRelatedAtomFull,
   KnowbookID,
+  TUiStringStorage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { api_getItemsFromTitlesFromWebCleanImage_blocking } from "./apiItems";
@@ -215,7 +216,7 @@ export function addItemInKnowbook(
       items: [atomId],
     };
 
-    stores.knowbookStore.setKnowbooks(knowbookID, newKnowbook);
+    stores.knowbookStore.setKnowbook(knowbookID, newKnowbook);
     setTimeout(() => {
       api_addKnowbook(knowbookID, stores.baseStore.paramsPage.lang)
         .then(() => {
@@ -285,7 +286,7 @@ export function getKnowbookAtomsList(
     if (my_knowbook !== undefined) {
       return getSavedAtomsFromIds(my_knowbook.items, stores);
     } else {
-      // console.log("impossible to provide Atoms List from knowbook");
+      // console.log("impossible to provide Atoms List from knowbook 2");
       return [];
     }
   }
@@ -323,19 +324,19 @@ export function IsItemInAnyKnowbook(atomId: AtomID, stores: IStores): boolean {
   return false;
 }
 
-export function IsItemInAnyStaticKnowbook(
-  atomId: AtomID,
-  stores: IStores
-): boolean {
-  if (atomId === undefined) {
-    return false;
-  }
+// export function IsItemInAnyStaticKnowbook(
+//   atomId: AtomID,
+//   stores: IStores
+// ): boolean {
+//   if (atomId === undefined) {
+//     return false;
+//   }
 
-  const result: boolean =
-    stores.knowbookStore.allItemsInStaticKnowbooks.has(atomId);
+//   const result: boolean =
+//     stores.knowbookStore.allItemsInStaticKnowbooks.has(atomId);
 
-  return result;
-}
+//   return result;
+// }
 
 export function ItemsInNoKnowbook(stores: IStores): IAtom[] {
   const itemsIdList: AtomID[] = [];
@@ -362,7 +363,8 @@ export function initKnowbookEditionElements(
   atomID: AtomID,
   stores: IStores
 ): void {
-  stores.uiStore.setEditKnowbookNewValue("");
+  // stores.uiStore.setEditKnowbookNewValue("");
+  stores.uiStore.setUiStringStorage(TUiStringStorage.editKnowbookNewValue, "");
   stores.uiStore.editKnowbookMembers.clear();
 
   const knowbook_id_list = Array.from(stores.knowbookStore.knowbooks.keys());

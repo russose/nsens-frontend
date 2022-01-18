@@ -1,29 +1,29 @@
-const card_size = 220;
-const card_compact_size = "30vw";
 const card_compact_vizs_size = 70;
-// const card_size_ = 250;
-// const card_compact_size = card_size_ * 0.8;
-// const card_compact_vizs_size = card_size_ * 0.5;
 
 export const configDataMobile = {
   display: {
     displayFeedIncrement: 6,
     amount_related_displayed: 32,
   },
-  max_nodes_network: 50,
-  // min_width_network: 500,
-  heightTopAndBottom: 200,
-  heightArticle: "90vh",
+  max_nodes_network: 50, //Only Network
+  heightTopAndBottom: 200, //Only Network
   heightUser: 500,
   heightChangePassword: "45vh",
   rounding_menu: 4,
   rounding_item: 6,
-  size_icon_menu: "lg", //"md" before tests
-  size_icon_card: "sm",
-  header_size: "sm",
+  rounding_knowbooks: "circle",
+  size_icon_menu: "lg",
+  size_icon_card: "xs",
+  header_title_size: "sm",
   layout: {
     heightHeader: 60, //7%
-    heightBody: "87%",
+    heightBody: "90vh", //87%
+    SVG_R_Max: 800,
+    SVG_R_Ratio: 1.2, //0.8,
+    SVG_Element_Circle_Density: 0.6,
+    SVG_Root_Ratio: 0.6,
+    fontsize: "9",
+    ratio_H_W_Item: 1.33,
   },
   dialogs: {
     title_size: "lg",
@@ -31,8 +31,17 @@ export const configDataMobile = {
     item_size: "md",
     button_icon_size: "lg",
   },
+  // svgHeader: {
+  //   delta_x: 80,
+  //   position: { x: 40, y: 40 },
+  // },
+  dropdown: {
+    width: 180,
+    height: 50,
+    delta_position: { x: -30, y: -20 },
+  },
   atom_sizes: {
-    height: card_size,
+    height: 120,
     image_ratio: "75%",
     lgColumn: 4,
     mdColumn: 4,
@@ -42,11 +51,11 @@ export const configDataMobile = {
     mdPadding: 2,
     smPadding: 2,
     padding: 2,
-    title_card_size: "md",
-    max_title_size: 60,
+    title_card_size: "sm",
+    max_title_size: 15,
   },
   knowbook_sizes: {
-    height: card_size,
+    height: 120,
     image_ratio: "75%",
     lgColumn: 4,
     mdColumn: 4,
@@ -54,26 +63,6 @@ export const configDataMobile = {
     column: 6,
     lgPadding: 1,
     mdPadding: 1,
-    smPadding: 1,
-    padding: 1,
-    title_card_size: "sm",
-    max_title_size: 40,
-  },
-  atom_compact_sizes: {
-    height: card_compact_size,
-    width: card_compact_size,
-    lgPadding: 2,
-    mdPadding: 2,
-    smPadding: 1,
-    padding: 1,
-    title_card_size: "sm",
-    max_title_size: 33,
-  },
-  atom_compact_vizs_sizes: {
-    height: card_compact_vizs_size,
-    width: card_compact_vizs_size,
-    lgPadding: 2,
-    mdPadding: 2,
     smPadding: 1,
     padding: 1,
     title_card_size: "sm",
@@ -94,5 +83,15 @@ export const configDataMobile = {
       title_size: "md",
       desciption_size: "md",
     },
+  },
+  atom_compact_vizs_sizes: {
+    height: card_compact_vizs_size,
+    width: card_compact_vizs_size,
+    lgPadding: 2,
+    mdPadding: 2,
+    smPadding: 1,
+    padding: 1,
+    title_card_size: "sm",
+    max_title_size: 20,
   },
 };

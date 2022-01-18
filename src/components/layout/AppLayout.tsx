@@ -8,6 +8,9 @@ import AppLayoutDesktop from "./AppLayoutDesktop";
 
 interface IAppLayoutProps {
   stores: IStores;
+  titleSEO?: string;
+  isBodySVG?: boolean;
+  // svgHeader?: SVG_T;
 }
 
 // const Media_ = observer(Media);
@@ -19,22 +22,42 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
   return (
     <>
       <Media_ at={TDisplay.mobile}>
-        <AppLayoutMobile stores={stores} display={TDisplay.mobile}>
+        <AppLayoutMobile
+          stores={stores}
+          titleSEO={props.titleSEO}
+          display={TDisplay.mobile}
+          svgBody={props.isBodySVG}
+        >
           {props.children}
         </AppLayoutMobile>
       </Media_>
       <Media_ at={TDisplay.desktop}>
-        <AppLayoutDesktop stores={stores} display={TDisplay.desktop}>
+        <AppLayoutDesktop
+          stores={stores}
+          titleSEO={props.titleSEO}
+          display={TDisplay.desktop}
+          svgBody={props.isBodySVG}
+        >
           {props.children}
         </AppLayoutDesktop>
       </Media_>
       <Media_ at={TDisplay.large}>
-        <AppLayoutDesktop stores={stores} display={TDisplay.large}>
+        <AppLayoutDesktop
+          stores={stores}
+          titleSEO={props.titleSEO}
+          display={TDisplay.large}
+          svgBody={props.isBodySVG}
+        >
           {props.children}
         </AppLayoutDesktop>
       </Media_>
       <Media_ greaterThanOrEqual={TDisplay.extra}>
-        <AppLayoutDesktop stores={stores} display={TDisplay.extra}>
+        <AppLayoutDesktop
+          stores={stores}
+          titleSEO={props.titleSEO}
+          display={TDisplay.extra}
+          svgBody={props.isBodySVG}
+        >
           {props.children}
         </AppLayoutDesktop>
       </Media_>

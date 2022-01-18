@@ -1,14 +1,13 @@
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../src/stores/RootStoreHook";
 import React from "react";
-import AboutLayoutHybrid from "../../src/components/layout/AboutLayoutHybrid";
+import LayoutPageAbout from "../../src/components/layout/LayoutPageAbout";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../src/libs/getDataParamsPage";
-import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
 import AppLayout from "../../src/components/layout/AppLayout";
 import { configPaths, getEmail, IFeature } from "../../src/config/globals";
 import { initializeApp } from "../../src/libs/helpersInitialize";
@@ -88,13 +87,17 @@ const About: React.FunctionComponent<IPage> = (props) => {
   );
 
   return (
-    <AppLayout stores={stores}>
-      <SEOHeaderTitle
+    <AppLayout
+      stores={stores}
+      titleSEO={GUI_CONFIG.language.SEO.title_description.About.title}
+      isBodySVG={false}
+    >
+      {/* <HeaderSEO
         stores={stores}
         title={GUI_CONFIG.language.SEO.title_description.About.title}
         hidden={true}
-      />
-      <AboutLayoutHybrid
+      /> */}
+      <LayoutPageAbout
         stores={stores}
         slogan={slogan}
         // description={description}
@@ -108,7 +111,7 @@ const About: React.FunctionComponent<IPage> = (props) => {
         contacts={contacts}
         installation_instructions={installation_instructions}
         // ratio_image={ratio_image}
-      ></AboutLayoutHybrid>
+      ></LayoutPageAbout>
     </AppLayout>
   );
 };

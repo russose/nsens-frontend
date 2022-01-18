@@ -11,9 +11,11 @@ import {
   IAtom,
   IGraph,
   ILink,
+  initStateCat,
   INode,
   IRelatedAtom,
   IRelatedAtomFull,
+  TUiBooleanStorage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { api_getItemsFromTitlesFromWebCleanImage_blocking } from "./apiItems";
@@ -210,7 +212,6 @@ function runSimulation(width: number, height: number, stores: IStores): void {
 
 export function renderGraph(
   root_itemId: AtomID,
-  // title: string,
   stores: IStores,
   width: number,
   height: number
@@ -231,9 +232,9 @@ export function renderGraph(
     return;
   }
 
-  // if (baseStore.getRelated(root_itemId) === undefined) {
   if (!baseStore.related.has(root_itemId)) {
-    stores.uiStore.setShowLoading(true);
+    // stores.uiStore.setShowLoading(true);
+    stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
     api_getRelatedFromWebWithoutImage(
       root_item.id,
       root_item.title,
@@ -249,9 +250,6 @@ export function renderGraph(
         if (!isMobile(stores)) {
           for (const id of relatedIds) {
             stores.baseStore.setGoodImageInHistoryItem(id);
-            // .then(() => {
-            //   setGraph(root_item, stores, width / 2, height / 2);
-            // });
           }
         }
       })
@@ -260,10 +258,68 @@ export function renderGraph(
       })
       .then(() => {
         runSimulation(width / 2, height / 2, stores);
-        stores.uiStore.setShowLoading(false);
+        // stores.uiStore.setShowLoading(false);
+        stores.uiStore.setUiBooleanStorage(
+          TUiBooleanStorage.showLoading,
+          false
+        );
       });
   } else if (root_itemId !== stores.graphStore.rootItemId) {
     initGraph(root_itemId, stores, width / 2, height / 2);
     runSimulation(width / 2, height / 2, stores);
   }
+}
+
+export async function initializeGraphSVG(
+  root_itemId: AtomID,
+  root_itemTitle: string,
+  stores: IStores
+): Promise<void> {
+  const baseStore = stores.baseStore;
+  const lang = stores.baseStore.paramsPage.lang;
+  const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
+
+  stores.baseStore.setInitCompleted(initStateCat.Item, false);
+
+  let root_item: IAtom = stores.baseStore.getHistoryItem(root_itemId);
+
+  // stores.uiStore.setShowLoading(true);
+  stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
+
+  if (root_item === undefined) {
+    const items = await api_getItemsFromTitlesFromWebCleanImage_blocking(
+      root_itemTitle,
+      lang,
+      exclusion_patterns_items
+    );
+    stores.baseStore.setHistory(items);
+    root_item = items[0];
+  }
+
+  if (!baseStore.related.has(root_item.id)) {
+    const relatedList: IRelatedAtomFull[] =
+      await api_getRelatedFromWebWithoutImage(
+        root_item.id,
+        root_item.title,
+        lang,
+        exclusion_patterns_items
+      );
+
+    //With no duplicates by construction
+    stores.baseStore.setRelated(root_item.id, relatedList);
+
+    setRelatedMap(root_item.id, stores);
+  }
+  // else if (root_itemId !== stores.graphStore.rootItemId) {
+  //   setRelatedMap(root_itemId, stores);
+  //   console.log("init completed 2");
+  // }
+  else {
+    setRelatedMap(root_itemId, stores);
+  }
+
+  // stores.uiStore.setShowLoading(false);
+  stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, false);
+
+  stores.baseStore.setInitCompleted(initStateCat.Item, true);
 }

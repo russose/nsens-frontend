@@ -1,8 +1,15 @@
+import { CUSTOM_ICONS } from "./configLocalAndEnv";
 import { Tlanguage, ICONS, TButtonID, TPages } from "./globals";
+import { TSpecialPages } from "./types";
 
 export const configDataFr = {
   searchBar: "Rechercher...",
   source_wikipedia: "Source: Wikipedia",
+  legend: "Légende:",
+  labels: {
+    knowbookUser: "Mes Carnets",
+    knowbookFeatured: "Explorer",
+  },
   SEO: {
     // canonical: "https://www.nsens.org/fr/Mobile/About/",
     title_page_base: "n.Sens - Explorer la Connaissance libre autrement",
@@ -19,25 +26,34 @@ export const configDataFr = {
         title: "Modifier votre mot de passe",
         description: "",
       },
-      [TPages.ItemArticle]: { title: "", description: "" },
+      // [TPages.ItemArticle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
-      [TPages.StaticArticle]: { title: "", description: "" },
-      [TPages.Knowbooks_Featured]: {
-        title: "Carnets indispensables",
-        description: "",
-      },
+      // [TPages.StaticArticle]: { title: "", description: "" },
+      // [TPages.Knowbooks_Featured]: {
+      //   title: "Carnets indispensables",
+      //   description: "",
+      // },
       [TPages.StaticKnowbook]: { title: "", description: "" },
-      [TPages.Knowbooks_User]: { title: "Mes Carnets", description: "" },
+      // [TPages.Knowbooks_User]: { title: "Mes Carnets", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
-      [TPages.KnowbookSaved]: {
-        title: "Sauvegardés (tous)",
-        description: "",
+      [TPages.KnowbookSpecial]: {
+        [TSpecialPages.Mostviewed]: { title: "Aujourd'hui", description: "" },
+        [TSpecialPages.AllSaved]: {
+          title: "Sauvegardés (tous)",
+          description: "",
+        },
+        [TSpecialPages.NoKnowbook]: { title: "Sans carnet", description: "" },
       },
-      [TPages.KnowbookNone]: { title: "Sans carnet", description: "" },
-      [TPages.KnowbookMostviewed]: {
-        title: "Aujourd'hui",
-        description: "",
-      },
+
+      // [TPages.KnowbookSaved]: {
+      //   title: "Sauvegardés (tous)",
+      //   description: "",
+      // },
+      // [TPages.KnowbookNone]: { title: "Sans carnet", description: "" },
+      // [TPages.KnowbookMostviewed]: {
+      //   title: "Aujourd'hui",
+      //   description: "",
+      // },
     },
   },
   about: {
@@ -68,16 +84,17 @@ export const configDataFr = {
   buttons: {
     [TButtonID.HOME]: {
       label: "Accueil",
-      icon: ICONS.HOME,
+      // icon: ICONS.HOME,
+      icon: CUSTOM_ICONS.HOME,
     },
-    [TButtonID.KNOWBOOKS_USER]: {
-      label: "Carnets",
-      icon: ICONS.KNOWBOOKS,
-    },
-    [TButtonID.KNOWBOOKS_FEATURED]: {
-      label: "Sélection",
-      icon: ICONS.FEATURED,
-    },
+    // [TButtonID.KNOWBOOKS_USER]: {
+    //   label: "Carnets",
+    //   icon: ICONS.KNOWBOOKS,
+    // },
+    // [TButtonID.KNOWBOOKS_FEATURED]: {
+    //   label: "Sélection",
+    //   icon: ICONS.FEATURED,
+    // },
     [TButtonID.LOGIN]: {
       label: "User",
       icon: ICONS.LOGIN,

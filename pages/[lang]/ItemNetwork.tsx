@@ -3,7 +3,6 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
-import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
 import AppLayout from "../../src/components/layout/AppLayout";
 import {
   IPage,
@@ -58,10 +57,7 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   // }
 
   return (
-    <AppLayout stores={stores}>
-      {/* <MenuBarDisplay stores={stores} isMobile={isMobile(GUI_CONFIG.id)} /> */}
-      {/* {navigation} */}
-      <SEOHeaderTitle stores={stores} title={item_title} />
+    <AppLayout stores={stores} titleSEO={item_title} isBodySVG={false}>
       <ItemNetworkNoSSRDynamic
         stores={stores}
         item_title={item_title}

@@ -1,9 +1,15 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button } from "gestalt";
-import { ColorT, handlerT, RoundingT, SizeT } from "../config/globals";
+import {
+  ColorT,
+  handlerT,
+  RoundingT,
+  SizeT,
+  TUiStringStorage,
+  configGeneral,
+} from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import React from "react";
-import { configGeneral } from "../config/globals";
 
 interface IFormChangePasswordProps {
   stores: IStores;
@@ -49,7 +55,10 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
               disabled={true}
               value={props.value_username}
               placeholder={props.placeholder_username}
-              errorMessage={props.stores.uiStore.changePasswordError}
+              // errorMessage={props.stores.uiStore.changePasswordError}
+              errorMessage={props.stores.uiStore.getUiStringStorage(
+                TUiStringStorage.changePasswordError
+              )}
               onChange={props.handler_text("username")}
               type="email"
               size={texfield_size}
@@ -60,7 +69,10 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
               // disabled={true}
               // value={props.value_username}
               placeholder={props.placeholder_username}
-              errorMessage={props.stores.uiStore.changePasswordError}
+              // errorMessage={props.stores.uiStore.changePasswordError}
+              errorMessage={props.stores.uiStore.getUiStringStorage(
+                TUiStringStorage.changePasswordError
+              )}
               onChange={props.handler_text("username")}
               type="email"
               size={texfield_size}

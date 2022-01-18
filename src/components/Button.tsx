@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, IconButton, Text } from "gestalt";
-import { ColorT, IconT, IparamsAtom, SizeT } from "../config/globals";
+import { ColorT, ICONS, IconT, IparamsAtom, SizeT } from "../config/globals";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { configGeneral, configPaths } from "../config/globals";
@@ -33,10 +33,10 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
 
   const paramsItem: IparamsAtom = props.stores.uiStore.selectedAtom;
   const query_ =
-    path_.includes(configPaths.pages.ItemArticle) ||
-    path_.includes(configPaths.pages.ItemNetwork) ||
-    path_.includes(configPaths.pages.StaticArticle)
-      ? { ...props.stores.baseStore.paramsPage, ...paramsItem }
+    // path_.includes(configPaths.pages.ItemArticle) ||
+    path_.includes(configPaths.pages.ItemNetwork)
+      ? // ||path_.includes(configPaths.pages.StaticArticle)
+        { ...props.stores.baseStore.paramsPage, ...paramsItem }
       : { ...props.stores.baseStore.paramsPage };
 
   let labetText = <></>;
@@ -50,11 +50,22 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
     );
   }
 
+  let icon = props.icon;
+  let __path = undefined;
+  if (!Object.values(ICONS).includes(props.icon)) {
+    //Custom icon
+    icon = undefined;
+    __path = props.icon;
+  }
+
   return path_ === path_empty ? (
     <Box paddingX={0} display="flex" direction="column" alignItems="center">
       <IconButton
         accessibilityLabel={props.label}
-        icon={props.icon}
+        icon={icon}
+        dangerouslySetSvgPath={{
+          __path: __path,
+        }}
         iconColor={iconColor_}
         size={icon_size}
         onClick={onClick_}
@@ -76,7 +87,10 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
         <a>
           <IconButton
             accessibilityLabel={props.label}
-            icon={props.icon}
+            icon={icon}
+            dangerouslySetSvgPath={{
+              __path: __path,
+            }}
             iconColor={iconColor_}
             size={icon_size}
           />

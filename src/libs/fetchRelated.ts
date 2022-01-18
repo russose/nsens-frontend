@@ -256,10 +256,6 @@ async function ItemsFromWikidataWithoutImage(
       });
     });
 
-    // if (mapping_prop_amount.size !== 0) {
-    //   console.log(mapping_prop_amount);
-    // }
-
     const items_flat: IAtom[] =
       await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_chunked_Parallel(
         Array.from(mapping_id_label.values()),

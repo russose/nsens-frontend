@@ -1,33 +1,36 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 // import Separator from "./Separator";
-import { Box, Link, Text } from "gestalt";
+import { Box, Link, Sheet, Text } from "gestalt";
 import { ROOT_URL_WIKIPEDIA } from "../config/configURLs";
 import { IStores } from "../stores/RootStore";
+import { TUiBooleanStorage, TUiStringStorage } from "../config/globals";
 
 interface IArticleProps {
-  item_title: string;
   stores: IStores;
 }
 
 const Article: React.FunctionComponent<IArticleProps> = (props) => {
-  const height = props.stores.baseStore.GUI_CONFIG.display.heightArticle;
   const source_wikipedia =
     props.stores.baseStore.GUI_CONFIG.language.source_wikipedia;
 
-  if (props.item_title === undefined) {
-    return <Text>{"..."}</Text>;
-  }
+  // if (props.item_title === undefined) {
+  //   return <Text>{"..."}</Text>;
+  // }
+  const item_title = props.stores.uiStore.selectedAtom.title;
 
   const article = (
     <iframe
-      srcDoc={props.stores.uiStore.articleContent}
+      // srcDoc={props.stores.uiStore.articleContent}
+      srcDoc={props.stores.uiStore.getUiStringStorage(
+        TUiStringStorage.articleContent
+      )}
       sandbox="allow-scripts" //DANGEROUS BUT NECESSARY FOR SCRIPTS
       frameBorder={0}
       marginWidth={0}
       marginHeight={0}
       // height={props.height - 0}
-      height="100%"
+      height="98%"
       width="100%"
     />
     //   <div
@@ -37,24 +40,46 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
     // />
   );
 
+  const source = (
+    <Box paddingY={0} paddingX={2}>
+      <Link
+        href={
+          ROOT_URL_WIKIPEDIA(props.stores.baseStore.paramsPage.lang) +
+          item_title
+        }
+        target="blank"
+      >
+        <Text size="sm" weight="bold">
+          {source_wikipedia}
+        </Text>
+      </Link>
+    </Box>
+  );
+
   return (
     <>
-      <Box paddingY={0} paddingX={2}>
-        <Link
-          href={
-            ROOT_URL_WIKIPEDIA(props.stores.baseStore.paramsPage.lang) +
-            props.item_title
-          }
-          target="blank"
+      {/* {props.stores.uiStore.showArticle && ( */}
+      {props.stores.uiStore.getUiBooleanStorage(
+        TUiBooleanStorage.showArticle
+      ) && (
+        <Sheet
+          accessibilityDismissButtonLabel="Close wikipedia sheet"
+          accessibilitySheetLabel="Wikipedia Article"
+          // heading={item_title}
+          heading={item_title}
+          onDismiss={() => {
+            // props.stores.uiStore.setShowArticle(false);
+            props.stores.uiStore.setUiBooleanStorage(
+              TUiBooleanStorage.showArticle,
+              false
+            );
+          }}
+          footer={source}
+          size="md"
         >
-          <Text size="sm" weight="bold">
-            {source_wikipedia}
-          </Text>
-        </Link>
-      </Box>
-      <Box padding={1} height={height}>
-        {article}
-      </Box>
+          {article}
+        </Sheet>
+      )}
     </>
   );
 };

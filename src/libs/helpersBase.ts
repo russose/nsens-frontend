@@ -1,30 +1,32 @@
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import {
-  AtomID,
   TDisplay,
-  configGeneral,
   Tlanguage,
   configPaths,
   eventT,
   EXCLUSION_PATTERNS,
   IAtom,
   IparamsPage,
+  TUiStringStorage,
+  initStateCat,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
   api_getItemsFeaturedFromWebWithoutImage,
   api_searchFromWebWithoutImage,
 } from "./apiItems";
-import { DateToStringWithZero, shuffleArray } from "./utils";
+import { DateToStringWithZero, entierAleatoire } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
   const result: boolean =
-    stores.baseStore.GUI_CONFIG.currentDisplay === TDisplay.mobile;
+    // stores.baseStore.GUI_CONFIG.currentDisplay === TDisplay.mobile;
+    stores.baseStore.currentDisplay === TDisplay.mobile;
   return result;
 }
 
 export async function getParamsPageFromContext(): Promise<IparamsPage> {
-  if (process.browser) {
+  // if (process.browser) {
+  if (typeof window !== "undefined") {
     const language_navigator = navigator.language;
     let paramsPage_lang: Tlanguage;
     if (language_navigator.includes("fr")) {
@@ -74,6 +76,19 @@ export async function fetchNewMostviewed(stores: IStores): Promise<IAtom[]> {
   return items;
 }
 
+export async function initializeMostviewed(stores: IStores): Promise<void> {
+  fetchNewMostviewed(stores)
+    .then((items: IAtom[]) => {
+      stores.baseStore.setMostviewed(items);
+      for (const item of items.slice(0, 1)) {
+        stores.baseStore.setGoodImageInHistoryItem(item.id);
+      }
+    })
+    .catch(() => {
+      // console.log("error in initializeMostviewed");
+    });
+}
+
 export function setFeedFromSearch(
   stores: IStores,
   searchPattern: string
@@ -86,133 +101,131 @@ export function setFeedFromSearch(
 
   api_searchFromWebWithoutImage(searchPattern, lang, exclusion_patterns_items)
     .then((atoms) => {
-      stores.baseStore.setModeFeedDisplayedIsSearch(true);
+      // stores.baseStore.setModeFeedDisplayedIsSearch(true);
       stores.baseStore.initAmountFeedDisplayed();
       stores.baseStore.clearFeed();
       stores.baseStore.setFeed(atoms);
     })
     .catch(() => {
-      // console.log("error in seach from pattern");
+      // console.log("error in setFeedFromSearch");
     });
 }
 
-export function updateHome(stores: IStores): void {
-  stores.baseStore.setModeFeedDisplayedIsSearch(false);
+// export function updateHome(stores: IStores): void {
+//   // stores.baseStore.setModeFeedDisplayedIsSearch(false);
 
-  stores.baseStore.initAmountFeedDisplayed();
-  stores.baseStore.clearFeed();
+//   stores.baseStore.initAmountFeedDisplayed();
+//   stores.baseStore.clearFeed();
 
-  setFeedFromMostviewedAndRelated(stores);
-}
+//   // setFeedFromMostviewedAndRelated(stores);
+// }
 
-export function setFeedFromMostviewedAndRelated(stores: IStores): void {
-  // const mixedIds: AtomID[] = Mix2Array_main_majoritaire(
-  //   stores.baseStore.mostviewedIds,
-  //   stores.baseStore.allRelatedIdsForHome,
-  //   configGeneral.display.amount_mostview_for_each_related
-  // );
+// export function setFeedFromMostviewedAndRelated(stores: IStores): void {
+//   const mixedIds: AtomID[] = Mix2Array_main_minoritaire(
+//     stores.baseStore.mostviewedIds,
+//     shuffleArray(stores.baseStore.allRelatedIdsForHome),
+//     configGeneral.display.amount_related_for_each_mostview
+//   );
 
-  const mixedIds: AtomID[] = Mix2Array_main_minoritaire(
-    stores.baseStore.mostviewedIds,
-    shuffleArray(stores.baseStore.allRelatedIdsForHome),
-    configGeneral.display.amount_related_for_each_mostview
-  );
+//   if (mixedIds.length === stores.baseStore.feedItemsToDisplay.length) {
+//     stores.baseStore.setIncreaseFeedDisplayed(false);
+//   }
 
-  if (mixedIds.length === stores.baseStore.feedItemsToDisplay.length) {
-    stores.baseStore.setIncreaseFeedDisplayed(false);
-  }
+//   const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
 
-  const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
+//   stores.baseStore.setFeed(mixedItems);
+// }
 
-  stores.baseStore.setFeed(mixedItems);
-}
+// export function Mix2Array_main_minoritaire(
+//   main: AtomID[],
+//   second: AtomID[],
+//   increment: number
+// ): AtomID[] {
+//   if (main.length === 0) {
+//     return [];
+//   }
 
-export function Mix2Array_main_minoritaire(
-  main: AtomID[],
-  second: AtomID[],
-  increment: number
-): AtomID[] {
-  if (main.length === 0) {
-    return [];
-  }
+//   let mixed: AtomID[] = [];
+//   let ix_1 = 0;
+//   let ix_2 = 0;
 
-  let mixed: AtomID[] = [];
-  let ix_1 = 0;
-  let ix_2 = 0;
+//   while (ix_2 + increment <= second.length) {
+//     let newMain: AtomID[];
+//     if (ix_1 < main.length) {
+//       newMain = [main[ix_1]];
+//     } else {
+//       newMain = [];
+//     }
 
-  while (ix_2 + increment <= second.length) {
-    let newMain: AtomID[];
-    if (ix_1 < main.length) {
-      newMain = [main[ix_1]];
-    } else {
-      newMain = [];
-    }
+//     const newElements: AtomID[] = shuffleArray(
+//       second.slice(ix_2, ix_2 + increment).concat(newMain)
+//     );
 
-    const newElements: AtomID[] = shuffleArray(
-      second.slice(ix_2, ix_2 + increment).concat(newMain)
-    );
+//     mixed = mixed.concat(newElements);
+//     ix_1 = ix_1 + 1;
+//     ix_2 = ix_2 + increment;
+//   }
 
-    mixed = mixed.concat(newElements);
-    ix_1 = ix_1 + 1;
-    ix_2 = ix_2 + increment;
-  }
+//   if (main.slice(ix_1).length !== 0) {
+//     mixed = mixed.concat(main.slice(ix_1));
+//   }
 
-  if (main.slice(ix_1).length !== 0) {
-    mixed = mixed.concat(main.slice(ix_1));
-  }
+//   return mixed;
+// }
 
-  return mixed;
-}
+// export function Mix2Array_main_majoritaire(
+//   main: AtomID[],
+//   second: AtomID[],
+//   increment: number
+// ): AtomID[] {
+//   if (main.length === 0) {
+//     return [];
+//   }
+//   let mixed: AtomID[] = [];
+//   let ix_1 = 0;
+//   let ix_2 = 0;
 
-export function Mix2Array_main_majoritaire(
-  main: AtomID[],
-  second: AtomID[],
-  increment: number
-): AtomID[] {
-  if (main.length === 0) {
-    return [];
-  }
-  let mixed: AtomID[] = [];
-  let ix_1 = 0;
-  let ix_2 = 0;
+//   while (ix_1 + increment <= main.length) {
+//     let newSecond: AtomID[];
+//     if (ix_2 < second.length) {
+//       newSecond = [second[ix_2]];
+//     } else {
+//       newSecond = [];
+//     }
 
-  while (ix_1 + increment <= main.length) {
-    let newSecond: AtomID[];
-    if (ix_2 < second.length) {
-      newSecond = [second[ix_2]];
-    } else {
-      newSecond = [];
-    }
+//     const newElements: AtomID[] = shuffleArray(
+//       main.slice(ix_1, ix_1 + increment).concat(newSecond)
+//     );
 
-    const newElements: AtomID[] = shuffleArray(
-      main.slice(ix_1, ix_1 + increment).concat(newSecond)
-    );
-
-    mixed = mixed.concat(newElements);
-    ix_1 = ix_1 + increment;
-    ix_2 = ix_2 + 1;
-  }
-  return mixed;
-}
+//     mixed = mixed.concat(newElements);
+//     ix_1 = ix_1 + increment;
+//     ix_2 = ix_2 + 1;
+//   }
+//   return mixed;
+// }
 
 export function isHome(router: any): boolean {
   return router.route === configPaths.rootPath;
 }
 
-export function goPage(
+export async function goPage(
   stores: IStores,
   paramsPage: IparamsPage,
   page: string,
+  queryObject: object = {},
   reload: boolean = false
 ) {
-  if (process.browser) {
-    stores.uiStore.setSearchPattern("");
-    Router.replace({
+  // if (process.browser) {
+  if (typeof window !== "undefined") {
+    // stores.uiStore.setSearchPattern("");
+    stores.uiStore.setUiStringStorage(TUiStringStorage.searchPattern, "");
+    await Router.push({
       pathname: configPaths.rootPath + page,
-      query: paramsPage as any,
+      // query: paramsPage as any,
+      query: { ...paramsPage, ...queryObject },
     });
     if (reload) {
-      Router.reload();
+      await Router.reload();
     }
   }
 }
@@ -229,4 +242,27 @@ export function goUserHandler(stores: IStores) {
     );
     input.event.preventDefault();
   };
+}
+
+export function goRandomStaticKnowbookWhenHome(
+  stores: IStores,
+  isHome: boolean
+) {
+  if (!isHome) {
+    return;
+  }
+
+  const staticKnowbooksName: string[] = [
+    ...Array.from(stores.knowbookStore.staticKnowbooks.keys()),
+  ];
+  const name =
+    staticKnowbooksName[entierAleatoire(0, staticKnowbooksName.length - 1)];
+
+  goPage(
+    stores,
+    stores.baseStore.paramsPage,
+    configPaths.pages.StaticKnowbook,
+    { nameOrPeriod: name },
+    false
+  );
 }

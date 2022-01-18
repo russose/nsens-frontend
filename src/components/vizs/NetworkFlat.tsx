@@ -11,7 +11,7 @@ import {
   onSaved,
 } from "../../handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
-import CardAtomGridCompact from "./../CardAtomGridCompact";
+import CardAtomGrid from "../CardAtomGrid";
 
 export type INetworkFlatProps = {
   rootItemId: AtomID;
@@ -30,7 +30,17 @@ const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
                 {capitalizeFirstLetter(key_value[0]) + " :"}
               </Text>
             </Box>
-            <CardAtomGridCompact
+            {/* <CardAtomGridCompact
+              id={`NetworkFlat-${key_value[0]}`}
+              stores={props.stores}
+              // atoms={key_value[1]}
+              atoms={props.stores.baseStore.getHistoryItems(key_value[1])}
+              isItemSaved_handler={isItemSaved(props.stores)}
+              isItemSavedActionable_handler={isItemSavedActivated(props.stores)}
+              saved_handler={onSaved(props.stores)}
+              edit_handler={onEditKnowbooks(props.stores)}
+            /> */}
+            <CardAtomGrid
               id={`NetworkFlat-${key_value[0]}`}
               stores={props.stores}
               // atoms={key_value[1]}

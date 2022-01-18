@@ -1,120 +1,217 @@
 import { observable, action, makeObservable } from "mobx";
-import { AtomID, IparamsAtom, KnowbookID } from "../config/globals";
+import {
+  AtomID,
+  IparamsAtom,
+  ISlider,
+  KnowbookID,
+  TPageHeaderModes,
+  TPages,
+  TUiBooleanStorage,
+  TUiNumberStorage,
+  TUiStringStorage,
+} from "../config/globals";
+import { SVGMaxElementCircle, SVGMaxRadius } from "../libs/utilsSVG";
 import { RootStore } from "./RootStore";
 
+const SLIDER_MOVE_TOLERANCE_RATE = 0.8;
 export class UIStore {
   $rootStore: RootStore;
-  private $searchPattern: string = "";
   private $selectedAtom: IparamsAtom = { id: "", title: "" };
-  private $articleContent: string = "";
-
-  private $editKnowbookOpened: boolean = false;
-  private $editKnowbookNewValue: string = "";
   private $editKnowbookMembers = observable.map<KnowbookID, boolean>();
-
   private $selectedKnowbookIdName: KnowbookID = "";
-  private $renameKnowbookOpened: boolean = false;
-  private $renameKnowbookNewName: string = "";
+  private $sliders = observable.map<string, ISlider>();
+  private $pageHeaderMode = observable.map<TPages, TPageHeaderModes>();
+  private $uiStringStorage = observable.map<TUiStringStorage, string>();
+  private $uiBooleanStorage = observable.map<TUiBooleanStorage, boolean>();
 
-  private $loginScreenUsername: string = "";
-  private $loginScreenUsername_: string = "";
-  private $loginScreenPassword: string = "";
-  private $loginScreenError: string = "";
-
-  private $changePasswordUsername: string = "";
-  private $changePasswordPassword: string = "";
-  private $changePasswordValidationCode: string = "";
-  private $changePasswordError: string = "";
-
-  private $showLoading: boolean = false;
+  private $uiNumberStorage = observable.map<TUiNumberStorage, number>();
 
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
-    makeObservable<
-      UIStore,
-      | "$searchPattern"
-      | "$selectedAtom"
-      | "$articleContent"
-      | "$editKnowbookOpened"
-      | "$editKnowbookNewValue"
-      | "$selectedKnowbookIdName"
-      | "$renameKnowbookOpened"
-      | "$renameKnowbookNewName"
-      | "$loginScreenUsername"
-      | "$loginScreenUsername_"
-      | "$loginScreenPassword"
-      | "$loginScreenError"
-      | "$changePasswordUsername"
-      | "$changePasswordPassword"
-      | "$changePasswordValidationCode"
-      | "$changePasswordError"
-      | "$showLoading"
-    >(this, {
-      $searchPattern: observable,
+    makeObservable<UIStore, "$selectedAtom" | "$selectedKnowbookIdName">(this, {
       $selectedAtom: observable,
-      $articleContent: observable,
-      $editKnowbookOpened: observable,
-      $editKnowbookNewValue: observable,
-      $loginScreenUsername: observable,
-      $loginScreenUsername_: observable,
-      $loginScreenPassword: observable,
-      $loginScreenError: observable,
-      $changePasswordUsername: observable,
-      $changePasswordPassword: observable,
-      $changePasswordValidationCode: observable,
-      $changePasswordError: observable,
       $selectedKnowbookIdName: observable,
-      $renameKnowbookOpened: observable,
-      $renameKnowbookNewName: observable,
-      $showLoading: observable,
-      setSearchPattern: action,
+      init: action,
+      initUiStorage: action,
+      setUiStringStorage: action,
+      setUiBooleanStorage: action,
+      initPageHeaderMode: action,
+      setPageHeaderMode: action,
       setSelectedAtom: action,
-      setArticleContent: action,
-      setEditKnowbookOpened: action,
-      setEditKnowbookNewValue: action,
       setEditKnowbookMembers: action,
       clearEditKnowbookMembers: action,
       setSelectedKnowbookIdName: action,
-      setRenameKnowbookOpened: action,
-      setRenameKnowbookNewName: action,
-      setLoginScreenUsername: action,
-      setLoginScreenUsername_: action,
-      setLoginScreenPassword: action,
-      setLoginScreenError: action,
-      setChangePasswordUsername: action,
-      setChangePasswordPassword: action,
-      setChangePasswordValidationCode: action,
-      setChangePasswordError: action,
-      setShowLoading: action,
+      initSlider: action,
+      updateSliderCircular: action,
+      setSVGGlobalDimensions: action,
     });
   }
+
+  init() {
+    this.initPageHeaderMode();
+    this.initUiStorage();
+  }
+
+  initUiStorage(): void {
+    const TUiStringStorage_list = Object.values(TUiStringStorage);
+    const TUiBooleanStorage_list = Object.values(TUiBooleanStorage);
+    const TUiNumberStorage_list = Object.values(TUiNumberStorage);
+
+    for (const key of TUiStringStorage_list) {
+      this.$uiStringStorage.set(key, "");
+    }
+    for (const key of TUiBooleanStorage_list) {
+      this.$uiBooleanStorage.set(key, false);
+    }
+    for (const key of TUiNumberStorage_list) {
+      this.$uiNumberStorage.set(key, 0);
+    }
+  }
+
+  getUiStringStorage(key: TUiStringStorage) {
+    return this.$uiStringStorage.get(key);
+  }
+  getUiBooleanStorage(key: TUiBooleanStorage) {
+    return this.$uiBooleanStorage.get(key);
+  }
+  getUiNumberStorage(key: TUiNumberStorage) {
+    return this.$uiNumberStorage.get(key);
+  }
+
+  setUiStringStorage(key: TUiStringStorage, value: string): void {
+    this.$uiStringStorage.set(key, value);
+  }
+  setUiBooleanStorage(key: TUiBooleanStorage, value: boolean): void {
+    this.$uiBooleanStorage.set(key, value);
+  }
+  setUiNumberStorage(key: TUiNumberStorage, value: number): void {
+    this.$uiNumberStorage.set(key, value);
+  }
+
+  setSVGGlobalDimensions(): void {
+    this.setUiNumberStorage(
+      TUiNumberStorage.R0,
+      SVGMaxRadius(this.$rootStore.stores())
+    );
+    this.setUiNumberStorage(
+      TUiNumberStorage.SVGMaxElementCircle,
+      SVGMaxElementCircle(this.$rootStore.stores())
+    );
+  }
+
+  isPageHeaderMode(page: TPages, mode: TPageHeaderModes): boolean {
+    return this.$pageHeaderMode.get(page) === mode;
+  }
+  initPageHeaderMode(): void {
+    this.$pageHeaderMode.set(
+      TPages.Home,
+      TPageHeaderModes.homeFeaturedKnowbooks
+    );
+    this.$pageHeaderMode.set(TPages.Item, TPageHeaderModes.itemAllRelated);
+
+    const pages_list = Object.values(TPages);
+
+    for (const page of pages_list) {
+      if (!this.$pageHeaderMode.has(page)) {
+        this.$pageHeaderMode.set(page, TPageHeaderModes.none);
+      }
+    }
+  }
+  setPageHeaderMode(page: TPages, mode: TPageHeaderModes): void {
+    this.$pageHeaderMode.set(page, mode);
+  }
+
+  get sliders() {
+    return this.$sliders;
+  }
+
+  initSlider(sliderId: string, max: number): void {
+    const slider = {
+      id: sliderId,
+      position: 0,
+      positionOneStep: 0,
+      max: max,
+      maxOneStep: 360,
+    };
+    this.$sliders.set(slider.id, slider);
+  }
+
+  updateSliderCircular(id: string, value: number): void {
+    const slider = this.sliders.get(id);
+
+    if (slider === undefined) {
+      return;
+    }
+
+    const tolerance = slider.maxOneStep * SLIDER_MOVE_TOLERANCE_RATE;
+    const current_PositionOneStep = slider.positionOneStep;
+    const current_Position = slider.position;
+    const delta = value - current_PositionOneStep;
+
+    let new_Position: number;
+    if (Math.abs(delta) < tolerance) {
+      new_Position = current_Position + delta;
+    } else {
+      if (delta < 0) {
+        new_Position = current_Position + value;
+      } else {
+        new_Position = current_Position - slider.maxOneStep + value;
+      }
+    }
+
+    if (new_Position >= 0 && new_Position <= slider.max) {
+      slider.positionOneStep = value;
+      slider.position = new_Position;
+    } else if (new_Position < 0) {
+      slider.positionOneStep = value;
+      slider.position = 0;
+    } else if (new_Position > slider.max) {
+      slider.positionOneStep = value;
+      slider.position = slider.max;
+    }
+    this.$sliders.set(slider.id, slider);
+  }
+
+  // updateSliderLinear(id: string, value: number): void {
+  //   const slider = this.sliders.get(id);
+
+  //   if (slider === undefined) {
+  //     return;
+  //   }
+
+  //   const tolerance = slider.maxOneStep * slider_move_tolerance_rate;
+  //   const current_PositionOneStep = slider.positionOneStep;
+  //   const delta = value - current_PositionOneStep;
+  //   const epsilon = slider.maxOneStep * slider_switch_tolerance_rate;
+
+  //   if (Math.abs(delta) < tolerance) {
+  //     if (delta > 0) {
+  //       if (slider.positionOneStep >= slider.maxOneStep - epsilon) {
+  //         slider.positionOneStep = epsilon;
+  //       } else if (slider.position + delta < slider.max) {
+  //         slider.position = slider.position + delta;
+  //         slider.positionOneStep = value;
+  //       }
+  //     } else if (delta < 0) {
+  //       if (slider.positionOneStep <= epsilon) {
+  //         slider.positionOneStep = slider.maxOneStep - epsilon;
+  //       } else if (slider.position + delta > epsilon) {
+  //         slider.position = slider.position + delta;
+  //         slider.positionOneStep = value;
+  //       }
+  //     } else if (delta === 0) {
+  //       return;
+  //     }
+
+  //     this.setSlider(slider);
+  //   }
+  // }
 
   get selectedKnowbookIdName() {
     return this.$selectedKnowbookIdName;
   }
   setSelectedKnowbookIdName(knowbookId: KnowbookID): void {
     this.$selectedKnowbookIdName = knowbookId;
-  }
-
-  get renameKnowbookOpened() {
-    return this.$renameKnowbookOpened;
-  }
-  setRenameKnowbookOpened(state: boolean): void {
-    this.$renameKnowbookOpened = state;
-  }
-
-  get renameKnowbookNewName() {
-    return this.$renameKnowbookNewName;
-  }
-  setRenameKnowbookNewName(value: string): void {
-    this.$renameKnowbookNewName = value;
-  }
-
-  get searchPattern() {
-    return this.$searchPattern;
-  }
-  setSearchPattern(searchPattern: string): void {
-    this.$searchPattern = searchPattern;
   }
 
   get selectedAtom() {
@@ -125,27 +222,6 @@ export class UIStore {
     this.$selectedAtom.title = title;
   }
 
-  get articleContent() {
-    return this.$articleContent;
-  }
-  setArticleContent(article: string): void {
-    this.$articleContent = article;
-  }
-
-  get editKnowbookOpened() {
-    return this.$editKnowbookOpened;
-  }
-  setEditKnowbookOpened(state: boolean): void {
-    this.$editKnowbookOpened = state;
-  }
-
-  get editKnowbookNewValue() {
-    return this.$editKnowbookNewValue;
-  }
-  setEditKnowbookNewValue(value: string): void {
-    this.$editKnowbookNewValue = value;
-  }
-
   get editKnowbookMembers() {
     return this.$editKnowbookMembers;
   }
@@ -154,62 +230,5 @@ export class UIStore {
   }
   clearEditKnowbookMembers(): void {
     this.editKnowbookMembers.clear();
-  }
-
-  get changePasswordUsername() {
-    return this.$changePasswordUsername;
-  }
-  setChangePasswordUsername(value: string): void {
-    this.$changePasswordUsername = value;
-  }
-  get changePasswordPassword() {
-    return this.$changePasswordPassword;
-  }
-  setChangePasswordPassword(value: string): void {
-    this.$changePasswordPassword = value;
-  }
-  get changePasswordValidationCode() {
-    return this.$changePasswordValidationCode;
-  }
-  setChangePasswordValidationCode(value: string): void {
-    this.$changePasswordValidationCode = value;
-  }
-  get changePasswordError() {
-    return this.$changePasswordError;
-  }
-  setChangePasswordError(value: string): void {
-    this.$changePasswordError = value;
-  }
-
-  get loginScreenUsername() {
-    return this.$loginScreenUsername;
-  }
-  setLoginScreenUsername(value: string): void {
-    this.$loginScreenUsername = value;
-  }
-  get loginScreenUsername_() {
-    return this.$loginScreenUsername_;
-  }
-  setLoginScreenUsername_(value: string): void {
-    this.$loginScreenUsername_ = value;
-  }
-  get loginScreenPassword() {
-    return this.$loginScreenPassword;
-  }
-  setLoginScreenPassword(value: string): void {
-    this.$loginScreenPassword = value;
-  }
-  get loginScreenError() {
-    return this.$loginScreenError;
-  }
-  setLoginScreenError(value: string): void {
-    this.$loginScreenError = value;
-  }
-
-  get showLoading() {
-    return this.$showLoading;
-  }
-  setShowLoading(show: boolean): void {
-    this.$showLoading = show;
   }
 }

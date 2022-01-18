@@ -1,9 +1,8 @@
-import { Box, IconButton, Modal, TextField, Text, Checkbox } from "gestalt";
+import { Box, TextField, Checkbox, Sheet } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { AtomID, handlerT, RoundingT, SizeT } from "../config/globals";
 import React from "react";
 import { IStores } from "../stores/RootStore";
-import { configGeneral } from "../config/globals";
 
 export interface ICheckboxes {
   label: string;
@@ -17,7 +16,7 @@ interface IDialogEditKnowbooksFormProps {
   input_placeholder: string;
   checkboxes: ICheckboxes[];
   handler_confirm: handlerT;
-  handler_cancel: handlerT;
+  // handler_cancel: handlerT;
   handler_inputValue: handlerT;
   handler_inputTags: handlerT;
 }
@@ -25,25 +24,25 @@ interface IDialogEditKnowbooksFormProps {
 const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormProps> =
   (props) => {
     const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-    const title_size: SizeT = GUI_CONFIG.display.dialogs.title_size;
     const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
     const item_checkbox_size: SizeT = GUI_CONFIG.display.dialogs.item_size;
-    const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;
     const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
 
     return (
-      <Modal
-        accessibilityModalLabel={props.title}
-        onDismiss={props.handler_cancel}
-        size="sm"
+      <Sheet
+        accessibilityDismissButtonLabel={props.title}
+        accessibilitySheetLabel="Edit Knowbook"
+        heading={
+          props.title +
+          ": " +
+          props.stores.baseStore.getHistoryItem(props.id).title
+        }
+        // onDismiss={props.handler_cancel}
+        onDismiss={props.handler_confirm(props.id)}
+        // footer={validation}
+        size="md"
       >
-        <Box rounding={rounding} padding={2}>
-          <Box padding={1}>
-            <Text align="center" size={title_size} weight="bold">
-              {props.title}
-            </Text>
-          </Box>
-
+        <Box rounding={rounding} padding={0}>
           <Box padding={1}>
             <TextField
               id={props.id}
@@ -55,10 +54,10 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
           </Box>
 
           <Box
-            padding={0}
+            padding={1}
             display="flex"
             direction="column"
-            height="30vh"
+            // height="30vh"
             // justifyContent="between"
             overflow="auto"
           >
@@ -76,36 +75,8 @@ const DialogEditKnowbooksForm: React.FunctionComponent<IDialogEditKnowbooksFormP
               );
             })}
           </Box>
-
-          <Box
-            padding={1}
-            display="flex"
-            direction="row"
-            justifyContent="around"
-          >
-            <IconButton
-              accessibilityLabel="ok"
-              icon="cancel"
-              bgColor="transparent"
-              iconColor={
-                configGeneral.colors.iconColorDefaultNotSelected as any
-              }
-              size={button_icon_size}
-              onClick={props.handler_cancel}
-            />
-            <IconButton
-              accessibilityLabel="ok"
-              icon="check-circle"
-              bgColor="transparent"
-              iconColor={
-                configGeneral.colors.iconColorDefaultNotSelected as any
-              }
-              size={button_icon_size}
-              onClick={props.handler_confirm(props.id)}
-            />
-          </Box>
         </Box>
-      </Modal>
+      </Sheet>
     );
   };
 

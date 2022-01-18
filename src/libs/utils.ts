@@ -1,6 +1,24 @@
-import { AtomID, Tlanguage, IAtom, configPaths } from "../config/globals";
+import { NextRouter } from "next/router";
+import {
+  AtomID,
+  Tlanguage,
+  IAtom,
+  configPaths,
+  TPages,
+} from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { IsItemInAnyStaticKnowbook } from "./helpersSavedKnowbooks";
+
+export function isPage(page: TPages, router: NextRouter): boolean {
+  if (configPaths.pages[page] === "/") {
+    return router.pathname === configPaths.rootPath;
+  } else {
+    return router.pathname === configPaths.rootPath + configPaths.pages[page];
+  }
+}
+export function range(amount_element: number): number[] {
+  //=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  return Array.from(Array(amount_element).keys());
+}
 
 export const empty_handler = () => {};
 
@@ -135,12 +153,13 @@ export function getRandomImageFromItems(items: IAtom[]): string {
 }
 
 export function path_link(id: AtomID, stores: IStores): string {
-  const isStatic: boolean = IsItemInAnyStaticKnowbook(id, stores);
-  if (isStatic) {
-    return configPaths.pages.StaticArticle;
-  } else {
-    return configPaths.pages.ItemArticle;
-  }
+  // const isStatic: boolean = IsItemInAnyStaticKnowbook(id, stores);
+  // if (isStatic) {
+  //   return configPaths.pages.StaticArticle;
+  // } else {
+  //   return configPaths.pages.ItemArticle;
+  // }
+  return configPaths.pages.Item;
 }
 
 export function hasTouchScreen(window: any): boolean {
@@ -167,6 +186,15 @@ export function hasTouchScreen(window: any): boolean {
   return hasTouchScreen;
 }
 
+export function isFirefox(): boolean {
+  let result = false;
+  if (typeof window !== "undefined") {
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
+    result = isFirefox;
+  }
+  return result;
+}
+
 export function isInstalled(): boolean {
   let result = false;
   if (typeof window !== "undefined") {
@@ -187,7 +215,7 @@ export function isInstalled(): boolean {
   return result;
 }
 
-export function shuffleArray(array: any[]): any[] {
+export function shuffleArray_modified(array: any[]): any[] {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * i);
     const temp = array[i];
@@ -195,6 +223,16 @@ export function shuffleArray(array: any[]): any[] {
     array[j] = temp;
   }
   return array;
+}
+
+export function shuffleArray(array: any[]): any[] {
+  const indexes: number[] = shuffleArray_modified(range(array.length));
+  const result: any[] = [];
+  for (const ind of indexes) {
+    result.push(array[ind]);
+  }
+
+  return result;
 }
 
 export function shuffleSized(
@@ -206,14 +244,14 @@ export function shuffleSized(
   return shuffled_sized;
 }
 
-export function waitForMessage(
-  duration_in_seconds: number,
-  message_after: string
-) {
-  setTimeout(() => {
-    console.log(message_after);
-  }, duration_in_seconds);
-}
+// export function waitForMessage(
+//   duration_in_seconds: number,
+//   message_after: string
+// ) {
+//   setTimeout(() => {
+//     console.log(message_after);
+//   }, duration_in_seconds);
+// }
 
 export function sleep(milliseconds: number) {
   const date = Date.now();
@@ -232,20 +270,20 @@ export function sleep(milliseconds: number) {
 //   return false;
 // }
 
-export function findUndefined(list: Object[]) {
-  list.forEach((item) => {
-    Object.values(item).forEach((value) => {
-      if (value === undefined) {
-        // console.log(item);
-      }
-    });
-  });
-}
+// export function findUndefined(list: Object[]) {
+//   list.forEach((item) => {
+//     Object.values(item).forEach((value) => {
+//       if (value === undefined) {
+//         // console.log(item);
+//       }
+//     });
+//   });
+// }
 
-//nombre aléatoire entre min (inclus) et max (exclue)
-export function getRandomArbitrary(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
-}
+// //nombre aléatoire entre min (inclus) et max (exclue)
+// export function getRandomArbitrary(min: number, max: number): number {
+//   return Math.random() * (max - min) + min;
+// }
 
 export function entierAleatoire(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));

@@ -3,34 +3,21 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import SearchBar from "../SearchBar";
 import MenuBarNavigation from "../MenuBarNavigation";
-import PageLayoutHybrid from "./PageLayoutHybrid";
+import AppLayoutPageHybrid from "./AppLayoutPageHybrid";
 import {
   onSearchHomeKeyboard,
   onSearchHomeSubmit,
   onSearchHomeText,
   onTapLogo,
 } from "../../handlers/handlers_Searchbar_Navigation";
-import { IStores } from "../../stores/RootStore";
-import { TDisplay, configPaths } from "../../config/globals";
-import dynamic from "next/dynamic";
-import MenuBarDisplayNotLogged from "../MenuBarDisplayNotLogged";
-
-const DialogsLoggedDynamic = dynamic(() => import("../DialogsLogged"));
-
-const MenuBarDisplayLoggedDynamic = dynamic(
-  () => import("../MenuBarDisplayLogged"),
-  { ssr: true }
-);
-
-interface IAppLayoutProps {
-  stores: IStores;
-  display: TDisplay;
-}
+import { configPaths, TUiStringStorage } from "../../config/globals";
+import { IAppLayoutProps } from "./AppLayoutMobile";
 
 const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
   const stores = props.stores;
 
   stores.baseStore.setGUICONFIGFromDisplay(props.display);
+  stores.uiStore.setSVGGlobalDimensions();
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const path_logo_image = configPaths.image_logo_W_small;
@@ -42,7 +29,8 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
       handlerText={onSearchHomeText(stores)}
       handlerSubmit={onSearchHomeSubmit(stores)}
       handlerKeyboard={onSearchHomeKeyboard(stores)}
-      value={stores.uiStore.searchPattern}
+      // value={stores.uiStore.searchPattern}
+      value={stores.uiStore.getUiStringStorage(TUiStringStorage.searchPattern)}
     />
   );
 
@@ -60,15 +48,15 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
     </TapArea>
   );
 
-  let displayMenu;
-  let dialogs_Logged;
-  if (!stores.baseStore.isLogged) {
-    displayMenu = <MenuBarDisplayNotLogged stores={stores} />;
-    dialogs_Logged = <></>;
-  } else {
-    displayMenu = <MenuBarDisplayLoggedDynamic stores={stores} />;
-    dialogs_Logged = <DialogsLoggedDynamic stores={stores} />;
-  }
+  // let displayMenu;
+  // let dialogs_Logged;
+  // if (!stores.baseStore.isLogged) {
+  //   // displayMenu = <MenuBarDisplayNotLogged stores={stores} />;
+  //   dialogs_Logged = <></>;
+  // } else {
+  //   // displayMenu = <MenuBarDisplayLoggedDynamic stores={stores} />;
+  //   dialogs_Logged = <DialogsLoggedDynamic stores={stores} />;
+  // }
 
   const navigation_desktop = (
     <Box
@@ -83,14 +71,6 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
       lgColumn={3}
     >
       <MenuBarNavigation stores={stores} rounding={rounding} />
-    </Box>
-  );
-
-  const display_desktop = (
-    <Box display="flex" width="100%" justifyContent="center">
-      <Box paddingY={1} column={4} smColumn={4} mdColumn={3} lgColumn={2}>
-        {displayMenu}
-      </Box>
     </Box>
   );
 
@@ -122,11 +102,15 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
 
   return (
     <>
-      <PageLayoutHybrid stores={stores} top={top_desktop} bottom={<></>}>
-        {display_desktop}
+      <AppLayoutPageHybrid
+        stores={stores}
+        titleSEO={props.titleSEO}
+        top={top_desktop}
+        bottom={<></>}
+        svgBody={props.svgBody}
+      >
         {props.children}
-        {dialogs_Logged}
-      </PageLayoutHybrid>
+      </AppLayoutPageHybrid>
     </>
   );
 };

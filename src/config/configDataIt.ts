@@ -4,11 +4,18 @@ import {
   ICONS,
   TButtonID,
   TPages,
+  TSpecialPages,
+  CUSTOM_ICONS,
 } from "./globals";
 
 export const configDataIt: TconfigDataLanguage = {
   searchBar: "Cerca...",
   source_wikipedia: "Sorgente: Wikipedia",
+  legend: "Leggenda:",
+  labels: {
+    knowbookUser: "I Miei Documenti",
+    knowbookFeatured: "Scoprire",
+  },
   SEO: {
     // canonical: "https://www.nsens.org/it/Mobile/About/",
     title_page_base: "n.Sens - Esplora la conoscenza libera in un modo nuovo",
@@ -24,25 +31,38 @@ export const configDataIt: TconfigDataLanguage = {
         title: "Modifica la password",
         description: "",
       },
-      [TPages.ItemArticle]: { title: "", description: "" },
+      // [TPages.ItemArticle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
-      [TPages.StaticArticle]: { title: "", description: "" },
-      [TPages.Knowbooks_Featured]: {
-        title: "Documenti essenziali",
-        description: "",
-      },
+      // [TPages.StaticArticle]: { title: "", description: "" },
+      // [TPages.Knowbooks_Featured]: {
+      //   title: "Documenti essenziali",
+      //   description: "",
+      // },
       [TPages.StaticKnowbook]: { title: "", description: "" },
-      [TPages.Knowbooks_User]: {
-        title: "I Miei Documenti",
-        description: "",
-      },
+      // [TPages.Knowbooks_User]: {
+      //   title: "I Miei Documenti",
+      //   description: "",
+      // },
       [TPages.Knowbook]: { title: "", description: "" },
-      [TPages.KnowbookSaved]: { title: "Salvati (tutti)", description: "" },
-      [TPages.KnowbookNone]: { title: "Senza Documento", description: "" },
-      [TPages.KnowbookMostviewed]: {
-        title: "Oggi",
-        description: "",
+
+      [TPages.KnowbookSpecial]: {
+        [TSpecialPages.Mostviewed]: { title: "Oggi", description: "" },
+        [TSpecialPages.AllSaved]: {
+          title: "Salvati (tutti)",
+          description: "",
+        },
+        [TSpecialPages.NoKnowbook]: {
+          title: "Senza Documento",
+          description: "",
+        },
       },
+
+      // [TPages.KnowbookSaved]: { title: "Salvati (tutti)", description: "" },
+      // [TPages.KnowbookNone]: { title: "Senza Documento", description: "" },
+      // [TPages.KnowbookMostviewed]: {
+      //   title: "Oggi",
+      //   description: "",
+      // },
     },
   },
   about: {
@@ -72,16 +92,17 @@ export const configDataIt: TconfigDataLanguage = {
   buttons: {
     [TButtonID.HOME]: {
       label: "Home",
-      icon: ICONS.HOME,
+      // icon: ICONS.HOME,
+      icon: CUSTOM_ICONS.HOME,
     },
-    [TButtonID.KNOWBOOKS_USER]: {
-      label: "Documenti",
-      icon: ICONS.KNOWBOOKS,
-    },
-    [TButtonID.KNOWBOOKS_FEATURED]: {
-      label: "Speciale",
-      icon: ICONS.FEATURED,
-    },
+    // [TButtonID.KNOWBOOKS_USER]: {
+    //   label: "Documenti",
+    //   icon: ICONS.KNOWBOOKS,
+    // },
+    // [TButtonID.KNOWBOOKS_FEATURED]: {
+    //   label: "Speciale",
+    //   icon: ICONS.FEATURED,
+    // },
     [TButtonID.LOGIN]: {
       label: "Utente",
       icon: ICONS.LOGIN,
@@ -154,7 +175,7 @@ export const configDataIt: TconfigDataLanguage = {
       missing_password_text: "Password dimenticata?",
       login_label: "Accedi",
       signup_label: "Registrati",
-      login_error: "Nome uttento o password incoretta",
+      login_error: "Nome uttento o password errata",
       signup_error: "Impossibile effettuare la registrazione",
       signup_error_duration:
         "Riscarigare la paggina, riempire i campi et aspettare qualque secondi prima di registrarsi",

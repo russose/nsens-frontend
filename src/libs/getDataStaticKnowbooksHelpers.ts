@@ -325,8 +325,9 @@ async function buildStaticKnowbooksExtracts(
   const staticKnowbooks: IStaticKnowbookDefinition[] =
     allStaticKnowbooks.filter((knowbooks) => {
       return (
-        knowbooks.lang === lang &&
-        knowbooks.type === StaticKnowbookFamilyType.VITAL
+        // knowbooks.lang === lang &&
+        // knowbooks.type === StaticKnowbookFamilyType.VITAL
+        knowbooks.lang === lang
       );
     });
 

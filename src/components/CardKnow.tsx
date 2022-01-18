@@ -1,44 +1,38 @@
 import { observer } from "mobx-react-lite";
-import { Box, IconButton, Text } from "gestalt";
-import { AtomID, handlerT, IconT } from "../config/globals";
+import { Box, IconButton } from "gestalt";
+import { ICardKnowProps, IconT, RoundingT } from "../config/globals";
 import CardGeneric from "./CardGeneric";
-import { configGeneral, configPaths } from "../config/globals";
-import { IStores } from "../stores/RootStore";
-
-export interface ICardKnowProps {
-  id: AtomID;
-  stores: IStores;
-  title: string;
-  image_url: string;
-  pathname: string;
-  queryObject: any;
-  amount: number | string;
-  edit_handler: handlerT;
-  delete_handler: handlerT;
-}
+import { configGeneral } from "../config/globals";
 
 const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
   const color = configGeneral.colors.knowbook_color;
+  const colorEdge = configGeneral.colors.knowbook_edge_color;
   const color_image = configGeneral.colors.knowbook_color_image;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
-  const pathKnowbookSaved = configPaths.pages.KnowbookSaved;
   const display_edit_icon = props.edit_handler === undefined ? false : true;
   const display_delete_icon =
-    props.amount === 0 && props.pathname !== pathKnowbookSaved ? true : false;
+    props.amount === 0 && props.delete_handler !== undefined ? true : false;
+
+  const width = display_edit_icon || display_edit_icon ? undefined : "100%";
+  const rounding: RoundingT = GUI_CONFIG.display.rounding_knowbooks;
+
   return (
     <CardGeneric
       id={props.id}
       stores={props.stores}
       title={props.title}
       color={color}
+      colorEdge={colorEdge}
       color_image={color_image}
       image_url={props.image_url}
       sizes={card_sizes}
+      rounding={rounding}
       pathname={props.pathname}
       queryObject={props.queryObject}
       full={false}
+      width_text={width}
     >
       <Box paddingX={0}>
         {display_delete_icon && (
@@ -63,11 +57,11 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           />
         )}
       </Box>
-      <Box paddingX={2}>
+      {/* <Box paddingX={2}>
         <Text align="center" size="sm" weight="bold">
           {props.amount}
         </Text>
-      </Box>
+      </Box> */}
     </CardGeneric>
   );
 };

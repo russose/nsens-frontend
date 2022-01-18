@@ -10,9 +10,11 @@ import {
 import Link from "next/link";
 import { IStores } from "../stores/RootStore";
 import { configPaths } from "../config/globals";
+import React from "react";
 
 interface ICardSizes {
   height: number | string;
+  width?: number;
   image_ratio: string;
   max_title_size: number;
   title_card_size: string;
@@ -24,29 +26,48 @@ interface ICardGenericProps {
   title: string;
   image_url: string;
   color: ColorT;
+  colorEdge?: ColorT;
   color_image?: string;
   sizes: ICardSizes;
+  rounding: RoundingT;
   pathname: string;
   queryObject?: any;
   full?: boolean;
+
+  width_text?: string;
+  TopIcon?: any;
+  // noImage?: boolean;
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
-  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const path_empty_image = configPaths.item_empty_image;
-  const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
+  // const path_empty_image = configPaths.item_empty_image;
+  const rounding = props.rounding;
   const max_title_size = props.sizes.max_title_size;
   const title_card_size: SizeT = props.sizes.title_card_size;
+
+  const width = props.width_text === undefined ? "75%" : props.width_text;
 
   let title = props.title;
   if (title.length > max_title_size) {
     title = props.title.substring(0, max_title_size) + "...";
   }
 
+  // const color_image =
+  //   props.image_url === undefined && props.color_image !== undefined
+  //     ? props.color_image
+  //     : "white";
   const color_image =
-    props.image_url === "" && props.color_image !== undefined
-      ? props.color_image
-      : "transparent";
+    props.color_image !== undefined ? props.color_image : "white";
+
+  const path_image = props.image_url !== undefined ? props.image_url : "";
+
+  // let path_image = "";
+  // if (props.noImage === undefined || props.noImage !== true) {
+  //   path_image =
+  //     props.image_url === "" || props.image_url === undefined
+  //       ? path_empty_image
+  //       : props.image_url;
+  // }
 
   const image_only = (component: reactComponentT) => {
     return (
@@ -58,11 +79,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         naturalHeight={3000}
         naturalWidth={3000}
         loading="lazy"
-        src={
-          props.image_url === "" || props.image_url === undefined
-            ? path_empty_image
-            : props.image_url
-        }
+        src={path_image}
       >
         <Box
           display="flex"
@@ -95,9 +112,6 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   const hasLink: boolean =
     props.pathname !== undefined && props.pathname !== "";
 
-  // const ratio_list = props.sizes.image_ratio.split("%");
-  // const ratio = (100 - Number(ratio_list[0])).toString();
-
   let c_width: string;
   let c_rounding: any;
   let c_marginBottom: any;
@@ -109,54 +123,76 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   } else {
     c_width = "100%";
     c_rounding = 0;
-    c_marginBottom = 4;
+    c_marginBottom = 1;
   }
 
   const content: reactComponentT = (
-    <Box
-      display="flex"
-      direction="row"
-      // height={ratio + "%"}
-      justifyContent="between"
-      alignItems="center"
-      color={props.color}
-      opacity={0.9}
-      padding={0}
-      borderStyle="none"
-      //
-      width={c_width}
-      rounding={c_rounding}
-      marginBottom={c_marginBottom}
-      //
-    >
-      <Box paddingX={2} paddingY={1} width="60%">
-        <Text size={title_card_size} align="start" weight="bold">
-          {title}
-        </Text>
-      </Box>
+    <>
+      {props.TopIcon !== undefined && (
+        <Box
+          height="100%"
+          width="100%"
+          display="flex"
+          direction="row"
+          justifyContent="end"
+          alignItems="start"
+          padding={2}
+        >
+          {props.TopIcon}
+        </Box>
+      )}
+
       <Box
         display="flex"
         direction="row"
-        justifyContent="end"
+        justifyContent="between"
         alignItems="center"
+        color={props.color}
+        opacity={0.9}
         padding={0}
-        wrap={true}
+        borderStyle="none"
+        //
+        width={c_width}
+        rounding={c_rounding}
+        marginBottom={c_marginBottom}
+        //
       >
-        {props.children}
+        <Box paddingX={1} paddingY={1} width={width}>
+          <Text size={title_card_size} align="center" weight="bold">
+            {title}
+          </Text>
+        </Box>
+        <Box
+          display="flex"
+          direction="row"
+          justifyContent="end"
+          alignItems="center"
+          padding={0}
+          wrap={true}
+        >
+          {props.children}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 
   return (
     <Box
       height={props.sizes.height}
+      width={props.sizes.width !== undefined ? props.sizes.width : undefined}
       borderStyle="shadow"
       // borderStyle="lg"
       rounding={rounding}
       display="flex"
       direction="column"
     >
-      <Box height="100%" width="100%">
+      <Box
+        height="100%"
+        width="100%"
+        color={props.colorEdge === undefined ? "transparent" : props.colorEdge}
+        padding={props.colorEdge === undefined ? 0 : 1}
+        rounding={rounding}
+      >
         <Mask rounding={rounding} height="100%" width="100%">
           {hasLink ? image_with_link(content) : image_only(content)}
         </Mask>

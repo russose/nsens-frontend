@@ -1,6 +1,13 @@
 import { observer } from "mobx-react-lite";
 import { Box, TextField, Button, Text } from "gestalt";
-import { ColorT, eventT, handlerT, RoundingT, SizeT } from "../config/globals";
+import {
+  ColorT,
+  eventT,
+  handlerT,
+  RoundingT,
+  SizeT,
+  TUiStringStorage,
+} from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { getUserNameDisplay } from "../libs/utils";
 import React from "react";
@@ -44,7 +51,10 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
           <TextField
             id="username"
             placeholder={props.placeholder_username}
-            errorMessage={props.stores.uiStore.loginScreenError}
+            // errorMessage={props.stores.uiStore.loginScreenError}
+            errorMessage={props.stores.uiStore.getUiStringStorage(
+              TUiStringStorage.loginScreenError
+            )}
             onChange={props.handler_text("username")}
             type="email"
             size={texfield_size}
@@ -54,10 +64,17 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
           <Box padding={1}>
             <TextField
               id="username*"
-              errorMessage={props.stores.uiStore.loginScreenUsername_}
+              // errorMessage={props.stores.uiStore.loginScreenUsername_}
+              errorMessage={props.stores.uiStore.getUiStringStorage(
+                TUiStringStorage.loginScreenUsername_
+              )}
               label="username*"
               onChange={(input: { event: eventT; value: string }): void => {
-                props.stores.uiStore.setLoginScreenUsername_(input.value);
+                // props.stores.uiStore.setLoginScreenUsername_(input.value);
+                props.stores.uiStore.setUiStringStorage(
+                  TUiStringStorage.loginScreenUsername_,
+                  input.value
+                );
               }}
               type="text"
               size={texfield_size}

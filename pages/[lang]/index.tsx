@@ -1,11 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-import SEOHeaderTitle from "../../src/components/SEOHeaderTitle";
 import AppLayout from "../../src/components/layout/AppLayout";
 import { useStores } from "../../src/stores/RootStoreHook";
-import dynamic from "next/dynamic";
-import CardAtomGridNotLogged from "../../src/components/CardAtomGridNotLogged";
 import {
   IPage,
   I_getStaticPaths,
@@ -13,58 +10,71 @@ import {
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import ContentLoading from "../../src/components/ContentLoading";
-
-const CardAtomGridLoggedDynamic = dynamic(
-  () => import("../../src/components/CardAtomGridLogged")
-);
+import {
+  SVG_T,
+  TPageHeaderModes,
+  TPages,
+  TUiNumberStorage,
+} from "../../src/config/globals";
+import SVGKnowbooksFeatured from "../../src/components/SVGKnowbooksFeatured";
+import SVGKnowbooksUser from "../../src/components/SVGKnowbooksUser";
 
 const Home: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
 
-  initializeApp(stores, paramsPage);
-
+  initializeApp(stores, paramsPage, true);
   // To be checked/deleted: Initialyzed until userData to avoid allRelatedIdsForHome being refreshed 1000s times because of home update
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
     return <ContentLoading stores={stores} />;
   }
 
-  let page_content;
-  if (!stores.baseStore.isLogged) {
-    page_content = (
-      <>
-        <CardAtomGridNotLogged
-          stores={stores}
-          id="Home_not_logged"
-          items={stores.baseStore.feedItemsToDisplay}
-        />
-      </>
+  let content: SVG_T;
+  if (
+    stores.baseStore.isLogged &&
+    stores.uiStore.isPageHeaderMode(
+      TPages.Home,
+      TPageHeaderModes.homeUserKnowbooks
+    )
+  ) {
+    content = (
+      <SVGKnowbooksUser
+        stores={stores}
+        // R0_large={R0}
+        // amountElementsLevel={amountElementsLevel}
+        R0_large={stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0)}
+        amountElementsLevel={stores.uiStore.getUiNumberStorage(
+          TUiNumberStorage.SVGMaxElementCircle
+        )}
+        closed={false}
+      />
     );
   } else {
-    page_content = (
-      <>
-        <CardAtomGridLoggedDynamic
-          stores={stores}
-          id="Home_logged"
-          items={stores.baseStore.feedItemsToDisplay}
-        />
-      </>
+    content = (
+      <SVGKnowbooksFeatured
+        stores={stores}
+        // R0_large={R0}
+        // amountElementsLevel={amountElementsLevel}
+        R0_large={stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0)}
+        amountElementsLevel={stores.uiStore.getUiNumberStorage(
+          TUiNumberStorage.SVGMaxElementCircle
+        )}
+        closed={false}
+      />
     );
   }
 
   return (
     <>
-      <AppLayout stores={stores}>
-        <SEOHeaderTitle
-          stores={stores}
-          title={
-            stores.baseStore.GUI_CONFIG.language.SEO.title_description.Home
-              .title
-          }
-          hidden={true}
-        />
-        {page_content}
+      <AppLayout
+        stores={stores}
+        titleSEO={
+          stores.baseStore.GUI_CONFIG.language.SEO.title_description.Home.title
+        }
+        isBodySVG={true}
+      >
+        {content}
       </AppLayout>
     </>
   );

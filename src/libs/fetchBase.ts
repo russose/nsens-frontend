@@ -1,4 +1,4 @@
-import { configFetching } from "../config/globals";
+import { configFetching, configPaths } from "../config/globals";
 import { Tlanguage, IAtom, JSONDataT } from "../config/globals";
 import {
   chunk,
@@ -257,6 +257,7 @@ async function idsFromSearchOrRandomOrTitlesFromWikipedia(
       srsearch: pattern_or_titles,
       srlimit: nb_atoms.toString(),
       srnamespace: "0",
+      redirects: 1,
       maxage: cache_duration_in_sec, //1 semaine pour le cache
       //srprop: "",
       //srnamespace: "4",
@@ -411,6 +412,7 @@ async function getAtomsFromWikipediaAction(
       piprop: "original|thumbnail",
       pilicense: "free",
       iiprop: "url|size|mediatype|dimensions",
+      redirects: 1,
       maxage: cache_duration_in_sec, //1 semaine pour le cache
     };
 
@@ -423,9 +425,12 @@ async function getAtomsFromWikipediaAction(
     if (data["query"] === undefined) {
       return [];
     }
+
     //Extract relevant information to keep
     const list_information_atoms: IAtom[] = [];
     Object.values(data["query"]["pages"]).forEach((item: JSONDataT) => {
+      // console.log(item.title);
+
       if (
         item["pageprops"] !== undefined &&
         item["pageprops"]["wikibase_item"] !== undefined &&
@@ -456,19 +461,24 @@ async function getAtomsFromWikipediaAction(
     });
 
     //remettre la liste dans l'ordre
-    const pages_ids_map = new Map<number, IAtom>();
-    list_information_atoms.forEach((atom) => {
-      pages_ids_map.set(atom.pageid_wp, atom);
-    });
-    const list_of_Pages_ids_copy = new String(list_of_Pages_ids); //deep copy mandatory
-    const pageid_wp_list: string[] = list_of_Pages_ids_copy.split("|");
-    const list_information_atoms_ordered: IAtom[] = pageid_wp_list.map(
-      (wp_id: string) => {
-        return pages_ids_map.get(parseInt(wp_id, 10));
-      }
-    );
+    const ordered_activated = false;
+    if (ordered_activated) {
+      const pages_ids_map = new Map<number, IAtom>();
+      list_information_atoms.forEach((atom) => {
+        pages_ids_map.set(atom.pageid_wp, atom);
+      });
+      const list_of_Pages_ids_copy = new String(list_of_Pages_ids); //deep copy mandatory
+      const pageid_wp_list: string[] = list_of_Pages_ids_copy.split("|");
+      const list_information_atoms_ordered: IAtom[] = pageid_wp_list.map(
+        (wp_id: string) => {
+          return pages_ids_map.get(parseInt(wp_id, 10));
+        }
+      );
 
-    return list_information_atoms_ordered;
+      return list_information_atoms_ordered;
+    } else {
+      return list_information_atoms;
+    }
   } catch (error) {
     // console.log(error);
     return [];
@@ -703,7 +713,7 @@ async function improveImageFromWikipedia_blocking(
   }
 
   if (best_image === undefined) {
-    item.image_url = "";
+    item.image_url = configPaths.item_empty_image;
     item.image_height = 1;
     item.image_width = 1;
     return item;

@@ -2,6 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Box, Spinner, Sticky } from "gestalt";
 import { IStores } from "../stores/RootStore";
+import { TUiBooleanStorage } from "../config/types";
 
 interface IContentLoadingProps {
   stores: IStores;
@@ -22,7 +23,10 @@ const ContentLoading: React.FunctionComponent<IContentLoadingProps> = (
       >
         <Sticky bottom="50vh">
           <Spinner
-            show={stores.uiStore.showLoading}
+            // show={stores.uiStore.showLoading}
+            show={stores.uiStore.getUiBooleanStorage(
+              TUiBooleanStorage.showLoading
+            )}
             accessibilityLabel="Loading..."
           />
         </Sticky>

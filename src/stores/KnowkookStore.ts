@@ -7,18 +7,22 @@ import {
   KnowbookID,
   StaticKnowbookFamilyType,
 } from "../config/globals";
+import { getKnowbookAtomsList } from "../libs/helpersSavedKnowbooks";
+import { getRandomImageFromItems } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
 export class KnowkookStore {
   $rootStore: RootStore;
   private $knowbooks = observable.map<KnowbookID, IKnowbook>();
   private $staticKnowbooks = observable.map<KnowbookID, IKnowbookStatic>();
+  private $imgKnowbooks = observable.map<KnowbookID, string>();
+  private $imgStaticKnowbooks = observable.map<KnowbookID, string>();
 
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
     makeObservable<KnowkookStore>(this, {
       init: action,
-      setKnowbooks: action,
+      setKnowbook: action,
       clearStaticKnowbooks: action,
       clearKnowbooks: action,
       deleteKnowbook: action,
@@ -27,32 +31,66 @@ export class KnowkookStore {
       addItemInKnowbook: action,
       removeItemFromKnowbook: action,
       renameKnowbook: action,
+      setImageKnowbook: action,
+      setImageStaticKnowbook: action,
       allItemsInStaticKnowbooks: computed,
       itemsInStaticKnowbooksForHome: computed,
     });
   }
-  /**
-   * Knowbook
-   */
 
   init() {
     this.clearStaticKnowbooks();
     this.clearKnowbooks();
   }
 
+  /**
+   * Images
+   */
+
+  getImageKnowbook(name: KnowbookID): string {
+    return this.$imgKnowbooks.get(name);
+  }
+
+  getImageStaticKnowbook(name: KnowbookID): string {
+    return this.$imgStaticKnowbooks.get(name);
+  }
+
+  setImageKnowbook(name: KnowbookID) {
+    this.$imgKnowbooks.set(
+      name,
+      getRandomImageFromItems(
+        getKnowbookAtomsList(name, this.$rootStore.stores())
+      )
+    );
+  }
+
+  setImageStaticKnowbook(name: KnowbookID) {
+    this.$imgStaticKnowbooks.set(
+      name,
+      getRandomImageFromItems(this.staticKnowbooks.get(name).items)
+    );
+  }
+
+  /**
+   * Knowbook
+   */
+
   get knowbooks() {
     return this.$knowbooks;
   }
-  setKnowbooks(key: KnowbookID, item: IKnowbook) {
+  setKnowbook(key: KnowbookID, item: IKnowbook) {
     this.$knowbooks.set(key, item);
+    this.setImageKnowbook(key);
   }
+
   setKnowbooksFromList(knowbooks: IKnowbook[]): void {
     if (knowbooks === undefined || knowbooks.length === 0) {
       return;
     }
 
     knowbooks.forEach((knowbook) => {
-      this.$knowbooks.set(knowbook.name, knowbook);
+      this.setKnowbook(knowbook.name, knowbook);
+      // this.$knowbooks.set(knowbook.name, knowbook);
     });
   }
 
@@ -61,13 +99,16 @@ export class KnowkookStore {
   }
   setStaticKnowbooks(key: KnowbookID, knowbook: IKnowbookStatic) {
     this.$staticKnowbooks.set(key, knowbook);
+    this.setImageStaticKnowbook(key);
   }
   clearStaticKnowbooks(): void {
     this.$staticKnowbooks.clear();
+    this.$imgStaticKnowbooks.clear();
   }
 
   clearKnowbooks(): void {
     this.$knowbooks.clear();
+    this.$imgKnowbooks.clear();
   }
   deleteKnowbook(key: KnowbookID): void {
     this.$knowbooks.delete(key);

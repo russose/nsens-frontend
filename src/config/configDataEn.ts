@@ -4,11 +4,18 @@ import {
   ICONS,
   TPages,
   TButtonID,
+  TSpecialPages,
+  CUSTOM_ICONS,
 } from "./globals";
 
 export const configDataEn: TconfigDataLanguage = {
   searchBar: "Search...",
   source_wikipedia: "Source: Wikipedia",
+  legend: "Legend:",
+  labels: {
+    knowbookUser: "My Notebooks",
+    knowbookFeatured: "Explore",
+  },
   SEO: {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
     title_page_base: "n.Sens - A new way to explore Open Knowledge",
@@ -21,22 +28,35 @@ export const configDataEn: TconfigDataLanguage = {
       },
       [TPages.User]: { title: "", description: "" },
       [TPages.ChangePassword]: { title: "Update password", description: "" },
-      [TPages.ItemArticle]: { title: "", description: "" },
+      // [TPages.ItemArticle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
-      [TPages.StaticArticle]: { title: "", description: "" },
-      [TPages.Knowbooks_Featured]: {
-        title: "Featured Notebooks",
-        description: "",
-      },
+      // [TPages.StaticArticle]: { title: "", description: "" },
+      // [TPages.Knowbooks_Featured]: {
+      //   title: "Featured Notebooks",
+      //   description: "",
+      // },
       [TPages.StaticKnowbook]: { title: "", description: "" },
-      [TPages.Knowbooks_User]: { title: "My Notebooks", description: "" },
+      // [TPages.Knowbooks_User]: { title: "My Notebooks", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
-      [TPages.KnowbookSaved]: { title: "Saved (all)", description: "" },
-      [TPages.KnowbookNone]: { title: "Without Notebook", description: "" },
-      [TPages.KnowbookMostviewed]: {
-        title: "Today",
-        description: "",
+
+      [TPages.KnowbookSpecial]: {
+        [TSpecialPages.Mostviewed]: { title: "Today", description: "" },
+        [TSpecialPages.AllSaved]: {
+          title: "Saved (all)",
+          description: "",
+        },
+        [TSpecialPages.NoKnowbook]: {
+          title: "Without Notebook",
+          description: "",
+        },
       },
+
+      // [TPages.KnowbookSaved]: { title: "Saved (all)", description: "" },
+      // [TPages.KnowbookNone]: { title: "Without Notebook", description: "" },
+      // [TPages.KnowbookMostviewed]: {
+      //   title: "Today",
+      //   description: "",
+      // }
     },
   },
   about: {
@@ -65,16 +85,17 @@ export const configDataEn: TconfigDataLanguage = {
   buttons: {
     [TButtonID.HOME]: {
       label: "Home",
-      icon: ICONS.HOME,
+      // icon: ICONS.HOME,
+      icon: CUSTOM_ICONS.HOME,
     },
-    [TButtonID.KNOWBOOKS_USER]: {
-      label: "Notebooks",
-      icon: ICONS.KNOWBOOKS,
-    },
-    [TButtonID.KNOWBOOKS_FEATURED]: {
-      label: "Featured",
-      icon: ICONS.FEATURED,
-    },
+    // [TButtonID.KNOWBOOKS_USER]: {
+    //   label: "Notebooks",
+    //   icon: ICONS.KNOWBOOKS,
+    // },
+    // [TButtonID.KNOWBOOKS_FEATURED]: {
+    //   label: "Featured",
+    //   icon: ICONS.FEATURED,
+    // },
     [TButtonID.LOGIN]: {
       label: "User",
       icon: ICONS.LOGIN,

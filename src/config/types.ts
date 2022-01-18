@@ -1,5 +1,11 @@
+import { IStores } from "../stores/RootStore";
 import type { configDataFr } from "./configDataFr";
 import type { configDataMobile } from "./configDataMobile";
+
+export interface IPosition {
+  x: number;
+  y: number;
+}
 
 export enum Tlanguage {
   fr = "fr",
@@ -16,23 +22,36 @@ export enum TDisplay {
 
 export enum TPages {
   Home = "Home",
+  Search = "Search",
   About = "About",
   User = "User",
   ChangePassword = "ChangePassword",
 
-  ItemArticle = "ItemArticle",
+  // ItemArticle = "ItemArticle",
   ItemNetwork = "ItemNetwork",
-  StaticArticle = "StaticArticle",
+  Item = "Item",
 
-  Knowbooks_Featured = "Knowbooks_Featured",
   StaticKnowbook = "StaticKnowbook",
 
-  Knowbooks_User = "Knowbooks_User",
   Knowbook = "Knowbook",
-  KnowbookSaved = "KnowbookSaved",
-  KnowbookNone = "KnowbookNone",
+  KnowbookSpecial = "KnowbookSpecial",
+  // KnowbookSaved = "KnowbookSaved",
+  // KnowbookNone = "KnowbookNone",
 
-  KnowbookMostviewed = "KnowbookMostviewed",
+  // KnowbookMostviewed = "KnowbookMostviewed",
+}
+
+export enum TPageHeaderModes {
+  homeFeaturedKnowbooks = "homeFeaturedKnowbooks",
+  homeUserKnowbooks = "homeUserKnowbooks",
+  itemAllRelated = "itemAllRelated",
+  none = "none",
+}
+
+export enum TSpecialPages {
+  Mostviewed = "Mostviewed",
+  AllSaved = "AllSaved",
+  NoKnowbook = "NoKnowbook",
 }
 
 export enum initStateCat {
@@ -40,6 +59,36 @@ export enum initStateCat {
   // display = "display",
   staticKnowbooksFull = "staticKnowbooksFull",
   userData = "userData",
+  Item = "Item",
+}
+
+export enum TUiStringStorage {
+  searchPattern = "searchPattern",
+  articleContent = "articleContent",
+  editKnowbookNewValue = "editKnowbookNewValue",
+  renameKnowbookNewName = "renameKnowbookNewName",
+  loginScreenUsername = "loginScreenUsername",
+  loginScreenUsername_ = "loginScreenUsername_",
+  loginScreenPassword = "loginScreenPassword",
+
+  loginScreenError = "loginScreenError",
+  changePasswordUsername = "changePasswordUsername",
+  changePasswordPassword = "changePasswordPassword",
+  changePasswordValidationCode = "changePasswordValidationCode",
+  changePasswordError = "changePasswordError",
+  dropdownselection = "dropdownselection",
+}
+
+export enum TUiBooleanStorage {
+  editKnowbookOpened = "editKnowbookOpened",
+  renameKnowbookOpened = "renameKnowbookOpened",
+  showLoading = "showLoading",
+  showArticle = "showArticle",
+}
+
+export enum TUiNumberStorage {
+  R0 = "R0",
+  SVGMaxElementCircle = "SVGMaxElementCircle",
 }
 
 export type TconfigDataDisplay = typeof configDataMobile;
@@ -57,7 +106,7 @@ export interface IGUICONFIG {
   language: TconfigDataLanguage;
   display: TconfigDataDisplay;
 
-  currentDisplay: TDisplay;
+  // currentDisplay: TDisplay;
   // currentLanguage: string; //already covered by IparamsPage.lang
 }
 
@@ -71,10 +120,28 @@ export interface IparamsAtom {
   title: string;
 }
 
+export interface ICardKnowProps {
+  id: AtomID | KnowbookID;
+  stores: IStores;
+  title: string;
+  image_url: string;
+  pathname: string;
+  queryObject: any;
+  amount: number | string;
+  edit_handler: handlerT;
+  delete_handler: handlerT;
+}
+
+export interface IPageSVG {
+  mode: TPageHeaderModes;
+  header: SVG_T;
+  body: SVG_T;
+}
+
 export enum TButtonID {
   HOME = "HOME",
-  KNOWBOOKS_USER = "KNOWBOOKS_USER",
-  KNOWBOOKS_FEATURED = "KNOWBOOKS_FEATURED",
+  // KNOWBOOKS_USER = "KNOWBOOKS_USER",
+  // KNOWBOOKS_FEATURED = "KNOWBOOKS_FEATURED",
 
   LOGIN = "LOGIN",
   INFO = "INFO",
@@ -183,6 +250,31 @@ export enum TLogAction {
   loginUser = "loginUser",
 }
 
+export interface IFeature {
+  title: string;
+  description: string;
+  icon: IconT;
+}
+
+export interface ISlider {
+  id: string;
+  position: number;
+  max: number;
+  positionOneStep: number;
+  maxOneStep: number;
+}
+
+// export enum SVGComponentType {
+//   item = "item",
+//   knowbook = "knowbook",
+// }
+
+// export interface SVGComponentT {
+//   id: string;
+//   type: SVGComponentType;
+//   svg: SVG_T;
+// }
+
 export interface INode {
   x: number;
   y: number;
@@ -201,11 +293,7 @@ export interface IGraph {
   links: ILink[];
 }
 
-export interface IFeature {
-  title: string;
-  description: string;
-  icon: IconT;
-}
+export type SVG_T = any;
 
 export type IconT = any;
 export type ColorT = any;

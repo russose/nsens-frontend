@@ -29,7 +29,7 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const path_empty_image = configPaths.item_empty_image;
+  // const path_empty_image = configPaths.item_empty_image;
   // const rounding = 3;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const max_title_size = props.sizes.max_title_size;
@@ -80,7 +80,10 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
                   <Image
                     alt={props.title}
                     color={
-                      props.image_url === "" && props.color_image !== undefined
+                      // props.image_url === "" && props.color_image !== undefined
+                      //   ? props.color_image
+                      //   : "white"
+                      props.color_image !== undefined
                         ? props.color_image
                         : "white"
                     }
@@ -89,9 +92,10 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
                     naturalWidth={1}
                     loading="lazy"
                     src={
-                      props.image_url === "" || props.image_url === undefined
-                        ? path_empty_image
-                        : props.image_url
+                      // props.image_url === "" || props.image_url === undefined
+                      //   ? path_empty_image
+                      //   : props.image_url
+                      props.image_url !== undefined ? props.image_url : ""
                     }
                     // src=""
                   ></Image>

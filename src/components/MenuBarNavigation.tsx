@@ -4,12 +4,11 @@ import { configGeneral, IButton, RoundingT } from "../config/globals";
 import { TButtonID } from "../config/globals";
 import { isMobile } from "../libs/helpersBase";
 import { IStores } from "../stores/RootStore";
-import MenuBarButtonLayout from "./layout/MenuBarButtonLayout";
+import LayoutMenuBarButton from "./layout/LayoutMenuBarButton";
 
 interface IMenuBarNavigationProps {
   stores: IStores;
   rounding: RoundingT;
-  // isMobile: boolean;
 }
 
 const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
@@ -21,12 +20,12 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     {
       Id: TButtonID.HOME,
     },
-    {
-      Id: TButtonID.KNOWBOOKS_FEATURED,
-    },
-    {
-      Id: TButtonID.KNOWBOOKS_USER,
-    },
+    // {
+    //   Id: TButtonID.KNOWBOOKS_FEATURED,
+    // },
+    // {
+    //   Id: TButtonID.KNOWBOOKS_USER,
+    // },
     {
       Id: TButtonID.LOGIN,
     },
@@ -39,13 +38,12 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
 
   return (
     <>
-      <MenuBarButtonLayout
+      <LayoutMenuBarButton
         stores={props.stores}
         // name={props.name}
         name="NavigationMenuBar"
         color={color_menu}
         direction="row"
-        // width={width}
         rounding={props.rounding}
         buttons={buttons}
         displayLabel={displayLabel}
