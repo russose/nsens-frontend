@@ -13,9 +13,9 @@ import {
 } from "../../src/config/globals";
 import { getRandomImageFromItems } from "../../src/libs/utils";
 import SVGKnowbook from "../../src/components/SVGKnowbook";
-import SVGElementsInCircleWithSlider from "./SVGElementsInCircleWithSlider";
 import SVGRoot from "./SVGRoot";
 import { switchPageHeaderMode } from "../handlers/handlers_Searchbar_Navigation";
+import SVGElementsInPlanWithSlider from "./SVGElementsInPlanWithSlider";
 
 interface IProps {
   stores: IStores;
@@ -44,7 +44,7 @@ const SVGKnowbooksFeatured: React.FunctionComponent<IProps> = (props) => {
     <SVGRoot
       stores={stores}
       title={title}
-      onClick={props.closed ? handler : () => {}}
+      onClick={props.closed ? handler : undefined}
     />
   );
 
@@ -83,7 +83,6 @@ const SVGKnowbooksFeatured: React.FunctionComponent<IProps> = (props) => {
             stores.knowbookStore.staticKnowbooks.get(staticKnowbook.name)
               .name_display
           }
-          // image_url={getRandomImageFromItems(staticKnowbook.items)}
           image_url={stores.knowbookStore.getImageStaticKnowbook(
             staticKnowbook.name
           )}
@@ -116,7 +115,7 @@ const SVGKnowbooksFeatured: React.FunctionComponent<IProps> = (props) => {
   );
 
   return (
-    <SVGElementsInCircleWithSlider
+    <SVGElementsInPlanWithSlider
       stores={stores}
       id="SVGKnowbooksFeatured"
       root_element={root_element}
@@ -125,8 +124,6 @@ const SVGKnowbooksFeatured: React.FunctionComponent<IProps> = (props) => {
         ...special_elements,
         ...static_elements,
       ]}
-      R0_large={props.R0_large}
-      amountElementsLevel={props.amountElementsLevel}
       translation={props.translation}
     />
   );

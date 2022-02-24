@@ -23,6 +23,7 @@ import SVGElementsInCircleWithSlider from "../../src/components/SVGElementsInCir
 import SVGKnowbook from "../../src/components/SVGKnowbook";
 import { configPaths } from "../../src/config/configLocalAndEnv";
 import { getRandomImageFromItems } from "../../src/libs/utils";
+import SVGKnowbookExternalShape from "../../src/components/SVGKnowbookExternalShape";
 
 const NotebookSpecial: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -63,7 +64,7 @@ const NotebookSpecial: React.FunctionComponent<IPage> = (props) => {
     items = ItemsInNoKnowbook(stores);
     url_image = configPaths.knowbook_none_image;
   } else {
-    console.log("error:page type not implemented");
+    // console.log("error:page type not implemented");
   }
 
   const root_element: SVG_T = (
@@ -86,6 +87,12 @@ const NotebookSpecial: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores} titleSEO={knowbook_title} isBodySVG={true}>
+      <SVGKnowbookExternalShape
+        size={
+          stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0) * 2 +
+          stores.baseStore.GUI_CONFIG.display.atom_sizes.height
+        }
+      />
       <SVGElementsInCircleWithSlider
         stores={stores}
         id="NotebookSpecial"

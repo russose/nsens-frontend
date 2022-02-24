@@ -5,6 +5,15 @@ input[type="submit"]::-moz-focus-inner {
   border: none;
 }
 
+/* Animations */
+.anim-element {
+  transform: scale(0.9);
+  transition: transform 300ms;
+}
+.anim-element:hover {
+  transform: scale(1);
+}
+
 /* https://medium.com/developer-rants/what-if-height-100vh-is-bigger-than-your-screen-7f39c62ac170 */
 body,
 html {
@@ -23,13 +32,15 @@ html {
 }
 
 body {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
+  background-color: #020723;
   /* No pull down for PWA */
   overscroll-behavior-y: contain;
 }
 
 :root {
-  --color-p1: #3490de;
+  /* --color-p1: #3490de; */
+  --color-p1: #020723;
   /* --color-p1: #de8634; */
   --color1: var(--color-p1);
 

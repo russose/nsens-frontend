@@ -1,6 +1,12 @@
 import { CUSTOM_ICONS } from "./configLocalAndEnv";
-import { Tlanguage, ICONS, TButtonID, TPages } from "./globals";
-import { TSpecialPages } from "./types";
+import {
+  Tlanguage,
+  ICONS,
+  TButtonID,
+  TPages,
+  TScenarioStepID,
+  TSpecialPages,
+} from "./globals";
 
 export const configDataFr = {
   searchBar: "Rechercher...",
@@ -12,9 +18,10 @@ export const configDataFr = {
   },
   SEO: {
     // canonical: "https://www.nsens.org/fr/Mobile/About/",
-    title_page_base: "n.Sens - Explorer la Connaissance libre autrement",
-    descirption_page_base:
-      "n.Sens est une plateforme autour de la connaissance libre",
+    // title_page_base: "n.Sens - Explorer la Connaissance libre autrement",
+    title_page_base: "n.Sens",
+    description_page_base:
+      "n.Sens - Ajouter une nouvelle dimension à la Wikipedia et naviguer visuellement dans la Connaissance",
     title_description: {
       [TPages.Home]: { title: "Accueil", description: "" },
       [TPages.About]: {
@@ -26,15 +33,8 @@ export const configDataFr = {
         title: "Modifier votre mot de passe",
         description: "",
       },
-      // [TPages.ItemArticle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
-      // [TPages.StaticArticle]: { title: "", description: "" },
-      // [TPages.Knowbooks_Featured]: {
-      //   title: "Carnets indispensables",
-      //   description: "",
-      // },
       [TPages.StaticKnowbook]: { title: "", description: "" },
-      // [TPages.Knowbooks_User]: { title: "Mes Carnets", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
       [TPages.KnowbookSpecial]: {
         [TSpecialPages.Mostviewed]: { title: "Aujourd'hui", description: "" },
@@ -44,57 +44,27 @@ export const configDataFr = {
         },
         [TSpecialPages.NoKnowbook]: { title: "Sans carnet", description: "" },
       },
-
-      // [TPages.KnowbookSaved]: {
-      //   title: "Sauvegardés (tous)",
-      //   description: "",
-      // },
-      // [TPages.KnowbookNone]: { title: "Sans carnet", description: "" },
-      // [TPages.KnowbookMostviewed]: {
-      //   title: "Aujourd'hui",
-      //   description: "",
-      // },
     },
   },
   about: {
-    // slogan:
-    //   "Explorer, comprendre, agir. Entretenir le goût du vrai et se laisser transporter...",
-    // slogan: "Explorer la Connaissance Libre autrement",
-    features: [
-      {
-        title: "Trouver",
-        description:
-          "Trouver des articles Wikipedia avec des cartes et des graphes, de façon visuelle et ludique",
-        icon: "search",
-      },
-      {
-        title: "Rassembler",
-        description:
-          "Rassembler ses trouvailles dans des carnets personnalisés",
-        icon: "folder",
-      },
-      {
-        title: "Explorer",
-        description:
-          "Explorer de nouveaux horizons et faire des découvertes grâces aux suggestions de la plateforme",
-        icon: "compass",
-      },
-    ],
+    scenario_texts: {
+      [TScenarioStepID.knowbook]:
+        "Créer des carnets personnalisés avec vos découvertes et y accéder sur tous vos écrans",
+      [TScenarioStepID.mostviewed]: "Voir les élements les plus populaires",
+      [TScenarioStepID.search]: "Trouver rapidement des éléments recherchés",
+      [TScenarioStepID.item]:
+        "Explorer les relations et faites de nouvelles découvertes",
+      [TScenarioStepID.itemArticle]:
+        "Accéder au contenu de chaque élément de la Wikipedia",
+      [TScenarioStepID.language]: "Plusieurs langues sont supportées",
+      [TScenarioStepID.home]: "Bon voyage dans notre connaissance infinie...",
+    },
   },
   buttons: {
     [TButtonID.HOME]: {
       label: "Accueil",
-      // icon: ICONS.HOME,
       icon: CUSTOM_ICONS.HOME,
     },
-    // [TButtonID.KNOWBOOKS_USER]: {
-    //   label: "Carnets",
-    //   icon: ICONS.KNOWBOOKS,
-    // },
-    // [TButtonID.KNOWBOOKS_FEATURED]: {
-    //   label: "Sélection",
-    //   icon: ICONS.FEATURED,
-    // },
     [TButtonID.LOGIN]: {
       label: "User",
       icon: ICONS.LOGIN,
@@ -125,9 +95,6 @@ export const configDataFr = {
     },
   },
   knowbooks_User: {
-    // knowbooks_title: "Mes Carnets",
-    // AllSaved_title: "Sauvés (tous)",
-    // None_Title: "Aucun Carnet",
     Related_title: "A découvrir :",
   },
   knowbooks_Featured: {
@@ -143,7 +110,6 @@ export const configDataFr = {
     cancel_label: "Annuler",
   },
   changePassword: {
-    // title: "Modifier votre mot de passe",
     password_placeholder: "Nouveau mot de passe",
     placeholder_validationCode: "Code de vérification reçu par email",
     label_sendValidationCode: "1-Recevoir code validation",
@@ -156,6 +122,7 @@ export const configDataFr = {
   user: {
     guest: "Enregistrement - Connexion",
     contact: "Contact",
+    social: "Partager",
     install_instructions:
       "Installer pour une meilleure expérience (Chrome/Safari)",
     deconnexion: "Se déconnecter",

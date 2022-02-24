@@ -1,4 +1,4 @@
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import {
   TDisplay,
   Tlanguage,
@@ -8,7 +8,7 @@ import {
   IAtom,
   IparamsPage,
   TUiStringStorage,
-  initStateCat,
+  configGeneral,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
@@ -18,9 +18,7 @@ import {
 import { DateToStringWithZero, entierAleatoire } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
-  const result: boolean =
-    // stores.baseStore.GUI_CONFIG.currentDisplay === TDisplay.mobile;
-    stores.baseStore.currentDisplay === TDisplay.mobile;
+  const result: boolean = stores.baseStore.currentDisplay === TDisplay.mobile;
   return result;
 }
 
@@ -244,11 +242,27 @@ export function goUserHandler(stores: IStores) {
   };
 }
 
+export function goRandomStaticKnowbook(stores: IStores) {
+  const staticKnowbooksName: string[] = [
+    ...Array.from(stores.knowbookStore.staticKnowbooks.keys()),
+  ];
+  const name =
+    staticKnowbooksName[entierAleatoire(0, staticKnowbooksName.length - 1)];
+
+  goPage(
+    stores,
+    stores.baseStore.paramsPage,
+    configPaths.pages.StaticKnowbook,
+    { nameOrPeriod: name },
+    false
+  );
+}
+
 export function goRandomStaticKnowbookWhenHome(
   stores: IStores,
   isHome: boolean
 ) {
-  if (!isHome) {
+  if (!isHome || configGeneral.demoModeForScreenshoots) {
     return;
   }
 

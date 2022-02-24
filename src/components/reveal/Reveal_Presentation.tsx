@@ -1,6 +1,6 @@
 import React from "react";
-import dynamic from "next/dynamic";
 
+import dynamic from "next/dynamic";
 const Reveal_Initialize = dynamic(() => import("./Reveal_Initialize"), {
   ssr: false,
 });
@@ -14,8 +14,8 @@ const Reveal_Presentation: React.FunctionComponent<IProps> = (props) => {
   return (
     <>
       <div style={{ height: height }}>
-        <Reveal_Initialize />
         {props.children}
+        <Reveal_Initialize />
       </div>
     </>
   );

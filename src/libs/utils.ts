@@ -5,6 +5,9 @@ import {
   IAtom,
   configPaths,
   TPages,
+  IScreen,
+  SCREENSHOTS_LIST,
+  IScenarioStep,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 
@@ -152,13 +155,22 @@ export function getRandomImageFromItems(items: IAtom[]): string {
   }
 }
 
+export function pathScreenshots(
+  rootPath: string,
+  scenarioStep: IScenarioStep,
+  isMobile: boolean,
+  language: Tlanguage
+) {
+  const screen: IScreen = isMobile
+    ? SCREENSHOTS_LIST.mobile
+    : SCREENSHOTS_LIST.desktop;
+
+  return (
+    rootPath + scenarioStep.id + "_" + language + "_" + screen.name + ".webp"
+  );
+}
+
 export function path_link(id: AtomID, stores: IStores): string {
-  // const isStatic: boolean = IsItemInAnyStaticKnowbook(id, stores);
-  // if (isStatic) {
-  //   return configPaths.pages.StaticArticle;
-  // } else {
-  //   return configPaths.pages.ItemArticle;
-  // }
   return configPaths.pages.Item;
 }
 
@@ -261,15 +273,6 @@ export function sleep(milliseconds: number) {
   } while (currentDate - date < milliseconds);
 }
 
-// export function displayCompactedGridCondition(GUI_CONFIG_id: string): boolean {
-//   // if (isMobile(GUI_CONFIG_id)) {
-//   //   return true;
-//   // } else {
-//   //   return false;
-//   // }
-//   return false;
-// }
-
 // export function findUndefined(list: Object[]) {
 //   list.forEach((item) => {
 //     Object.values(item).forEach((value) => {
@@ -287,6 +290,20 @@ export function sleep(milliseconds: number) {
 
 export function entierAleatoire(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+export function estPair(n: number): boolean {
+  return n & 1 ? false : true;
+}
+
+export function reorder(elements: any[]): any[] {
+  const l = elements.length;
+  const idx = range(l);
+  // console.log(l, idx);
+  const elements_reordered = idx.map((id) => {
+    return elements[l - id];
+  });
+  return elements_reordered;
 }
 
 // export function removeDuplicates(array: string[]): any[] {

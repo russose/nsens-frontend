@@ -6,6 +6,7 @@ import {
   TButtonID,
   TSpecialPages,
   CUSTOM_ICONS,
+  TScenarioStepID,
 } from "./globals";
 
 export const configDataEn: TconfigDataLanguage = {
@@ -18,8 +19,9 @@ export const configDataEn: TconfigDataLanguage = {
   },
   SEO: {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
-    title_page_base: "n.Sens - A new way to explore Open Knowledge",
-    descirption_page_base: "n.sens is a platform around free knowledge",
+    title_page_base: "n.Sens",
+    description_page_base:
+      "n.Sens - Add a new dimension to the Wikipedia and browse visually in Knowledge",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -28,17 +30,9 @@ export const configDataEn: TconfigDataLanguage = {
       },
       [TPages.User]: { title: "", description: "" },
       [TPages.ChangePassword]: { title: "Update password", description: "" },
-      // [TPages.ItemArticle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
-      // [TPages.StaticArticle]: { title: "", description: "" },
-      // [TPages.Knowbooks_Featured]: {
-      //   title: "Featured Notebooks",
-      //   description: "",
-      // },
       [TPages.StaticKnowbook]: { title: "", description: "" },
-      // [TPages.Knowbooks_User]: { title: "My Notebooks", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
-
       [TPages.KnowbookSpecial]: {
         [TSpecialPages.Mostviewed]: { title: "Today", description: "" },
         [TSpecialPages.AllSaved]: {
@@ -50,52 +44,26 @@ export const configDataEn: TconfigDataLanguage = {
           description: "",
         },
       },
-
-      // [TPages.KnowbookSaved]: { title: "Saved (all)", description: "" },
-      // [TPages.KnowbookNone]: { title: "Without Notebook", description: "" },
-      // [TPages.KnowbookMostviewed]: {
-      //   title: "Today",
-      //   description: "",
-      // }
     },
   },
   about: {
-    // slogan:
-    //   "Explore, understand, perform. Maintain the taste of truth and be ready for a fantastic journey...",
-    // slogan: "A new way to explore Open Knowledge",
-    features: [
-      {
-        title: "Find",
-        description: "Find Wikipedia articles visually, with graphs and cards",
-        icon: "search",
-      },
-      {
-        title: "Collect",
-        description: "Collect your findings in notebooks",
-        icon: "folder",
-      },
-      {
-        title: "Explore",
-        description:
-          "Open up new horizons and access new discoveries thanks to the platform suggestions",
-        icon: "compass",
-      },
-    ],
+    scenario_texts: {
+      [TScenarioStepID.knowbook]:
+        "Create personalized notebooks with your findings and access them on all your devices",
+      [TScenarioStepID.mostviewed]: "See most popular elements",
+      [TScenarioStepID.search]: "Find quickly all items you are looking for",
+      [TScenarioStepID.item]: "Explore relations and make new findings",
+      [TScenarioStepID.itemArticle]: "Access content of each Wikipedia items",
+      [TScenarioStepID.language]: "Many languages are supported",
+      [TScenarioStepID.home]:
+        "Have a nice journey in our infinite knowledge...",
+    },
   },
   buttons: {
     [TButtonID.HOME]: {
       label: "Home",
-      // icon: ICONS.HOME,
       icon: CUSTOM_ICONS.HOME,
     },
-    // [TButtonID.KNOWBOOKS_USER]: {
-    //   label: "Notebooks",
-    //   icon: ICONS.KNOWBOOKS,
-    // },
-    // [TButtonID.KNOWBOOKS_FEATURED]: {
-    //   label: "Featured",
-    //   icon: ICONS.FEATURED,
-    // },
     [TButtonID.LOGIN]: {
       label: "User",
       icon: ICONS.LOGIN,
@@ -126,9 +94,6 @@ export const configDataEn: TconfigDataLanguage = {
     },
   },
   knowbooks_User: {
-    // knowbooks_title: "My Notebooks",
-    // AllSaved_title: "Saved (all)",
-    // None_Title: "In no notebook",
     Related_title: "Explore :",
   },
   knowbooks_Featured: {
@@ -144,7 +109,6 @@ export const configDataEn: TconfigDataLanguage = {
     cancel_label: "Cancel",
   },
   changePassword: {
-    // title: "Update password",
     password_placeholder: "New password",
     placeholder_validationCode: "Verification code received by email",
     label_sendValidationCode: "1-Receive validation code",
@@ -156,6 +120,7 @@ export const configDataEn: TconfigDataLanguage = {
   user: {
     guest: "Create account - Login",
     contact: "Contact",
+    social: "Share",
     install_instructions:
       "Install for a better user experience (Chrome/Safari)",
     deconnexion: "Logout",

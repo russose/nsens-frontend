@@ -24,11 +24,6 @@ export async function api_login(
     password: password,
   });
   return res;
-  // } catch (error) {
-  //   console.log("err");
-  //   // console.log(error);
-  //   return issue_text;
-  // }
 }
 
 export async function api_signup(
@@ -36,27 +31,17 @@ export async function api_signup(
   username_: string,
   password: string
 ): Promise<string> {
-  // try {
   const res = await my_api("post", "/auth/signup", {
     username: username,
     username_: username_,
     password: password,
   });
   return res;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return issue_text;
-  // }
 }
 
 export async function api_logout(): Promise<string> {
-  // try {
   const res = await my_api("post", "/auth/logout", {});
   return res;
-  // } catch (error) {
-  //   // console.log(error);
-  //   return issue_text;
-  // }
 }
 
 export async function api_getValidationNewPassword(

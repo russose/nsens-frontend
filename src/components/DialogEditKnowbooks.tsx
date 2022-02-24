@@ -20,7 +20,6 @@ const DialogEditKnowbooks: React.FunctionComponent<
 
   return (
     <>
-      {/* {stores.uiStore.editKnowbookOpened && ( */}
       {stores.uiStore.getUiBooleanStorage(
         TUiBooleanStorage.editKnowbookOpened
       ) && (
@@ -34,7 +33,6 @@ const DialogEditKnowbooks: React.FunctionComponent<
             .map(([key, value]) => {
               return { label: key, activated: value };
             })}
-          // handler_cancel={onCancel(stores)}
           handler_confirm={onSubmitChangesEditKnowbooks(stores)}
           handler_inputValue={onChangeInputValueEditKnowbooks(stores)}
           handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(stores)}

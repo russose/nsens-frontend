@@ -57,11 +57,6 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
           />
         )}
       </Box>
-      {/* <Box paddingX={2}>
-        <Text align="center" size="sm" weight="bold">
-          {props.amount}
-        </Text>
-      </Box> */}
     </CardGeneric>
   );
 };

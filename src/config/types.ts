@@ -7,6 +7,11 @@ export interface IPosition {
   y: number;
 }
 
+export interface IStar {
+  position: IPosition;
+  opacity: number;
+}
+
 export enum Tlanguage {
   fr = "fr",
   it = "it",
@@ -20,14 +25,47 @@ export enum TDisplay {
   extra = "Extra",
 }
 
+export interface IScreen {
+  name: TDisplay;
+  width: number;
+  height: number;
+}
+
+export const SCREENSHOTS_LIST = {
+  desktop: {
+    name: TDisplay.desktop,
+    width: 1440, //1024,
+    height: 900, //768,
+  },
+  mobile: {
+    name: TDisplay.mobile,
+    width: 360,
+    height: 640,
+  },
+};
+
+export interface IScenarioStep {
+  id: TScenarioStepID;
+  url: string;
+  text: string;
+}
+
+export enum TScenarioStepID {
+  knowbook = "knowbook",
+  mostviewed = "mostviewed",
+  search = "search",
+  item = "item",
+  itemArticle = "itemArticle",
+  language = "language",
+  home = "home",
+}
+
 export enum TPages {
   Home = "Home",
   Search = "Search",
   About = "About",
   User = "User",
   ChangePassword = "ChangePassword",
-
-  // ItemArticle = "ItemArticle",
   ItemNetwork = "ItemNetwork",
   Item = "Item",
 
@@ -35,10 +73,6 @@ export enum TPages {
 
   Knowbook = "Knowbook",
   KnowbookSpecial = "KnowbookSpecial",
-  // KnowbookSaved = "KnowbookSaved",
-  // KnowbookNone = "KnowbookNone",
-
-  // KnowbookMostviewed = "KnowbookMostviewed",
 }
 
 export enum TPageHeaderModes {
@@ -56,7 +90,6 @@ export enum TSpecialPages {
 
 export enum initStateCat {
   core = "core",
-  // display = "display",
   staticKnowbooksFull = "staticKnowbooksFull",
   userData = "userData",
   Item = "Item",
@@ -105,14 +138,10 @@ export interface IGUICONFIG {
   // id: string;
   language: TconfigDataLanguage;
   display: TconfigDataDisplay;
-
-  // currentDisplay: TDisplay;
-  // currentLanguage: string; //already covered by IparamsPage.lang
 }
 
 export interface IparamsPage {
   lang: Tlanguage;
-  // display: ConfigDisplay;
 }
 
 export interface IparamsAtom {
@@ -140,16 +169,12 @@ export interface IPageSVG {
 
 export enum TButtonID {
   HOME = "HOME",
-  // KNOWBOOKS_USER = "KNOWBOOKS_USER",
-  // KNOWBOOKS_FEATURED = "KNOWBOOKS_FEATURED",
-
   LOGIN = "LOGIN",
   INFO = "INFO",
   SAVE = "SAVE",
   EDIT = "EDIT",
   VIZS = "VIZS",
   ARTICLE = "ARTICLE",
-
   SEPARATOR = "SEPARATOR",
 }
 
@@ -166,9 +191,7 @@ export type AtomID = string;
 export type KnowbookID = string;
 
 export interface IUser {
-  //id: UserID;
   username: UserID;
-  //language: ConfigDataLanguage;
 }
 
 export interface IAtom {
@@ -189,8 +212,6 @@ export interface IKnowbook {
   id: number;
   name: KnowbookID;
   language: Tlanguage;
-  //creation_date: Date;
-  //update_date: Date;
   items: AtomID[];
 }
 
@@ -263,17 +284,6 @@ export interface ISlider {
   positionOneStep: number;
   maxOneStep: number;
 }
-
-// export enum SVGComponentType {
-//   item = "item",
-//   knowbook = "knowbook",
-// }
-
-// export interface SVGComponentT {
-//   id: string;
-//   type: SVGComponentType;
-//   svg: SVG_T;
-// }
 
 export interface INode {
   x: number;

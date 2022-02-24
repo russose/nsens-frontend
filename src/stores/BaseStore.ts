@@ -24,14 +24,10 @@ import {
   configGeneral,
   IPosition,
   configPaths,
+  IStar,
 } from "../config/globals";
 import { api_getCleanImageFromWeb_blocking } from "../libs/apiItems";
-// import {
-//   fetchNewMostviewed,
-//   removeSavedFromItems,
-//   setFeedFromMostviewedAndRelated,
-// } from "../libs/helpersBase";
-import { newAtom } from "../libs/utils";
+import { entierAleatoire, newAtom, range } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
 interface IInitState {
@@ -55,7 +51,6 @@ export class BaseStore {
   private $GUI_CONFIG: IGUICONFIG = {
     language: undefined,
     display: undefined,
-    // currentDisplay: undefined,
   };
 
   private $currentDisplay: TDisplay = undefined;
@@ -70,14 +65,11 @@ export class BaseStore {
 
   private $amountFeedDisplayed: number = 0;
   private $increaseFeedDisplayed: boolean = true;
-  // private $modeFeedDisplayedIsSearch: boolean = false;
 
   private $history = observable.map<AtomID, IAtom>(); //Containing all items content
   private $feed = observable.set<AtomID>();
   private $mostviewed = observable.set<AtomID>();
   private $dateLastMostviewed: IDate;
-
-  // private $allRelatedIdsForHome: AtomID[];
 
   private $related = observable.map<AtomID, IRelatedAtom[]>();
 
@@ -117,6 +109,7 @@ export class BaseStore {
       isLogged: computed,
       feedItemsToDisplay: computed,
       mostviewedIds: computed,
+      stars: computed,
     });
   }
 
@@ -126,6 +119,25 @@ export class BaseStore {
     this.clearFeed();
     this.clearMostviewed();
     this.clearRelated();
+  }
+
+  get stars(): IStar[] {
+    const width = this.screen.width;
+    const height = this.screen.height;
+    const density_stars = 0.0005;
+    const amount = Math.floor(width * height * density_stars);
+
+    const stars: IStar[] = range(amount).map((ind) => {
+      return {
+        position: {
+          x: entierAleatoire(0, width),
+          y: entierAleatoire(0, height),
+        },
+        opacity: entierAleatoire(3, 10) / 10,
+      };
+    });
+
+    return stars;
   }
 
   /**  General **/
@@ -185,7 +197,6 @@ export class BaseStore {
   }
 
   setGUICONFIGFromDisplay(display: TDisplay) {
-    // if (display === this.$GUI_CONFIG.currentDisplay) {
     if (display === this.currentDisplay) {
       return;
     }
@@ -222,7 +233,6 @@ export class BaseStore {
     }
     const screen_size_min = Math.min(this.screen.height, this.screen.width);
     let scale_factor = 1;
-    // if (this.GUI_CONFIG.currentDisplay === TDisplay.mobile) {
     if (this.currentDisplay === TDisplay.mobile) {
       scale_factor = screen_size_min / 360;
     } else {
@@ -396,9 +406,6 @@ export class BaseStore {
   setIncreaseFeedDisplayed(value: boolean): void {
     this.$increaseFeedDisplayed = value;
   }
-  // get amountFeedDisplayed() {
-  //   return this.$amountFeedDisplayed;
-  // }
   initAmountFeedDisplayed() {
     const increment = this.GUI_CONFIG.display.display.displayFeedIncrement;
     this.$amountFeedDisplayed = increment;
@@ -410,55 +417,9 @@ export class BaseStore {
     // console.log(this.$amountFeedDisplayed);
   }
 
-  // setModeFeedDisplayedIsSearch(value: boolean): void {
-  //   this.$modeFeedDisplayedIsSearch = value;
-  // }
-
-  // get feedItemsToDisplay(): IAtom[] {
-  //   if (this.increaseFeedDisplayed) {
-  //     // if (false) {
-  //     //Important: these 2 if(this.increaseFeedDisplayed) are mandatory to work
-  //     setTimeout(() => {
-  //       if (this.increaseFeedDisplayed) {
-  //         this.incrementAmountFeedDisplayed();
-  //       }
-  //     }, configGeneral.display.feed_time_increment_ms);
-  //   }
-
-  //   const requireFetchNewMostviewed =
-  //     // !this.$modeFeedDisplayedIsSearch &&
-  //     this.$amountFeedDisplayed >= this.$feed.size;
-
-  //   if (requireFetchNewMostviewed) {
-  //     fetchNewMostviewed(this.$rootStore.stores())
-  //       .then((items: IAtom[]) => {
-  //         const itemsWithoutSaved: IAtom[] = removeSavedFromItems(
-  //           this.$rootStore.stores(),
-  //           items
-  //         );
-  //         this.setMostviewed(itemsWithoutSaved);
-
-  //         // setFeedFromMostviewedAndRelated(this.$rootStore.stores());
-  //       })
-  //       .catch(() => {
-  //         // console.log("error in seach from pattern");
-  //       });
-  //   }
-
-  //   const itemsId = Array.from(this.$feed).slice(0, this.$amountFeedDisplayed);
-
-  //   for (const id of itemsId) {
-  //     this.setGoodImageInHistoryItem(id);
-  //   }
-
-  //   return this.getHistoryItems(itemsId);
-  // }
-
   amount_loop_no_changes = 0;
   get feedItemsToDisplay(): IAtom[] {
-    // console.log("increaseFeedDisplayed", this.increaseFeedDisplayed);
     if (this.increaseFeedDisplayed && this.amount_loop_no_changes < 2) {
-      // if (false) {
       //Important: these 2 if(this.increaseFeedDisplayed) are mandatory to work
       setTimeout(() => {
         if (this.increaseFeedDisplayed) {
@@ -467,28 +428,6 @@ export class BaseStore {
         }
       }, configGeneral.display.feed_time_increment_ms);
     }
-
-    // const requireFetchNewMostviewed =
-    //   // !this.$modeFeedDisplayedIsSearch &&
-    //   false && this.$amountFeedDisplayed >= this.$feed.size;
-
-    // console.log(requireFetchNewMostviewed);
-
-    // if (requireFetchNewMostviewed) {
-    //   fetchNewMostviewed(this.$rootStore.stores())
-    //     .then((items: IAtom[]) => {
-    //       const itemsWithoutSaved: IAtom[] = removeSavedFromItems(
-    //         this.$rootStore.stores(),
-    //         items
-    //       );
-    //       this.setMostviewed(itemsWithoutSaved);
-
-    //       // setFeedFromMostviewedAndRelated(this.$rootStore.stores());
-    //     })
-    //     .catch(() => {
-    //       // console.log("error in seach from pattern");
-    //     });
-    // }
 
     const itemsId = Array.from(this.$feed).slice(0, this.$amountFeedDisplayed);
     if (itemsId.length !== this.$feed.size) {
@@ -501,62 +440,6 @@ export class BaseStore {
 
     return this.getHistoryItems(itemsId);
   }
-
-  // get allRelatedIdsForHome() {
-  //   return this.$allRelatedIdsForHome;
-  // }
-
-  // initAllRelatedIdsForHome() {
-  //   // const max_items_amount = 200;
-  //   const min_size_saved_to_display_related = 10;
-
-  //   if (
-  //     this.$rootStore.stores().baseStore.isLogged &&
-  //     this.$rootStore.stores().savedStore.saved.size >
-  //       min_size_saved_to_display_related
-  //   ) {
-  //     // Get all related items of saved items with relation "wikipedia"
-  //     const ids_shuffled: AtomID[] = shuffleArray(
-  //       Array.from(this.$rootStore.stores().savedStore.saved)
-  //     );
-  //     const output = new Set<AtomID>();
-
-  //     for (const id of ids_shuffled) {
-  //       // if (output.size > max_items_amount) {
-  //       //   break;
-  //       // }
-  //       //Only Wikipedia relations
-
-  //       if (this.$rootStore.stores().baseStore.related.get(id) !== undefined) {
-  //         const related_only_wikipedia: IRelatedAtom[] = this.$rootStore
-  //           .stores()
-  //           .baseStore.related.get(id)
-  //           .filter((related) => {
-  //             return related.relation === configGeneral.relation_name_wikipedia;
-  //           });
-  //         const relatedItemsIds_only_wikipedia: AtomID[] =
-  //           related_only_wikipedia.map((related) => {
-  //             return related.item;
-  //           });
-  //         relatedItemsIds_only_wikipedia.forEach((id) => {
-  //           if (!this.$rootStore.stores().savedStore.saved.has(id)) {
-  //             output.add(id);
-  //           }
-  //         });
-  //       }
-  //     }
-
-  //     this.$allRelatedIdsForHome = shuffleArray(Array.from(output));
-  //   } else {
-  //     const ids_shuffled: AtomID[] = shuffleArray(
-  //       Array.from(
-  //         this.$rootStore.stores().knowbookStore.itemsInStaticKnowbooksForHome
-  //       )
-  //     );
-
-  //     this.$allRelatedIdsForHome = ids_shuffled;
-  //   }
-  // }
 
   /**  Related **/
   get related() {

@@ -17,6 +17,9 @@ import {
   onSaved,
 } from "../../src/handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../src/handlers/handlers_Knowbooks";
+import { useRouter } from "next/router";
+import { setFeedFromSearch } from "../../src/libs/helpersBase";
+import { TUiStringStorage } from "../../src/config/globals";
 
 const Search: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -30,6 +33,21 @@ const Search: React.FunctionComponent<IPage> = (props) => {
     return <ContentLoading stores={stores} />;
   }
 
+  const router = useRouter();
+  const search_string = router.query.search as string;
+
+  if (search_string !== undefined) {
+    if (
+      stores.uiStore.getUiStringStorage(TUiStringStorage.searchPattern) === ""
+    ) {
+      setFeedFromSearch(stores, search_string);
+      stores.uiStore.setUiStringStorage(
+        TUiStringStorage.searchPattern,
+        search_string
+      );
+    }
+  }
+
   const page_content = (
     <>
       <CardAtomGrid
@@ -40,7 +58,6 @@ const Search: React.FunctionComponent<IPage> = (props) => {
         isItemSavedActionable_handler={isItemSavedActivated(stores)}
         saved_handler={onSaved(stores)}
         edit_handler={onEditKnowbooks(stores)}
-        // static={props.static}
       />
     </>
   );

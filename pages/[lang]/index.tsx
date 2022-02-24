@@ -23,7 +23,7 @@ const Home: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
 
-  initializeApp(stores, paramsPage, true);
+  initializeApp(stores, paramsPage);
   // To be checked/deleted: Initialyzed until userData to avoid allRelatedIdsForHome being refreshed 1000s times because of home update
   if (stores.baseStore.initCompleted.core !== true) {
     //Not yet initialyzed
@@ -41,8 +41,6 @@ const Home: React.FunctionComponent<IPage> = (props) => {
     content = (
       <SVGKnowbooksUser
         stores={stores}
-        // R0_large={R0}
-        // amountElementsLevel={amountElementsLevel}
         R0_large={stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0)}
         amountElementsLevel={stores.uiStore.getUiNumberStorage(
           TUiNumberStorage.SVGMaxElementCircle
@@ -54,8 +52,6 @@ const Home: React.FunctionComponent<IPage> = (props) => {
     content = (
       <SVGKnowbooksFeatured
         stores={stores}
-        // R0_large={R0}
-        // amountElementsLevel={amountElementsLevel}
         R0_large={stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0)}
         amountElementsLevel={stores.uiStore.getUiNumberStorage(
           TUiNumberStorage.SVGMaxElementCircle

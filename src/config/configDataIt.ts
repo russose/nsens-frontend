@@ -6,6 +6,7 @@ import {
   TPages,
   TSpecialPages,
   CUSTOM_ICONS,
+  TScenarioStepID,
 } from "./globals";
 
 export const configDataIt: TconfigDataLanguage = {
@@ -14,12 +15,13 @@ export const configDataIt: TconfigDataLanguage = {
   legend: "Leggenda:",
   labels: {
     knowbookUser: "I Miei Documenti",
-    knowbookFeatured: "Scoprire",
+    knowbookFeatured: "Scopri",
   },
   SEO: {
     // canonical: "https://www.nsens.org/it/Mobile/About/",
     title_page_base: "n.Sens - Esplora la conoscenza libera in un modo nuovo",
-    descirption_page_base: "???",
+    description_page_base:
+      "n.Sens - Aggiungi una nuova dimenzione alla Wikipedia e esplora visualmente la Conoscenza",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -31,18 +33,8 @@ export const configDataIt: TconfigDataLanguage = {
         title: "Modifica la password",
         description: "",
       },
-      // [TPages.ItemArticle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
-      // [TPages.StaticArticle]: { title: "", description: "" },
-      // [TPages.Knowbooks_Featured]: {
-      //   title: "Documenti essenziali",
-      //   description: "",
-      // },
       [TPages.StaticKnowbook]: { title: "", description: "" },
-      // [TPages.Knowbooks_User]: {
-      //   title: "I Miei Documenti",
-      //   description: "",
-      // },
       [TPages.Knowbook]: { title: "", description: "" },
 
       [TPages.KnowbookSpecial]: {
@@ -56,53 +48,27 @@ export const configDataIt: TconfigDataLanguage = {
           description: "",
         },
       },
-
-      // [TPages.KnowbookSaved]: { title: "Salvati (tutti)", description: "" },
-      // [TPages.KnowbookNone]: { title: "Senza Documento", description: "" },
-      // [TPages.KnowbookMostviewed]: {
-      //   title: "Oggi",
-      //   description: "",
-      // },
     },
   },
   about: {
-    // slogan:
-    //   "Esplorare, capire, agire. Lasciarsi trasportare gustandosi la ricerca...",
-    // slogan: "Esplora la conoscenza libera in un modo nuovo",
-    features: [
-      {
-        title: "Trova",
-        description:
-          "Trova e vizualizza articoli Wikipedia in modo divertente, con grafici e schede",
-        icon: "search",
-      },
-      {
-        title: "Raccolta",
-        description: "Raccogli in documenti personalizzati le tue ricerche",
-        icon: "folder",
-      },
-      {
-        title: "Esplora",
-        description:
-          "Esplora nuovi orizzonti e fai nuove scoperte grazie alla suggestiva piattaforma",
-        icon: "compass",
-      },
-    ],
+    scenario_texts: {
+      [TScenarioStepID.knowbook]:
+        "Crea documenti personalizzati e accedi alle tue scoperte da tutti i tuoi schermi",
+      [TScenarioStepID.mostviewed]: "Sfoglia gli elementi più popolari",
+      [TScenarioStepID.search]: "Trova presto gli elementi cercati",
+      [TScenarioStepID.item]: "Esplora le relazioni e fai nuove scoperte",
+      [TScenarioStepID.itemArticle]:
+        "Accedi al contenuto di ogni elemente della Wikipedia",
+      [TScenarioStepID.language]: "Piu lingue sono disponibile",
+      [TScenarioStepID.home]:
+        "Buon viaggio nella nostra conoscenza infinita...",
+    },
   },
   buttons: {
     [TButtonID.HOME]: {
       label: "Home",
-      // icon: ICONS.HOME,
       icon: CUSTOM_ICONS.HOME,
     },
-    // [TButtonID.KNOWBOOKS_USER]: {
-    //   label: "Documenti",
-    //   icon: ICONS.KNOWBOOKS,
-    // },
-    // [TButtonID.KNOWBOOKS_FEATURED]: {
-    //   label: "Speciale",
-    //   icon: ICONS.FEATURED,
-    // },
     [TButtonID.LOGIN]: {
       label: "Utente",
       icon: ICONS.LOGIN,
@@ -133,9 +99,6 @@ export const configDataIt: TconfigDataLanguage = {
     },
   },
   knowbooks_User: {
-    // knowbooks_title: "I Miei Documenti",
-    // AllSaved_title: "Salvati (tutti)",
-    // None_Title: "Nessun Documento",
     Related_title: "Da scoprire :",
   },
   knowbooks_Featured: {
@@ -151,7 +114,6 @@ export const configDataIt: TconfigDataLanguage = {
     cancel_label: "Annulla",
   },
   changePassword: {
-    // title: "Modifica la password",
     password_placeholder: "Nuova password",
     placeholder_validationCode: "Codice di convalida ricevuto per email",
     label_sendValidationCode: "1-Recevi il codice di convalida",
@@ -164,6 +126,7 @@ export const configDataIt: TconfigDataLanguage = {
   user: {
     guest: "Registrazione - Login",
     contact: "Contatto",
+    social: "Condividi",
     install_instructions: "Installa per un ottima esperienza (Chrome/Safari)",
     deconnexion: "Disconnetti - Logout",
     changePassword: "Modifica la password",
@@ -175,7 +138,7 @@ export const configDataIt: TconfigDataLanguage = {
       missing_password_text: "Password dimenticata?",
       login_label: "Accedi",
       signup_label: "Registrati",
-      login_error: "Nome uttento o password errata",
+      login_error: "Nome utente o password errata",
       signup_error: "Impossibile effettuare la registrazione",
       signup_error_duration:
         "Riscarigare la paggina, riempire i campi et aspettare qualque secondi prima di registrarsi",

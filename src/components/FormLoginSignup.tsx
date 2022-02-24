@@ -51,7 +51,6 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
           <TextField
             id="username"
             placeholder={props.placeholder_username}
-            // errorMessage={props.stores.uiStore.loginScreenError}
             errorMessage={props.stores.uiStore.getUiStringStorage(
               TUiStringStorage.loginScreenError
             )}
@@ -64,13 +63,11 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
           <Box padding={1}>
             <TextField
               id="username*"
-              // errorMessage={props.stores.uiStore.loginScreenUsername_}
               errorMessage={props.stores.uiStore.getUiStringStorage(
                 TUiStringStorage.loginScreenUsername_
               )}
               label="username*"
               onChange={(input: { event: eventT; value: string }): void => {
-                // props.stores.uiStore.setLoginScreenUsername_(input.value);
                 props.stores.uiStore.setUiStringStorage(
                   TUiStringStorage.loginScreenUsername_,
                   input.value
@@ -116,7 +113,6 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
             size={button_icon_size}
             onClick={props.handler_button("signup")}
             color="red"
-            // color="gray"
             fullWidth
           />
         </Box>
@@ -127,7 +123,6 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
             size={button_icon_size}
             onClick={props.handler_button("login")}
             color="blue"
-            // color="gray"
             fullWidth
           />
         </Box>

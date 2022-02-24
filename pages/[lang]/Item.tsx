@@ -20,6 +20,7 @@ import {
   TUiStringStorage,
 } from "../../src/config/globals";
 import { initializeGraphSVG } from "../../src/libs/helpersGraph";
+import { showArticle } from "../../src/handlers/handlers_Searchbar_Navigation";
 
 const Item: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -41,6 +42,11 @@ const Item: React.FunctionComponent<IPage> = (props) => {
   if (stores.baseStore.initCompleted.Item !== true) {
     //Not yet initialyzed
     return <ContentLoading stores={stores} />;
+  }
+
+  const articleOpen = router.query.articleOpen as string;
+  if (articleOpen !== undefined) {
+    showArticle(stores, item_title, item_id)({ event: new Event("test") });
   }
 
   const root_element: SVG_T = (

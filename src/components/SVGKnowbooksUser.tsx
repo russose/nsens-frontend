@@ -7,7 +7,6 @@ import {
   onOpenRenameKnowbook,
 } from "../../src/handlers/handlers_Knowbooks";
 import SVGKnowbook from "../../src/components/SVGKnowbook";
-import SVGElementsInCircleWithSlider from "./SVGElementsInCircleWithSlider";
 import {
   ICardKnowProps,
   IKnowbook,
@@ -19,6 +18,7 @@ import {
 } from "../config/globals";
 import SVGRoot from "./SVGRoot";
 import { switchPageHeaderMode } from "../handlers/handlers_Searchbar_Navigation";
+import SVGElementsInPlanWithSlider from "./SVGElementsInPlanWithSlider";
 
 interface IProps {
   stores: IStores;
@@ -55,7 +55,7 @@ const SVGKnowbooksUser: React.FunctionComponent<IProps> = (props) => {
     <SVGRoot
       stores={stores}
       title={title}
-      onClick={props.closed ? handler : () => {}}
+      onClick={props.closed ? handler : undefined}
     />
   );
 
@@ -98,8 +98,8 @@ const SVGKnowbooksUser: React.FunctionComponent<IProps> = (props) => {
         pathname={pathKnowbook}
         queryObject={{ nameOrPeriod: knowbook.name }}
         amount={knowbook.items.length}
-        edit_handler={onOpenRenameKnowbook(stores)}
-        delete_handler={onDeleteKnowbook(stores)}
+        edit_handler={onOpenRenameKnowbook(stores)(knowbook.name)}
+        delete_handler={onDeleteKnowbook(stores)(knowbook.name)}
       />
     );
   });
@@ -123,14 +123,12 @@ const SVGKnowbooksUser: React.FunctionComponent<IProps> = (props) => {
   );
 
   return (
-    <SVGElementsInCircleWithSlider
+    <SVGElementsInPlanWithSlider
       stores={stores}
       id="SVGKnowbooksUser"
       root_element={root_element}
       closed={props.closed}
-      elements_body_all_SVG_or_ItemIds={[...elements, ...special_elements]}
-      R0_large={props.R0_large}
-      amountElementsLevel={props.amountElementsLevel}
+      elements_body_all_SVG_or_ItemIds={[...special_elements, ...elements]}
       translation={props.translation}
     />
   );

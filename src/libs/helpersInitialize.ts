@@ -9,7 +9,7 @@ import {
   KnowbookID,
   configGeneral,
   TUiBooleanStorage,
-  configPaths,
+  TUiStringStorage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
@@ -17,18 +17,11 @@ import {
   api_getAllStaticKnowbooksLocal,
   api_getStaticKnowbookWithItemsLocal,
 } from "./apiItems";
-import { api_getUser } from "./apiUser";
-import {
-  initializeMostviewed,
-  goRandomStaticKnowbookWhenHome,
-} from "./helpersBase";
+import { api_getUser, api_login } from "./apiUser";
+import { initializeMostviewed } from "./helpersBase";
 import { readRelatedStringFromItem } from "./helpersRelated";
 
-export async function initializeApp(
-  stores: IStores,
-  paramsPage: IparamsPage,
-  isHome = false
-) {
+export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
   try {
     if (stores.baseStore.initCompleted.core === undefined) {
       // stores.uiStore.setShowLoading(true);
@@ -56,14 +49,9 @@ export async function initializeApp(
       //Static knowbooks Extracts (small less blocking)
       await initializeStaticKnowbooksExtract(stores);
 
-      goRandomStaticKnowbookWhenHome(stores, isHome);
+      // goRandomStaticKnowbookWhenHome(stores, isHome);
 
-      /********************************* */
-      // stores.baseStore.initAllRelatedIdsForHome();
-
-      // Init dynamic Feed (without this function, display 2x amountfeed)
-      // updateHome(stores);
-      /********************************* */
+      await initDemo(stores);
 
       stores.baseStore.setInitCompleted(initStateCat.core, true);
       /************************************************************/
@@ -95,6 +83,23 @@ export async function initializeApp(
 
       stores.baseStore.setInitCompleted(initStateCat.userData, true);
     }
+  } catch (error) {
+    // console.log(error);
+  }
+}
+
+async function initDemo(stores: IStores): Promise<void> {
+  if (!configGeneral.demoModeForScreenshoots) {
+    return;
+  }
+  console.log(
+    "RUNNING IN DEMO MODE, activated with configGeneral.demoModeForScreenshoots"
+  );
+  try {
+    await api_login("demo@demo.org", "demo");
+    stores.baseStore.setUser({
+      username: "demo@demo.org",
+    });
   } catch (error) {
     // console.log(error);
   }
@@ -136,7 +141,6 @@ export async function initializeStaticKnowbookFullSingle(
   })[0];
 
   try {
-    // for (const staticKnowbook of staticKnowbook_local) {
     const knowbook_json: any = await api_getStaticKnowbookWithItemsLocal(
       staticKnowbook_local.nameOrPeriod,
       lang
@@ -157,7 +161,6 @@ export async function initializeStaticKnowbookFullSingle(
       const related: IRelatedAtomFull[] = readRelatedStringFromItem(atom);
       stores.baseStore.setRelated(atom.id, related);
     });
-    // }
   } catch (err) {
     // console.log("error in getting static knowbooks...");
   }

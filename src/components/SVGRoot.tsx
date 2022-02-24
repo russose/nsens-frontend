@@ -22,38 +22,48 @@ const SVGRoot: React.FunctionComponent<IProps> = (props) => {
   const title_card_size = "sm";
 
   const rounding = "circle";
-  return (
-    <foreignObject x={-size / 2} y={-size / 2} width={size} height={size}>
-      <TapArea rounding={rounding} onTap={props.onClick}>
-        <Box padding={1} height={size} width={size}>
+
+  const element = (
+    <Box padding={1} height={size} width={size}>
+      <Box
+        height="100%"
+        width="100%"
+        borderStyle="shadow"
+        // borderStyle="lg"
+        color={colorEdge === undefined ? "transparent" : colorEdge}
+        padding={colorEdge === undefined ? 0 : 1}
+        rounding={rounding}
+        display="flex"
+        direction="column"
+      >
+        <Box height="100%" width="100%" color={color} rounding={rounding}>
           <Box
-            height="100%"
-            width="100%"
-            borderStyle="shadow"
-            // borderStyle="lg"
-            color={colorEdge === undefined ? "transparent" : colorEdge}
-            padding={colorEdge === undefined ? 0 : 1}
-            rounding={rounding}
+            paddingX={2}
             display="flex"
-            direction="column"
+            justifyContent="center"
+            height="100%"
+            alignItems="center"
           >
-            <Box height="100%" width="100%" color={color} rounding={rounding}>
-              <Box
-                paddingX={2}
-                // color="red"
-                display="flex"
-                justifyContent="center"
-                height="100%"
-                alignItems="center"
-              >
-                <Text size={title_card_size} align="center" weight="bold">
-                  {props.title}
-                </Text>
-              </Box>
-            </Box>
+            <Text size={title_card_size} align="center" weight="bold">
+              {props.title}
+            </Text>
           </Box>
         </Box>
+      </Box>
+    </Box>
+  );
+
+  const elementWithTap = (
+    <div className="anim-element">
+      <TapArea rounding={rounding} onTap={props.onClick}>
+        {element}
       </TapArea>
+    </div>
+  );
+
+  return (
+    <foreignObject x={-size / 2} y={-size / 2} width={size} height={size}>
+      {props.onClick !== undefined ? elementWithTap : element}
     </foreignObject>
   );
 };

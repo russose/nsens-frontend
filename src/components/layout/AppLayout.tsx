@@ -10,7 +10,6 @@ interface IAppLayoutProps {
   stores: IStores;
   titleSEO?: string;
   isBodySVG?: boolean;
-  // svgHeader?: SVG_T;
 }
 
 // const Media_ = observer(Media);

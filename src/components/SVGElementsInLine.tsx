@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IPosition, SVG_T } from "../config/globals";
+import { configGeneral, IPosition, SVG_T } from "../config/globals";
 import SVGElementsInPositionMatrix from "./SVGElementsInPositionMatrix";
 
 interface IProps {
@@ -13,7 +13,7 @@ const SVGElementsInLine: React.FunctionComponent<IProps> = (props) => {
   if (props.elements.length === 0) {
     return <></>;
   }
-
+  const color: any = configGeneral.colors.svg_elements;
   const centers: IPosition[] = props.elements.map((el, index) => {
     return { x: index * props.deltaX, y: 0 };
   });
@@ -26,7 +26,8 @@ const SVGElementsInLine: React.FunctionComponent<IProps> = (props) => {
           y1={0}
           x2={centers.slice(-1)[0].x}
           y2={0}
-          stroke="black"
+          // stroke="black"
+          stroke={color}
           strokeOpacity="0.5"
           strokeDasharray="5,5"
           strokeWidth="2"

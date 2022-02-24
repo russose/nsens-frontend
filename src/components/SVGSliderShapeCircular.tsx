@@ -1,13 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-// import Slider from "rc-slider";
-// import "rc-slider/assets/index.css";
 import CircularSlider from "@fseehawer/react-circular-slider";
 import { handlerT, ISlider } from "../config/globals";
 
 type ISVGSliderShapeCircularProps = {
   slider: ISlider;
-  // width_slider: number;
   onSliderChange: handlerT;
   radius: number;
 };
@@ -43,7 +40,7 @@ const SVGSliderShapeCircular: React.FunctionComponent<
             width={2 * radius}
             hideLabelValue={true}
             hideKnob={false}
-            knobSize={PROGRESS_SIZE * 2}
+            knobSize={PROGRESS_SIZE * 4}
             progressSize={PROGRESS_SIZE}
             trackSize={PROGRESS_SIZE}
             onChange={props.onSliderChange}

@@ -14,7 +14,6 @@ const Index: React.FunctionComponent = (props) => {
           stores,
           {
             lang: paramsPageContext.lang,
-            // display: paramsPageContext.display,
           },
           configPaths.pages.Home
         );

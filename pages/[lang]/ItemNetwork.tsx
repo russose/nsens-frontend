@@ -35,27 +35,6 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
 
   // stores.uiStore.setSelectedAtomId(item_id);
 
-  // let navigation;
-  // if (!stores.baseStore.isLogged) {
-  //   navigation = (
-  //     <>
-  //       <MenuBarDisplayNotLogged
-  //         stores={stores}
-  //         isMobile={isMobile(GUI_CONFIG.id)}
-  //       />
-  //     </>
-  //   );
-  // } else {
-  //   navigation = (
-  //     <>
-  //       <MenuBarDisplayLoggedDynamic
-  //         stores={stores}
-  //         isMobile={isMobile(GUI_CONFIG.id)}
-  //       />
-  //     </>
-  //   );
-  // }
-
   return (
     <AppLayout stores={stores} titleSEO={item_title} isBodySVG={false}>
       <ItemNetworkNoSSRDynamic

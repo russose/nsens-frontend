@@ -53,6 +53,9 @@ const SVGElementsInCircleWithSlider: React.FunctionComponent<IProps> = (
     );
   }
 
+  const display = props.stores.baseStore.GUI_CONFIG.display;
+  const radiusSlider =
+    (display.atom_sizes.height / 2) * display.layout.SVG_Slider_Circle_Ratio;
   const l = props.elements_body_all_SVG_or_ItemIds.length;
   const R0_large = props.R0_large;
   let amountElementsLevel_ = props.amountElementsLevel;
@@ -63,7 +66,6 @@ const SVGElementsInCircleWithSlider: React.FunctionComponent<IProps> = (
     maxAmountCascade_ = 0;
     displaySlider = false;
   }
-  // console.log(l, props.amountElementsLevel, amountElementsLevel_);
   const max = Math.floor((l * 360) / amountElementsLevel_);
 
   let slider: ISlider = props.stores.uiStore.sliders.get(props.id);
@@ -81,7 +83,6 @@ const SVGElementsInCircleWithSlider: React.FunctionComponent<IProps> = (
       maxAmountCascade_,
       i
     );
-    // elements_boby = idsToSVGItem(props.stores, elements_boby_ids);
     elements_boby = elements_boby_ids.map((itemId, index) => {
       return (
         <SVGItem
@@ -131,7 +132,13 @@ const SVGElementsInCircleWithSlider: React.FunctionComponent<IProps> = (
   return (
     <>
       <g transform={`translate(${center.x}, ${center.y}) `}>
-        {displaySlider && <SVGSlider stores={props.stores} slider={slider} />}
+        {displaySlider && (
+          <SVGSlider
+            stores={props.stores}
+            slider={slider}
+            radius={radiusSlider}
+          />
+        )}
 
         {props.root_element}
 

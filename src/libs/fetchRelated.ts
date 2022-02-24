@@ -5,7 +5,6 @@ import {
   AtomID,
   IRelatedAtomFull,
   configGeneral,
-  configFetching,
 } from "../config/globals";
 import { fetch_data_wikidata } from "./fetch";
 import {

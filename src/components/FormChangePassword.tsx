@@ -55,7 +55,6 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
               disabled={true}
               value={props.value_username}
               placeholder={props.placeholder_username}
-              // errorMessage={props.stores.uiStore.changePasswordError}
               errorMessage={props.stores.uiStore.getUiStringStorage(
                 TUiStringStorage.changePasswordError
               )}
@@ -66,10 +65,7 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
           ) : (
             <TextField
               id="newPassword_username"
-              // disabled={true}
-              // value={props.value_username}
               placeholder={props.placeholder_username}
-              // errorMessage={props.stores.uiStore.changePasswordError}
               errorMessage={props.stores.uiStore.getUiStringStorage(
                 TUiStringStorage.changePasswordError
               )}

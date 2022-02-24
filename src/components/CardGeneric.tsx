@@ -33,14 +33,11 @@ interface ICardGenericProps {
   pathname: string;
   queryObject?: any;
   full?: boolean;
-
   width_text?: string;
   TopIcon?: any;
-  // noImage?: boolean;
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
-  // const path_empty_image = configPaths.item_empty_image;
   const rounding = props.rounding;
   const max_title_size = props.sizes.max_title_size;
   const title_card_size: SizeT = props.sizes.title_card_size;
@@ -52,22 +49,9 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     title = props.title.substring(0, max_title_size) + "...";
   }
 
-  // const color_image =
-  //   props.image_url === undefined && props.color_image !== undefined
-  //     ? props.color_image
-  //     : "white";
   const color_image =
     props.color_image !== undefined ? props.color_image : "white";
-
   const path_image = props.image_url !== undefined ? props.image_url : "";
-
-  // let path_image = "";
-  // if (props.noImage === undefined || props.noImage !== true) {
-  //   path_image =
-  //     props.image_url === "" || props.image_url === undefined
-  //       ? path_empty_image
-  //       : props.image_url;
-  // }
 
   const image_only = (component: reactComponentT) => {
     return (
@@ -117,13 +101,13 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   let c_marginBottom: any;
 
   if (props.full === false) {
-    c_width = "80%";
+    c_width = "65%";
     c_rounding = 3;
-    c_marginBottom = 4;
+    c_marginBottom = 9;
   } else {
     c_width = "100%";
     c_rounding = 0;
-    c_marginBottom = 1;
+    c_marginBottom = 4;
   }
 
   const content: reactComponentT = (
@@ -180,8 +164,8 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     <Box
       height={props.sizes.height}
       width={props.sizes.width !== undefined ? props.sizes.width : undefined}
-      borderStyle="shadow"
-      // borderStyle="lg"
+      // borderStyle="shadow"
+      borderStyle="lg"
       rounding={rounding}
       display="flex"
       direction="column"

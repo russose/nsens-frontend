@@ -19,14 +19,12 @@ const DialogRenameKnowbooks: React.FunctionComponent<
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   return (
     <>
-      {/* {stores.uiStore.renameKnowbookOpened && ( */}
       {stores.uiStore.getUiBooleanStorage(
         TUiBooleanStorage.renameKnowbookOpened
       ) && (
         <DialogRenameKnowbookForm
           stores={stores}
           title={GUI_CONFIG.language.renameDeleteKnowbook.title}
-          // value={stores.uiStore.renameKnowbookNewName}
           value={stores.uiStore.getUiStringStorage(
             TUiStringStorage.renameKnowbookNewName
           )}

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IPosition, SVG_T } from "../config/globals";
+import { configGeneral, IPosition, SVG_T } from "../config/globals";
 import { DELTA_ALPHA, indexFromTick, polarToCartesian } from "../libs/utilsSVG";
 import { IStores } from "../stores/RootStore";
 import SVGEdge from "./SVGEdge";
@@ -19,7 +19,7 @@ interface IProps {
   showOrbit?: boolean;
 }
 
-const EPSILON_CASCADE_DEGREE = 4;
+const EPSILON_CASCADE_DEGREE = 8;
 const EDGE_START_RATE = 0.45;
 const EDGE_END_RATE = 0.6;
 
@@ -28,6 +28,7 @@ const SVGElementsInCircle: React.FunctionComponent<IProps> = (props) => {
     return <></>;
   }
 
+  const color: any = configGeneral.colors.svg_elements;
   const fontsize = props.stores.baseStore.GUI_CONFIG.display.layout.fontsize;
   let showEdges = true;
   if (
@@ -81,12 +82,18 @@ const SVGElementsInCircle: React.FunctionComponent<IProps> = (props) => {
     const edges_labels_ = props.edges_ids;
 
     const edges_labels_cascade = edges_labels_.slice(0, props.amountCascade);
-    const edges_labels_mobile = edges_labels_.slice(props.amountCascade);
+    const edges_labels_mobile = edges_labels_.slice(
+      props.amountCascade,
+      edges_labels_.length - 1
+    );
     const angles_edges = angles_cascade.concat(angles_mobile);
 
     const edges_labels = edges_labels_cascade
       .concat(edges_labels_mobile)
       .slice(Math.max(props.amountCascade - 1, 0));
+
+    console.log(props.amountCascade);
+    console.log(edges_labels);
 
     edges = angles_edges
       .slice(Math.max(props.amountCascade - 1, 0))
@@ -109,7 +116,7 @@ const SVGElementsInCircle: React.FunctionComponent<IProps> = (props) => {
         stores={props.stores}
         title={props.stores.baseStore.GUI_CONFIG.language.legend}
         labels={props.edges_legend}
-        height={props.stores.baseStore.screen.height / 9}
+        height={70}
       />
     );
   }
@@ -123,7 +130,8 @@ const SVGElementsInCircle: React.FunctionComponent<IProps> = (props) => {
           cx={0}
           cy={0}
           r={props.R0}
-          stroke="black"
+          // stroke="black"
+          stroke={color}
           strokeOpacity="0.5"
           // strokeDasharray="5,5"
           strokeDasharray="10,10"

@@ -90,7 +90,6 @@ export class KnowkookStore {
 
     knowbooks.forEach((knowbook) => {
       this.setKnowbook(knowbook.name, knowbook);
-      // this.$knowbooks.set(knowbook.name, knowbook);
     });
   }
 
@@ -172,7 +171,6 @@ export class KnowkookStore {
 
     const knowbook: IKnowbook = this.knowbooks.get(name);
     knowbook.name = new_name;
-    // console.log(knowbook.name);
     this.knowbooks.delete(name);
     this.knowbooks.set(new_name, knowbook);
   }

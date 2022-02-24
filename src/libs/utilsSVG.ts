@@ -17,7 +17,7 @@ export function polarToCartesian(
   };
 }
 
-export function SVGMaxRadius(stores: IStores): number {
+export function SVGMaxRadius(stores: IStores, hasMax = true): number {
   if (stores.baseStore.screen !== undefined) {
     const SVG_R_Max = stores.baseStore.GUI_CONFIG.display.layout.SVG_R_Max;
     const SVG_R_Ratio = stores.baseStore.GUI_CONFIG.display.layout.SVG_R_Ratio;
@@ -30,7 +30,7 @@ export function SVGMaxRadius(stores: IStores): number {
       R = (Math.min(center.x, center.y) - dim) * SVG_R_Ratio;
     }
 
-    if (R > SVG_R_Max) {
+    if (R > SVG_R_Max && hasMax) {
       R = SVG_R_Max;
     }
     return R;

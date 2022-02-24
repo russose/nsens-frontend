@@ -29,7 +29,6 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
       handlerText={onSearchHomeText(stores)}
       handlerSubmit={onSearchHomeSubmit(stores)}
       handlerKeyboard={onSearchHomeKeyboard(stores)}
-      // value={stores.uiStore.searchPattern}
       value={stores.uiStore.getUiStringStorage(TUiStringStorage.searchPattern)}
     />
   );
@@ -47,16 +46,6 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
       ></Image>
     </TapArea>
   );
-
-  // let displayMenu;
-  // let dialogs_Logged;
-  // if (!stores.baseStore.isLogged) {
-  //   // displayMenu = <MenuBarDisplayNotLogged stores={stores} />;
-  //   dialogs_Logged = <></>;
-  // } else {
-  //   // displayMenu = <MenuBarDisplayLoggedDynamic stores={stores} />;
-  //   dialogs_Logged = <DialogsLoggedDynamic stores={stores} />;
-  // }
 
   const navigation_desktop = (
     <Box

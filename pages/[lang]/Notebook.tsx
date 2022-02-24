@@ -22,6 +22,7 @@ import ContentLoading from "../../src/components/ContentLoading";
 import SVGItem from "../../src/components/SVGItem";
 import SVGKnowbook from "../../src/components/SVGKnowbook";
 import SVGElementsInCircleWithSlider from "../../src/components/SVGElementsInCircleWithSlider";
+import SVGKnowbookExternalShape from "../../src/components/SVGKnowbookExternalShape";
 
 const Knowbook: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -77,6 +78,12 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores} titleSEO={selected_knowbook} isBodySVG={true}>
+      <SVGKnowbookExternalShape
+        size={
+          stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0) * 2 +
+          stores.baseStore.GUI_CONFIG.display.atom_sizes.height
+        }
+      />
       <SVGElementsInCircleWithSlider
         stores={stores}
         id="Notebook"

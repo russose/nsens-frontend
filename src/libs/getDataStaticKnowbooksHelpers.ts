@@ -55,9 +55,7 @@ export async function getAllStaticKnowbooks(): Promise<
   let allStaticKnowbooks: IStaticKnowbookDefinition[];
   const name_allStaticKnowbooks =
     configGeneral.staticKnowbooks.name_allStaticKnowbooks;
-  const allStaticKnowbooks_path_base =
-    // configPaths.static.knowbooks_location + name_allStaticKnowbooks;
-    configPaths.static.knowbooks_location;
+  const allStaticKnowbooks_path_base = configPaths.static.knowbooks_location;
 
   try {
     allStaticKnowbooks = (await readFileJson(

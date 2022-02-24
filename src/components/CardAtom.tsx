@@ -24,15 +24,8 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
   const color_item = configGeneral.colors.item_color;
-  // const color_image = configGeneral.colors.item_color_image;
   const buttons_all = GUI_CONFIG.language.buttons;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
-  // let card_sizes;
-  // if (props.viz) {
-  //   card_sizes = GUI_CONFIG.display.atom_sizes_viz;
-  // } else {
-  //   card_sizes = GUI_CONFIG.display.atom_sizes;
-  // }
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
 
   const topIcon = (
@@ -41,7 +34,7 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
       size={size_icon}
       icon="view-type-list"
       iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
-      bgColor="white"
+      bgColor="lightGray"
       onClick={props.top_handler}
     />
   );
@@ -53,7 +46,6 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
       title={props.title}
       image_url={props.image_url}
       color={color_item}
-      // color_image={color_image}
       sizes={card_sizes}
       rounding={rounding}
       pathname={props.pathname}

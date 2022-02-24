@@ -18,12 +18,10 @@ import { IStores } from "../stores/RootStore";
 /******************* Edit Knowbooks ************************************ */
 
 export const onCancel = (stores: IStores) => (): void => {
-  // stores.uiStore.setEditKnowbookOpened(false);
   stores.uiStore.setUiBooleanStorage(
     TUiBooleanStorage.editKnowbookOpened,
     false
   );
-  // stores.uiStore.setRenameKnowbookOpened(false);
   stores.uiStore.setUiBooleanStorage(
     TUiBooleanStorage.renameKnowbookOpened,
     false
@@ -36,7 +34,6 @@ export const onEditKnowbooks =
   (input: { event: eventT }): void => {
     stores.uiStore.setSelectedAtom(itemId, "title");
     initKnowbookEditionElements(itemId, stores);
-    // stores.uiStore.setEditKnowbookOpened(true);
     stores.uiStore.setUiBooleanStorage(
       TUiBooleanStorage.editKnowbookOpened,
       true
@@ -47,7 +44,6 @@ export const onEditKnowbooks =
 export const onChangeInputValueEditKnowbooks =
   (stores: IStores) =>
   (input: { value: string; syntheticEvent: eventT }): void => {
-    // stores.uiStore.setEditKnowbookNewValue(input.value);
     stores.uiStore.setUiStringStorage(
       TUiStringStorage.editKnowbookNewValue,
       input.value
@@ -78,7 +74,6 @@ export const onSubmitChangesEditKnowbooks =
     const knowbookIds: KnowbookID[] = Array.from(
       stores.knowbookStore.knowbooks.keys()
     );
-    // const value = stores.uiStore.editKnowbookNewValue;
     const value = stores.uiStore.getUiStringStorage(
       TUiStringStorage.editKnowbookNewValue
     );
@@ -86,7 +81,6 @@ export const onSubmitChangesEditKnowbooks =
       if (knowbookIds.includes(value)) {
         if (!isItemInKnowbook(itemId, value, stores)) {
           addItemInKnowbook(
-            // stores.uiStore.editKnowbookNewValue,
             stores.uiStore.getUiStringStorage(
               TUiStringStorage.editKnowbookNewValue
             ),
@@ -99,7 +93,6 @@ export const onSubmitChangesEditKnowbooks =
       }
     }
 
-    // stores.uiStore.setEditKnowbookOpened(false);
     stores.uiStore.setUiBooleanStorage(
       TUiBooleanStorage.editKnowbookOpened,
       false
@@ -113,12 +106,10 @@ export const onOpenRenameKnowbook =
   (name: KnowbookID) =>
   (input: { event: eventT }): void => {
     stores.uiStore.setSelectedKnowbookIdName(name);
-    // stores.uiStore.setRenameKnowbookNewName(name);
     stores.uiStore.setUiStringStorage(
       TUiStringStorage.renameKnowbookNewName,
       name
     );
-    // stores.uiStore.setRenameKnowbookOpened(true);
     stores.uiStore.setUiBooleanStorage(
       TUiBooleanStorage.renameKnowbookOpened,
       true
@@ -129,7 +120,6 @@ export const onOpenRenameKnowbook =
 export const onChangeInputValueRenameKnowbook =
   (stores: IStores) =>
   (input: { value: string; syntheticEvent: eventT }): void => {
-    // stores.uiStore.setRenameKnowbookNewName(input.value);
     stores.uiStore.setUiStringStorage(
       TUiStringStorage.renameKnowbookNewName,
       input.value
@@ -139,11 +129,9 @@ export const onChangeInputValueRenameKnowbook =
 export const onRenameKnowbook = (stores: IStores) => (): void => {
   renameKnowbook(
     stores.uiStore.selectedKnowbookIdName,
-    // stores.uiStore.renameKnowbookNewName,
     stores.uiStore.getUiStringStorage(TUiStringStorage.renameKnowbookNewName),
     stores
   );
-  // stores.uiStore.setRenameKnowbookOpened(false);
   stores.uiStore.setUiBooleanStorage(
     TUiBooleanStorage.renameKnowbookOpened,
     false

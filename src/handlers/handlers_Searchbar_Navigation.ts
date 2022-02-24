@@ -17,8 +17,9 @@ import { prepareArticle } from "../libs/utils";
 
 /*******************Logo*************************** */
 export const onTapLogo = (stores: IStores) => (): void => {
-  // updateHome(stores);
   goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+
+  // goRandomStaticKnowbook(stores);
 };
 
 /*******************Searchbar*************************** */
@@ -26,7 +27,6 @@ export const onTapLogo = (stores: IStores) => (): void => {
 export const onSearchHomeText =
   (stores: IStores) =>
   (input: { value: string; syntheticEvent: eventT }): void => {
-    // stores.uiStore.setSearchPattern(input.value);
     stores.uiStore.setUiStringStorage(
       TUiStringStorage.searchPattern,
       input.value
@@ -38,10 +38,7 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
   const searchPattern = stores.uiStore.getUiStringStorage(
     TUiStringStorage.searchPattern
   );
-  // if (stores.uiStore.searchPattern.length > 0) {
   if (searchPattern.length > 0) {
-    // stores.uiStore.setPageMode(TPageModes.search);
-    // setFeedFromSearch(stores, stores.uiStore.searchPattern);
     setFeedFromSearch(stores, searchPattern);
     goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Search);
   } else {
@@ -56,13 +53,7 @@ export const onSearchHomeKeyboard =
   (input: { event: eventT; value: string }): void => {
     if (input.event.key === "Enter") {
       onSearchHomeSubmit(stores)();
-      // if (stores.uiStore.searchPattern.length === 0) {
-      //   // updateHome(stores);
-      // } else {
-      //   onSearchHomeSubmit(stores)();
-      // }
     } else if (input.event.key === "Escape") {
-      // stores.uiStore.setSearchPattern("");
       stores.uiStore.setUiStringStorage(TUiStringStorage.searchPattern, "");
     }
   };
@@ -73,16 +64,6 @@ export const onMenuButtonPath =
   (stores: IStores) =>
   (buttonId: TButtonID): string => {
     if (buttonId === TButtonID.ARTICLE) {
-      // const IsInAnyStaticKnowbook: boolean =
-      //   // stores.knowbookStore.allItemsInStaticKnowbooks.has(
-      //   //   stores.uiStore.selectedAtom.id
-      //   // );
-      //   IsItemInAnyStaticKnowbook(stores.uiStore.selectedAtom.id, stores);
-
-      // if (IsInAnyStaticKnowbook) {
-      //   return configPaths.pages.StaticArticle;
-      // }
-
       return path_link(stores.uiStore.selectedAtom.id, stores);
     }
 
@@ -98,7 +79,6 @@ export const onSliderPositionChange =
     // console.log(slider.position);
     // console.log("max", slider.max);
     stores.uiStore.updateSliderCircular(sliderId, value);
-    // stores.uiStore.updateSliderLinear(sliderId, value);
   };
 
 /*******************Articles*************************** */
@@ -108,23 +88,18 @@ export const showArticle =
   (input: { event: eventT }): void => {
     if (item_title !== undefined && item_id !== undefined) {
       stores.uiStore.setSelectedAtom(item_id, item_title);
-      // stores.uiStore.setArticleContent("");
       stores.uiStore.setUiStringStorage(TUiStringStorage.articleContent, "");
-      // stores.uiStore.setShowArticle(true);
       stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, true);
-      // stores.uiStore.setShowLoading(true);
       stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
       fetchArticle(
         item_title,
         ROOT_URL_WIKIPEDIA_REST(stores.baseStore.paramsPage.lang)
       )
         .then((value) => {
-          // stores.uiStore.setArticleContent(prepareArticle(value));
           stores.uiStore.setUiStringStorage(
             TUiStringStorage.articleContent,
             prepareArticle(value)
           );
-          // stores.uiStore.setArticleContent(value);
           // stores.uiStore.setShowLoading(false);
           stores.uiStore.setUiBooleanStorage(
             TUiBooleanStorage.showLoading,
@@ -137,7 +112,6 @@ export const showArticle =
             TUiBooleanStorage.showLoading,
             false
           );
-
           // console.log("error in fetching article");
         });
     }
@@ -162,10 +136,4 @@ export const onDropdownSelection =
     const slider = stores.uiStore.sliders.get(stores.graphStore.rootItemId);
     // console.log("slider", slider.position, slider.positionOneStep);
     stores.uiStore.initSlider(slider.id, slider.max);
-    // const slider_ = stores.uiStore.sliders.get(stores.graphStore.rootItemId);
-    // console.log("slider", slider_.position, slider_.positionOneStep);
-    // console.log(
-    //   stores.uiStore.getUiStringStorage(TUiStringStorage.dropdownselection)
-    // );
-    // console.log("dropdownchanged");
   };

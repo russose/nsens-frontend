@@ -32,12 +32,10 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
   const onClick_ = props.onClick === undefined ? () => {} : props.onClick;
 
   const paramsItem: IparamsAtom = props.stores.uiStore.selectedAtom;
-  const query_ =
-    // path_.includes(configPaths.pages.ItemArticle) ||
-    path_.includes(configPaths.pages.ItemNetwork)
-      ? // ||path_.includes(configPaths.pages.StaticArticle)
-        { ...props.stores.baseStore.paramsPage, ...paramsItem }
-      : { ...props.stores.baseStore.paramsPage };
+  const query_ = path_.includes(configPaths.pages.ItemNetwork)
+    ? // ||path_.includes(configPaths.pages.StaticArticle)
+      { ...props.stores.baseStore.paramsPage, ...paramsItem }
+    : { ...props.stores.baseStore.paramsPage };
 
   let labetText = <></>;
   if (props.displayLabel) {
@@ -58,7 +56,7 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
     __path = props.icon;
   }
 
-  return path_ === path_empty ? (
+  return path_ === path_empty || props.onClick !== undefined ? (
     <Box paddingX={0} display="flex" direction="column" alignItems="center">
       <IconButton
         accessibilityLabel={props.label}
@@ -79,7 +77,6 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
         prefetch={false}
         href={{
           pathname: configPaths.rootPath + props.path,
-          // query: props.stores.baseStore.paramsPage as any,
           query: query_ as any,
         }}
         passHref

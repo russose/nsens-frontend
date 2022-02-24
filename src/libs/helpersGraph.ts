@@ -23,7 +23,6 @@ import { api_getRelatedFromWebWithoutImage } from "./apiRelated";
 import { isMobile } from "./helpersBase";
 
 export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
-  // const related: IRelatedAtom[] = stores.baseStore.getRelated(root_itemId);
   const related: IRelatedAtom[] = stores.baseStore.related.get(root_itemId);
   if (
     root_itemId === undefined ||
@@ -33,7 +32,6 @@ export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
     return;
   }
 
-  // const relatedMap_local = new Map<string, IAtom[]>();
   const relatedMap_local = new Map<string, AtomID[]>();
 
   related.forEach((el) => {
@@ -41,7 +39,6 @@ export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
     if (!relatedMap_local.has(key)) {
       relatedMap_local.set(key, [el.item]);
     } else {
-      // const item_list: IAtom[] = relatedMap_local.get(key);
       const item_list: AtomID[] = relatedMap_local.get(key);
       item_list.push(el.item);
       relatedMap_local.set(key, item_list);
@@ -283,7 +280,6 @@ export async function initializeGraphSVG(
 
   let root_item: IAtom = stores.baseStore.getHistoryItem(root_itemId);
 
-  // stores.uiStore.setShowLoading(true);
   stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
 
   if (root_item === undefined) {
@@ -309,16 +305,10 @@ export async function initializeGraphSVG(
     stores.baseStore.setRelated(root_item.id, relatedList);
 
     setRelatedMap(root_item.id, stores);
-  }
-  // else if (root_itemId !== stores.graphStore.rootItemId) {
-  //   setRelatedMap(root_itemId, stores);
-  //   console.log("init completed 2");
-  // }
-  else {
+  } else {
     setRelatedMap(root_itemId, stores);
   }
 
-  // stores.uiStore.setShowLoading(false);
   stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, false);
 
   stores.baseStore.setInitCompleted(initStateCat.Item, true);

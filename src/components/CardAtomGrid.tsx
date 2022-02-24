@@ -14,20 +14,11 @@ interface ICardAtomGridProps {
   isItemSavedActionable_handler: handlerT;
   saved_handler: handlerT;
   edit_handler: handlerT;
-  // static?: boolean;
 }
 
 const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
-  // let path_Itemview: string;
-  // if (props.static) {
-  //   path_Itemview = configPaths.pages.StaticArticles;
-  // } else {
-  //   path_Itemview = configPaths.pages.ItemArticle;
-  // }
-
-  // const path_link = configPaths.pages.ItemArticle;
 
   if (
     props.atoms === undefined ||
@@ -61,14 +52,8 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                   stores={props.stores}
                   title={item.title}
                   image_url={item.image_url}
-                  // pathname={path_Itemview}
                   pathname={path_link(item.id, props.stores)}
-                  queryObject={
-                    // props.static
-                    //   ? { title: item.title }
-                    //   : { title: item.title, id: item.id }
-                    { title: item.title, id: item.id }
-                  }
+                  queryObject={{ title: item.title, id: item.id }}
                   saved_enabled={props.isItemSaved_handler(item.id)}
                   saved_actionable={props.isItemSavedActionable_handler(
                     item.id

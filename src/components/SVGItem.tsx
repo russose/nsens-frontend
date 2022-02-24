@@ -34,21 +34,22 @@ const SVGItem: React.FunctionComponent<IProps> = (props) => {
 
   return (
     <foreignObject x={-width / 2} y={-height / 2} width={width} height={height}>
-      <CardAtom
-        // key={`cardAtomNetwork-${item.id}`}
-        id={item.id}
-        stores={stores}
-        title={item.title}
-        image_url={item.image_url}
-        // pathname={path_Itemview}
-        pathname={path_link(item.id, stores)}
-        queryObject={{ title: item.title, id: item.id }}
-        saved_enabled={isItemSaved(stores)(item.id)}
-        saved_actionable={isItemSavedActivated(stores)(item.id)}
-        saved_handler={onSaved(stores)(item.id)}
-        edit_handler={onEditKnowbooks(stores)(item.id)}
-        top_handler={showArticle(stores, item.title, item.id)}
-      />
+      <div className="anim-element">
+        <CardAtom
+          // key={`cardAtomNetwork-${item.id}`}
+          id={item.id}
+          stores={stores}
+          title={item.title}
+          image_url={item.image_url}
+          pathname={path_link(item.id, stores)}
+          queryObject={{ title: item.title, id: item.id }}
+          saved_enabled={isItemSaved(stores)(item.id)}
+          saved_actionable={isItemSavedActivated(stores)(item.id)}
+          saved_handler={onSaved(stores)(item.id)}
+          edit_handler={onEditKnowbooks(stores)(item.id)}
+          top_handler={showArticle(stores, item.title, item.id)}
+        />
+      </div>
     </foreignObject>
   );
 };

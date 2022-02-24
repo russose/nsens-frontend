@@ -58,7 +58,6 @@ export async function api_getItemsFeaturedFromWebWithoutImage(
       month,
       day,
       ROOT_URL_WIKIPEDIA_REST(lang),
-      // ROOT_URL_WIKIPEDIA_ACTION(lang),
       lang,
       exclusion_patterns
     );
@@ -79,7 +78,6 @@ export async function api_searchFromWebWithoutImage(
     const items: IAtom[] =
       await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
         searchPattern,
-        // ROOT_URL_WIKIPEDIA_REST(lang),
         ROOT_URL_WIKIPEDIA_ACTION(lang),
         amount_data_fetched_items_searched,
         "search",

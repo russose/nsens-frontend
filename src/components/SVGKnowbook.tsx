@@ -9,19 +9,33 @@ const SVGKnowbook: React.FunctionComponent<ICardKnowProps> = (props) => {
     return <></>;
   }
   return (
-    <foreignObject x={-size / 2} y={-size / 2} width={size} height={size}>
-      <CardKnow
-        stores={props.stores}
-        id={props.id}
-        title={props.title}
-        image_url={props.image_url}
-        pathname={props.pathname}
-        queryObject={props.queryObject}
-        amount={props.amount}
-        edit_handler={props.edit_handler}
-        delete_handler={props.delete_handler}
-      />
-    </foreignObject>
+    <>
+      {/* <clipPath id="Clip">
+        <SVGPolyPath n={8} R0={(size / 2) * 0.95} deltaDegree={360 / (8 * 2)} />
+      </clipPath> */}
+
+      {/* <SVGPolyPath n={8} R0={(size / 2) * 0.95} deltaDegree={360 / (8 * 2)} /> */}
+      <foreignObject
+        // clipPath="url(#Clip)"
+        className="anim-element"
+        x={-size / 2}
+        y={-size / 2}
+        width={size}
+        height={size}
+      >
+        <CardKnow
+          stores={props.stores}
+          id={props.id}
+          title={props.title}
+          image_url={props.image_url}
+          pathname={props.pathname}
+          queryObject={props.queryObject}
+          amount={props.amount}
+          edit_handler={props.edit_handler}
+          delete_handler={props.delete_handler}
+        />
+      </foreignObject>
+    </>
   );
 };
 

@@ -19,12 +19,16 @@ export const configDataDesktop: TconfigDataDisplay = {
   header_title_size: "sm",
   layout: {
     heightHeader: 60, //7%
-    heightBody: "90vh", //"93%",
+    heightBody: "92vh", //"93%",
+    heightBottom: "6vh",
     SVG_R_Max: 400,
-    SVG_R_Ratio: 0.9, //0.8,
+    SVG_R_Ratio: 0.8, //0.9, //0.8,
+    SVG_deltaStepGrid_Ratio: 1.2,
+    SVG_Slider_Circle_Ratio: 1.2,
+    SVG_Slider_Grid_Ratio: 1.0,
     SVG_Element_Circle_Density: 0.7,
     SVG_Root_Ratio: 0.6,
-    fontsize: "12",
+    fontsize: "13",
     ratio_H_W_Item: 1.33,
   },
   dialogs: {
@@ -33,10 +37,6 @@ export const configDataDesktop: TconfigDataDisplay = {
     item_size: "md",
     button_icon_size: "lg",
   },
-  // svgHeader: {
-  //   delta_x: 130,
-  //   position: { x: 70, y: 70 },
-  // },
   dropdown: {
     width: 200,
     height: 50,
@@ -57,7 +57,7 @@ export const configDataDesktop: TconfigDataDisplay = {
     max_title_size: 30,
   },
   knowbook_sizes: {
-    height: 155,
+    height: 150,
     image_ratio: "75%",
     lgColumn: 3,
     mdColumn: 3,
@@ -71,20 +71,8 @@ export const configDataDesktop: TconfigDataDisplay = {
     max_title_size: 40,
   },
   About: {
-    ratio_page_vh: "90vh",
-    ratio_page_number: 0,
-    ratio_logo: "8vh",
-    ratio_image: "30vh",
-    header_size: "md",
-    features: {
-      lgColumn: 3,
-      mdColumn: 3,
-      smColumn: 10,
-      column: 10,
-      padding: 3,
-      title_size: "lg",
-      desciption_size: "lg",
-    },
+    ratio_presentation: "65vh",
+    ratio_image: "70%",
   },
   atom_compact_vizs_sizes: {
     height: card_compact_vizs_size,

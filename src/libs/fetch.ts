@@ -63,7 +63,6 @@ export async function my_api(
   const res = await axios({
     withCredentials: true,
     method: method,
-    // url: CONFIG_OPS.BACK_URL + uri,
     baseURL: CONFIG_ENV.BACK_URL,
     url: uri,
     data: data,
@@ -81,7 +80,7 @@ export async function fetchArticle(
   const data = await fetch_data_wiki_rest(
     title_ + "?redirect=true",
     ROOT_URL + "page/mobile-html/" //MOBILE,
-    // ROOT_URL + "html/",  //DSKTOP
+    // ROOT_URL + "html/",  //DESKTOP
   );
 
   return data;
@@ -97,7 +96,6 @@ export async function fetch_data_wiki_rest(
       // "Api-User-Agent": userAgentString,
       Accept: "text/html",
     },
-    // baseURL: ROOT_URL + "related/",
     baseURL: ROOT_URL,
     url: encodeURI(url),
   });
@@ -107,19 +105,14 @@ export async function fetch_data_wiki_rest(
   return data;
 }
 
-export async function fetch_data_local(
-  path: string
-  // lang: ConfigLanguage
-): Promise<object> {
+export async function fetch_data_local(path: string): Promise<object> {
   const res = await axios({
     method: "get",
     headers: {
       // "Api-User-Agent": userAgentString,
       Accept: "text/html",
     },
-    // baseURL: ROOT_URL + "related/",
     baseURL: CONFIG_ENV.FRONT_URL,
-    // url: "/staticKnowbooks" + "/" + lang + "/" + name + ".txt",
     url: path,
   });
 

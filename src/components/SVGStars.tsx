@@ -1,0 +1,32 @@
+import { observer } from "mobx-react-lite";
+import React from "react";
+import { IStores } from "../stores/RootStore";
+
+interface IProps {
+  stores: IStores;
+}
+
+const SVGStars: React.FunctionComponent<IProps> = (props) => {
+  if (props.stores.baseStore.screen === undefined) {
+    return <></>;
+  }
+
+  const stars = props.stores.baseStore.stars;
+
+  const elements = stars.map((star, index) => {
+    return (
+      <g key={`SVGStars${index}`}>
+        <circle
+          cx={`${star.position.x}`}
+          cy={`${star.position.y}`}
+          r="1"
+          fill="white"
+          opacity={star.opacity}
+        />
+      </g>
+    );
+  });
+
+  return <>{elements}</>;
+};
+export default observer(SVGStars);

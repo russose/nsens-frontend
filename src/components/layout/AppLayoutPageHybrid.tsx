@@ -10,10 +10,10 @@ import { IStores } from "../../stores/RootStore";
 import { configGeneral } from "../../config/globals";
 import VisibilitySensorFeed from "../VisibilitySensorFeed";
 import ContentLoading from "../ContentLoading";
-import AppLayoutPageHybridSVGBody from "./AppLayoutPageHybridSVGBody";
 import HeaderSEO from "../HeaderSEO";
 import Article from "../Article";
 import dynamic from "next/dynamic";
+import AppLayoutPageHybridSVGBody from "./AppLayoutPageHybridSVGBody";
 
 const DialogsLoggedDynamic = dynamic(() => import("../DialogsLogged"));
 
@@ -29,11 +29,14 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
   props
 ) => {
   const color_top: ColorT = configGeneral.colors.top;
+  const bottom_bar: ColorT = configGeneral.colors.bottom_bar;
   const color_background: ColorT = configGeneral.colors.background;
   const heightHeader =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightHeader;
   const heightBody =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightBody;
+  const heightBottom =
+    props.stores.baseStore.GUI_CONFIG.display.layout.heightBottom;
 
   return (
     <>
@@ -49,8 +52,8 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
         >
           {props.top}
         </Box>
+
         <Box padding={0} height={heightBody} width="100%" overflow="auto">
-          {/* <Box padding={0} height="50%" width="100%" overflow="auto"> */}
           <Box
             display="flex"
             flex="grow"
@@ -72,12 +75,11 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
                   // overflow="auto"
                 >
                   {props.svgBody ? (
-                    <AppLayoutPageHybridSVGBody
-                      stores={props.stores}
-                      // header={<SVGHeader stores={props.stores} />}
-                    >
-                      {props.children}
-                    </AppLayoutPageHybridSVGBody>
+                    <>
+                      <AppLayoutPageHybridSVGBody stores={props.stores}>
+                        {props.children}
+                      </AppLayoutPageHybridSVGBody>
+                    </>
                   ) : (
                     props.children
                   )}
@@ -88,6 +90,20 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
           {/* Attention, déplacer le VisibilitySensorFeed et le mettre au mauvais endroit peut le faire bugger! */}
           <VisibilitySensorFeed stores={props.stores} />
         </Box>
+        {props.svgBody ? (
+          <>
+            <Box
+              color={bottom_bar}
+              position="fixed"
+              bottom
+              height={heightBottom}
+              width="100%"
+            ></Box>
+          </>
+        ) : (
+          <></>
+        )}
+
         <Box padding={0} position="fixed" bottom width="100%">
           {props.bottom}
         </Box>

@@ -14,9 +14,6 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
   const source_wikipedia =
     props.stores.baseStore.GUI_CONFIG.language.source_wikipedia;
 
-  // if (props.item_title === undefined) {
-  //   return <Text>{"..."}</Text>;
-  // }
   const item_title = props.stores.uiStore.selectedAtom.title;
 
   const article = (
@@ -58,24 +55,21 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
 
   return (
     <>
-      {/* {props.stores.uiStore.showArticle && ( */}
       {props.stores.uiStore.getUiBooleanStorage(
         TUiBooleanStorage.showArticle
       ) && (
         <Sheet
           accessibilityDismissButtonLabel="Close wikipedia sheet"
           accessibilitySheetLabel="Wikipedia Article"
-          // heading={item_title}
           heading={item_title}
           onDismiss={() => {
-            // props.stores.uiStore.setShowArticle(false);
             props.stores.uiStore.setUiBooleanStorage(
               TUiBooleanStorage.showArticle,
               false
             );
           }}
           footer={source}
-          size="md"
+          size="lg"
         >
           {article}
         </Sheet>

@@ -18,11 +18,15 @@ export const configDataMobile = {
   layout: {
     heightHeader: 60, //7%
     heightBody: "90vh", //87%
+    heightBottom: "0vh",
     SVG_R_Max: 800,
     SVG_R_Ratio: 1.2, //0.8,
+    SVG_deltaStepGrid_Ratio: 1.05,
+    SVG_Slider_Circle_Ratio: 1.2,
+    SVG_Slider_Grid_Ratio: 1.0,
     SVG_Element_Circle_Density: 0.6,
-    SVG_Root_Ratio: 0.6,
-    fontsize: "9",
+    SVG_Root_Ratio: 0.8,
+    fontsize: "12",
     ratio_H_W_Item: 1.33,
   },
   dialogs: {
@@ -31,12 +35,8 @@ export const configDataMobile = {
     item_size: "md",
     button_icon_size: "lg",
   },
-  // svgHeader: {
-  //   delta_x: 80,
-  //   position: { x: 40, y: 40 },
-  // },
   dropdown: {
-    width: 180,
+    width: 130,
     height: 50,
     delta_position: { x: -30, y: -20 },
   },
@@ -69,20 +69,8 @@ export const configDataMobile = {
     max_title_size: 20,
   },
   About: {
-    ratio_page_number: 1400,
-    ratio_page_vh: "0vh",
-    ratio_logo: "10vh",
-    ratio_image: "25vh",
-    header_size: "sm",
-    features: {
-      lgColumn: 11,
-      mdColumn: 11,
-      smColumn: 11,
-      column: 11,
-      padding: 4,
-      title_size: "md",
-      desciption_size: "md",
-    },
+    ratio_presentation: "65vh",
+    ratio_image: "80%",
   },
   atom_compact_vizs_sizes: {
     height: card_compact_vizs_size,

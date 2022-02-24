@@ -2,10 +2,6 @@
 
 import { Tlanguage, TPages } from "./globals";
 
-// export const is_testing_mode = {
-//   activated: true,
-//   amount_staticArticles: 1,
-// };
 export const languages_activated: Tlanguage[] = [
   Tlanguage.fr,
   Tlanguage.it,
@@ -32,6 +28,7 @@ export const CONFIG_ENV = {
 };
 
 export const configGeneral = {
+  demoModeForScreenshoots: false,
   max_width_mobile: 640,
   large_screen_breakpoint: 1400,
   extra_large_screen_breakpoint: 2500,
@@ -42,15 +39,18 @@ export const configGeneral = {
     feed_time_increment_ms: 500,
   },
   colors: {
+    //Theme: update below + style.css + manifest.json
     //https://www.rapidtables.com/web/color/RGB_Color.html
     top: "green",
-    features: "green",
-    background: "white",
-    // background_landing: "navy",
+    bottom_bar: "green",
+    background: "white", //"white",
+    knowbook_edge_color: "white", //"white", //"darkGray",
+    root_edge_color: "gray", //"darkWash",
+    svg_background: "#020723", //"white",
+    svg_elements: "white",
+
     item_color: "lightGray",
     knowbook_color: "lightGray",
-    knowbook_edge_color: "darkGray",
-    root_edge_color: "darkWash",
     menu: "white",
     item_compact_color: "white",
     dialog: "white",
@@ -91,17 +91,14 @@ export const configFetching = {
 
 export const configPaths = {
   rootPath: "/[lang]",
+  screenshots: "/screenshots/",
   // item_empty_image: "/The_Scientific_Universe_small.webp",
   item_empty_image: "/", //Don't put "" used to identify that an image shall be fetched!
   knowbook_all_image: "/500px-Book_closed_template_small.svg.webp",
   knowbook_none_image: "/The_Scientific_Universe_small.webp",
-  // knowbook_image: "",
-  // user_image: "/icon_user.jpg",
-  // image_logo_W: "/logo2_W.webp",
   image_logo_B: "/logo2_B.webp",
   image_logo_W_small: "/logo2_W_small.webp",
-  // image_logo_B_small: "/logo2_B_small.webp",
-  image_landing: "/landing_graph.webp",
+  image_landing: "/landing.webp",
   image_install: "/install.webp",
   pages: {
     [TPages.Home]: "/",
@@ -110,20 +107,13 @@ export const configPaths = {
     [TPages.User]: "/User",
     [TPages.ChangePassword]: "/ChangePassword",
 
-    // [TPages.ItemArticle]: "/ItemArticle",
     [TPages.Item]: "/Item",
     [TPages.ItemNetwork]: "/ItemNetwork",
-    // [TPages.StaticArticle]: "/Static_Articles/[title]",
 
-    // [TPages.Knowbooks_Featured]: "/Notebooks_Featured",
     [TPages.StaticKnowbook]: "/Static_Notebooks/[nameOrPeriod]",
 
-    // [TPages.Knowbooks_User]: "/NotebooksUser",
     [TPages.Knowbook]: "/Notebook",
     [TPages.KnowbookSpecial]: "/NotebookSpecial",
-    // [TPages.KnowbookSaved]: "/NotebookSpecialSaved",
-    // [TPages.KnowbookNone]: "/NotebookSpecialNone",
-    // [TPages.KnowbookMostviewed]: "/NotebookSpecialMostviewed",
 
     empty: "",
   },
@@ -136,22 +126,15 @@ export const configPaths = {
 };
 
 export const ICONS = {
-  // HOME: "workflow-status-all",
-
   KNOWBOOKS: "folder",
-
-  // FEATURED: "star",
-  // FEATURED: "sparkle",
 
   LOGIN: "person",
 
   INFO: "question-mark",
 
-  // SAVE: "heart",
   SAVE: "heart",
 
   EDIT: "download",
-  // EDIT: "folder",
 
   ARTICLE: "menu",
 
@@ -167,18 +150,13 @@ export const CUSTOM_ICONS = {
 
 export const configButtonsPath = {
   HOME: configPaths.pages.Home,
-  // KNOWBOOKS_USER: configPaths.pages.Knowbooks_User,
-  // KNOWBOOKS_FEATURED: configPaths.pages.Knowbooks_Featured,
   LOGIN: configPaths.pages.User,
   INFO: configPaths.pages.About,
   SAVE: configPaths.pages.empty,
   EDIT: configPaths.pages.empty,
-  // ARTICLE: configPaths.pages.ItemArticle,
   VIZS: configPaths.pages.ItemNetwork,
   SEPARATOR: "",
 };
-
-// export const api_issue_text: string = "issue in loging or network";
 
 export const group_name = "group";
 

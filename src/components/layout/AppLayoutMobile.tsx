@@ -14,8 +14,6 @@ import {
 import { IStores } from "../../stores/RootStore";
 import { TDisplay, configPaths, TUiStringStorage } from "../../config/globals";
 
-import { isHome } from "../../libs/helpersBase";
-
 export interface IAppLayoutProps {
   stores: IStores;
   titleSEO: string;
@@ -39,7 +37,6 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
       handlerText={onSearchHomeText(stores)}
       handlerSubmit={onSearchHomeSubmit(stores)}
       handlerKeyboard={onSearchHomeKeyboard(stores)}
-      // value={stores.uiStore.searchPattern}
       value={stores.uiStore.getUiStringStorage(TUiStringStorage.searchPattern)}
     />
   );
@@ -66,7 +63,6 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
       alignItems="center"
       justifyContent="center"
     >
-      {/* <Box paddingY={1}>{displayMenu}</Box> */}
       <Box width="100%">
         <MenuBarNavigation stores={stores} rounding={0} />
       </Box>
@@ -87,15 +83,12 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
 
   // IMPORTANT: ce free space évite aussi que le menu du bas disparaisse
   // (50vh pour avoir un contenu qui dépasse les 100vh)
-
-  const free_space_buttom_mobile =
-    // router.pathname.includes(configPaths.pages.ItemArticle) ||
-    (router.pathname.includes(configPaths.pages.ItemNetwork) ||
-      router.pathname.includes(configPaths.pages.User) ||
-      router.pathname.includes(configPaths.pages.Search) ||
-      router.pathname.includes(configPaths.pages.About)) && (
-      <Box height="30vh" />
-    );
+  const free_space_buttom_mobile = (router.pathname.includes(
+    configPaths.pages.ItemNetwork
+  ) ||
+    router.pathname.includes(configPaths.pages.User) ||
+    router.pathname.includes(configPaths.pages.Search) ||
+    router.pathname.includes(configPaths.pages.About)) && <Box height="30vh" />;
 
   return (
     <>

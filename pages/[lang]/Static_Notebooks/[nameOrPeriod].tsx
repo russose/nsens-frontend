@@ -23,6 +23,7 @@ import ContentLoading from "../../../src/components/ContentLoading";
 import SVGItem from "../../../src/components/SVGItem";
 import SVGKnowbook from "../../../src/components/SVGKnowbook";
 import SVGElementsInCircleWithSlider from "../../../src/components/SVGElementsInCircleWithSlider";
+import SVGKnowbookExternalShape from "../../../src/components/SVGKnowbookExternalShape";
 
 const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   const stores = useStores();
@@ -33,7 +34,6 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
     return <ContentLoading stores={stores} />;
   }
 
-  // initializeStaticKnowbooksFullPage(stores);
   const knowbook: IKnowbookStatic = stores.knowbookStore.staticKnowbooks.get(
     props.nameOrPeriod
   );
@@ -46,9 +46,6 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const pathTarget = configPaths.pages.Home;
   const name_display = props.name_display;
-
-  // const R0 = SVGMaxRadius(stores);
-  // const amountElementsLevel = SVGMaxElementCircle(stores, R0);
 
   const items = knowbook.items;
 
@@ -85,6 +82,12 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
 
   return (
     <AppLayout stores={stores} titleSEO={name_display} isBodySVG={true}>
+      <SVGKnowbookExternalShape
+        size={
+          stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0) * 2 +
+          stores.baseStore.GUI_CONFIG.display.atom_sizes.height
+        }
+      />
       <SVGElementsInCircleWithSlider
         stores={stores}
         id="BestKnowbook"

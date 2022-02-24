@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { configGeneral } from "../config/configLocalAndEnv";
 
 interface IProps {
   text: string;
@@ -11,6 +12,7 @@ interface IProps {
 }
 
 const SVGEdge: React.FunctionComponent<IProps> = (props) => {
+  const color: any = configGeneral.colors.svg_elements;
   return (
     <>
       <g transform={`rotate(${props.angle - 180}) `}>
@@ -19,16 +21,15 @@ const SVGEdge: React.FunctionComponent<IProps> = (props) => {
           y1={`${props.lenght * props.start_rate} `}
           x2="0"
           y2={`${props.lenght * props.end_rate} `}
-          stroke="black"
+          stroke={color}
           strokeWidth="1"
           // strokeDasharray="5,5"
         />
 
         <g
           transform={`translate(${5}, ${
-            -5 +
             props.lenght *
-              (props.start_rate + (props.end_rate - props.start_rate) / 2)
+            (props.start_rate + (props.end_rate - props.start_rate) * 0.5)
           }) `}
         >
           <g transform={`rotate(${90}) `}>
@@ -38,6 +39,7 @@ const SVGEdge: React.FunctionComponent<IProps> = (props) => {
               fontFamily="Verdana"
               fontSize={props.fontsize}
               fontWeight="bold"
+              fill={color}
             >
               {props.text}
             </text>

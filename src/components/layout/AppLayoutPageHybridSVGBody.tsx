@@ -1,12 +1,21 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IPosition, SVG_T } from "../../config/globals";
+import { configGeneral, IPosition, SVG_T } from "../../config/globals";
 import { isMobile } from "../../libs/helpersBase";
 import { isFirefox } from "../../libs/utils";
 import { IStores } from "../../stores/RootStore";
 import SVGElementsInPositionMatrix from "../SVGElementsInPositionMatrix";
 import SVGHeader from "../SVGHeader";
+import SVGStars from "../SVGStars";
+
+function vhReduceString(original: string, reduction: number): string {
+  const result =
+    (
+      parseInt(original.slice(0, original.length - 2), 10) - reduction
+    ).toString() + "vh";
+  return result;
+}
 
 interface IProps {
   stores: IStores;
@@ -19,8 +28,8 @@ const AppLayoutPageHybridSVGBody: React.FunctionComponent<IProps> = (props) => {
     props.stores.baseStore.GUI_CONFIG.display.layout.SVG_Root_Ratio;
   const size = card_sizes.height * ratio_size;
 
-  // const header_position: IPosition =
-  //   props.stores.baseStore.GUI_CONFIG.display.svgHeader.position;
+  const background_svg = configGeneral.colors.svg_background;
+
   const header_position: IPosition = { x: size / 2, y: size / 2 + 5 };
 
   let center: IPosition = { x: 0, y: 0 };
@@ -42,9 +51,7 @@ const AppLayoutPageHybridSVGBody: React.FunctionComponent<IProps> = (props) => {
 
   const dontReduceheightBody = isFirefox() && isMobile(props.stores);
 
-  const heightBodyReduced =
-    (parseInt(heightBody.slice(0, heightBody.length - 2), 10) - 1).toString() +
-    "vh";
+  const heightBodyReduced = vhReduceString(heightBody, 1);
 
   elements.push(header);
   positions.push(header_position);
@@ -56,11 +63,12 @@ const AppLayoutPageHybridSVGBody: React.FunctionComponent<IProps> = (props) => {
         style={{
           width: "100%",
           height: dontReduceheightBody ? heightBody : heightBodyReduced,
-          background: "white",
+          background: background_svg,
           // marginLeft: "0px",
           // backgroundColor: "green",
         }}
       >
+        <SVGStars stores={props.stores} />
         <SVGElementsInPositionMatrix
           elements={elements}
           positions={positions}

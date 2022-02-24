@@ -87,7 +87,6 @@ export async function ItemsFeaturedFromWikipediaWithoutImage(
   month: string,
   day: string,
   ROOT_URL_REST_API: string,
-  // ROOT_URL_ACTION_API: string,
   lang: Tlanguage,
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
@@ -109,7 +108,6 @@ export async function ItemsFeaturedFromWikipediaWithoutImage(
 
 export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
   pattern_or_titles: string,
-  // ROOT_URL_REST_API: string,
   ROOT_URL_ACTION_API: string,
   nb_items: number,
   mode: "search" | "titles" | "random",
@@ -153,7 +151,6 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWi
       list_of_PageTitle_string.map((PageTitle_string: string) => {
         return ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
           PageTitle_string,
-          // ROOT_URL_REST_API,
           ROOT_URL_ACTION_API,
           -1,
           "titles",

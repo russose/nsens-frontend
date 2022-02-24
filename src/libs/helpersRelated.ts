@@ -15,7 +15,6 @@ export function readRelatedStringFromItem(item: IAtom): IRelatedAtomFull[] {
 export function initialyzeRelatedFromSaved(stores: IStores): void {
   stores.savedStore.savedItems.forEach((item: IAtom) => {
     if (item.related !== empty_value_atom) {
-      // const related: IRelatedAtom[] = JSON.parse(item.related);
       const relatedFull: IRelatedAtomFull[] = readRelatedStringFromItem(item);
       stores.baseStore.setRelated(item.id, relatedFull);
     }

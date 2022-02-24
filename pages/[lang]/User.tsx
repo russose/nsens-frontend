@@ -2,7 +2,6 @@ import { Box, Button } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-// import CatchupMessage from "../../src/components/CatchupMessage";
 import FormLoginSignup from "../../src/components/FormLoginSignup";
 import LanguageSelector from "../../src/components/LanguageSelector";
 import AppLayout from "../../src/components/layout/AppLayout";
@@ -23,12 +22,6 @@ import { useStores } from "../../src/stores/RootStoreHook";
 import ContentLoading from "../../src/components/ContentLoading";
 import CatchupMessage from "../../src/components/CatchupMessage";
 import HeaderTitle from "../../src/components/HeaderTitle";
-
-//CSS in JS Styles not supported in SSR
-// const CatchupMessageDynamic = dynamic(
-//   () => import("../../src/components/CatchupMessage"),
-//   { ssr: false }
-// );
 
 const User: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();

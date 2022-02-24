@@ -25,9 +25,6 @@ enum THeaderElementIDs {
 const SVGHeader: React.FunctionComponent<IProps> = (props) => {
   const router = useRouter();
 
-  // const deltax_x_header =
-  //   props.stores.baseStore.GUI_CONFIG.display.svgHeader.delta_x;
-
   function isPageMode(page: TPages, mode?: TPageHeaderModes): boolean {
     if (mode === undefined) {
       return isPage(page, router);
