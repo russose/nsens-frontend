@@ -9,6 +9,7 @@ import {
   IparamsPage,
   TUiStringStorage,
   configGeneral,
+  initStateCat,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
@@ -38,6 +39,24 @@ export async function getParamsPageFromContext(): Promise<IparamsPage> {
     return { lang: paramsPage_lang };
   }
   return undefined;
+}
+
+export async function initWhenResized(
+  stores: IStores,
+  window: Window
+): Promise<void> {
+  if (
+    window.innerHeight !== stores.baseStore.screen.height ||
+    window.innerWidth !== stores.baseStore.screen.width
+  )
+    stores.baseStore.setInitCompleted(initStateCat.core, undefined);
+  await goPage(
+    stores,
+    stores.baseStore.paramsPage,
+    configPaths.pages.Home,
+    {},
+    true
+  );
 }
 
 export function removeSavedFromItems(stores: IStores, items: IAtom[]): IAtom[] {

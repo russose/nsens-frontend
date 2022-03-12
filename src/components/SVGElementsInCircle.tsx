@@ -92,9 +92,6 @@ const SVGElementsInCircle: React.FunctionComponent<IProps> = (props) => {
       .concat(edges_labels_mobile)
       .slice(Math.max(props.amountCascade - 1, 0));
 
-    console.log(props.amountCascade);
-    console.log(edges_labels);
-
     edges = angles_edges
       .slice(Math.max(props.amountCascade - 1, 0))
       .map((angle, index) => {

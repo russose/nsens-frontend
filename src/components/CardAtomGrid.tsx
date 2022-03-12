@@ -2,6 +2,7 @@ import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { handlerT, IAtom, PaddingT, SizeT } from "../config/globals";
+import { showArticle } from "../handlers/handlers_Searchbar_Navigation";
 import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 import CardAtom from "./CardAtom";
@@ -60,6 +61,7 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                   )}
                   saved_handler={props.saved_handler(item.id)}
                   edit_handler={props.edit_handler(item.id)}
+                  top_handler={showArticle(props.stores, item.title, item.id)}
                 />
               </Box>
             );

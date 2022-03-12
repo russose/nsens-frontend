@@ -6,7 +6,8 @@ import { IStores } from "../../stores/RootStore";
 interface IProps {
   stores: IStores;
   image_path: string;
-  text: string;
+  text?: string;
+  additionnal_element?: any;
 }
 
 const AboutTemplate: React.FunctionComponent<IProps> = (props) => {
@@ -28,11 +29,20 @@ const AboutTemplate: React.FunctionComponent<IProps> = (props) => {
         justifyContent="evenly"
         overflow="hidden"
       >
-        <Box borderStyle="none" rounding={6} padding={2} column={8}>
-          <Text size={textSize} weight="bold" align="center">
-            {props.text}
-          </Text>
-        </Box>
+        {props.text !== undefined || props.additionnal_element !== undefined ? (
+          <Box borderStyle="none" padding={0} column={11}>
+            <Text size={textSize} weight="bold" align="center">
+              {props.text}
+              {props.additionnal_element !== undefined ? (
+                props.additionnal_element
+              ) : (
+                <></>
+              )}
+            </Text>
+          </Box>
+        ) : (
+          <></>
+        )}
 
         <Box padding={0} height={ratio_image} width="100%">
           <Image

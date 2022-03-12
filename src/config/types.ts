@@ -48,6 +48,7 @@ export interface IScenarioStep {
   id: TScenarioStepID;
   url: string;
   text: string;
+  additionnal_element?: any;
 }
 
 export enum TScenarioStepID {
@@ -58,6 +59,7 @@ export enum TScenarioStepID {
   itemArticle = "itemArticle",
   language = "language",
   home = "home",
+  navigationBall = "navigationBall",
 }
 
 export enum TPages {

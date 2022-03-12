@@ -141,6 +141,8 @@ export const ICONS = {
   VIZS: "globe",
 
   SEPARATOR: "ellipsis",
+
+  WIKIPEDIA: "view-type-list",
 };
 
 //Shoud be svg one path (https://gestalt.netlify.app/iconography_and_svgs)

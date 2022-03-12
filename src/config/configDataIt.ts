@@ -13,6 +13,7 @@ export const configDataIt: TconfigDataLanguage = {
   searchBar: "Cerca...",
   source_wikipedia: "Sorgente: Wikipedia",
   legend: "Leggenda:",
+  tryButton: "Prova n.Sens e condividi",
   labels: {
     knowbookUser: "I Miei Documenti",
     knowbookFeatured: "Scopri",
@@ -21,7 +22,7 @@ export const configDataIt: TconfigDataLanguage = {
     // canonical: "https://www.nsens.org/it/Mobile/About/",
     title_page_base: "n.Sens - Esplora la conoscenza libera in un modo nuovo",
     description_page_base:
-      "n.Sens - Aggiungi una nuova dimenzione alla Wikipedia e esplora visualmente la Conoscenza",
+      "n.Sens - Aggiungi una nuova dimenSione a Wikipedia ed esplora visualmente la Conoscenza",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -52,14 +53,18 @@ export const configDataIt: TconfigDataLanguage = {
   },
   about: {
     scenario_texts: {
+      [TScenarioStepID.navigationBall]:
+        "Gira la pallina blu per scorrere gli elementi",
       [TScenarioStepID.knowbook]:
-        "Crea documenti personalizzati e accedi alle tue scoperte da tutti i tuoi schermi",
-      [TScenarioStepID.mostviewed]: "Sfoglia gli elementi più popolari",
-      [TScenarioStepID.search]: "Trova presto gli elementi cercati",
-      [TScenarioStepID.item]: "Esplora le relazioni e fai nuove scoperte",
+        "Crea documenti personalizzati con le tue scoperte usando: ",
+      [TScenarioStepID.mostviewed]:
+        "Sfoglia gli elementi più popolari nel documento quotidiano",
+      [TScenarioStepID.search]: "Trova velocemente ogni elementi",
+      [TScenarioStepID.item]:
+        "Scorre e esplora le relazioni e fai nuove scoperte",
       [TScenarioStepID.itemArticle]:
-        "Accedi al contenuto di ogni elemente della Wikipedia",
-      [TScenarioStepID.language]: "Piu lingue sono disponibile",
+        "Accedi al contenuti Wikipedia di ogni elemento con: ",
+      [TScenarioStepID.language]: "Più lingue disponibili",
       [TScenarioStepID.home]:
         "Buon viaggio nella nostra conoscenza infinita...",
     },
@@ -118,7 +123,7 @@ export const configDataIt: TconfigDataLanguage = {
     placeholder_validationCode: "Codice di convalida ricevuto per email",
     label_sendValidationCode: "1-Recevi il codice di convalida",
     label_changePassword: "2-Cambia la password",
-    sendValidationCode_error: "Email incorrectto",
+    sendValidationCode_error: "Email non corretta",
     sendValidationCode_success:
       "Codice di convalida inviato all'indirizzo mail (controllare spam)",
     changePassword_error: "Codice di convalida incorretto o password vuota",
@@ -127,7 +132,7 @@ export const configDataIt: TconfigDataLanguage = {
     guest: "Registrazione - Login",
     contact: "Contatto",
     social: "Condividi",
-    install_instructions: "Installa per un ottima esperienza (Chrome/Safari)",
+    install_instructions: "Installa per un'esperienza ottimale (Chrome/Safari)",
     deconnexion: "Disconnetti - Logout",
     changePassword: "Modifica la password",
     catchup_message:

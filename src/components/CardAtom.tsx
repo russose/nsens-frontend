@@ -1,6 +1,6 @@
 import { Box, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { configGeneral, RoundingT } from "../config/globals";
+import { configGeneral, ICONS, RoundingT } from "../config/globals";
 import { AtomID, TButtonID, handlerT, IconT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import CardGeneric from "./CardGeneric";
@@ -16,7 +16,7 @@ interface ICardAtomProps {
   saved_enabled: boolean;
   saved_handler: handlerT;
   edit_handler: handlerT;
-  top_handler?: handlerT;
+  top_handler: handlerT;
   // viz?: boolean;
 }
 
@@ -32,7 +32,8 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
     <IconButton
       accessibilityLabel="wikipedia"
       size={size_icon}
-      icon="view-type-list"
+      // icon="view-type-list"
+      icon={ICONS.WIKIPEDIA as any}
       iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
       bgColor="lightGray"
       onClick={props.top_handler}

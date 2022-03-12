@@ -62,13 +62,13 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
           accessibilityDismissButtonLabel="Close wikipedia sheet"
           accessibilitySheetLabel="Wikipedia Article"
           heading={item_title}
+          subHeading={source}
           onDismiss={() => {
             props.stores.uiStore.setUiBooleanStorage(
               TUiBooleanStorage.showArticle,
               false
             );
           }}
-          footer={source}
           size="lg"
         >
           {article}

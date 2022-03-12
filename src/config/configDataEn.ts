@@ -13,6 +13,7 @@ export const configDataEn: TconfigDataLanguage = {
   searchBar: "Search...",
   source_wikipedia: "Source: Wikipedia",
   legend: "Legend:",
+  tryButton: "Try n.Sens and share",
   labels: {
     knowbookUser: "My Notebooks",
     knowbookFeatured: "Explore",
@@ -48,12 +49,17 @@ export const configDataEn: TconfigDataLanguage = {
   },
   about: {
     scenario_texts: {
+      [TScenarioStepID.navigationBall]:
+        "Turn around the blue ball to scroll elements",
       [TScenarioStepID.knowbook]:
-        "Create personalized notebooks with your findings and access them on all your devices",
-      [TScenarioStepID.mostviewed]: "See most popular elements",
-      [TScenarioStepID.search]: "Find quickly all items you are looking for",
-      [TScenarioStepID.item]: "Explore relations and make new findings",
-      [TScenarioStepID.itemArticle]: "Access content of each Wikipedia items",
+        "Create personalized notebooks with your findings using: ",
+      [TScenarioStepID.mostviewed]:
+        "Access most popular elements with the daily notebook",
+      [TScenarioStepID.search]: "Find quickly any items",
+      [TScenarioStepID.item]:
+        "Browse and explore relations making new findings",
+      [TScenarioStepID.itemArticle]:
+        "Access Wikipedia content of any items with: ",
       [TScenarioStepID.language]: "Many languages are supported",
       [TScenarioStepID.home]:
         "Have a nice journey in our infinite knowledge...",

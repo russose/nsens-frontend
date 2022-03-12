@@ -12,6 +12,7 @@ export const configDataFr = {
   searchBar: "Rechercher...",
   source_wikipedia: "Source: Wikipedia",
   legend: "Légende:",
+  tryButton: "Essayer n.Sens et partager",
   labels: {
     knowbookUser: "Mes Carnets",
     knowbookFeatured: "Explorer",
@@ -48,16 +49,20 @@ export const configDataFr = {
   },
   about: {
     scenario_texts: {
+      [TScenarioStepID.navigationBall]:
+        "Tourner la balle bleu pour faire défiler les élements",
       [TScenarioStepID.knowbook]:
-        "Créer des carnets personnalisés avec vos découvertes et y accéder sur tous vos écrans",
-      [TScenarioStepID.mostviewed]: "Voir les élements les plus populaires",
-      [TScenarioStepID.search]: "Trouver rapidement des éléments recherchés",
+        "Créer des carnets personnalisés grâce à tes découvertes avec: ",
+      [TScenarioStepID.mostviewed]:
+        "Voir les élements les plus populaires avec le carnet du jour",
+      [TScenarioStepID.search]: "Rechercher rapidement des éléments",
       [TScenarioStepID.item]:
-        "Explorer les relations et faites de nouvelles découvertes",
+        "Naviguer et explorer les relations pour faire de nouvelles découvertes",
       [TScenarioStepID.itemArticle]:
-        "Accéder au contenu de chaque élément de la Wikipedia",
+        "Accéder au contenu de chaque élément de la Wikipedia avec: ",
       [TScenarioStepID.language]: "Plusieurs langues sont supportées",
-      [TScenarioStepID.home]: "Bon voyage dans notre connaissance infinie...",
+      [TScenarioStepID.home]:
+        "Bon voyage dans notre connaissance sans limite...",
     },
   },
   buttons: {

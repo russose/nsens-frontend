@@ -1,11 +1,16 @@
+import { Button, IconButton } from "gestalt";
 import React from "react";
-import { configPaths } from "../../config/configLocalAndEnv";
+import {
+  configGeneral,
+  configPaths,
+  ICONS,
+} from "../../config/configLocalAndEnv";
 import {
   IScenarioStep,
   TScenarioStepID,
   TSpecialPages,
 } from "../../config/globals";
-import { isMobile } from "../../libs/helpersBase";
+import { goPage, isMobile } from "../../libs/helpersBase";
 import { isInstalled, pathScreenshots } from "../../libs/utils";
 import { IStores } from "../../stores/RootStore";
 import AboutTemplate from "./AboutTemplate";
@@ -14,21 +19,47 @@ interface IProps {
   stores: IStores;
 }
 
+const topIcon = (
+  <IconButton
+    accessibilityLabel="wikipedia"
+    size="xs"
+    icon={ICONS.WIKIPEDIA as any}
+    iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
+    bgColor="lightGray"
+  />
+);
+
+const knowbookIcons = (
+  <>
+    <IconButton
+      accessibilityLabel="wikipedia"
+      size="xs"
+      icon={ICONS.SAVE as any}
+      iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
+      bgColor="lightGray"
+    />
+    {" + "}
+    <IconButton
+      accessibilityLabel="wikipedia"
+      size="xs"
+      icon={ICONS.EDIT as any}
+      iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
+      bgColor="lightGray"
+    />
+  </>
+);
+
 export const scenarios: IScenarioStep[] = [
   {
-    id: TScenarioStepID.search,
-    url: configPaths.pages.Search + "?search=einstein",
+    id: TScenarioStepID.navigationBall,
+    url: configPaths.pages.Home,
     text: "",
   },
   {
     id: TScenarioStepID.knowbook,
     url: configPaths.pages.Knowbook + "?nameOrPeriod=Europe",
     text: "",
-  },
-  {
-    id: TScenarioStepID.item,
-    url: configPaths.pages.Item + "?title=Albert+Einstein&id=Q937",
-    text: "",
+    additionnal_element: knowbookIcons,
   },
   {
     id: TScenarioStepID.itemArticle,
@@ -36,7 +67,20 @@ export const scenarios: IScenarioStep[] = [
       configPaths.pages.Item +
       "?title=Albert+Einstein&id=Q937&articleOpen=toto",
     text: "",
+    additionnal_element: topIcon,
   },
+  {
+    id: TScenarioStepID.search,
+    url: configPaths.pages.Search + "?search=einstein",
+    text: "",
+  },
+
+  {
+    id: TScenarioStepID.item,
+    url: configPaths.pages.Item + "?title=Albert+Einstein&id=Q937",
+    text: "",
+  },
+
   {
     id: TScenarioStepID.mostviewed,
     url:
@@ -48,11 +92,6 @@ export const scenarios: IScenarioStep[] = [
   {
     id: TScenarioStepID.language,
     url: configPaths.pages.User,
-    text: "",
-  },
-  {
-    id: TScenarioStepID.home,
-    url: configPaths.pages.Home,
     text: "",
   },
 ];
@@ -100,6 +139,7 @@ const AboutContent: React.FunctionComponent<IProps> = (props) => {
                     props.stores.baseStore.paramsPage.lang
                   )}
                   text={step.text}
+                  additionnal_element={step.additionnal_element}
                 />
               </section>
             );
@@ -113,6 +153,37 @@ const AboutContent: React.FunctionComponent<IProps> = (props) => {
               />
             </section>
           )}
+          <section>
+            <AboutTemplate
+              stores={props.stores}
+              image_path={pathScreenshots(
+                rootPath,
+                scenarios[0],
+                isMobile(props.stores),
+                props.stores.baseStore.paramsPage.lang
+              )}
+              // text={
+              //   GUI_CONFIG.language.about.scenario_texts[TScenarioStepID.home]
+              // }
+              additionnal_element={
+                <>
+                  <Button
+                    accessibilityLabel={GUI_CONFIG.language.tryButton}
+                    text={GUI_CONFIG.language.tryButton}
+                    size={GUI_CONFIG.display.dialogs.button_icon_size as any}
+                    onClick={() => {
+                      goPage(
+                        props.stores,
+                        props.stores.baseStore.paramsPage,
+                        configPaths.pages.Home
+                      );
+                    }}
+                    color="red"
+                  />
+                </>
+              }
+            />
+          </section>
         </div>
       </div>
     </>
