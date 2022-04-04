@@ -33,7 +33,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
         placeholder={props.placeholder}
         value={props.value}
       />
-      <Box padding={1}>
+      {/* <Box padding={1}>
         <IconButton
           accessibilityLabel="Button searchField"
           icon="search"
@@ -42,7 +42,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
           size="sm"
           onClick={props.handlerSubmit}
         />
-      </Box>
+      </Box> */}
     </Box>
   );
 };

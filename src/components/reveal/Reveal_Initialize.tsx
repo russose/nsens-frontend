@@ -6,20 +6,16 @@ import "reveal.js/dist/reveal.css";
 import "reveal.js/dist/reset.css";
 import "reveal.js/dist/theme/sky.css";
 
-interface IProps {}
+interface IProps {
+  config: object;
+}
 
-function initialize(): void {
+function initialize(config: object): void {
   try {
     const deck = new Reveal({
       // plugins: [Markdown],
     });
-    deck.initialize({
-      embedded: true,
-      disableLayout: true,
-      overview: false,
-      loop: true,
-      autoSlide: 10000,
-    });
+    deck.initialize(config);
   } catch {
     // console.log("error in reveal initialize");
   }
@@ -29,7 +25,7 @@ const Reveal_Initialize: React.FunctionComponent<IProps> = (props) => {
   useEffect(() => {
     // Anything in here is fired on component mount.
     // console.log("Reveal_Initialize mounted");
-    initialize();
+    initialize(props.config);
     return () => {
       // Anything in here is fired on component unmount.
       // console.log("Reveal_Initialize unmounted");

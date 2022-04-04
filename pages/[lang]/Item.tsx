@@ -20,7 +20,7 @@ import {
   TUiStringStorage,
 } from "../../src/config/globals";
 import { initializeGraphSVG } from "../../src/libs/helpersGraph";
-import { showArticle } from "../../src/handlers/handlers_Searchbar_Navigation";
+import { showArticle } from "../../src/handlers/handlers_Articles";
 
 const Item: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();

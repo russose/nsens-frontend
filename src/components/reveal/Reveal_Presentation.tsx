@@ -6,6 +6,7 @@ const Reveal_Initialize = dynamic(() => import("./Reveal_Initialize"), {
 });
 
 interface IProps {
+  config: object;
   height?: string;
 }
 
@@ -15,7 +16,7 @@ const Reveal_Presentation: React.FunctionComponent<IProps> = (props) => {
     <>
       <div style={{ height: height }}>
         {props.children}
-        <Reveal_Initialize />
+        <Reveal_Initialize config={props.config} />
       </div>
     </>
   );

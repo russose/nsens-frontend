@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { IAtom } from "../config/globals";
+import { showArticle } from "../handlers/handlers_Articles";
 import { onEditKnowbooks } from "../handlers/handlers_Knowbooks";
 import {
   isItemSaved,
   isItemSavedActivated,
   onSaved,
 } from "../handlers/handlers_Saved";
-import { showArticle } from "../handlers/handlers_Searchbar_Navigation";
 import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 import CardAtom from "./CardAtom";

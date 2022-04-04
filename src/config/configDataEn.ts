@@ -15,14 +15,14 @@ export const configDataEn: TconfigDataLanguage = {
   legend: "Legend:",
   tryButton: "Try n.Sens and share",
   labels: {
-    knowbookUser: "My Notebooks",
+    knowbookUser: "My collections",
     knowbookFeatured: "Explore",
   },
   SEO: {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
     title_page_base: "n.Sens",
     description_page_base:
-      "n.Sens - Add a new dimension to the Wikipedia and browse visually in Knowledge",
+      "n.Sens - Add a new dimension to the Wikipedia and browse Knowledge visually",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -41,7 +41,7 @@ export const configDataEn: TconfigDataLanguage = {
           description: "",
         },
         [TSpecialPages.NoKnowbook]: {
-          title: "Without Notebook",
+          title: "Without collection",
           description: "",
         },
       },
@@ -52,9 +52,9 @@ export const configDataEn: TconfigDataLanguage = {
       [TScenarioStepID.navigationBall]:
         "Turn around the blue ball to scroll elements",
       [TScenarioStepID.knowbook]:
-        "Create personalized notebooks with your findings using: ",
+        "Create personalized collections with your findings using: ",
       [TScenarioStepID.mostviewed]:
-        "Access most popular elements with the daily notebook",
+        "Access most popular elements with the daily collection",
       [TScenarioStepID.search]: "Find quickly any items",
       [TScenarioStepID.item]:
         "Browse and explore relations making new findings",
@@ -66,6 +66,10 @@ export const configDataEn: TconfigDataLanguage = {
     },
   },
   buttons: {
+    [TButtonID.BACK]: {
+      label: "Back",
+      icon: ICONS.BACK,
+    },
     [TButtonID.HOME]: {
       label: "Home",
       icon: CUSTOM_ICONS.HOME,
@@ -90,9 +94,13 @@ export const configDataEn: TconfigDataLanguage = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.VIZS]: {
-      label: "Vizs",
-      icon: ICONS.VIZS,
+    [TButtonID.SLIDE]: {
+      label: "Slides",
+      icon: ICONS.SLIDE,
+    },
+    [TButtonID.KNOWBOOK]: {
+      label: "Overview",
+      icon: ICONS.KNOWBOOK,
     },
     [TButtonID.SEPARATOR]: {
       label: "",
@@ -106,11 +114,11 @@ export const configDataEn: TconfigDataLanguage = {
     knowbooks_title: "Featured",
   },
   editKnowbook: {
-    title: "Update Notebooks",
-    input_placeholder: "New notebook",
+    title: "Update collections",
+    input_placeholder: "New collection",
   },
   renameDeleteKnowbook: {
-    title: "Rename notebook",
+    title: "Rename collection",
     rename_label: "Rename",
     cancel_label: "Cancel",
   },

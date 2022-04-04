@@ -1,6 +1,6 @@
 //Warning: different between back and front
 
-import { Tlanguage, TPages } from "./globals";
+import { TButtonID, Tlanguage, TPages } from "./globals";
 
 export const languages_activated: Tlanguage[] = [
   Tlanguage.fr,
@@ -114,6 +114,7 @@ export const configPaths = {
 
     [TPages.Knowbook]: "/Notebook",
     [TPages.KnowbookSpecial]: "/NotebookSpecial",
+    [TPages.KnowbookSlide]: "/NotebookSlide",
 
     empty: "",
   },
@@ -127,22 +128,16 @@ export const configPaths = {
 
 export const ICONS = {
   KNOWBOOKS: "folder",
-
   LOGIN: "person",
-
   INFO: "question-mark",
-
   SAVE: "heart",
-
   EDIT: "download",
-
   ARTICLE: "menu",
-
-  VIZS: "globe",
-
+  SLIDE: "ads-overview",
+  KNOWBOOK: "workflow-status-all",
   SEPARATOR: "ellipsis",
-
   WIKIPEDIA: "view-type-list",
+  BACK: "arrow-back",
 };
 
 //Shoud be svg one path (https://gestalt.netlify.app/iconography_and_svgs)
@@ -151,16 +146,19 @@ export const CUSTOM_ICONS = {
 };
 
 export const configButtonsPath = {
-  HOME: configPaths.pages.Home,
-  LOGIN: configPaths.pages.User,
-  INFO: configPaths.pages.About,
-  SAVE: configPaths.pages.empty,
-  EDIT: configPaths.pages.empty,
-  VIZS: configPaths.pages.ItemNetwork,
-  SEPARATOR: "",
+  [TButtonID.HOME]: configPaths.pages.Home,
+  [TButtonID.LOGIN]: configPaths.pages.User,
+  [TButtonID.INFO]: configPaths.pages.About,
+  [TButtonID.SAVE]: configPaths.pages.empty,
+  [TButtonID.EDIT]: configPaths.pages.empty,
+  [TButtonID.SLIDE]: configPaths.pages.KnowbookSlide,
+  [TButtonID.KNOWBOOK]: configPaths.pages.Knowbook,
+  [TButtonID.SEPARATOR]: "",
+  [TButtonID.BACK]: "",
 };
 
 export const group_name = "group";
+export const ArticlesSlideSeparator = "***-***";
 
 export function EXCLUSION_PATTERNS(lang: Tlanguage): string[] {
   if (lang === Tlanguage.fr) {

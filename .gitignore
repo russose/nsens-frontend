@@ -12,3 +12,6 @@ public/workbox-*.js
 frontend-static.tar.bz2
 public/staticKnowbooks
 public/sitemap.xml
+android/
+public/screenshots/
+public/staticKnowbooks/

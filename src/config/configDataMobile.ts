@@ -7,8 +7,7 @@ export const configDataMobile = {
   },
   max_nodes_network: 50, //Only Network
   heightTopAndBottom: 200, //Only Network
-  heightUser: 500,
-  heightChangePassword: "45vh",
+
   rounding_menu: 4,
   rounding_item: 6,
   rounding_knowbooks: "circle",
@@ -16,9 +15,12 @@ export const configDataMobile = {
   size_icon_card: "xs",
   header_title_size: "sm",
   layout: {
+    heightUser: 500,
+    heightChangePassword: "45vh",
     heightHeader: 60, //7%
     heightBody: "90vh", //87%
     heightBottom: "0vh",
+    heightSlideArticle: "67vh",
     SVG_R_Max: 800,
     SVG_R_Ratio: 1.2, //0.8,
     SVG_deltaStepGrid_Ratio: 1.05,
@@ -52,7 +54,7 @@ export const configDataMobile = {
     smPadding: 2,
     padding: 2,
     title_card_size: "sm",
-    max_title_size: 15,
+    max_title_size: 30,
   },
   knowbook_sizes: {
     height: 120,
@@ -66,7 +68,7 @@ export const configDataMobile = {
     smPadding: 1,
     padding: 1,
     title_card_size: "sm",
-    max_title_size: 20,
+    max_title_size: 25,
   },
   About: {
     ratio_presentation: "65vh",

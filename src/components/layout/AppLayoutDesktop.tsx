@@ -50,12 +50,12 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
   const navigation_desktop = (
     <Box
       height="100%"
-      padding={0}
+      padding={2}
       display="flex"
       direction="column"
       justifyContent="center"
       column={5}
-      smColumn={4}
+      smColumn={5}
       mdColumn={4}
       lgColumn={3}
     >

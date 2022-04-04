@@ -9,8 +9,6 @@ export const configDataDesktop: TconfigDataDisplay = {
   },
   max_nodes_network: 110, //Only Network
   heightTopAndBottom: 250, //Only Network
-  heightUser: 500,
-  heightChangePassword: "40vh",
   rounding_menu: 4,
   rounding_item: 6,
   rounding_knowbooks: "circle",
@@ -18,9 +16,12 @@ export const configDataDesktop: TconfigDataDisplay = {
   size_icon_card: "xs",
   header_title_size: "sm",
   layout: {
+    heightUser: 500,
+    heightChangePassword: "40vh",
     heightHeader: 60, //7%
     heightBody: "92vh", //"93%",
     heightBottom: "6vh",
+    heightSlideArticle: "80vh",
     SVG_R_Max: 400,
     SVG_R_Ratio: 0.8, //0.9, //0.8,
     SVG_deltaStepGrid_Ratio: 1.2,

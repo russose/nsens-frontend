@@ -16,7 +16,7 @@ import {
   api_getItemsFeaturedFromWebWithoutImage,
   api_searchFromWebWithoutImage,
 } from "./apiItems";
-import { DateToStringWithZero, entierAleatoire } from "./utils";
+import { DateToStringWithZero, entierAleatoire, hasTouchScreen } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
   const result: boolean = stores.baseStore.currentDisplay === TDisplay.mobile;
@@ -45,18 +45,22 @@ export async function initWhenResized(
   stores: IStores,
   window: Window
 ): Promise<void> {
-  if (
-    window.innerHeight !== stores.baseStore.screen.height ||
-    window.innerWidth !== stores.baseStore.screen.width
-  )
+  const condition =
+    !isMobile(stores) &&
+    !hasTouchScreen(window) &&
+    (window.innerHeight !== stores.baseStore.screen.height ||
+      window.innerWidth !== stores.baseStore.screen.width);
+  // console.log(window.innerHeight, window.innerWidth);
+  if (condition) {
     stores.baseStore.setInitCompleted(initStateCat.core, undefined);
-  await goPage(
-    stores,
-    stores.baseStore.paramsPage,
-    configPaths.pages.Home,
-    {},
-    true
-  );
+    await goPage(
+      stores,
+      stores.baseStore.paramsPage,
+      configPaths.pages.Home,
+      {},
+      true
+    );
+  }
 }
 
 export function removeSavedFromItems(stores: IStores, items: IAtom[]): IAtom[] {

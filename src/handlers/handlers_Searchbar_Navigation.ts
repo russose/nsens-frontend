@@ -81,43 +81,6 @@ export const onSliderPositionChange =
     stores.uiStore.updateSliderCircular(sliderId, value);
   };
 
-/*******************Articles*************************** */
-
-export const showArticle =
-  (stores: IStores, item_title: string, item_id: string) =>
-  (input: { event: eventT }): void => {
-    if (item_title !== undefined && item_id !== undefined) {
-      stores.uiStore.setSelectedAtom(item_id, item_title);
-      stores.uiStore.setUiStringStorage(TUiStringStorage.articleContent, "");
-      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, true);
-      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
-      fetchArticle(
-        item_title,
-        ROOT_URL_WIKIPEDIA_REST(stores.baseStore.paramsPage.lang)
-      )
-        .then((value) => {
-          stores.uiStore.setUiStringStorage(
-            TUiStringStorage.articleContent,
-            prepareArticle(value)
-          );
-          // stores.uiStore.setShowLoading(false);
-          stores.uiStore.setUiBooleanStorage(
-            TUiBooleanStorage.showLoading,
-            false
-          );
-        })
-        .catch(() => {
-          // stores.uiStore.setShowLoading(false);
-          stores.uiStore.setUiBooleanStorage(
-            TUiBooleanStorage.showLoading,
-            false
-          );
-          // console.log("error in fetching article");
-        });
-    }
-    input.event.preventDefault();
-  };
-
 /*******************Page Header Modes*************************** */
 
 export const switchPageHeaderMode =

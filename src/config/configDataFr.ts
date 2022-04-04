@@ -14,7 +14,7 @@ export const configDataFr = {
   legend: "Légende:",
   tryButton: "Essayer n.Sens et partager",
   labels: {
-    knowbookUser: "Mes Carnets",
+    knowbookUser: "Mes collections",
     knowbookFeatured: "Explorer",
   },
   SEO: {
@@ -43,7 +43,10 @@ export const configDataFr = {
           title: "Sauvegardés (tous)",
           description: "",
         },
-        [TSpecialPages.NoKnowbook]: { title: "Sans carnet", description: "" },
+        [TSpecialPages.NoKnowbook]: {
+          title: "Sans collection",
+          description: "",
+        },
       },
     },
   },
@@ -52,9 +55,9 @@ export const configDataFr = {
       [TScenarioStepID.navigationBall]:
         "Tourner la balle bleu pour faire défiler les élements",
       [TScenarioStepID.knowbook]:
-        "Créer des carnets personnalisés grâce à tes découvertes avec: ",
+        "Créer des collections personnalisés grâce à tes découvertes avec: ",
       [TScenarioStepID.mostviewed]:
-        "Voir les élements les plus populaires avec le carnet du jour",
+        "Voir les élements les plus populaires avec la collection du jour",
       [TScenarioStepID.search]: "Rechercher rapidement des éléments",
       [TScenarioStepID.item]:
         "Naviguer et explorer les relations pour faire de nouvelles découvertes",
@@ -66,6 +69,10 @@ export const configDataFr = {
     },
   },
   buttons: {
+    [TButtonID.BACK]: {
+      label: "Retour",
+      icon: ICONS.BACK,
+    },
     [TButtonID.HOME]: {
       label: "Accueil",
       icon: CUSTOM_ICONS.HOME,
@@ -90,9 +97,13 @@ export const configDataFr = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.VIZS]: {
-      label: "Vizs",
-      icon: ICONS.VIZS,
+    [TButtonID.SLIDE]: {
+      label: "Slides",
+      icon: ICONS.SLIDE,
+    },
+    [TButtonID.KNOWBOOK]: {
+      label: "Overview",
+      icon: ICONS.KNOWBOOK,
     },
     [TButtonID.SEPARATOR]: {
       label: "",
@@ -106,11 +117,11 @@ export const configDataFr = {
     // knowbooks_title: "Sélection",
   },
   editKnowbook: {
-    title: "Mise à jour des carnets",
-    input_placeholder: "Nouveau Carnet",
+    title: "Mise à jour des collections",
+    input_placeholder: "Nouvelle collection",
   },
   renameDeleteKnowbook: {
-    title: "Renommer un carnet",
+    title: "Renommer une collection",
     rename_label: "Renommer",
     cancel_label: "Annuler",
   },

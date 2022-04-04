@@ -1,0 +1,18 @@
+{
+  "name": "android",
+  "version": "1.0.0",
+  "description": "frontend for Dimension5",
+  "author": "Salvatore Russo <salvatore.russo@laposte.net>",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "android-init": "bubblewrap init --manifest=https://www.nsens.org/manifest.json",
+    "android-config": "bubblewrap updateConfig  --jdkPath=/usr/lib/jvm/java-8-openjdk/jre",
+    "android-build-no-validation": "bubblewrap build --skipPwaValidation",
+    "android-build": "bubblewrap build",
+    "android-update": "bubblewrap update"
+  },
+  "comments": {
+    "to-do": ""
+  }
+}

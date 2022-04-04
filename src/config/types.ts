@@ -75,6 +75,7 @@ export enum TPages {
 
   Knowbook = "Knowbook",
   KnowbookSpecial = "KnowbookSpecial",
+  KnowbookSlide = "KnowbookSlide",
 }
 
 export enum TPageHeaderModes {
@@ -119,6 +120,7 @@ export enum TUiBooleanStorage {
   renameKnowbookOpened = "renameKnowbookOpened",
   showLoading = "showLoading",
   showArticle = "showArticle",
+  ArticleSlideFetchingStarted = "ArticleSlideFetchingStarted",
 }
 
 export enum TUiNumberStorage {
@@ -175,9 +177,11 @@ export enum TButtonID {
   INFO = "INFO",
   SAVE = "SAVE",
   EDIT = "EDIT",
-  VIZS = "VIZS",
+  SLIDE = "SLIDE",
+  KNOWBOOK = "KNOWBOOK",
   ARTICLE = "ARTICLE",
   SEPARATOR = "SEPARATOR",
+  BACK = "BACK",
 }
 
 export interface IButton {

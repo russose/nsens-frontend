@@ -2,7 +2,7 @@ import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { handlerT, IAtom, PaddingT, SizeT } from "../config/globals";
-import { showArticle } from "../handlers/handlers_Searchbar_Navigation";
+import { showArticle } from "../handlers/handlers_Articles";
 import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 import CardAtom from "./CardAtom";

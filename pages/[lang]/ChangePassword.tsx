@@ -46,7 +46,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   stores.uiStore.setUiStringStorage(TUiStringStorage.changePasswordError, "");
 
   const height_elements =
-    stores.baseStore.GUI_CONFIG.display.heightChangePassword;
+    stores.baseStore.GUI_CONFIG.display.layout.heightChangePassword;
 
   let value_username = undefined;
   if (isLogged && stores.baseStore.user !== null) {

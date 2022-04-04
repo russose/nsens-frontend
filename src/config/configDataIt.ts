@@ -15,7 +15,7 @@ export const configDataIt: TconfigDataLanguage = {
   legend: "Leggenda:",
   tryButton: "Prova n.Sens e condividi",
   labels: {
-    knowbookUser: "I Miei Documenti",
+    knowbookUser: "Le mie collezione",
     knowbookFeatured: "Scopri",
   },
   SEO: {
@@ -45,7 +45,7 @@ export const configDataIt: TconfigDataLanguage = {
           description: "",
         },
         [TSpecialPages.NoKnowbook]: {
-          title: "Senza Documento",
+          title: "Senza collezione",
           description: "",
         },
       },
@@ -56,9 +56,9 @@ export const configDataIt: TconfigDataLanguage = {
       [TScenarioStepID.navigationBall]:
         "Gira la pallina blu per scorrere gli elementi",
       [TScenarioStepID.knowbook]:
-        "Crea documenti personalizzati con le tue scoperte usando: ",
+        "Crea collezione personalizzate con le tue scoperte usando: ",
       [TScenarioStepID.mostviewed]:
-        "Sfoglia gli elementi più popolari nel documento quotidiano",
+        "Sfoglia gli elementi più popolari nella collezione quotidiana",
       [TScenarioStepID.search]: "Trova velocemente ogni elementi",
       [TScenarioStepID.item]:
         "Scorre e esplora le relazioni e fai nuove scoperte",
@@ -70,6 +70,10 @@ export const configDataIt: TconfigDataLanguage = {
     },
   },
   buttons: {
+    [TButtonID.BACK]: {
+      label: "Indietro",
+      icon: ICONS.BACK,
+    },
     [TButtonID.HOME]: {
       label: "Home",
       icon: CUSTOM_ICONS.HOME,
@@ -94,9 +98,13 @@ export const configDataIt: TconfigDataLanguage = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.VIZS]: {
-      label: "Vizs",
-      icon: ICONS.VIZS,
+    [TButtonID.SLIDE]: {
+      label: "Slides",
+      icon: ICONS.SLIDE,
+    },
+    [TButtonID.KNOWBOOK]: {
+      label: "Overview",
+      icon: ICONS.KNOWBOOK,
     },
     [TButtonID.SEPARATOR]: {
       label: "",
@@ -110,11 +118,11 @@ export const configDataIt: TconfigDataLanguage = {
     knowbooks_title: "Selezione",
   },
   editKnowbook: {
-    title: "Aggiorna documenti",
-    input_placeholder: "Nuovo Documento",
+    title: "Aggiorna collezione",
+    input_placeholder: "Nuova collezione",
   },
   renameDeleteKnowbook: {
-    title: "Rinomina un Documento",
+    title: "Rinomina una collezione",
     rename_label: "Rinomina",
     cancel_label: "Annulla",
   },

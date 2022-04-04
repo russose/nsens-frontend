@@ -49,7 +49,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
   const login_label = GUI_CONFIG.language.user.loginSignup.login_label;
   const signup_label = GUI_CONFIG.language.user.loginSignup.signup_label;
 
-  const height_elements = stores.baseStore.GUI_CONFIG.display.heightUser;
+  const height_elements = stores.baseStore.GUI_CONFIG.display.layout.heightUser;
 
   const loginSignup = (
     <Box padding={0} column={11} smColumn={11} mdColumn={5} lgColumn={3}>

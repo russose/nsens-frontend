@@ -18,7 +18,6 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
 
   const article = (
     <iframe
-      // srcDoc={props.stores.uiStore.articleContent}
       srcDoc={props.stores.uiStore.getUiStringStorage(
         TUiStringStorage.articleContent
       )}
@@ -26,7 +25,6 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
       frameBorder={0}
       marginWidth={0}
       marginHeight={0}
-      // height={props.height - 0}
       height="98%"
       width="100%"
     />
