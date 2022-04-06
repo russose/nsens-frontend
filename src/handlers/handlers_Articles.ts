@@ -4,6 +4,8 @@ import {
   TUiBooleanStorage,
   IAtom,
   ArticlesSlideSeparator,
+  IKnowbookStatic,
+  configFetching,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { ROOT_URL_WIKIPEDIA_REST } from "../config/configURLs";
@@ -52,9 +54,17 @@ export const showArticle =
 
 export async function ComputeArticleSlideContent(
   stores: IStores,
-  selected_knowbook: string
+  selected_knowbook: string,
+  isStatic: boolean
 ): Promise<void> {
-  const items: IAtom[] = getKnowbookAtomsList(selected_knowbook, stores);
+  let items_all;
+  if (isStatic) {
+    const knowbook: IKnowbookStatic =
+      stores.knowbookStore.staticKnowbooks.get(selected_knowbook);
+    items_all = knowbook.items;
+  } else {
+    items_all = getKnowbookAtomsList(selected_knowbook, stores);
+  }
 
   async function getArticle(item: IAtom): Promise<string> {
     return fetchArticle(
@@ -73,6 +83,8 @@ export async function ComputeArticleSlideContent(
     return myBigPromise;
   }
 
+  const items = items_all.slice(0, configFetching.maxArticlesSlide);
+
   if (
     !stores.uiStore.getUiBooleanStorage(
       TUiBooleanStorage.ArticleSlideFetchingStarted
@@ -82,7 +94,7 @@ export async function ComputeArticleSlideContent(
       TUiBooleanStorage.ArticleSlideFetchingStarted,
       true
     );
-
+    // stores.uiStore.setUiStringStorage(TUiStringStorage.articleContent, "");
     getArticle_Parallel(items)
       .then((articles: string[]) => {
         let articles_merged = "";
@@ -97,12 +109,5 @@ export async function ComputeArticleSlideContent(
           articles_merged
         );
       });
-    // .then(() => {
-    //   console.log("completed!");
-    //   stores.uiStore.setUiBooleanStorage(
-    //     TUiBooleanStorage.ArticleSlideContentReady,
-    //     true
-    //   );
-    // });
   }
 }

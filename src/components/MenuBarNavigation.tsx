@@ -26,15 +26,25 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
   const color_menu = configGeneral.colors.menu;
   const router = useRouter();
   const selected_knowbook = router.query.nameOrPeriod as string;
+  const isStatic_from_slide = (router.query.isStatic as string) === "true";
 
   const displaySlide =
-    router.pathname.includes(configPaths.pages.Knowbook) &&
-    !router.pathname.includes(configPaths.pages.KnowbookSlide);
+    (router.pathname.includes(configPaths.pages.Knowbook) ||
+      router.pathname.includes(configPaths.pages.StaticKnowbook)) &&
+    !router.pathname.includes(configPaths.pages.KnowbookSpecial);
   const displayKnowbook = router.pathname.includes(
-    configPaths.pages.KnowbookSlide
+    configPaths.pages.ArticleSlide
   );
 
+  const isStatic = router.pathname.includes(configPaths.pages.StaticKnowbook);
+
   const buttons: IButton[] = [
+    {
+      Id: TButtonID.BACK,
+      onClick: () => {
+        router.back();
+      },
+    },
     {
       Id: TButtonID.HOME,
     },
@@ -46,12 +56,16 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
           TUiBooleanStorage.ArticleSlideFetchingStarted,
           false
         );
-        ComputeArticleSlideContent(props.stores, selected_knowbook).then(() => {
+        ComputeArticleSlideContent(
+          props.stores,
+          selected_knowbook,
+          isStatic
+        ).then(() => {
           goPage(
             props.stores,
             props.stores.baseStore.paramsPage,
-            configPaths.pages.KnowbookSlide,
-            { nameOrPeriod: selected_knowbook }
+            configPaths.pages.ArticleSlide,
+            { nameOrPeriod: selected_knowbook, isStatic: isStatic }
           );
         });
       },
@@ -63,7 +77,9 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
         goPage(
           props.stores,
           props.stores.baseStore.paramsPage,
-          configPaths.pages.Knowbook,
+          isStatic_from_slide
+            ? configPaths.pages.StaticKnowbook
+            : configPaths.pages.Knowbook,
           { nameOrPeriod: selected_knowbook }
         );
       },
@@ -73,13 +89,6 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     },
     {
       Id: TButtonID.INFO,
-    },
-
-    {
-      Id: TButtonID.BACK,
-      onClick: () => {
-        router.back();
-      },
     },
   ];
 

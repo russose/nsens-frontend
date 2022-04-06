@@ -79,6 +79,7 @@ export const configFetching = {
   amount_related_wikipedia: 10,
   amount_max_by_node_wikidata: 30,
   amount_data_fetched_related_for_images: 2,
+  maxArticlesSlide: 20,
   width_image_thumbnail: 300,
   cache_duration_in_sec: "2628000", //1 Mois pour le cache
   staticKnowbooks: {
@@ -114,7 +115,7 @@ export const configPaths = {
 
     [TPages.Knowbook]: "/Notebook",
     [TPages.KnowbookSpecial]: "/NotebookSpecial",
-    [TPages.KnowbookSlide]: "/NotebookSlide",
+    [TPages.ArticleSlide]: "/ArticleSlide",
 
     empty: "",
   },
@@ -151,7 +152,7 @@ export const configButtonsPath = {
   [TButtonID.INFO]: configPaths.pages.About,
   [TButtonID.SAVE]: configPaths.pages.empty,
   [TButtonID.EDIT]: configPaths.pages.empty,
-  [TButtonID.SLIDE]: configPaths.pages.KnowbookSlide,
+  [TButtonID.SLIDE]: configPaths.pages.ArticleSlide,
   [TButtonID.KNOWBOOK]: configPaths.pages.Knowbook,
   [TButtonID.SEPARATOR]: "",
   [TButtonID.BACK]: "",

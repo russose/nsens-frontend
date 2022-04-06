@@ -75,7 +75,7 @@ export enum TPages {
 
   Knowbook = "Knowbook",
   KnowbookSpecial = "KnowbookSpecial",
-  KnowbookSlide = "KnowbookSlide",
+  ArticleSlide = "ArticleSlide",
 }
 
 export enum TPageHeaderModes {

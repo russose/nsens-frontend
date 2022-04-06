@@ -26,9 +26,7 @@ const NotebookSlide: React.FunctionComponent<IPage> = (props) => {
 
   const router = useRouter();
   const selected_knowbook = router.query.nameOrPeriod as string;
-  if (stores.knowbookStore.knowbooks.get(selected_knowbook) === undefined) {
-    return <ContentLoading stores={stores} />;
-  }
+
   const heightSlideArticle =
     stores.baseStore.GUI_CONFIG.display.layout.heightSlideArticle;
 
