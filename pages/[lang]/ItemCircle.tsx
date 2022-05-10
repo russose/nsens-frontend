@@ -22,7 +22,7 @@ import {
 import { initializeGraphSVG } from "../../src/libs/helpersGraph";
 import { showArticle } from "../../src/handlers/handlers_Articles";
 
-const Item: React.FunctionComponent<IPage> = (props) => {
+const ItemCircle: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
@@ -34,6 +34,8 @@ const Item: React.FunctionComponent<IPage> = (props) => {
   const router = useRouter();
   const item_title = router.query.title as string;
   const item_id = router.query.id as string;
+
+  stores.uiStore.setSelectedAtom(item_id, item_title);
 
   if (item_id !== stores.graphStore.rootItemId) {
     stores.graphStore.setRootItemId(item_id);
@@ -99,4 +101,4 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
   return await I_getStaticPaths(context);
 };
 
-export default observer(Item);
+export default observer(ItemCircle);

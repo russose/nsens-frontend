@@ -13,7 +13,7 @@ export const configDataEn: TconfigDataLanguage = {
   searchBar: "Search...",
   source_wikipedia: "Source: Wikipedia",
   legend: "Legend:",
-  tryButton: "Try n.Sens and share",
+  tryButton: "Try n.Sens",
   labels: {
     knowbookUser: "My collections",
     knowbookFeatured: "Explore",
@@ -94,9 +94,13 @@ export const configDataEn: TconfigDataLanguage = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.SLIDE]: {
-      label: "Slides",
-      icon: ICONS.SLIDE,
+    [TButtonID.CIRCLE]: {
+      label: "Orbit",
+      icon: CUSTOM_ICONS.CIRCLE,
+    },
+    [TButtonID.NETWORK]: {
+      label: "Network",
+      icon: CUSTOM_ICONS.NETWORK,
     },
     [TButtonID.KNOWBOOK]: {
       label: "Overview",
@@ -105,6 +109,14 @@ export const configDataEn: TconfigDataLanguage = {
     [TButtonID.SEPARATOR]: {
       label: "",
       icon: ICONS.SEPARATOR,
+    },
+    [TButtonID.ARTICLE_BACK]: {
+      label: "",
+      icon: ICONS.ARTICLE_BACK,
+    },
+    [TButtonID.ARTICLE_NEXT]: {
+      label: "",
+      icon: ICONS.ARTICLE_NEXT,
     },
   },
   knowbooks_User: {

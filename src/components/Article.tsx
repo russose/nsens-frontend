@@ -5,6 +5,7 @@ import { Box, Link, Sheet, Text } from "gestalt";
 import { ROOT_URL_WIKIPEDIA } from "../config/configURLs";
 import { IStores } from "../stores/RootStore";
 import { TUiBooleanStorage, TUiStringStorage } from "../config/globals";
+import MenuBarArticle from "./MenuBarArticle";
 
 interface IArticleProps {
   stores: IStores;
@@ -15,6 +16,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
     props.stores.baseStore.GUI_CONFIG.language.source_wikipedia;
 
   const item_title = props.stores.uiStore.selectedAtom.title;
+  const rounding = props.stores.baseStore.GUI_CONFIG.display.rounding_menu;
 
   const article = (
     <iframe
@@ -51,6 +53,22 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
     </Box>
   );
 
+  const subHeading = (
+    <Box width="100%" paddingX={4}>
+      <Box
+        display="flex"
+        direction="row"
+        justifyContent="between"
+        alignItems="center"
+      >
+        {source}
+        <Box column={6}>
+          <MenuBarArticle stores={props.stores} rounding={rounding} />
+        </Box>
+      </Box>
+    </Box>
+  );
+
   return (
     <>
       {props.stores.uiStore.getUiBooleanStorage(
@@ -60,7 +78,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
           accessibilityDismissButtonLabel="Close wikipedia sheet"
           accessibilitySheetLabel="Wikipedia Article"
           heading={item_title}
-          subHeading={source}
+          subHeading={subHeading}
           onDismiss={() => {
             props.stores.uiStore.setUiBooleanStorage(
               TUiBooleanStorage.showArticle,

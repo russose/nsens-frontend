@@ -18,6 +18,7 @@ import {
 } from "../../src/config/globals";
 import SVGKnowbooksFeatured from "../../src/components/SVGKnowbooksFeatured";
 import SVGKnowbooksUser from "../../src/components/SVGKnowbooksUser";
+import { makeScreenshoots } from "../../src/libs/utilsServer";
 
 const Home: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -77,6 +78,7 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  makeScreenshoots();
   return await I_getStaticProps(context);
 };
 export const getStaticPaths: GetStaticPaths = async (context) => {

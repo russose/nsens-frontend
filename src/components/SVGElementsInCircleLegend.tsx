@@ -1,7 +1,7 @@
 import { Box, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { configGeneral, IPosition, TUiNumberStorage } from "../config/globals";
+import { IPosition, TUiNumberStorage } from "../config/globals";
 import { isMobile } from "../libs/helpersBase";
 import { IStores } from "../stores/RootStore";
 
@@ -14,7 +14,6 @@ interface IProps {
 
 const SVGElementsInCircleLegend: React.FunctionComponent<IProps> = (props) => {
   const width = props.stores.baseStore.screen.width;
-  const color: any = configGeneral.colors.svg_elements;
 
   const R0 = props.stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0);
 
@@ -31,7 +30,7 @@ const SVGElementsInCircleLegend: React.FunctionComponent<IProps> = (props) => {
   const elements = props.labels.map((label) => {
     return (
       <Box key={label + "B"} padding={1}>
-        <Text key={label + "T"} size={"sm"} weight="normal" color={color}>
+        <Text key={label + "T"} size={"sm"} weight="normal" color={"light"}>
           {label}
         </Text>
       </Box>

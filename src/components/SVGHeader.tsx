@@ -68,7 +68,7 @@ const SVGHeader: React.FunctionComponent<IProps> = (props) => {
     header[0] = headerElementFromID(THeaderElementIDs.UserKnowbooks);
   } else if (isPageMode(TPages.Home, TPageHeaderModes.homeUserKnowbooks)) {
     header[0] = headerElementFromID(THeaderElementIDs.FeaturedKnowbooks);
-  } else if (isPageMode(TPages.Item)) {
+  } else if (isPageMode(TPages.ItemCircle)) {
     header = [
       headerElementFromID(THeaderElementIDs.FeaturedKnowbooks),
       headerElementFromID(THeaderElementIDs.UserKnowbooks),

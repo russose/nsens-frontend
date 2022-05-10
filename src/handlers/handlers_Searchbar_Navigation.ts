@@ -6,14 +6,10 @@ import {
   TPageHeaderModes,
   TPages,
   TUiStringStorage,
-  TUiBooleanStorage,
 } from "../config/globals";
 import { goPage, setFeedFromSearch } from "../libs/helpersBase";
 import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
-import { ROOT_URL_WIKIPEDIA_REST } from "../config/configURLs";
-import { fetchArticle } from "../libs/fetch";
-import { prepareArticle } from "../libs/utils";
 
 /*******************Logo*************************** */
 export const onTapLogo = (stores: IStores) => (): void => {

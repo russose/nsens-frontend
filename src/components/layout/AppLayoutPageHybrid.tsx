@@ -18,6 +18,7 @@ import AppLayoutPageHybridSVGBody from "./AppLayoutPageHybridSVGBody";
 const DialogsLoggedDynamic = dynamic(() => import("../DialogsLogged"));
 
 interface IPageLayoutProps {
+  children?: React.ReactNode;
   stores: IStores;
   titleSEO: string;
   top: reactComponentT;

@@ -15,7 +15,7 @@ export const configDataMobile = {
   size_icon_card: "xs",
   header_title_size: "sm",
   layout: {
-    heightUser: 500,
+    heightUser: 700,
     heightChangePassword: "45vh",
     heightHeader: 60, //7%
     heightBody: "90vh", //87%

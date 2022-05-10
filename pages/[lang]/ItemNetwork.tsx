@@ -22,7 +22,8 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
   const paramsPage = props.paramsPage;
   initializeApp(stores, paramsPage);
-  if (stores.baseStore.initCompleted.core !== true) {
+  // if (stores.baseStore.initCompleted.core !== true) {
+  if (stores.baseStore.initCompleted.userData !== true) {
     //Not yet initialyzed
     return <ContentLoading stores={stores} />;
   }

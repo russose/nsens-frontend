@@ -99,15 +99,15 @@ export class UIStore {
     );
   }
 
-  isPageHeaderMode(page: TPages, mode: TPageHeaderModes): boolean {
-    return this.$pageHeaderMode.get(page) === mode;
-  }
   initPageHeaderMode(): void {
     this.$pageHeaderMode.set(
       TPages.Home,
       TPageHeaderModes.homeFeaturedKnowbooks
     );
-    this.$pageHeaderMode.set(TPages.Item, TPageHeaderModes.itemAllRelated);
+    this.$pageHeaderMode.set(
+      TPages.ItemCircle,
+      TPageHeaderModes.itemAllRelated
+    );
 
     const pages_list = Object.values(TPages);
 
@@ -119,6 +119,9 @@ export class UIStore {
   }
   setPageHeaderMode(page: TPages, mode: TPageHeaderModes): void {
     this.$pageHeaderMode.set(page, mode);
+  }
+  isPageHeaderMode(page: TPages, mode: TPageHeaderModes): boolean {
+    return this.$pageHeaderMode.get(page) === mode;
   }
 
   get sliders() {

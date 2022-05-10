@@ -292,6 +292,24 @@ export function getKnowbookAtomsList(
   }
 }
 
+export function getKnowbookStaticAtomsList(
+  knowbookID: KnowbookID,
+  stores: IStores
+): IAtom[] {
+  if (!stores.knowbookStore.staticKnowbooks.has(knowbookID)) {
+    // console.log("impossible to provide Atoms List from knowbook");
+    return [];
+  } else {
+    const my_knowbook = stores.knowbookStore.staticKnowbooks.get(knowbookID);
+    if (my_knowbook !== undefined) {
+      return my_knowbook.items;
+    } else {
+      // console.log("impossible to provide Atoms List from knowbook 2");
+      return [];
+    }
+  }
+}
+
 export function isItemInKnowbook(
   atomId: AtomID,
   knowbookId: KnowbookID,

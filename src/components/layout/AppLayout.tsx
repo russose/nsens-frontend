@@ -7,6 +7,7 @@ import AppLayoutMobile from "./AppLayoutMobile";
 import AppLayoutDesktop from "./AppLayoutDesktop";
 
 interface IAppLayoutProps {
+  children?: React.ReactNode;
   stores: IStores;
   titleSEO?: string;
   isBodySVG?: boolean;

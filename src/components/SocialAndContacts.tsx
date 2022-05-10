@@ -36,6 +36,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
 
   const icon_size = 32;
   const text_size = "lg";
+  const icon_color = "default";
 
   const contact_icons = (
     <Box
@@ -50,7 +51,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
         <Icon
           accessibilityLabel={"email"}
           icon="envelope"
-          color="darkGray"
+          color={icon_color}
           size={icon_size}
         />
       </a>
@@ -58,7 +59,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
         <Icon
           accessibilityLabel={"twitter"}
           icon="twitter"
-          color="darkGray"
+          color={icon_color}
           size={icon_size}
         />
       </a>
@@ -66,7 +67,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
         <Icon
           accessibilityLabel={"Instagram"}
           icon="camera"
-          color="darkGray"
+          color={icon_color}
           size={icon_size}
         />
       </a>
@@ -74,7 +75,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
         <Icon
           accessibilityLabel={"pinterest"}
           icon="pinterest"
-          color="darkGray"
+          color={icon_color}
           size={icon_size}
         />
       </a>

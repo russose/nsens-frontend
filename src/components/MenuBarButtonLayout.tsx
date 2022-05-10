@@ -1,7 +1,13 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { ColorT, DirectionT, IButton, RoundingT } from "../config/globals";
+import {
+  ColorT,
+  DirectionT,
+  IButton,
+  RoundingT,
+  SizeT,
+} from "../config/globals";
 import { onMenuButtonPath } from "../handlers/handlers_Searchbar_Navigation";
 import { IStores } from "../stores/RootStore";
 import Button from "./Button";
@@ -9,6 +15,7 @@ import Button from "./Button";
 interface IProps {
   stores: IStores;
   name: string;
+  icon_size: SizeT;
   color: ColorT;
   direction: DirectionT;
   rounding: RoundingT;
@@ -48,6 +55,7 @@ const MenuBarButtonLayout: React.FunctionComponent<IProps> = (props) => {
               icon={buttons_all[button.Id].icon}
               label={buttons_all[button.Id].label}
               path={onMenuButtonPath(props.stores)(button.Id)}
+              icon_size={props.icon_size}
               iconColor={button.iconColor}
               disabled={button.disabled}
               onClick={button.onClick}

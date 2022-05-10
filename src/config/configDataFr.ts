@@ -12,7 +12,7 @@ export const configDataFr = {
   searchBar: "Rechercher...",
   source_wikipedia: "Source: Wikipedia",
   legend: "Légende:",
-  tryButton: "Essayer n.Sens et partager",
+  tryButton: "Essayer n.Sens",
   labels: {
     knowbookUser: "Mes collections",
     knowbookFeatured: "Explorer",
@@ -55,7 +55,7 @@ export const configDataFr = {
       [TScenarioStepID.navigationBall]:
         "Tourner la balle bleu pour faire défiler les élements",
       [TScenarioStepID.knowbook]:
-        "Créer des collections personnalisés grâce à tes découvertes avec: ",
+        "Créer des collections personnalisées grâce à tes découvertes avec: ",
       [TScenarioStepID.mostviewed]:
         "Voir les élements les plus populaires avec la collection du jour",
       [TScenarioStepID.search]: "Rechercher rapidement des éléments",
@@ -97,9 +97,13 @@ export const configDataFr = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.SLIDE]: {
-      label: "Slides",
-      icon: ICONS.SLIDE,
+    [TButtonID.CIRCLE]: {
+      label: "Orbite",
+      icon: CUSTOM_ICONS.CIRCLE,
+    },
+    [TButtonID.NETWORK]: {
+      label: "Réseau",
+      icon: CUSTOM_ICONS.NETWORK,
     },
     [TButtonID.KNOWBOOK]: {
       label: "Overview",
@@ -108,6 +112,14 @@ export const configDataFr = {
     [TButtonID.SEPARATOR]: {
       label: "",
       icon: ICONS.SEPARATOR,
+    },
+    [TButtonID.ARTICLE_BACK]: {
+      label: "",
+      icon: ICONS.ARTICLE_BACK,
+    },
+    [TButtonID.ARTICLE_NEXT]: {
+      label: "",
+      icon: ICONS.ARTICLE_NEXT,
     },
   },
   knowbooks_User: {

@@ -171,7 +171,7 @@ export function pathScreenshots(
 }
 
 export function path_link(id: AtomID, stores: IStores): string {
-  return configPaths.pages.Item;
+  return configPaths.pages.ItemCircle;
 }
 
 export function hasTouchScreen(window: any): boolean {

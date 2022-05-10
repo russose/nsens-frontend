@@ -69,13 +69,13 @@ export enum TPages {
   User = "User",
   ChangePassword = "ChangePassword",
   ItemNetwork = "ItemNetwork",
-  Item = "Item",
+  ItemCircle = "ItemCircle",
 
   StaticKnowbook = "StaticKnowbook",
 
   Knowbook = "Knowbook",
   KnowbookSpecial = "KnowbookSpecial",
-  ArticleSlide = "ArticleSlide",
+  // ArticleSlide = "ArticleSlide",
 }
 
 export enum TPageHeaderModes {
@@ -120,7 +120,7 @@ export enum TUiBooleanStorage {
   renameKnowbookOpened = "renameKnowbookOpened",
   showLoading = "showLoading",
   showArticle = "showArticle",
-  ArticleSlideFetchingStarted = "ArticleSlideFetchingStarted",
+  // ArticleSlideFetchingStarted = "ArticleSlideFetchingStarted",
 }
 
 export enum TUiNumberStorage {
@@ -177,11 +177,15 @@ export enum TButtonID {
   INFO = "INFO",
   SAVE = "SAVE",
   EDIT = "EDIT",
-  SLIDE = "SLIDE",
+  NETWORK = "NETWORK",
+  CIRCLE = "CIRCLE",
   KNOWBOOK = "KNOWBOOK",
   ARTICLE = "ARTICLE",
   SEPARATOR = "SEPARATOR",
   BACK = "BACK",
+
+  ARTICLE_BACK = "ARTICLE_BACK",
+  ARTICLE_NEXT = "ARTICLE_NEXT",
 }
 
 export interface IButton {

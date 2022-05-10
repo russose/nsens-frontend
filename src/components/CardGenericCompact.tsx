@@ -13,6 +13,7 @@ interface ICardSizes {
 }
 
 interface ICardGenericCompactProps {
+  children?: React.ReactNode;
   id: AtomID;
   stores: IStores;
   title: string;

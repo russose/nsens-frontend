@@ -1,6 +1,5 @@
 import { readFile, writeFile } from "fs/promises";
 import puppeteer from "puppeteer";
-import { scenarios } from "../components/reveal/AboutContent";
 import {
   configGeneral,
   configPaths,
@@ -12,6 +11,7 @@ import {
   SCREENSHOTS_LIST,
   TDisplay,
   Tlanguage,
+  TScenarioStepID,
 } from "../config/globals";
 import { pathScreenshots } from "./utils";
 
@@ -36,6 +36,51 @@ export async function writeFileJson(
 }
 
 /*************** Screenshoots with Puppeteer ************************/
+
+const scenarios: IScenarioStep[] = [
+  {
+    id: TScenarioStepID.navigationBall,
+    url: configPaths.pages.Home,
+    text: "",
+  },
+  {
+    id: TScenarioStepID.knowbook,
+    url: configPaths.pages.Knowbook + "?nameOrPeriod=Europe",
+    text: "",
+    // additionnal_element: knowbookIcons,
+  },
+  {
+    id: TScenarioStepID.itemArticle,
+    url:
+      configPaths.pages.ItemCircle +
+      "?title=Albert+Einstein&id=Q937&articleOpen=toto",
+    text: "",
+    // additionnal_element: topIcon,
+  },
+  {
+    id: TScenarioStepID.search,
+    url: configPaths.pages.Search + "?search=einstein",
+    text: "",
+  },
+  {
+    id: TScenarioStepID.item,
+    url: configPaths.pages.ItemCircle + "?title=Albert+Einstein&id=Q937",
+    text: "",
+  },
+  // {
+  //   id: TScenarioStepID.mostviewed,
+  //   url:
+  //     configPaths.pages.KnowbookSpecial +
+  //     "?pageType=" +
+  //     TSpecialPages.Mostviewed,
+  //   text: "",
+  // },
+  // {
+  //   id: TScenarioStepID.language,
+  //   url: configPaths.pages.User,
+  //   text: "",
+  // },
+];
 
 async function makeOneScreenshoot(
   browser: any,

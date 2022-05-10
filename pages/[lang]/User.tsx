@@ -22,6 +22,7 @@ import { useStores } from "../../src/stores/RootStoreHook";
 import ContentLoading from "../../src/components/ContentLoading";
 import CatchupMessage from "../../src/components/CatchupMessage";
 import HeaderTitle from "../../src/components/HeaderTitle";
+import SocialAndContacts from "../../src/components/SocialAndContacts";
 
 const User: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -112,7 +113,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
   if (!stores.baseStore.isLogged) {
     page_content = (
       <>
-        {languageSelector}
+        {/* {languageSelector} */}
         {loginSignup}
         {catchMessage}
       </>
@@ -120,12 +121,14 @@ const User: React.FunctionComponent<IPage> = (props) => {
   } else {
     page_content = (
       <>
-        {languageSelector}
+        {/* {languageSelector} */}
         {resetPasswordButton}
         {logoutButton}
       </>
     );
   }
+
+  const contacts = <SocialAndContacts stores={stores} />;
 
   return (
     <AppLayout stores={stores} titleSEO={title} isBodySVG={false}>
@@ -138,7 +141,9 @@ const User: React.FunctionComponent<IPage> = (props) => {
         justifyContent="around"
         alignItems="center"
       >
+        {languageSelector}
         {page_content}
+        {contacts}
       </Box>
     </AppLayout>
   );

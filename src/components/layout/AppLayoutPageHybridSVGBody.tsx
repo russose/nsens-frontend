@@ -1,6 +1,5 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { useRouter } from "next/router";
 import React from "react";
 import { configGeneral, IPosition, SVG_T } from "../../config/globals";
 import { initWhenResized, isMobile } from "../../libs/helpersBase";
@@ -19,6 +18,7 @@ function vhReduceString(original: string, reduction: number): string {
 }
 
 interface IProps {
+  children?: React.ReactNode;
   stores: IStores;
   // header: SVG_T;
 }

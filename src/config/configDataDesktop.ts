@@ -16,7 +16,7 @@ export const configDataDesktop: TconfigDataDisplay = {
   size_icon_card: "xs",
   header_title_size: "sm",
   layout: {
-    heightUser: 500,
+    heightUser: 700,
     heightChangePassword: "40vh",
     heightHeader: 60, //7%
     heightBody: "92vh", //"93%",

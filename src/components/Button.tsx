@@ -11,6 +11,8 @@ interface IButtonProps {
   icon: IconT;
   label: string;
   path: string;
+
+  icon_size: SizeT;
   iconColor?: ColorT;
   disabled?: boolean;
 
@@ -21,7 +23,8 @@ interface IButtonProps {
 
 const Button: React.FunctionComponent<IButtonProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const icon_size: SizeT = GUI_CONFIG.display.size_icon_menu;
+  // const icon_size: SizeT = GUI_CONFIG.display.size_icon_menu;
+  const icon_size: SizeT = props.icon_size;
   const path_empty = configPaths.pages.empty;
   const path_ = props.path === undefined ? path_empty : props.path;
   const iconColor_ =

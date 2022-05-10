@@ -213,6 +213,7 @@ export function renderGraph(
   width: number,
   height: number
 ): void {
+  console.log("ok0");
   const baseStore = stores.baseStore;
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
@@ -229,7 +230,12 @@ export function renderGraph(
     return;
   }
 
+  console.log("ok1");
+
+  console.log(root_itemId, stores.graphStore.rootItemId);
+
   if (!baseStore.related.has(root_itemId)) {
+    console.log("ok2");
     // stores.uiStore.setShowLoading(true);
     stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
     api_getRelatedFromWebWithoutImage(
@@ -262,6 +268,7 @@ export function renderGraph(
         );
       });
   } else if (root_itemId !== stores.graphStore.rootItemId) {
+    console.log("ok3");
     initGraph(root_itemId, stores, width / 2, height / 2);
     runSimulation(width / 2, height / 2, stores);
   }

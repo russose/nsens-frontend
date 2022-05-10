@@ -10,6 +10,8 @@ import {
   configGeneral,
   TUiBooleanStorage,
   TUiStringStorage,
+  TPages,
+  TPageHeaderModes,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
@@ -69,6 +71,12 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
 
       // Saved Items and Knowbooks
       if (stores.baseStore.isLogged) {
+        //Init PageHeaderMode
+        stores.uiStore.setPageHeaderMode(
+          TPages.Home,
+          TPageHeaderModes.homeUserKnowbooks
+        );
+
         const helpersInitializeLogged = await import(
           "./helpersInitializeLogged"
         );

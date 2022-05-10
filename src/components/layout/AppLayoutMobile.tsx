@@ -15,6 +15,7 @@ import { IStores } from "../../stores/RootStore";
 import { TDisplay, configPaths, TUiStringStorage } from "../../config/globals";
 
 export interface IAppLayoutProps {
+  children?: React.ReactNode;
   stores: IStores;
   titleSEO: string;
   display: TDisplay;

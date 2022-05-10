@@ -13,9 +13,9 @@ export const configDataIt: TconfigDataLanguage = {
   searchBar: "Cerca...",
   source_wikipedia: "Sorgente: Wikipedia",
   legend: "Leggenda:",
-  tryButton: "Prova n.Sens e condividi",
+  tryButton: "Prova n.Sens",
   labels: {
-    knowbookUser: "Le mie collezione",
+    knowbookUser: "Le mie collezioni",
     knowbookFeatured: "Scopri",
   },
   SEO: {
@@ -56,7 +56,7 @@ export const configDataIt: TconfigDataLanguage = {
       [TScenarioStepID.navigationBall]:
         "Gira la pallina blu per scorrere gli elementi",
       [TScenarioStepID.knowbook]:
-        "Crea collezione personalizzate con le tue scoperte usando: ",
+        "Crea collezioni personalizzate con le tue scoperte usando: ",
       [TScenarioStepID.mostviewed]:
         "Sfoglia gli elementi più popolari nella collezione quotidiana",
       [TScenarioStepID.search]: "Trova velocemente ogni elementi",
@@ -98,9 +98,13 @@ export const configDataIt: TconfigDataLanguage = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.SLIDE]: {
-      label: "Slides",
-      icon: ICONS.SLIDE,
+    [TButtonID.CIRCLE]: {
+      label: "Orbita",
+      icon: CUSTOM_ICONS.CIRCLE,
+    },
+    [TButtonID.NETWORK]: {
+      label: "Rete",
+      icon: CUSTOM_ICONS.NETWORK,
     },
     [TButtonID.KNOWBOOK]: {
       label: "Overview",
@@ -109,6 +113,14 @@ export const configDataIt: TconfigDataLanguage = {
     [TButtonID.SEPARATOR]: {
       label: "",
       icon: ICONS.SEPARATOR,
+    },
+    [TButtonID.ARTICLE_BACK]: {
+      label: "",
+      icon: ICONS.ARTICLE_BACK,
+    },
+    [TButtonID.ARTICLE_NEXT]: {
+      label: "",
+      icon: ICONS.ARTICLE_NEXT,
     },
   },
   knowbooks_User: {

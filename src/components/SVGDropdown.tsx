@@ -20,8 +20,15 @@ const SVGDropdown: React.FunctionComponent<IProps> = (props) => {
     ...Array.from(props.stores.graphStore.relatedMap.keys()),
   ];
   const options = values.sort().map((key) => {
+    // console.log(key);
+    // let key_: string;
+    // if (key === "") {
+    //   key_ = "----";
+    // } else {
+    //   key_ = key;
+    // }
     return {
-      label: capitalizeFirstLetter(key),
+      label: key === "" ? "----" : capitalizeFirstLetter(key),
       value: key,
     };
   });

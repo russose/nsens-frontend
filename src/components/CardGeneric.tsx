@@ -21,6 +21,7 @@ interface ICardSizes {
 }
 
 interface ICardGenericProps {
+  children?: React.ReactNode;
   id: AtomID;
   stores: IStores;
   title: string;
