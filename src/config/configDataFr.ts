@@ -22,7 +22,7 @@ export const configDataFr = {
     // title_page_base: "n.Sens - Explorer la Connaissance libre autrement",
     title_page_base: "n.Sens",
     description_page_base:
-      "n.Sens - Ajouter une nouvelle dimension à la Wikipedia et naviguer visuellement dans la Connaissance",
+      "n.Sens - n.Sens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes",
     title_description: {
       [TPages.Home]: { title: "Accueil", description: "" },
       [TPages.About]: {
@@ -34,6 +34,7 @@ export const configDataFr = {
         title: "Modifier votre mot de passe",
         description: "",
       },
+      [TPages.ItemCircle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
       [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
@@ -59,7 +60,7 @@ export const configDataFr = {
       [TScenarioStepID.mostviewed]:
         "Voir les élements les plus populaires avec la collection du jour",
       [TScenarioStepID.search]: "Rechercher rapidement des éléments",
-      [TScenarioStepID.item]:
+      [TScenarioStepID.itemCircle]:
         "Naviguer et explorer les relations pour faire de nouvelles découvertes",
       [TScenarioStepID.itemArticle]:
         "Accéder au contenu de chaque élément de la Wikipedia avec: ",

@@ -29,7 +29,7 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
+  const rounding: RoundingT = GUI_CONFIG.display.rounding_item_viz;
   const max_title_size = props.sizes.max_title_size;
 
   const title_card_size: SizeT = props.sizes.title_card_size;
@@ -55,9 +55,9 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
           justifyContent="between"
           alignItems="start"
           padding={0}
-          height="100%"
+          height="70%"
         >
-          <Box padding={1} height="100%" width="100%">
+          <Box padding={1} height="90%" width="100%">
             <Mask rounding={rounding} height="100%" width="100%">
               <Link
                 prefetch={false}
@@ -89,13 +89,25 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
             </Mask>
           </Box>
 
-          <Box display="flex" direction="column" padding={0}>
+          <Box display="flex" direction="column" paddingY={1}>
             {props.children}
           </Box>
         </Box>
 
-        <Box padding={2}>
-          <Text size={title_card_size} align="start" weight="bold">
+        <Box
+          display="flex"
+          direction="row"
+          alignItems="center"
+          paddingX={1}
+          paddingY={0}
+          height="30%"
+        >
+          <Text
+            size={title_card_size}
+            align="start"
+            weight="normal"
+            underline={false}
+          >
             {title}
           </Text>
         </Box>

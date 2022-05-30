@@ -4,8 +4,8 @@ import { makeArrayFlat } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
 export interface IRelatedMapFlat {
-  keys: string[];
-  values: AtomID[];
+  labels: string[];
+  atomIds: AtomID[];
 }
 
 export class GraphStore {
@@ -67,6 +67,6 @@ export class GraphStore {
     const keysFlat = makeArrayFlat(keysList);
     const valuesFlat = makeArrayFlat(valuesList);
 
-    return { keys: keysFlat, values: valuesFlat };
+    return { labels: keysFlat, atomIds: valuesFlat };
   }
 }

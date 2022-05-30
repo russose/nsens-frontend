@@ -7,10 +7,11 @@ export const configDataDesktop: TconfigDataDisplay = {
     displayFeedIncrement: 20,
     amount_related_displayed: 50,
   },
-  max_nodes_network: 110, //Only Network
-  heightTopAndBottom: 250, //Only Network
+  // max_nodes_network: 110, //Only Network
+  // heightTopAndBottom: 250, //Only Network
   rounding_menu: 4,
   rounding_item: 6,
+  rounding_item_viz: 4,
   rounding_knowbooks: "circle",
   size_icon_menu: "xs",
   size_icon_card: "xs",
@@ -21,7 +22,7 @@ export const configDataDesktop: TconfigDataDisplay = {
     heightHeader: 60, //7%
     heightBody: "92vh", //"93%",
     heightBottom: "6vh",
-    heightSlideArticle: "80vh",
+    // heightSlideArticle: "80vh",
     SVG_R_Max: 400,
     SVG_R_Ratio: 0.8, //0.9, //0.8,
     SVG_deltaStepGrid_Ratio: 1.2,
@@ -83,6 +84,6 @@ export const configDataDesktop: TconfigDataDisplay = {
     smPadding: 1,
     padding: 1,
     title_card_size: "sm",
-    max_title_size: 33,
+    max_title_size: 27,
   },
 };

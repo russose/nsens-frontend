@@ -24,8 +24,8 @@ export type INetworkZoomableProps = {
 const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   props
 ) => {
-  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const max_nodes_network = GUI_CONFIG.display.max_nodes_network;
+  // const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
+  // const max_nodes_network = GUI_CONFIG.display.max_nodes_network;
 
   // const margin = 5;
   // const size_factor = 4; //4
@@ -37,16 +37,16 @@ const NetworkZoomable: React.FunctionComponent<INetworkZoomableProps> = (
   const width = props.width - margin;
   const height = props.height - margin;
 
-  const amount_nodes = Array.from(
-    props.stores.graphStore.relatedMap.values()
-  ).reduce((acc, value) => {
-    return acc + value.length;
-  }, 0);
+  // const amount_nodes = Array.from(
+  //   props.stores.graphStore.relatedMap.values()
+  // ).reduce((acc, value) => {
+  //   return acc + value.length;
+  // }, 0);
   function networkNodeDisplayed(): boolean {
     // return amount_nodes < max_nodes_network;
     // return !isMobile(props.stores) && amount_nodes < max_nodes_network;
-    // return true;
-    return amount_nodes < max_nodes_network;
+    return true;
+    // return amount_nodes < max_nodes_network;
   }
 
   return (

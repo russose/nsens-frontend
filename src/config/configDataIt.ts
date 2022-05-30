@@ -34,6 +34,7 @@ export const configDataIt: TconfigDataLanguage = {
         title: "Modifica la password",
         description: "",
       },
+      [TPages.ItemCircle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
       [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
@@ -60,7 +61,7 @@ export const configDataIt: TconfigDataLanguage = {
       [TScenarioStepID.mostviewed]:
         "Sfoglia gli elementi più popolari nella collezione quotidiana",
       [TScenarioStepID.search]: "Trova velocemente ogni elementi",
-      [TScenarioStepID.item]:
+      [TScenarioStepID.itemCircle]:
         "Scorre e esplora le relazioni e fai nuove scoperte",
       [TScenarioStepID.itemArticle]:
         "Accedi al contenuti Wikipedia di ogni elemento con: ",

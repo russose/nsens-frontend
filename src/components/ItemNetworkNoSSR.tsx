@@ -3,6 +3,14 @@ import React from "react";
 import { IStores } from "../stores/RootStore";
 import NetworkZoomable from "./vizs/NetworkZoomable";
 
+function convertStringToNumberWithoutLast(
+  original: string,
+  amount_last: number
+): number {
+  const result = parseInt(original.slice(0, original.length - amount_last), 10);
+  return result;
+}
+
 interface ItemNetworkNoSSR {
   stores: IStores;
   item_title: string;
@@ -14,9 +22,17 @@ const ItemNetworkNoSSR: React.FunctionComponent<ItemNetworkNoSSR> = (props) => {
 
   stores.baseStore.setscreenNoSSR();
 
+  // const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
+  // const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;
+  // const height = stores.baseStore.screen.height - 1.0 * heightTopAndBottom;
+
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const heightTopAndBottom = GUI_CONFIG.display.heightTopAndBottom;
-  const height = stores.baseStore.screen.height - 1.0 * heightTopAndBottom;
+  const heightBody = GUI_CONFIG.display.layout.heightBody;
+
+  const height =
+    stores.baseStore.screen.height *
+    0.01 *
+    convertStringToNumberWithoutLast(heightBody, 2);
   const width = stores.baseStore.screen.width;
 
   return (

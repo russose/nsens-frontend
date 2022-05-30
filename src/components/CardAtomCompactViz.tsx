@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
-import { AtomID, TButtonID, handlerT, IconT } from "../config/globals";
+import { AtomID, TButtonID, handlerT, IconT, ICONS } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { configGeneral } from "../config/globals";
 import React from "react";
@@ -18,6 +18,7 @@ interface ICardAtomCompactVizProps {
   saved_enabled: boolean;
   saved_handler: handlerT;
   edit_handler: handlerT;
+  top_handler: handlerT;
   CompactExtra?: boolean;
 }
 
@@ -29,14 +30,26 @@ const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
   const color_item = configGeneral.colors.item_compact_color;
   const color_image = configGeneral.colors.item_color_image;
   let card_sizes = GUI_CONFIG.display.atom_compact_vizs_sizes;
-  if (props.CompactExtra === true) {
-    size_icon = "xs";
-  }
+  // if (props.CompactExtra === true) {
+  //   size_icon = "xs";
+  // }
 
   const buttons_all = GUI_CONFIG.language.buttons;
 
+  const topIcon = (
+    <IconButton
+      accessibilityLabel="wikipedia"
+      size={size_icon}
+      icon={ICONS.WIKIPEDIA as any}
+      iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
+      // bgColor="lightGray"
+      onClick={props.top_handler}
+    />
+  );
+
   const icons = (
     <>
+      <Box paddingX={0}>{topIcon}</Box>
       <Box paddingX={0}>
         <IconButton
           accessibilityLabel="save"

@@ -22,7 +22,7 @@ export const configDataEn: TconfigDataLanguage = {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
     title_page_base: "n.Sens",
     description_page_base:
-      "n.Sens - Add a new dimension to the Wikipedia and browse Knowledge visually",
+      "n.Sens - n.Sens enable to add a new dimension to the Wikipedia, browsing visually through knowledge card from Wikipedia. A journey with no limit, from findings to findings",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -31,6 +31,7 @@ export const configDataEn: TconfigDataLanguage = {
       },
       [TPages.User]: { title: "", description: "" },
       [TPages.ChangePassword]: { title: "Update password", description: "" },
+      [TPages.ItemCircle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
       [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
@@ -56,7 +57,7 @@ export const configDataEn: TconfigDataLanguage = {
       [TScenarioStepID.mostviewed]:
         "Access most popular elements with the daily collection",
       [TScenarioStepID.search]: "Find quickly any items",
-      [TScenarioStepID.item]:
+      [TScenarioStepID.itemCircle]:
         "Browse and explore relations making new findings",
       [TScenarioStepID.itemArticle]:
         "Access Wikipedia content of any items with: ",

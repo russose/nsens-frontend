@@ -4,6 +4,7 @@ import React from "react";
 import {
   configGeneral,
   configPaths,
+  eventT,
   IButton,
   RoundingT,
   TUiBooleanStorage,
@@ -32,38 +33,28 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
   const color_menu = configGeneral.colors.menu;
   const router = useRouter();
   const stores = props.stores;
-  const selected_knowbook = router.query.nameOrPeriod as string;
-  const isStatic = router.pathname.includes(configPaths.pages.StaticKnowbook);
 
   const displayNavigationArrows =
     router.pathname.includes(configPaths.pages.Knowbook) ||
-    router.pathname.includes(configPaths.pages.StaticKnowbook);
+    router.pathname.includes(configPaths.pages.StaticKnowbook) ||
+    router.pathname.includes(configPaths.pages.ItemCircle) ||
+    router.pathname.includes(configPaths.pages.ItemNetwork);
 
   const buttons: IButton[] = [
     {
       Id: TButtonID.ARTICLE_BACK,
       disabled: !displayNavigationArrows,
-      onClick: showArticleBackNext(
-        props.stores,
-        selected_knowbook,
-        isStatic,
-        -1
-      ),
+      onClick: showArticleBackNext(props.stores, router, -1),
     },
     {
       Id: TButtonID.ARTICLE_NEXT,
       disabled: !displayNavigationArrows,
-      onClick: showArticleBackNext(
-        props.stores,
-        selected_knowbook,
-        isStatic,
-        1
-      ),
+      onClick: showArticleBackNext(props.stores, router, 1),
     },
     {
       Id: TButtonID.NETWORK,
       // hidden: !router.pathname.includes(configPaths.pages.ItemCircle),
-      onClick: () => {
+      onClick: (input: { event: eventT }) => {
         stores.uiStore.setUiBooleanStorage(
           TUiBooleanStorage.showArticle,
           false
@@ -77,12 +68,13 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
             id: stores.uiStore.selectedAtom.id,
           }
         );
+        input.event.preventDefault();
       },
     },
     {
       Id: TButtonID.CIRCLE,
       // hidden: !router.pathname.includes(configPaths.pages.ItemCircle),
-      onClick: () => {
+      onClick: (input: { event: eventT }) => {
         stores.uiStore.setUiBooleanStorage(
           TUiBooleanStorage.showArticle,
           false
@@ -96,6 +88,7 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
             id: stores.uiStore.selectedAtom.id,
           }
         );
+        input.event.preventDefault();
       },
     },
     {

@@ -1,15 +1,16 @@
-const card_compact_vizs_size = 70;
+const card_compact_vizs_size = 75;
 
 export const configDataMobile = {
   display: {
     displayFeedIncrement: 10,
     amount_related_displayed: 32,
   },
-  max_nodes_network: 50, //Only Network
-  heightTopAndBottom: 200, //Only Network
+  // max_nodes_network: 50, //Only Network
+  // heightTopAndBottom: 200, //Only Network
 
   rounding_menu: 4,
   rounding_item: 6,
+  rounding_item_viz: 4,
   rounding_knowbooks: "circle",
   size_icon_menu: "lg",
   size_icon_card: "xs",
@@ -20,7 +21,7 @@ export const configDataMobile = {
     heightHeader: 60, //7%
     heightBody: "90vh", //87%
     heightBottom: "0vh",
-    heightSlideArticle: "67vh",
+    // heightSlideArticle: "67vh",
     SVG_R_Max: 800,
     SVG_R_Ratio: 1.2, //0.8,
     SVG_deltaStepGrid_Ratio: 1.05,

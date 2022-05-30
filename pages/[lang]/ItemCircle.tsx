@@ -19,7 +19,7 @@ import {
   TUiNumberStorage,
   TUiStringStorage,
 } from "../../src/config/globals";
-import { initializeGraphSVG } from "../../src/libs/helpersGraph";
+import { fetchRelatedItems } from "../../src/libs/helpersGraph";
 import { showArticle } from "../../src/handlers/handlers_Articles";
 
 const ItemCircle: React.FunctionComponent<IPage> = (props) => {
@@ -39,9 +39,9 @@ const ItemCircle: React.FunctionComponent<IPage> = (props) => {
 
   if (item_id !== stores.graphStore.rootItemId) {
     stores.graphStore.setRootItemId(item_id);
-    initializeGraphSVG(item_id, item_title, stores);
+    fetchRelatedItems(item_id, item_title, stores);
   }
-  if (stores.baseStore.initCompleted.Item !== true) {
+  if (stores.baseStore.initCompleted.itemRelated !== true) {
     //Not yet initialyzed
     return <ContentLoading stores={stores} />;
   }
@@ -66,8 +66,8 @@ const ItemCircle: React.FunctionComponent<IPage> = (props) => {
     selectedValue === "" ||
     !stores.graphStore.relatedMap.has(selectedValue)
   ) {
-    elements_ids = stores.graphStore.relatedMapFlat.values;
-    edges = stores.graphStore.relatedMapFlat.keys;
+    elements_ids = stores.graphStore.relatedMapFlat.atomIds;
+    edges = stores.graphStore.relatedMapFlat.labels;
   } else {
     elements_ids = stores.graphStore.relatedMap.get(selectedValue);
     edges = elements_ids.map((el) => selectedValue);

@@ -41,10 +41,11 @@ const CardGenericCompactExtra: React.FunctionComponent<
     <Box height={props.sizes.height} width={props.sizes.width}>
       <Box
         height="100%"
+        width="100%"
         borderStyle="lg"
         rounding={rounding}
         display="flex"
-        direction="column"
+        direction="row"
         justifyContent="between"
         color={props.color}
       >
@@ -52,8 +53,9 @@ const CardGenericCompactExtra: React.FunctionComponent<
           display="flex"
           direction="column"
           justifyContent="center"
-          height="70%"
-          padding={1}
+          height="100%"
+          width="65%"
+          paddingX={1}
         >
           <Link
             prefetch={false}
@@ -67,14 +69,20 @@ const CardGenericCompactExtra: React.FunctionComponent<
             passHref
           >
             <a>
-              <Text size="sm" align="start" weight="bold">
+              <Text size="sm" align="start" weight="normal">
                 {title}
               </Text>
             </a>
           </Link>
         </Box>
 
-        <Box display="flex" direction="row" justifyContent="end" width="100%">
+        <Box
+          display="flex"
+          direction="column"
+          justifyContent="start"
+          height="100%"
+          // width="100%"
+        >
           {props.children}
         </Box>
       </Box>

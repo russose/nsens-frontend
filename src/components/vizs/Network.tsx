@@ -4,6 +4,7 @@ import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { group_name, IAtom } from "../../config/globals";
+import { showArticle } from "../../handlers/handlers_Articles";
 import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
 import {
   isItemSaved,
@@ -34,8 +35,6 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const node_dx = GUI_CONFIG.display.atom_compact_vizs_sizes.width;
   const node_dy = GUI_CONFIG.display.atom_compact_vizs_sizes.height;
-  // const path_link = configPaths.pages.ItemArticle;
-  // const path_link = configPaths.pages.ItemNetwork;
 
   let node;
   if (props.node.relation_name === group_name) {
@@ -71,6 +70,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
           saved_actionable={isItemSavedActivated(stores)(item.id)}
           saved_handler={onSaved(stores)(item.id)}
           edit_handler={onEditKnowbooks(stores)(item.id)}
+          top_handler={showArticle(stores, item.title, item.id)}
           CompactExtra={isMobile(stores)}
         />
       </foreignObject>

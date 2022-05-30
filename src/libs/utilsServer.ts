@@ -63,8 +63,13 @@ const scenarios: IScenarioStep[] = [
     text: "",
   },
   {
-    id: TScenarioStepID.item,
+    id: TScenarioStepID.itemCircle,
     url: configPaths.pages.ItemCircle + "?title=Albert+Einstein&id=Q937",
+    text: "",
+  },
+  {
+    id: TScenarioStepID.itemNetwork,
+    url: configPaths.pages.ItemNetwork + "?title=Albert+Einstein&id=Q937",
     text: "",
   },
   // {

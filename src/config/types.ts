@@ -55,7 +55,8 @@ export enum TScenarioStepID {
   knowbook = "knowbook",
   mostviewed = "mostviewed",
   search = "search",
-  item = "item",
+  itemCircle = "itemCircle",
+  itemNetwork = "itemNetwork",
   itemArticle = "itemArticle",
   language = "language",
   home = "home",
@@ -95,7 +96,7 @@ export enum initStateCat {
   core = "core",
   staticKnowbooksFull = "staticKnowbooksFull",
   userData = "userData",
-  Item = "Item",
+  itemRelated = "itemRelated",
 }
 
 export enum TUiStringStorage {
@@ -121,6 +122,7 @@ export enum TUiBooleanStorage {
   showLoading = "showLoading",
   showArticle = "showArticle",
   // ArticleSlideFetchingStarted = "ArticleSlideFetchingStarted",
+  renderGraphNetwork = "renderGraphNetwork",
 }
 
 export enum TUiNumberStorage {

@@ -12,6 +12,7 @@ import {
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import { useStores } from "../../src/stores/RootStoreHook";
 import ContentLoading from "../../src/components/ContentLoading";
+import { fetchRelatedItems } from "../../src/libs/helpersGraph";
 
 const ItemNetworkNoSSRDynamic = dynamic(
   () => import("../../src/components/ItemNetworkNoSSR"),
@@ -34,7 +35,14 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
 
   stores.uiStore.setSelectedAtom(item_id, item_title);
 
-  // stores.uiStore.setSelectedAtomId(item_id);
+  if (item_id !== stores.graphStore.rootItemId) {
+    stores.graphStore.setRootItemId(item_id);
+    fetchRelatedItems(item_id, item_title, stores);
+  }
+  if (stores.baseStore.initCompleted.itemRelated !== true) {
+    //Not yet initialyzed
+    return <ContentLoading stores={stores} />;
+  }
 
   return (
     <AppLayout stores={stores} titleSEO={item_title} isBodySVG={false}>

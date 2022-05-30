@@ -1,8 +1,12 @@
+import { NextRouter } from "next/router";
 import {
   eventT,
   TUiStringStorage,
   TUiBooleanStorage,
   IAtom,
+  configPaths,
+  TPages,
+  AtomID,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { ROOT_URL_WIKIPEDIA_REST } from "../config/configURLs";
@@ -48,20 +52,31 @@ export const showArticle =
   };
 
 export const showArticleBackNext =
-  (
-    stores: IStores,
-    selected_knowbook: string,
-    isStatic: boolean,
-    direction: number
-  ) =>
+  (stores: IStores, router: NextRouter, direction: number) =>
   (input: { event: eventT }): void => {
     if (direction !== -1 && direction !== 1) {
       return;
     }
 
-    const items: IAtom[] = isStatic
-      ? getKnowbookStaticAtomsList(selected_knowbook, stores)
-      : getKnowbookAtomsList(selected_knowbook, stores);
+    // const selected_knowbook = router.query.nameOrPeriod as string;
+    let items: IAtom[];
+    let selected: string;
+    if (router.pathname.includes(configPaths.pages.StaticKnowbook)) {
+      selected = router.query.nameOrPeriod as string;
+      items = getKnowbookStaticAtomsList(selected, stores);
+    } else if (router.pathname.includes(configPaths.pages.Knowbook)) {
+      selected = router.query.nameOrPeriod as string;
+      items = getKnowbookAtomsList(selected, stores);
+    } else if (
+      router.pathname.includes(configPaths.pages.ItemCircle) ||
+      router.pathname.includes(configPaths.pages.ItemNetwork)
+    ) {
+      selected = router.query.id as string;
+      const related_Ids: AtomID[] = stores.graphStore.relatedMapFlat.atomIds;
+      items = stores.baseStore.getHistoryItems([selected].concat(related_Ids));
+    } else {
+      return;
+    }
 
     if (items === undefined || items.length === 0) {
       return;

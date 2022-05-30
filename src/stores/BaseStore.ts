@@ -34,7 +34,7 @@ interface IInitState {
   [initStateCat.core]: boolean;
   [initStateCat.staticKnowbooksFull]: boolean;
   [initStateCat.userData]: boolean;
-  [initStateCat.Item]: boolean;
+  [initStateCat.itemRelated]: boolean;
 }
 
 export class BaseStore {
@@ -43,7 +43,7 @@ export class BaseStore {
     [initStateCat.core]: undefined,
     [initStateCat.staticKnowbooksFull]: undefined,
     [initStateCat.userData]: undefined,
-    [initStateCat.Item]: undefined,
+    [initStateCat.itemRelated]: undefined,
   };
 
   private $user: IUser | null = null;

@@ -20,7 +20,6 @@ import {
 import { IStores } from "../stores/RootStore";
 import { api_getItemsFromTitlesFromWebCleanImage_blocking } from "./apiItems";
 import { api_getRelatedFromWebWithoutImage } from "./apiRelated";
-import { isMobile } from "./helpersBase";
 
 export function setRelatedMap(root_itemId: AtomID, stores: IStores): void {
   const related: IRelatedAtom[] = stores.baseStore.related.get(root_itemId);
@@ -151,6 +150,11 @@ function runSimulation(width: number, height: number, stores: IStores): void {
   const forceIterations = 10;
   const forceAlphaMin = 0.001; //0.001 working well
 
+  stores.uiStore.setUiBooleanStorage(
+    TUiBooleanStorage.renderGraphNetwork,
+    false
+  );
+
   //Deep Copy, all other solutions didn't worked!
   const nodesClone = stores.graphStore.graph.nodes.map((el) => {
     return { ...el };
@@ -185,7 +189,6 @@ function runSimulation(width: number, height: number, stores: IStores): void {
     .on(
       "tick",
       // "end",
-      // action(
       () => {
         if (tick_count % 10 === 0) {
           //NEW
@@ -200,8 +203,10 @@ function runSimulation(width: number, height: number, stores: IStores): void {
         }
         tick_count = tick_count + 1;
       }
-      // )
     )
+    // .on("end", () => {
+    //   // To be completed
+    // })
     .alphaMin(forceAlphaMin) //To converge quickly, default is 0.001
     .alphaDecay(0.1);
   // .alphaDecay(0.05);
@@ -213,68 +218,22 @@ export function renderGraph(
   width: number,
   height: number
 ): void {
-  console.log("ok0");
-  const baseStore = stores.baseStore;
-  const lang = stores.baseStore.paramsPage.lang;
-  const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
-  let root_item: IAtom = stores.baseStore.getHistoryItem(root_itemId);
-
-  if (root_item === undefined) {
-    api_getItemsFromTitlesFromWebCleanImage_blocking(
-      stores.uiStore.selectedAtom.title,
-      lang,
-      exclusion_patterns_items
-    ).then((items) => {
-      stores.baseStore.setHistory(items);
-    });
-    return;
-  }
-
-  console.log("ok1");
-
-  console.log(root_itemId, stores.graphStore.rootItemId);
-
-  if (!baseStore.related.has(root_itemId)) {
-    console.log("ok2");
-    // stores.uiStore.setShowLoading(true);
-    stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
-    api_getRelatedFromWebWithoutImage(
-      root_item.id,
-      root_item.title,
-      lang,
-      exclusion_patterns_items
-    )
-      .then((relatedList: IRelatedAtomFull[]) => {
-        //With no duplicates by construction
-        stores.baseStore.setRelated(root_item.id, relatedList);
-        const relatedIds = relatedList.map((related) => {
-          return related.item.id;
-        });
-        if (!isMobile(stores)) {
-          for (const id of relatedIds) {
-            stores.baseStore.setGoodImageInHistoryItem(id);
-          }
-        }
-      })
-      .then(() => {
-        initGraph(root_itemId, stores, width / 2, height / 2);
-      })
-      .then(() => {
-        runSimulation(width / 2, height / 2, stores);
-        // stores.uiStore.setShowLoading(false);
-        stores.uiStore.setUiBooleanStorage(
-          TUiBooleanStorage.showLoading,
-          false
-        );
-      });
-  } else if (root_itemId !== stores.graphStore.rootItemId) {
-    console.log("ok3");
+  const render: boolean = stores.uiStore.getUiBooleanStorage(
+    TUiBooleanStorage.renderGraphNetwork
+  );
+  if (render) {
     initGraph(root_itemId, stores, width / 2, height / 2);
     runSimulation(width / 2, height / 2, stores);
+
+    // //Fetch missing images
+    const related_Ids: AtomID[] = stores.graphStore.relatedMapFlat.atomIds;
+    for (const id of related_Ids) {
+      stores.baseStore.setGoodImageInHistoryItem(id);
+    }
   }
 }
 
-export async function initializeGraphSVG(
+export async function fetchRelatedItems(
   root_itemId: AtomID,
   root_itemTitle: string,
   stores: IStores
@@ -283,7 +242,7 @@ export async function initializeGraphSVG(
   const lang = stores.baseStore.paramsPage.lang;
   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
 
-  stores.baseStore.setInitCompleted(initStateCat.Item, false);
+  stores.baseStore.setInitCompleted(initStateCat.itemRelated, false);
 
   let root_item: IAtom = stores.baseStore.getHistoryItem(root_itemId);
 
@@ -318,5 +277,77 @@ export async function initializeGraphSVG(
 
   stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, false);
 
-  stores.baseStore.setInitCompleted(initStateCat.Item, true);
+  stores.uiStore.setUiBooleanStorage(
+    TUiBooleanStorage.renderGraphNetwork,
+    true
+  );
+
+  stores.baseStore.setInitCompleted(initStateCat.itemRelated, true);
 }
+
+// export function renderGraph_to_be_deleted(
+//   root_itemId: AtomID,
+//   stores: IStores,
+//   width: number,
+//   height: number
+// ): void {
+//   console.log("ok0");
+//   const baseStore = stores.baseStore;
+//   const lang = stores.baseStore.paramsPage.lang;
+//   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
+//   let root_item: IAtom = stores.baseStore.getHistoryItem(root_itemId);
+
+//   if (root_item === undefined) {
+//     api_getItemsFromTitlesFromWebCleanImage_blocking(
+//       stores.uiStore.selectedAtom.title,
+//       lang,
+//       exclusion_patterns_items
+//     ).then((items) => {
+//       stores.baseStore.setHistory(items);
+//     });
+//     return;
+//   }
+
+//   console.log("ok1");
+
+//   console.log(root_itemId, stores.graphStore.rootItemId);
+
+//   if (!baseStore.related.has(root_itemId)) {
+//     console.log("ok2");
+//     // stores.uiStore.setShowLoading(true);
+//     stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
+//     api_getRelatedFromWebWithoutImage(
+//       root_item.id,
+//       root_item.title,
+//       lang,
+//       exclusion_patterns_items
+//     )
+//       .then((relatedList: IRelatedAtomFull[]) => {
+//         //With no duplicates by construction
+//         stores.baseStore.setRelated(root_item.id, relatedList);
+//         const relatedIds = relatedList.map((related) => {
+//           return related.item.id;
+//         });
+//         if (!isMobile(stores)) {
+//           for (const id of relatedIds) {
+//             stores.baseStore.setGoodImageInHistoryItem(id);
+//           }
+//         }
+//       })
+//       .then(() => {
+//         initGraph(root_itemId, stores, width / 2, height / 2);
+//       })
+//       .then(() => {
+//         runSimulation(width / 2, height / 2, stores);
+//         // stores.uiStore.setShowLoading(false);
+//         stores.uiStore.setUiBooleanStorage(
+//           TUiBooleanStorage.showLoading,
+//           false
+//         );
+//       });
+//   } else if (root_itemId !== stores.graphStore.rootItemId) {
+//     console.log("ok3");
+//     initGraph(root_itemId, stores, width / 2, height / 2);
+//     runSimulation(width / 2, height / 2, stores);
+//   }
+// }

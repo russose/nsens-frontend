@@ -32,7 +32,6 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
     <IconButton
       accessibilityLabel="wikipedia"
       size={size_icon}
-      // icon="view-type-list"
       icon={ICONS.WIKIPEDIA as any}
       iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
       bgColor="lightGray"
