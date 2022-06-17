@@ -165,8 +165,8 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     <Box
       height={props.sizes.height}
       width={props.sizes.width !== undefined ? props.sizes.width : undefined}
-      // borderStyle="shadow"
-      borderStyle="lg"
+      borderStyle="shadow"
+      // borderStyle="lg"
       rounding={rounding}
       display="flex"
       direction="column"
@@ -178,7 +178,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         padding={props.colorEdge === undefined ? 0 : 1}
         rounding={rounding}
       >
-        <Mask rounding={rounding} height="100%" width="100%">
+        <Mask rounding={rounding as RoundingT} height="100%" width="100%">
           {hasLink ? image_with_link(content) : image_only(content)}
         </Mask>
       </Box>

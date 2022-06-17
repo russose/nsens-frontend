@@ -10,7 +10,7 @@ interface IAppLayoutProps {
   children?: React.ReactNode;
   stores: IStores;
   titleSEO?: string;
-  isBodySVG?: boolean;
+  isBodySVG: boolean;
 }
 
 // const Media_ = observer(Media);

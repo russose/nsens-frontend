@@ -2,12 +2,7 @@ import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
 import AppLayout from "../../../src/components/layout/AppLayout";
-import {
-  configPaths,
-  IKnowbookStatic,
-  SVG_T,
-  TUiNumberStorage,
-} from "../../../src/config/globals";
+import { IKnowbookStatic } from "../../../src/config/globals";
 import {
   IPageStaticKnowbooks,
   I_getStaticPaths,
@@ -20,10 +15,14 @@ import {
 import { useStores } from "../../../src/stores/RootStoreHook";
 import { getRelatedItemsForItemsShuffleSized_Static } from "../../../src/libs/helpersRelated";
 import ContentLoading from "../../../src/components/ContentLoading";
-import SVGItem from "../../../src/components/SVGItem";
-import SVGKnowbook from "../../../src/components/SVGKnowbook";
-import SVGElementsInCircleWithSlider from "../../../src/components/SVGElementsInCircleWithSlider";
-import SVGKnowbookExternalShape from "../../../src/components/SVGKnowbookExternalShape";
+import CardAtomGrid from "../../../src/components/CardAtomGrid";
+import {
+  isItemSaved,
+  isItemSavedActivated,
+  onSaved,
+} from "../../../src/handlers/handlers_Saved";
+import { onEditKnowbooks } from "../../../src/handlers/handlers_Knowbooks";
+import HeaderTitle from "../../../src/components/HeaderTitle";
 
 const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   const stores = useStores();
@@ -44,7 +43,7 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
   }
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  const pathTarget = configPaths.pages.Home;
+  // const pathTarget = configPaths.pages.Home;
   const name_display = props.name_display;
 
   const items = knowbook.items;
@@ -58,47 +57,55 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
     amount_related_displayed
   );
 
-  const root_element: SVG_T = (
-    <SVGKnowbook
-      stores={stores}
-      id={knowbook.name}
-      title={knowbook.name_display}
-      image_url={stores.knowbookStore.getImageStaticKnowbook(knowbook.name)}
-      pathname={pathTarget}
-      queryObject={{}}
-      amount={0}
-      edit_handler={undefined}
-      delete_handler={undefined}
-    />
+  // const root_element: SVG_T = (
+  //   <SVGKnowbook
+  //     stores={stores}
+  //     id={knowbook.name}
+  //     title={knowbook.name_display}
+  //     image_url={stores.knowbookStore.getImageStaticKnowbook(knowbook.name)}
+  //     pathname={pathTarget}
+  //     queryObject={{}}
+  //     amount={0}
+  //     edit_handler={undefined}
+  //     delete_handler={undefined}
+  //   />
+  // );
+
+  // const elements: SVG_T[] = items.map((item, index) => {
+  //   return <SVGItem stores={stores} item={item} />;
+  // });
+
+  // const elements_related: SVG_T[] = related_items.map((item, index) => {
+  //   return <SVGItem stores={stores} item={item} />;
+  // });
+
+  const content = (
+    <>
+      <HeaderTitle stores={stores} title={name_display} />
+      <CardAtomGrid
+        id={"BestKnowbook"}
+        stores={stores}
+        atoms={items}
+        isItemSaved_handler={isItemSaved(stores)}
+        isItemSavedActionable_handler={isItemSavedActivated(stores)}
+        saved_handler={onSaved(stores)}
+        edit_handler={onEditKnowbooks(stores)}
+      />
+    </>
   );
 
-  const elements: SVG_T[] = items.map((item, index) => {
-    return <SVGItem stores={stores} item={item} />;
-  });
-
-  const elements_related: SVG_T[] = related_items.map((item, index) => {
-    return <SVGItem stores={stores} item={item} />;
-  });
-
   return (
-    <AppLayout stores={stores} titleSEO={name_display} isBodySVG={true}>
-      <SVGKnowbookExternalShape
-        size={
-          stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0) * 2 +
-          stores.baseStore.GUI_CONFIG.display.atom_sizes.height
-        }
-      />
-      <SVGElementsInCircleWithSlider
-        stores={stores}
-        id="BestKnowbook"
-        root_element={root_element}
-        closed={false}
-        elements_body_all_SVG_or_ItemIds={elements}
-        R0_large={stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0)}
-        amountElementsLevel={stores.uiStore.getUiNumberStorage(
-          TUiNumberStorage.SVGMaxElementCircle
-        )}
-      />
+    <AppLayout
+      stores={stores}
+      titleSEO={
+        stores.baseStore.GUI_CONFIG.language.SEO.title_description
+          .StaticKnowbook.title +
+        " " +
+        name_display
+      }
+      isBodySVG={false}
+    >
+      {content}
     </AppLayout>
   );
 };

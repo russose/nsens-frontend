@@ -6,8 +6,6 @@ import { isPage } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 import SVGDropdown from "./SVGDropdown";
 import SVGElementsInLine from "./SVGElementsInLine";
-import SVGKnowbooksFeatured from "./SVGKnowbooksFeatured";
-import SVGKnowbooksUser from "./SVGKnowbooksUser";
 
 interface IProps {
   stores: IStores;
@@ -37,25 +35,26 @@ const SVGHeader: React.FunctionComponent<IProps> = (props) => {
   }
 
   function headerElementFromID(id: THeaderElementIDs): SVG_T {
-    if (id === THeaderElementIDs.FeaturedKnowbooks) {
-      return (
-        <SVGKnowbooksFeatured
-          stores={props.stores}
-          R0_large={0}
-          amountElementsLevel={0}
-          closed={true}
-        />
-      );
-    } else if (id === THeaderElementIDs.UserKnowbooks) {
-      return (
-        <SVGKnowbooksUser
-          stores={props.stores}
-          R0_large={0}
-          amountElementsLevel={0}
-          closed={true}
-        />
-      );
-    } else if (id === THeaderElementIDs.Dropdown) {
+    // if (id === THeaderElementIDs.FeaturedKnowbooks) {
+    //   return (
+    //     <SVGKnowbooksFeatured
+    //       stores={props.stores}
+    //       R0_large={0}
+    //       amountElementsLevel={0}
+    //       closed={true}
+    //     />
+    //   );
+    // } else if (id === THeaderElementIDs.UserKnowbooks) {
+    //   return (
+    //     <SVGKnowbooksUser
+    //       stores={props.stores}
+    //       R0_large={0}
+    //       amountElementsLevel={0}
+    //       closed={true}
+    //     />
+    //   );
+    // } else
+    if (id === THeaderElementIDs.Dropdown) {
       return <SVGDropdown stores={props.stores} />;
     } else if (id === THeaderElementIDs.None) {
       return <></>;
@@ -64,20 +63,21 @@ const SVGHeader: React.FunctionComponent<IProps> = (props) => {
 
   let header: SVG_T[] = [<></>];
 
-  if (isPageMode(TPages.Home, TPageHeaderModes.homeFeaturedKnowbooks)) {
-    header[0] = headerElementFromID(THeaderElementIDs.UserKnowbooks);
-  } else if (isPageMode(TPages.Home, TPageHeaderModes.homeUserKnowbooks)) {
-    header[0] = headerElementFromID(THeaderElementIDs.FeaturedKnowbooks);
-  } else if (isPageMode(TPages.ItemCircle)) {
+  // if (isPageMode(TPages.Home, TPageHeaderModes.homeFeaturedKnowbooks)) {
+  //   header[0] = headerElementFromID(THeaderElementIDs.UserKnowbooks);
+  // } else if (isPageMode(TPages.Home, TPageHeaderModes.homeUserKnowbooks)) {
+  //   header[0] = headerElementFromID(THeaderElementIDs.FeaturedKnowbooks);
+  // } else
+  if (isPageMode(TPages.ItemCircle)) {
     header = [
-      headerElementFromID(THeaderElementIDs.FeaturedKnowbooks),
-      headerElementFromID(THeaderElementIDs.UserKnowbooks),
+      // headerElementFromID(THeaderElementIDs.FeaturedKnowbooks),
+      // headerElementFromID(THeaderElementIDs.UserKnowbooks),
       headerElementFromID(THeaderElementIDs.Dropdown),
     ];
   } else {
     header = [
-      headerElementFromID(THeaderElementIDs.FeaturedKnowbooks),
-      headerElementFromID(THeaderElementIDs.UserKnowbooks),
+      // headerElementFromID(THeaderElementIDs.FeaturedKnowbooks),
+      // headerElementFromID(THeaderElementIDs.UserKnowbooks),
     ];
   }
 

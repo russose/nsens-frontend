@@ -20,9 +20,10 @@ export const configDataIt: TconfigDataLanguage = {
   },
   SEO: {
     // canonical: "https://www.nsens.org/it/Mobile/About/",
-    title_page_base: "n.Sens - Esplora la conoscenza libera in un modo nuovo",
+    title_page_base:
+      "n.Sens - n.Sens aggiunge una nuova dimensione alla Wikipedia, esplorando visualmente la Conoscenza attraverso delle schede di Wikipedia. Un viaggio illimitato, di scoperta in scoperta.",
     description_page_base:
-      "n.Sens - Aggiungi una nuova dimenSione a Wikipedia ed esplora visualmente la Conoscenza",
+      "n.Sens - n.Sens aggiunge una nuova dimensione alla Wikipedia, esplorando visualmente la Conoscenza attraverso delle schede di Wikipedia. Un viaggio illimitato, di scoperta in scoperta.",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -36,6 +37,7 @@ export const configDataIt: TconfigDataLanguage = {
       },
       [TPages.ItemCircle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
+      [TPages.Knowbooks]: { title: "", description: "" },
       [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
 
@@ -53,27 +55,26 @@ export const configDataIt: TconfigDataLanguage = {
     },
   },
   about: {
-    scenario_texts: {
-      [TScenarioStepID.navigationBall]:
-        "Gira la pallina blu per scorrere gli elementi",
-      [TScenarioStepID.knowbook]:
-        "Crea collezioni personalizzate con le tue scoperte usando: ",
-      [TScenarioStepID.mostviewed]:
-        "Sfoglia gli elementi più popolari nella collezione quotidiana",
-      [TScenarioStepID.search]: "Trova velocemente ogni elementi",
-      [TScenarioStepID.itemCircle]:
-        "Scorre e esplora le relazioni e fai nuove scoperte",
-      [TScenarioStepID.itemArticle]:
-        "Accedi al contenuti Wikipedia di ogni elemento con: ",
-      [TScenarioStepID.language]: "Più lingue disponibili",
-      [TScenarioStepID.home]:
-        "Buon viaggio nella nostra conoscenza infinita...",
-    },
+    // scenario_texts: {
+    //   [TScenarioStepID.Home]: "Gira la pallina blu per scorrere gli elementi",
+    //   [TScenarioStepID.knowbook]:
+    //     "Crea collezioni personalizzate con le tue scoperte usando: ",
+    //   [TScenarioStepID.mostviewed]:
+    //     "Sfoglia gli elementi più popolari nella collezione quotidiana",
+    //   [TScenarioStepID.search]: "Trova velocemente ogni elementi",
+    //   [TScenarioStepID.itemCircle]:
+    //     "Scorre e esplora le relazioni e fai nuove scoperte",
+    //   [TScenarioStepID.itemArticle]:
+    //     "Accedi al contenuti Wikipedia di ogni elemento con: ",
+    //   [TScenarioStepID.language]: "Più lingue disponibili",
+    //   [TScenarioStepID.home]:
+    //     "Buon viaggio nella nostra conoscenza infinita...",
+    // },
   },
   buttons: {
     [TButtonID.BACK]: {
       label: "Indietro",
-      icon: ICONS.BACK,
+      icon: CUSTOM_ICONS.BACK,
     },
     [TButtonID.HOME]: {
       label: "Home",
@@ -106,6 +107,14 @@ export const configDataIt: TconfigDataLanguage = {
     [TButtonID.NETWORK]: {
       label: "Rete",
       icon: CUSTOM_ICONS.NETWORK,
+    },
+    [TButtonID.NETWORKFLAT]: {
+      label: "Elenco",
+      icon: CUSTOM_ICONS.NETWORKFLAT,
+    },
+    [TButtonID.KNOWBOOKS]: {
+      label: "collezioni",
+      icon: ICONS.KNOWBOOKS,
     },
     [TButtonID.KNOWBOOK]: {
       label: "Overview",

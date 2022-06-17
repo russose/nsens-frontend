@@ -10,15 +10,14 @@ import {
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import ContentLoading from "../../src/components/ContentLoading";
-import {
-  SVG_T,
-  TPageHeaderModes,
-  TPages,
-  TUiNumberStorage,
-} from "../../src/config/globals";
-import SVGKnowbooksFeatured from "../../src/components/SVGKnowbooksFeatured";
-import SVGKnowbooksUser from "../../src/components/SVGKnowbooksUser";
 import { makeScreenshoots } from "../../src/libs/utilsServer";
+import CardAtomGrid from "../../src/components/CardAtomGrid";
+import {
+  isItemSaved,
+  isItemSavedActivated,
+  onSaved,
+} from "../../src/handlers/handlers_Saved";
+import { onEditKnowbooks } from "../../src/handlers/handlers_Knowbooks";
 
 const Home: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -31,36 +30,19 @@ const Home: React.FunctionComponent<IPage> = (props) => {
     return <ContentLoading stores={stores} />;
   }
 
-  let content: SVG_T;
-  if (
-    stores.baseStore.isLogged &&
-    stores.uiStore.isPageHeaderMode(
-      TPages.Home,
-      TPageHeaderModes.homeUserKnowbooks
-    )
-  ) {
-    content = (
-      <SVGKnowbooksUser
+  const content = (
+    <>
+      <CardAtomGrid
+        id={"Home"}
         stores={stores}
-        R0_large={stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0)}
-        amountElementsLevel={stores.uiStore.getUiNumberStorage(
-          TUiNumberStorage.SVGMaxElementCircle
-        )}
-        closed={false}
+        atoms={stores.baseStore.feedItemsToDisplay}
+        isItemSaved_handler={isItemSaved(stores)}
+        isItemSavedActionable_handler={isItemSavedActivated(stores)}
+        saved_handler={onSaved(stores)}
+        edit_handler={onEditKnowbooks(stores)}
       />
-    );
-  } else {
-    content = (
-      <SVGKnowbooksFeatured
-        stores={stores}
-        R0_large={stores.uiStore.getUiNumberStorage(TUiNumberStorage.R0)}
-        amountElementsLevel={stores.uiStore.getUiNumberStorage(
-          TUiNumberStorage.SVGMaxElementCircle
-        )}
-        closed={false}
-      />
-    );
-  }
+    </>
+  );
 
   return (
     <>
@@ -69,7 +51,7 @@ const Home: React.FunctionComponent<IPage> = (props) => {
         titleSEO={
           stores.baseStore.GUI_CONFIG.language.SEO.title_description.Home.title
         }
-        isBodySVG={true}
+        isBodySVG={false}
       >
         {content}
       </AppLayout>

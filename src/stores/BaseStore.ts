@@ -209,16 +209,16 @@ export class BaseStore {
       this.$GUI_CONFIG.display = configDataDesktop;
       this.$GUI_CONFIG.display.atom_sizes.lgColumn =
         configDataSpecialScreen.large.atom_sizes_column;
-      this.$GUI_CONFIG.display.knowbook_sizes.lgColumn =
-        configDataSpecialScreen.large.knowbook_sizes_column;
+      // this.$GUI_CONFIG.display.knowbook_sizes.lgColumn =
+      //   configDataSpecialScreen.large.knowbook_sizes_column;
     } else if (display === TDisplay.extra) {
       this.$GUI_CONFIG.display = configDataDesktop;
       // GUI_CONFIG__.display.About.features.lgColumn =
       //   configGUISpecialScreen.configDataSpecialScreen.large.landing_features_column;
       this.$GUI_CONFIG.display.atom_sizes.lgColumn =
         configDataSpecialScreen.extra_large.atom_sizes_column;
-      this.$GUI_CONFIG.display.knowbook_sizes.lgColumn =
-        configDataSpecialScreen.extra_large.knowbook_sizes_column;
+      // this.$GUI_CONFIG.display.knowbook_sizes.lgColumn =
+      //   configDataSpecialScreen.extra_large.knowbook_sizes_column;
     }
 
     // this.$GUI_CONFIG.currentDisplay = display;

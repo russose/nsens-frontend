@@ -1,8 +1,9 @@
 import React from "react";
-import { Tlanguage, CONFIG_ENV } from "../config/globals";
+import { Tlanguage, CONFIG_ENV, configPaths } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { getKnowbookStaticAtomsList } from "../libs/helpersSavedKnowbooks";
 
 interface IHeaderTitleProps {
   stores: IStores;
@@ -19,12 +20,26 @@ const HeaderSEO: React.FunctionComponent<IHeaderTitleProps> = (props) => {
     title_page = props.title + " | " + title_page;
   }
 
-  let description = GUI_CONFIG.language.SEO.description_page_base;
-  // Object.values(GUI_CONFIG.language.about.features).forEach(
-  //   (item: JSONDataT) => {
-  //     description = description + " - " + item.description;
-  //   }
-  // );
+  let description =
+    title_page + " - " + GUI_CONFIG.language.SEO.description_page_base;
+
+  if (router.pathname.includes(configPaths.pages.StaticKnowbook)) {
+    const staticKnowbookID = router.query.nameOrPeriod as string;
+    getKnowbookStaticAtomsList(staticKnowbookID, props.stores).forEach(
+      (item) => {
+        description = description + " | " + item.title;
+      }
+    );
+  }
+
+  if (router.pathname.includes(configPaths.pages.Knowbooks)) {
+    const staticKnowbookIDList: string[] = Array.from(
+      props.stores.knowbookStore.staticKnowbooks.keys()
+    );
+    staticKnowbookIDList.forEach((staticKnowbookID) => {
+      description = description + " | " + staticKnowbookID;
+    });
+  }
 
   // console.log(description);
 

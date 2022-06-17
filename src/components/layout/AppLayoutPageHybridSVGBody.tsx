@@ -2,7 +2,7 @@ import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { configGeneral, IPosition, SVG_T } from "../../config/globals";
-import { initWhenResized, isMobile } from "../../libs/helpersBase";
+import { isMobile } from "../../libs/helpersBase";
 import { isFirefox } from "../../libs/utils";
 import { IStores } from "../../stores/RootStore";
 import SVGElementsInPositionMatrix from "../SVGElementsInPositionMatrix";
@@ -57,11 +57,11 @@ const AppLayoutPageHybridSVGBody: React.FunctionComponent<IProps> = (props) => {
   elements.push(header);
   positions.push(header_position);
 
-  if (typeof window !== "undefined") {
-    window.onresize = () => {
-      initWhenResized(props.stores, window);
-    };
-  }
+  // if (typeof window !== "undefined") {
+  //   window.onresize = () => {
+  //     initWhenResized(props.stores, window);
+  //   };
+  // }
 
   return (
     <Box>

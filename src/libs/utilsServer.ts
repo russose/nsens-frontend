@@ -39,9 +39,15 @@ export async function writeFileJson(
 
 const scenarios: IScenarioStep[] = [
   {
-    id: TScenarioStepID.navigationBall,
+    id: TScenarioStepID.home,
     url: configPaths.pages.Home,
     text: "",
+  },
+  {
+    id: TScenarioStepID.knowbooks,
+    url: configPaths.pages.Knowbooks,
+    text: "",
+    // additionnal_element: knowbookIcons,
   },
   {
     id: TScenarioStepID.knowbook,
@@ -138,6 +144,13 @@ export async function makeScreenshoots(): Promise<void> {
         language,
         scenarioStep.id,
         screen.name
+      );
+
+      //Write a placeholder to avoid simultanous generation
+      await writeFile(
+        pathScreenshots(rootPath, scenarioStep, isMobile, language),
+        "work in progress",
+        "utf8"
       );
 
       await makeOneScreenshoot(

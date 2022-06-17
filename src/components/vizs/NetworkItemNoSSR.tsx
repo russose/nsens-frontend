@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IStores } from "../stores/RootStore";
-import NetworkZoomable from "./vizs/NetworkZoomable";
+import { IStores } from "../../stores/RootStore";
+import NetworkZoomable from "./NetworkZoomable";
 
 function convertStringToNumberWithoutLast(
   original: string,
@@ -11,13 +11,15 @@ function convertStringToNumberWithoutLast(
   return result;
 }
 
-interface ItemNetworkNoSSR {
+interface INetworkItemNoSSR {
   stores: IStores;
   item_title: string;
   item_id: string;
 }
 
-const ItemNetworkNoSSR: React.FunctionComponent<ItemNetworkNoSSR> = (props) => {
+const NetworkItemNoSSR: React.FunctionComponent<INetworkItemNoSSR> = (
+  props
+) => {
   const stores = props.stores;
 
   stores.baseStore.setscreenNoSSR();
@@ -46,4 +48,4 @@ const ItemNetworkNoSSR: React.FunctionComponent<ItemNetworkNoSSR> = (props) => {
   );
 };
 
-export default observer(ItemNetworkNoSSR);
+export default observer(NetworkItemNoSSR);

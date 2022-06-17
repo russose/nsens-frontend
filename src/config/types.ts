@@ -53,6 +53,7 @@ export interface IScenarioStep {
 
 export enum TScenarioStepID {
   knowbook = "knowbook",
+  knowbooks = "knowbooks",
   mostviewed = "mostviewed",
   search = "search",
   itemCircle = "itemCircle",
@@ -60,7 +61,6 @@ export enum TScenarioStepID {
   itemArticle = "itemArticle",
   language = "language",
   home = "home",
-  navigationBall = "navigationBall",
 }
 
 export enum TPages {
@@ -71,17 +71,18 @@ export enum TPages {
   ChangePassword = "ChangePassword",
   ItemNetwork = "ItemNetwork",
   ItemCircle = "ItemCircle",
+  ItemFlat = "ItemFlat",
 
+  Knowbooks = "Knowbooks",
   StaticKnowbook = "StaticKnowbook",
-
   Knowbook = "Knowbook",
   KnowbookSpecial = "KnowbookSpecial",
   // ArticleSlide = "ArticleSlide",
 }
 
 export enum TPageHeaderModes {
-  homeFeaturedKnowbooks = "homeFeaturedKnowbooks",
-  homeUserKnowbooks = "homeUserKnowbooks",
+  // homeFeaturedKnowbooks = "homeFeaturedKnowbooks",
+  // homeUserKnowbooks = "homeUserKnowbooks",
   itemAllRelated = "itemAllRelated",
   none = "none",
 }
@@ -121,7 +122,6 @@ export enum TUiBooleanStorage {
   renameKnowbookOpened = "renameKnowbookOpened",
   showLoading = "showLoading",
   showArticle = "showArticle",
-  // ArticleSlideFetchingStarted = "ArticleSlideFetchingStarted",
   renderGraphNetwork = "renderGraphNetwork",
 }
 
@@ -163,7 +163,7 @@ export interface ICardKnowProps {
   pathname: string;
   queryObject: any;
   amount: number | string;
-  edit_handler: handlerT;
+  rename_handler: handlerT;
   delete_handler: handlerT;
 }
 
@@ -181,6 +181,9 @@ export enum TButtonID {
   EDIT = "EDIT",
   NETWORK = "NETWORK",
   CIRCLE = "CIRCLE",
+  NETWORKFLAT = "NETWORKFLAT",
+
+  KNOWBOOKS = "KNOWBOOKS",
   KNOWBOOK = "KNOWBOOK",
   ARTICLE = "ARTICLE",
   SEPARATOR = "SEPARATOR",

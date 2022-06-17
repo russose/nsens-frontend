@@ -5,7 +5,7 @@ import {
   api_getValidationNewPassword,
   api_setNewPassword,
 } from "../libs/apiUser";
-import { goPage } from "../libs/helpersBase";
+import { goPage, updateHome } from "../libs/helpersBase";
 
 /*******************Change Password*************************** */
 
@@ -67,6 +67,7 @@ export const onChangePassword_button =
         )
       )
         .then(() => {
+          updateHome(stores);
           goPage(
             stores,
             stores.baseStore.paramsPage,

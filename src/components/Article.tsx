@@ -62,7 +62,8 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
         alignItems="center"
       >
         {source}
-        <Box column={6}>
+        {/* <Box column={6}> */}
+        <Box column={7} smColumn={5} mdColumn={4} lgColumn={4}>
           <MenuBarArticle stores={props.stores} rounding={rounding} />
         </Box>
       </Box>

@@ -20,6 +20,9 @@ export type INetworkFlatProps = {
 
 const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
   const relatedMap = props.stores.graphStore.relatedMap;
+  for (const itemId of props.stores.graphStore.relatedMapFlat.atomIds) {
+    props.stores.baseStore.setGoodImageInHistoryItem(itemId);
+  }
   return (
     <Box>
       {Array.from(relatedMap).map((key_value) => {

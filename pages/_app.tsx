@@ -2,7 +2,7 @@ import "gestalt/dist/gestalt.css";
 import "../styles.css";
 import { configure } from "mobx";
 import { enableStaticRendering, observer } from "mobx-react-lite";
-import { AppProps } from "next/app";
+import { AppProps, NextWebVitalsMetric } from "next/app";
 import React from "react";
 import { ContextStores } from "../src/stores/RootStoreHook";
 import rootStore from "../src/stores/RootStore";
@@ -34,5 +34,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
+// export function reportWebVitals(metric: NextWebVitalsMetric) {
+//   console.log(metric.name, metric.value);
+// }
 
 export default observer(MyApp);

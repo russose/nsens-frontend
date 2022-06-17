@@ -100,10 +100,10 @@ export class UIStore {
   }
 
   initPageHeaderMode(): void {
-    this.$pageHeaderMode.set(
-      TPages.Home,
-      TPageHeaderModes.homeFeaturedKnowbooks
-    );
+    // this.$pageHeaderMode.set(
+    //   TPages.Home,
+    //   TPageHeaderModes.homeFeaturedKnowbooks
+    // );
     this.$pageHeaderMode.set(
       TPages.ItemCircle,
       TPageHeaderModes.itemAllRelated

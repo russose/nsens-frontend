@@ -10,13 +10,14 @@ import {
   TUiStringStorage,
   configGeneral,
   initStateCat,
+  AtomID,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
   api_getItemsFeaturedFromWebWithoutImage,
   api_searchFromWebWithoutImage,
 } from "./apiItems";
-import { DateToStringWithZero, entierAleatoire, hasTouchScreen } from "./utils";
+import { DateToStringWithZero, hasTouchScreen, shuffleArray } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
   const result: boolean = stores.baseStore.currentDisplay === TDisplay.mobile;
@@ -101,9 +102,13 @@ export async function initializeMostviewed(stores: IStores): Promise<void> {
   fetchNewMostviewed(stores)
     .then((items: IAtom[]) => {
       stores.baseStore.setMostviewed(items);
-      for (const item of items.slice(0, 1)) {
-        stores.baseStore.setGoodImageInHistoryItem(item.id);
-      }
+      //Force feed update when fetchNewMostviewed completed (otherwise first init fails)
+      setFeedForHome(stores);
+
+      // for (const item of items.slice(0, 1)) {
+      //   stores.baseStore.setGoodImageInHistoryItem(item.id);
+      //   console.log("ok_most3");
+      // }
     })
     .catch(() => {
       // console.log("error in initializeMostviewed");
@@ -122,7 +127,6 @@ export function setFeedFromSearch(
 
   api_searchFromWebWithoutImage(searchPattern, lang, exclusion_patterns_items)
     .then((atoms) => {
-      // stores.baseStore.setModeFeedDisplayedIsSearch(true);
       stores.baseStore.initAmountFeedDisplayed();
       stores.baseStore.clearFeed();
       stores.baseStore.setFeed(atoms);
@@ -132,67 +136,67 @@ export function setFeedFromSearch(
     });
 }
 
-// export function updateHome(stores: IStores): void {
-//   // stores.baseStore.setModeFeedDisplayedIsSearch(false);
+export function updateHome(stores: IStores): void {
+  stores.baseStore.initAmountFeedDisplayed();
+  stores.baseStore.clearFeed();
 
-//   stores.baseStore.initAmountFeedDisplayed();
-//   stores.baseStore.clearFeed();
+  setFeedForHome(stores);
+}
 
-//   // setFeedFromMostviewedAndRelated(stores);
-// }
+export function setFeedForHome(stores: IStores): void {
+  const mixedIds: AtomID[] = Mix2Array_main_minoritaire(
+    shuffleArray(stores.baseStore.mostviewedIds),
+    shuffleArray(
+      Array.from(stores.knowbookStore.itemsInStaticKnowbooksForHome)
+    ),
+    configGeneral.display.amount_vitalKnowbook_for_each_mostview
+  );
 
-// export function setFeedFromMostviewedAndRelated(stores: IStores): void {
-//   const mixedIds: AtomID[] = Mix2Array_main_minoritaire(
-//     stores.baseStore.mostviewedIds,
-//     shuffleArray(stores.baseStore.allRelatedIdsForHome),
-//     configGeneral.display.amount_related_for_each_mostview
-//   );
+  // if (mixedIds.length === stores.baseStore.feedItemsToDisplay.length) {
+  //   stores.baseStore.setIncreaseFeedDisplayed(false);
+  // }
 
-//   if (mixedIds.length === stores.baseStore.feedItemsToDisplay.length) {
-//     stores.baseStore.setIncreaseFeedDisplayed(false);
-//   }
+  const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
 
-//   const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
+  stores.baseStore.setFeed(mixedItems);
+}
 
-//   stores.baseStore.setFeed(mixedItems);
-// }
+export function Mix2Array_main_minoritaire(
+  main: AtomID[],
+  second: AtomID[],
+  increment: number
+): AtomID[] {
+  if (main.length === 0) {
+    return [];
+  }
 
-// export function Mix2Array_main_minoritaire(
-//   main: AtomID[],
-//   second: AtomID[],
-//   increment: number
-// ): AtomID[] {
-//   if (main.length === 0) {
-//     return [];
-//   }
+  let mixed: AtomID[] = [];
+  let ix_1 = 0;
+  let ix_2 = 0;
 
-//   let mixed: AtomID[] = [];
-//   let ix_1 = 0;
-//   let ix_2 = 0;
+  while (ix_2 + increment <= second.length) {
+    let newMain: AtomID[];
+    if (ix_1 < main.length) {
+      newMain = [main[ix_1]];
+    } else {
+      newMain = [];
+    }
 
-//   while (ix_2 + increment <= second.length) {
-//     let newMain: AtomID[];
-//     if (ix_1 < main.length) {
-//       newMain = [main[ix_1]];
-//     } else {
-//       newMain = [];
-//     }
+    const newElements: AtomID[] = shuffleArray(
+      second.slice(ix_2, ix_2 + increment).concat(newMain)
+    );
 
-//     const newElements: AtomID[] = shuffleArray(
-//       second.slice(ix_2, ix_2 + increment).concat(newMain)
-//     );
+    mixed = mixed.concat(newElements);
+    ix_1 = ix_1 + 1;
+    ix_2 = ix_2 + increment;
+  }
 
-//     mixed = mixed.concat(newElements);
-//     ix_1 = ix_1 + 1;
-//     ix_2 = ix_2 + increment;
-//   }
+  if (main.slice(ix_1).length !== 0) {
+    mixed = mixed.concat(main.slice(ix_1));
+  }
 
-//   if (main.slice(ix_1).length !== 0) {
-//     mixed = mixed.concat(main.slice(ix_1));
-//   }
-
-//   return mixed;
-// }
+  return mixed;
+}
 
 // export function Mix2Array_main_majoritaire(
 //   main: AtomID[],
@@ -265,41 +269,41 @@ export function goUserHandler(stores: IStores) {
   };
 }
 
-export function goRandomStaticKnowbook(stores: IStores) {
-  const staticKnowbooksName: string[] = [
-    ...Array.from(stores.knowbookStore.staticKnowbooks.keys()),
-  ];
-  const name =
-    staticKnowbooksName[entierAleatoire(0, staticKnowbooksName.length - 1)];
+// export function goRandomStaticKnowbook(stores: IStores) {
+//   const staticKnowbooksName: string[] = [
+//     ...Array.from(stores.knowbookStore.staticKnowbooks.keys()),
+//   ];
+//   const name =
+//     staticKnowbooksName[entierAleatoire(0, staticKnowbooksName.length - 1)];
 
-  goPage(
-    stores,
-    stores.baseStore.paramsPage,
-    configPaths.pages.StaticKnowbook,
-    { nameOrPeriod: name },
-    false
-  );
-}
+//   goPage(
+//     stores,
+//     stores.baseStore.paramsPage,
+//     configPaths.pages.StaticKnowbook,
+//     { nameOrPeriod: name },
+//     false
+//   );
+// }
 
-export function goRandomStaticKnowbookWhenHome(
-  stores: IStores,
-  isHome: boolean
-) {
-  if (!isHome || configGeneral.demoModeForScreenshoots) {
-    return;
-  }
+// export function goRandomStaticKnowbookWhenHome(
+//   stores: IStores,
+//   isHome: boolean
+// ) {
+//   if (!isHome || configGeneral.demoModeForScreenshoots) {
+//     return;
+//   }
 
-  const staticKnowbooksName: string[] = [
-    ...Array.from(stores.knowbookStore.staticKnowbooks.keys()),
-  ];
-  const name =
-    staticKnowbooksName[entierAleatoire(0, staticKnowbooksName.length - 1)];
+//   const staticKnowbooksName: string[] = [
+//     ...Array.from(stores.knowbookStore.staticKnowbooks.keys()),
+//   ];
+//   const name =
+//     staticKnowbooksName[entierAleatoire(0, staticKnowbooksName.length - 1)];
 
-  goPage(
-    stores,
-    stores.baseStore.paramsPage,
-    configPaths.pages.StaticKnowbook,
-    { nameOrPeriod: name },
-    false
-  );
-}
+//   goPage(
+//     stores,
+//     stores.baseStore.paramsPage,
+//     configPaths.pages.StaticKnowbook,
+//     { nameOrPeriod: name },
+//     false
+//   );
+// }

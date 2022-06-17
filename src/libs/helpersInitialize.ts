@@ -9,9 +9,6 @@ import {
   KnowbookID,
   configGeneral,
   TUiBooleanStorage,
-  TUiStringStorage,
-  TPages,
-  TPageHeaderModes,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
@@ -20,7 +17,7 @@ import {
   api_getStaticKnowbookWithItemsLocal,
 } from "./apiItems";
 import { api_getUser, api_login } from "./apiUser";
-import { initializeMostviewed } from "./helpersBase";
+import { initializeMostviewed, updateHome } from "./helpersBase";
 import { readRelatedStringFromItem } from "./helpersRelated";
 
 export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
@@ -36,7 +33,6 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       stores.savedStore.init();
       stores.uiStore.init();
 
-      // stores.baseStore.setscreenNoSSR();
       await stores.baseStore.setParamsPageAndGUICONFIGFromParamsPageData(
         paramsPage
       );
@@ -46,18 +42,15 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       stores.baseStore.setGUICONFIGFromDisplay(TDisplay.mobile);
 
       //MostViewed
-      initializeMostviewed(stores);
-
+      await initializeMostviewed(stores);
       //Static knowbooks Extracts (small less blocking)
       await initializeStaticKnowbooksExtract(stores);
-
-      // goRandomStaticKnowbookWhenHome(stores, isHome);
+      updateHome(stores);
 
       await initDemo(stores);
 
       stores.baseStore.setInitCompleted(initStateCat.core, true);
       /************************************************************/
-      // stores.uiStore.setShowLoading(false);
       stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, false);
     } else if (stores.baseStore.initCompleted.core !== true) {
       return;
@@ -72,10 +65,10 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       // Saved Items and Knowbooks
       if (stores.baseStore.isLogged) {
         //Init PageHeaderMode
-        stores.uiStore.setPageHeaderMode(
-          TPages.Home,
-          TPageHeaderModes.homeUserKnowbooks
-        );
+        // stores.uiStore.setPageHeaderMode(
+        //   TPages.Home,
+        //   TPageHeaderModes.homeUserKnowbooks
+        // );
 
         const helpersInitializeLogged = await import(
           "./helpersInitializeLogged"
@@ -190,6 +183,9 @@ export async function initializeStaticKnowbooksExtract(stores: IStores) {
       items: staticKnowbooks_extract.items,
     };
     stores.knowbookStore.setStaticKnowbooks(knowbook.name, knowbook);
+    //Force feed update when api_getAllStaticKnowbooksExtractWithItemsLocal completed (otherwise first init fails)
+    // Issue here????
+    //setFeedForHome(stores);
 
     stores.baseStore.setHistory(knowbook.items);
   }

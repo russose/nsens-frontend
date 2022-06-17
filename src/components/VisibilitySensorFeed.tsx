@@ -5,6 +5,7 @@ import { IStores } from "../stores/RootStore";
 import { Waypoint } from "react-waypoint";
 import { useRouter } from "next/router";
 import { configPaths } from "../config/globals";
+import { isHome } from "../libs/helpersBase";
 
 interface IVisibilitySensorFeedProps {
   stores: IStores;
@@ -15,7 +16,7 @@ const VisibilitySensorFeed: React.FunctionComponent<
 > = (props) => {
   const router = useRouter();
 
-  if (!router.route.includes(configPaths.pages.Search)) {
+  if (!router.route.includes(configPaths.pages.Search) && !isHome(router)) {
     return <></>;
   }
 

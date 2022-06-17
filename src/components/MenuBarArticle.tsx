@@ -52,6 +52,19 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
       onClick: showArticleBackNext(props.stores, router, 1),
     },
     {
+      Id: TButtonID.EDIT,
+      onClick: onEditKnowbooks(stores)(stores.uiStore.selectedAtom.id),
+      hidden: !isItemSaved(stores)(stores.uiStore.selectedAtom.id),
+    },
+    {
+      Id: TButtonID.SAVE,
+      onClick: onSaved(stores)(stores.uiStore.selectedAtom.id),
+      disabled: !isItemSavedActivated(stores)(stores.uiStore.selectedAtom.id),
+      iconColor: isItemSaved(stores)(stores.uiStore.selectedAtom.id)
+        ? configGeneral.colors.iconColorDefaultSelected
+        : configGeneral.colors.iconColorDefaultNotSelected,
+    },
+    {
       Id: TButtonID.NETWORK,
       // hidden: !router.pathname.includes(configPaths.pages.ItemCircle),
       onClick: (input: { event: eventT }) => {
@@ -92,17 +105,23 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
       },
     },
     {
-      Id: TButtonID.EDIT,
-      onClick: onEditKnowbooks(stores)(stores.uiStore.selectedAtom.id),
-      hidden: !isItemSaved(stores)(stores.uiStore.selectedAtom.id),
-    },
-    {
-      Id: TButtonID.SAVE,
-      onClick: onSaved(stores)(stores.uiStore.selectedAtom.id),
-      disabled: !isItemSavedActivated(stores)(stores.uiStore.selectedAtom.id),
-      iconColor: isItemSaved(stores)(stores.uiStore.selectedAtom.id)
-        ? configGeneral.colors.iconColorDefaultSelected
-        : configGeneral.colors.iconColorDefaultNotSelected,
+      Id: TButtonID.NETWORKFLAT,
+      onClick: (input: { event: eventT }) => {
+        stores.uiStore.setUiBooleanStorage(
+          TUiBooleanStorage.showArticle,
+          false
+        );
+        goPage(
+          props.stores,
+          props.stores.baseStore.paramsPage,
+          configPaths.pages.ItemFlat,
+          {
+            title: props.stores.uiStore.selectedAtom.title,
+            id: props.stores.uiStore.selectedAtom.id,
+          }
+        );
+        input.event.preventDefault();
+      },
     },
   ];
 

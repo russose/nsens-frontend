@@ -171,7 +171,18 @@ export function pathScreenshots(
 }
 
 export function path_link(id: AtomID, stores: IStores): string {
-  return configPaths.pages.ItemCircle;
+  if (
+    stores.baseStore.screen === undefined ||
+    stores.baseStore.screen.height === undefined
+  ) {
+    return configPaths.pages.ItemCircle;
+  }
+
+  if (stores.baseStore.screen.height <= 480) {
+    return configPaths.pages.ItemFlat;
+  } else {
+    return configPaths.pages.ItemCircle;
+  }
 }
 
 export function hasTouchScreen(window: any): boolean {

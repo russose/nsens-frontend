@@ -11,7 +11,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
   const colorEdge = configGeneral.colors.knowbook_edge_color;
   const color_image = configGeneral.colors.knowbook_color_image;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
-  const display_edit_icon = props.edit_handler === undefined ? false : true;
+  const display_edit_icon = props.rename_handler === undefined ? false : true;
   const display_delete_icon =
     props.amount === 0 && props.delete_handler !== undefined ? true : false;
 
@@ -41,7 +41,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
             icon="clear"
             iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
             size={size_icon}
-            onClick={props.delete_handler}
+            onClick={props.delete_handler(props.id)}
           />
         )}
       </Box>
@@ -53,7 +53,7 @@ const CardKnow: React.FunctionComponent<ICardKnowProps> = (props) => {
             icon="edit"
             iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
             size={size_icon}
-            onClick={props.edit_handler}
+            onClick={props.rename_handler(props.id)}
           />
         )}
       </Box>

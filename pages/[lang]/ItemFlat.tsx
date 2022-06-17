@@ -12,7 +12,8 @@ import { initializeApp } from "../../src/libs/helpersInitialize";
 import { useStores } from "../../src/stores/RootStoreHook";
 import ContentLoading from "../../src/components/ContentLoading";
 import { fetchRelatedItems } from "../../src/libs/helpersGraph";
-import NetworkItemNoSSR from "../../src/components/vizs/NetworkItemNoSSR";
+import NetworkFlat from "../../src/components/vizs/NetworkFlat";
+import HeaderTitle from "../../src/components/HeaderTitle";
 
 const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -41,11 +42,8 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
 
   return (
     <AppLayout stores={stores} titleSEO={item_title} isBodySVG={false}>
-      <NetworkItemNoSSR
-        stores={stores}
-        item_title={item_title}
-        item_id={item_id}
-      />
+      <HeaderTitle stores={stores} title={item_title} />
+      <NetworkFlat rootItemId={item_id} stores={stores} />
     </AppLayout>
   );
 };

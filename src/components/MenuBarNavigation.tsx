@@ -8,9 +8,10 @@ import {
   IButton,
   RoundingT,
   SizeT,
+  TPages,
 } from "../config/globals";
 import { TButtonID } from "../config/globals";
-import { goPage, isMobile } from "../libs/helpersBase";
+import { goPage, isMobile, updateHome } from "../libs/helpersBase";
 
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./MenuBarButtonLayout";
@@ -31,6 +32,14 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
   const buttons: IButton[] = [
     {
       Id: TButtonID.HOME,
+      onClick: () => {
+        updateHome(props.stores);
+        goPage(
+          props.stores,
+          props.stores.baseStore.paramsPage,
+          configPaths.pages.Home
+        );
+      },
     },
     {
       Id: TButtonID.BACK,
@@ -39,8 +48,13 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
       },
     },
     {
+      Id: TButtonID.KNOWBOOKS,
+    },
+    {
       Id: TButtonID.CIRCLE,
-      hidden: !router.pathname.includes(configPaths.pages.ItemNetwork),
+      hidden:
+        !router.pathname.includes(configPaths.pages.ItemNetwork) &&
+        !router.pathname.includes(configPaths.pages.ItemFlat),
       onClick: () => {
         goPage(
           props.stores,
@@ -55,7 +69,9 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     },
     {
       Id: TButtonID.NETWORK,
-      hidden: !router.pathname.includes(configPaths.pages.ItemCircle),
+      hidden:
+        !router.pathname.includes(configPaths.pages.ItemCircle) &&
+        !router.pathname.includes(configPaths.pages.ItemFlat),
       onClick: () => {
         goPage(
           props.stores,
@@ -68,7 +84,23 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
         );
       },
     },
-
+    {
+      Id: TButtonID.NETWORKFLAT,
+      hidden:
+        !router.pathname.includes(configPaths.pages.ItemCircle) &&
+        !router.pathname.includes(configPaths.pages.ItemNetwork),
+      onClick: () => {
+        goPage(
+          props.stores,
+          props.stores.baseStore.paramsPage,
+          configPaths.pages.ItemFlat,
+          {
+            title: props.stores.uiStore.selectedAtom.title,
+            id: props.stores.uiStore.selectedAtom.id,
+          }
+        );
+      },
+    },
     {
       Id: TButtonID.LOGIN,
     },

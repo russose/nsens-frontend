@@ -1,12 +1,5 @@
 import { CUSTOM_ICONS } from "./configLocalAndEnv";
-import {
-  Tlanguage,
-  ICONS,
-  TButtonID,
-  TPages,
-  TScenarioStepID,
-  TSpecialPages,
-} from "./globals";
+import { Tlanguage, ICONS, TButtonID, TPages, TSpecialPages } from "./globals";
 
 export const configDataFr = {
   searchBar: "Rechercher...",
@@ -20,9 +13,10 @@ export const configDataFr = {
   SEO: {
     // canonical: "https://www.nsens.org/fr/Mobile/About/",
     // title_page_base: "n.Sens - Explorer la Connaissance libre autrement",
-    title_page_base: "n.Sens",
+    title_page_base:
+      "n.Sens - n.Sens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes.",
     description_page_base:
-      "n.Sens - n.Sens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes",
+      "n.Sens - n.Sens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes.",
     title_description: {
       [TPages.Home]: { title: "Accueil", description: "" },
       [TPages.About]: {
@@ -37,6 +31,7 @@ export const configDataFr = {
       [TPages.ItemCircle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
       [TPages.StaticKnowbook]: { title: "", description: "" },
+      [TPages.Knowbooks]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
       [TPages.KnowbookSpecial]: {
         [TSpecialPages.Mostviewed]: { title: "Aujourd'hui", description: "" },
@@ -52,27 +47,27 @@ export const configDataFr = {
     },
   },
   about: {
-    scenario_texts: {
-      [TScenarioStepID.navigationBall]:
-        "Tourner la balle bleu pour faire défiler les élements",
-      [TScenarioStepID.knowbook]:
-        "Créer des collections personnalisées grâce à tes découvertes avec: ",
-      [TScenarioStepID.mostviewed]:
-        "Voir les élements les plus populaires avec la collection du jour",
-      [TScenarioStepID.search]: "Rechercher rapidement des éléments",
-      [TScenarioStepID.itemCircle]:
-        "Naviguer et explorer les relations pour faire de nouvelles découvertes",
-      [TScenarioStepID.itemArticle]:
-        "Accéder au contenu de chaque élément de la Wikipedia avec: ",
-      [TScenarioStepID.language]: "Plusieurs langues sont supportées",
-      [TScenarioStepID.home]:
-        "Bon voyage dans notre connaissance sans limite...",
-    },
+    // scenario_texts: {
+    //   [TScenarioStepID.Home]:
+    //     "Tourner la balle bleu pour faire défiler les élements",
+    //   [TScenarioStepID.knowbook]:
+    //     "Créer des collections personnalisées grâce à tes découvertes avec: ",
+    //   [TScenarioStepID.mostviewed]:
+    //     "Voir les élements les plus populaires avec la collection du jour",
+    //   [TScenarioStepID.search]: "Rechercher rapidement des éléments",
+    //   [TScenarioStepID.itemCircle]:
+    //     "Naviguer et explorer les relations pour faire de nouvelles découvertes",
+    //   [TScenarioStepID.itemArticle]:
+    //     "Accéder au contenu de chaque élément de la Wikipedia avec: ",
+    //   [TScenarioStepID.language]: "Plusieurs langues sont supportées",
+    //   [TScenarioStepID.home]:
+    //     "Bon voyage dans notre connaissance sans limite...",
+    // },
   },
   buttons: {
     [TButtonID.BACK]: {
       label: "Retour",
-      icon: ICONS.BACK,
+      icon: CUSTOM_ICONS.BACK,
     },
     [TButtonID.HOME]: {
       label: "Accueil",
@@ -105,6 +100,14 @@ export const configDataFr = {
     [TButtonID.NETWORK]: {
       label: "Réseau",
       icon: CUSTOM_ICONS.NETWORK,
+    },
+    [TButtonID.NETWORKFLAT]: {
+      label: "Liste",
+      icon: CUSTOM_ICONS.NETWORKFLAT,
+    },
+    [TButtonID.KNOWBOOKS]: {
+      label: "Collections",
+      icon: ICONS.KNOWBOOKS,
     },
     [TButtonID.KNOWBOOK]: {
       label: "Overview",

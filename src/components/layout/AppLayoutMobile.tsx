@@ -84,12 +84,19 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
 
   // IMPORTANT: ce free space évite aussi que le menu du bas disparaisse
   // (50vh pour avoir un contenu qui dépasse les 100vh)
-  const free_space_buttom_mobile = (router.pathname.includes(
-    configPaths.pages.ItemNetwork
-  ) ||
-    router.pathname.includes(configPaths.pages.User) ||
-    router.pathname.includes(configPaths.pages.Search) ||
-    router.pathname.includes(configPaths.pages.About)) && <Box height="30vh" />;
+  // const free_space_buttom_mobile = (router.pathname.includes(
+  //   configPaths.pages.ItemNetwork
+  // ) ||
+  //   router.pathname.includes(configPaths.pages.User) ||
+  //   router.pathname.includes(configPaths.pages.Search) ||
+  //   router.pathname.includes(configPaths.pages.About) ||
+  //   router.pathname.includes(configPaths.pages.Knowbooks)) && (
+  //   <Box height="30vh" />
+  // );
+
+  const free_space_buttom_mobile = !router.pathname.includes(
+    configPaths.pages.ItemCircle
+  ) && <Box height="30vh" />;
 
   return (
     <>

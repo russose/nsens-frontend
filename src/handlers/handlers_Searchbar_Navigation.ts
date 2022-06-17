@@ -7,12 +7,13 @@ import {
   TPages,
   TUiStringStorage,
 } from "../config/globals";
-import { goPage, setFeedFromSearch } from "../libs/helpersBase";
+import { goPage, setFeedFromSearch, updateHome } from "../libs/helpersBase";
 import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 
 /*******************Logo*************************** */
 export const onTapLogo = (stores: IStores) => (): void => {
+  updateHome(stores);
   goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
 
   // goRandomStaticKnowbook(stores);
@@ -38,7 +39,7 @@ export const onSearchHomeSubmit = (stores: IStores) => (): void => {
     setFeedFromSearch(stores, searchPattern);
     goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Search);
   } else {
-    // updateHome(stores);
+    updateHome(stores);
     goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
   }
   // goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Search);
