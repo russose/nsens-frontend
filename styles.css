@@ -32,8 +32,8 @@ html {
 }
 
 body {
-  /* background-color: #ffffff; */
-  background-color: #020723;
+  background-color: #ffffff;
+  /* background-color: #020723; */
   /* No pull down for PWA */
   overscroll-behavior-y: contain;
 }

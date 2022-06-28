@@ -24,6 +24,9 @@ const VisibilitySensorFeed: React.FunctionComponent<
     (stores: IStores) =>
     (props: any): void => {
       // console.log("entered...");
+      if (!stores.baseStore.onEnterOnce) {
+        stores.baseStore.setOnEnterOnce(true);
+      }
       stores.baseStore.setIncreaseFeedDisplayed(true);
     };
 

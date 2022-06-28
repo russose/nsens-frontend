@@ -1,6 +1,5 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-// import Separator from "./Separator";
 import { Box, Link, Sheet, Text } from "gestalt";
 import { ROOT_URL_WIKIPEDIA } from "../config/configURLs";
 import { IStores } from "../stores/RootStore";
@@ -38,7 +37,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
   );
 
   const source = (
-    <Box paddingY={0} paddingX={2}>
+    <Box paddingY={0} paddingX={1}>
       <Link
         href={
           ROOT_URL_WIKIPEDIA(props.stores.baseStore.paramsPage.lang) +
@@ -46,7 +45,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
         }
         target="blank"
       >
-        <Text size="sm" weight="bold">
+        <Text size="100" weight="bold">
           {source_wikipedia}
         </Text>
       </Link>
@@ -54,7 +53,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
   );
 
   const subHeading = (
-    <Box width="100%" paddingX={4}>
+    <Box width="100%" paddingX={1}>
       <Box
         display="flex"
         direction="row"
@@ -63,7 +62,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
       >
         {source}
         {/* <Box column={6}> */}
-        <Box column={7} smColumn={5} mdColumn={4} lgColumn={4}>
+        <Box column={11} smColumn={8} mdColumn={5} lgColumn={5}>
           <MenuBarArticle stores={props.stores} rounding={rounding} />
         </Box>
       </Box>

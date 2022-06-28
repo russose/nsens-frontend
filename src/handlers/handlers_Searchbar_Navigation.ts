@@ -7,16 +7,22 @@ import {
   TPages,
   TUiStringStorage,
 } from "../config/globals";
-import { goPage, setFeedFromSearch, updateHome } from "../libs/helpersBase";
+import {
+  goLanding,
+  goPage,
+  setFeedFromSearch,
+  updateHome,
+  updateSliderCircular,
+} from "../libs/helpersBase";
 import { path_link } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 
 /*******************Logo*************************** */
 export const onTapLogo = (stores: IStores) => (): void => {
-  updateHome(stores);
-  goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+  // updateHome(stores);
+  // goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
 
-  // goRandomStaticKnowbook(stores);
+  goLanding(stores);
 };
 
 /*******************Searchbar*************************** */
@@ -72,10 +78,8 @@ export const onMenuButtonPath =
 export const onSliderPositionChange =
   (stores: IStores, sliderId: string) =>
   (value: number): void => {
-    // const slider = stores.uiStore.sliders.get(sliderId);
-    // console.log(slider.position);
-    // console.log("max", slider.max);
-    stores.uiStore.updateSliderCircular(sliderId, value);
+    // stores.uiStore.updateSliderCircular(sliderId, value);
+    updateSliderCircular(stores, sliderId, value);
   };
 
 /*******************Page Header Modes*************************** */

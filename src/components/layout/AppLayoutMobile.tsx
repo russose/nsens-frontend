@@ -27,7 +27,7 @@ const AppLayoutMobile: React.FunctionComponent<IAppLayoutProps> = (props) => {
   const router = useRouter();
 
   stores.baseStore.setGUICONFIGFromDisplay(props.display);
-  stores.uiStore.setSVGGlobalDimensions();
+  // setSVGGlobalDimensions(stores);
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const path_logo_image = configPaths.image_logo_W_small;

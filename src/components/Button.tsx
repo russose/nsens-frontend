@@ -44,7 +44,7 @@ const Button: React.FunctionComponent<IButtonProps> = (props) => {
   if (props.displayLabel) {
     labetText = (
       <Box paddingY={0}>
-        <Text size={"sm"} weight="bold">
+        <Text size="100" weight="bold">
           {props.label}
         </Text>
       </Box>

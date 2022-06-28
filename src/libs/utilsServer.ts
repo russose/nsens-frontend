@@ -110,9 +110,9 @@ async function makeOneScreenshoot(
 }
 
 export async function makeScreenshoots(): Promise<void> {
-  if (!configGeneral.demoModeForScreenshoots) {
-    return;
-  }
+  // if (!configGeneral.demoModeForScreenshoots) {
+  //   return;
+  // }
 
   const rootPath = "public" + configPaths.screenshots;
   const rootUrl = CONFIG_ENV.FRONT_URL;

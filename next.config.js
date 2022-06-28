@@ -4,9 +4,9 @@ const runtimeCaching = require("./src/config/runtimeCaching");
 module.exports = withPWA({
   trailingSlash: true,
   reactStrictMode: true,
-  experimental: {
-    staticPageGenerationTimeout: 8000,
-  },
+  // experimental: {
+  //   staticPageGenerationTimeout: 8000,
+  // },
   pwa: {
     dest: "public",
     disable: process.env.NODE_ENV === "development",
@@ -16,7 +16,7 @@ module.exports = withPWA({
   },
 });
 
-// To use bundle-analyzer, uncomment and see ./next/analyse directory
+// To use bundle-analyzer, uncomment, run buid and see ./next/analyse directory
 
 // const withBundleAnalyzer = require("@next/bundle-analyzer")({
 //   // enabled: process.env.ANALYZE === "true",

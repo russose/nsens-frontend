@@ -3,8 +3,7 @@ import React from "react";
 import { IStores } from "../../stores/RootStore";
 import { TDisplay } from "../../config/globals";
 import { Media } from "../../config/media";
-import AppLayoutMobile from "./AppLayoutMobile";
-import AppLayoutDesktop from "./AppLayoutDesktop";
+import dynamic from "next/dynamic";
 
 interface IAppLayoutProps {
   children?: React.ReactNode;
@@ -12,6 +11,9 @@ interface IAppLayoutProps {
   titleSEO?: string;
   isBodySVG: boolean;
 }
+
+const AppLayoutMobile_D = dynamic(() => import("./AppLayoutMobile"));
+const AppLayoutDesktop_D = dynamic(() => import("./AppLayoutDesktop"));
 
 // const Media_ = observer(Media);
 const Media_ = Media;
@@ -22,44 +24,44 @@ const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
   return (
     <>
       <Media_ at={TDisplay.mobile}>
-        <AppLayoutMobile
+        <AppLayoutMobile_D
           stores={stores}
           titleSEO={props.titleSEO}
           display={TDisplay.mobile}
           svgBody={props.isBodySVG}
         >
           {props.children}
-        </AppLayoutMobile>
+        </AppLayoutMobile_D>
       </Media_>
       <Media_ at={TDisplay.desktop}>
-        <AppLayoutDesktop
+        <AppLayoutDesktop_D
           stores={stores}
           titleSEO={props.titleSEO}
           display={TDisplay.desktop}
           svgBody={props.isBodySVG}
         >
           {props.children}
-        </AppLayoutDesktop>
+        </AppLayoutDesktop_D>
       </Media_>
       <Media_ at={TDisplay.large}>
-        <AppLayoutDesktop
+        <AppLayoutDesktop_D
           stores={stores}
           titleSEO={props.titleSEO}
           display={TDisplay.large}
           svgBody={props.isBodySVG}
         >
           {props.children}
-        </AppLayoutDesktop>
+        </AppLayoutDesktop_D>
       </Media_>
       <Media_ greaterThanOrEqual={TDisplay.extra}>
-        <AppLayoutDesktop
+        <AppLayoutDesktop_D
           stores={stores}
           titleSEO={props.titleSEO}
           display={TDisplay.extra}
           svgBody={props.isBodySVG}
         >
           {props.children}
-        </AppLayoutDesktop>
+        </AppLayoutDesktop_D>
       </Media_>
     </>
   );

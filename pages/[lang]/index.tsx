@@ -10,7 +10,6 @@ import {
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import ContentLoading from "../../src/components/ContentLoading";
-import { makeScreenshoots } from "../../src/libs/utilsServer";
 import CardAtomGrid from "../../src/components/CardAtomGrid";
 import {
   isItemSaved,
@@ -18,6 +17,12 @@ import {
   onSaved,
 } from "../../src/handlers/handlers_Saved";
 import { onEditKnowbooks } from "../../src/handlers/handlers_Knowbooks";
+import {
+  configFetching,
+  configGeneral,
+} from "../../src/config/configLocalAndEnv";
+import { makeScreenshoots } from "../../src/libs/utilsServer";
+import { buildAllStaticKnowbooks } from "../../src/libs/getDataStaticKnowbooksHelpers";
 
 const Home: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -60,7 +65,12 @@ const Home: React.FunctionComponent<IPage> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  makeScreenshoots();
+  if (configGeneral.demoModeForScreenshoots) {
+    makeScreenshoots();
+  }
+  if (configFetching.staticKnowbooks.refreshAllStaticKnowbooks) {
+    buildAllStaticKnowbooks();
+  }
   return await I_getStaticProps(context);
 };
 export const getStaticPaths: GetStaticPaths = async (context) => {

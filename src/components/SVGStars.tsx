@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { stars } from "../libs/utilsSVG";
 import { IStores } from "../stores/RootStore";
 
 interface IProps {
@@ -11,9 +12,9 @@ const SVGStars: React.FunctionComponent<IProps> = (props) => {
     return <></>;
   }
 
-  const stars = props.stores.baseStore.stars;
+  const stars_ = stars(props.stores);
 
-  const elements = stars.map((star, index) => {
+  const elements = stars_.map((star, index) => {
     return (
       <g key={`SVGStars${index}`}>
         <circle

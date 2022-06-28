@@ -24,11 +24,23 @@ import {
   configGeneral,
   IPosition,
   configPaths,
-  IStar,
 } from "../config/globals";
 import { api_getCleanImageFromWeb_blocking } from "../libs/apiItems";
-import { entierAleatoire, newAtom, range } from "../libs/utils";
+import { newAtom } from "../libs/utils";
 import { RootStore } from "./RootStore";
+
+export const configDataFr_D = () =>
+  import("../config/configDataFr").then((module) => {
+    return module.configDataFr;
+  });
+export const configDataEn_D = () =>
+  import("../config/configDataEn").then((module) => {
+    return module.configDataEn;
+  });
+export const configDataIt_D = () =>
+  import("../config/configDataIt").then((module) => {
+    return module.configDataIt;
+  });
 
 interface IInitState {
   [initStateCat.core]: boolean;
@@ -66,6 +78,8 @@ export class BaseStore {
   private $amountFeedDisplayed: number = 0;
   private $increaseFeedDisplayed: boolean = true;
 
+  private $onEnterOnce: boolean = false;
+
   private $history = observable.map<AtomID, IAtom>(); //Containing all items content
   private $feed = observable.set<AtomID>();
   private $mostviewed = observable.set<AtomID>();
@@ -81,6 +95,7 @@ export class BaseStore {
       | "$initCompleted"
       | "$amountFeedDisplayed"
       | "$increaseFeedDisplayed"
+      | "$onEnterOnce"
       | "$screen"
       | "$currentDisplay"
     >(this, {
@@ -88,6 +103,7 @@ export class BaseStore {
       $initCompleted: observable,
       $amountFeedDisplayed: observable,
       $increaseFeedDisplayed: observable,
+      $onEnterOnce: observable,
       $screen: observable,
       $currentDisplay: observable,
       init: action,
@@ -96,6 +112,9 @@ export class BaseStore {
       initAmountFeedDisplayed: action,
       incrementAmountFeedDisplayed: action,
       setIncreaseFeedDisplayed: action,
+      decreaseDateLastMostviewed: action,
+      initDateLastMostviewed: action,
+      setOnEnterOnce: action,
       setHistory: action,
       clearHistory: action,
       setMostviewed: action,
@@ -106,10 +125,10 @@ export class BaseStore {
       setRelated: action,
       clearRelated: action,
       setscreenNoSSR: action,
+      setGUICONFIGFromDisplay: action,
       isLogged: computed,
       feedItemsToDisplay: computed,
       mostviewedIds: computed,
-      stars: computed,
     });
   }
 
@@ -119,25 +138,6 @@ export class BaseStore {
     this.clearFeed();
     this.clearMostviewed();
     this.clearRelated();
-  }
-
-  get stars(): IStar[] {
-    const width = this.screen.width;
-    const height = this.screen.height;
-    const density_stars = 0.0005;
-    const amount = Math.floor(width * height * density_stars);
-
-    const stars: IStar[] = range(amount).map((ind) => {
-      return {
-        position: {
-          x: entierAleatoire(0, width),
-          y: entierAleatoire(0, height),
-        },
-        opacity: entierAleatoire(3, 10) / 10,
-      };
-    });
-
-    return stars;
   }
 
   /**  General **/
@@ -261,14 +261,17 @@ export class BaseStore {
     let configDataLang: TconfigDataLanguage;
 
     if (lang === Tlanguage.fr) {
-      const configDataFr = await import("../config/configDataFr");
-      configDataLang = configDataFr.configDataFr;
+      // const configDataFr = await import("../config/configDataFr");
+      // configDataLang = configDataFr.configDataFr;
+      configDataLang = await configDataFr_D();
     } else if (lang === Tlanguage.it) {
-      const configDataIt = await import("../config/configDataIt");
-      configDataLang = configDataIt.configDataIt;
+      // const configDataIt = await import("../config/configDataIt");
+      // configDataLang = configDataIt.configDataIt;
+      configDataLang = await configDataIt_D();
     } else if (lang === Tlanguage.en) {
-      const configDataEn = await import("../config/configDataEn");
-      configDataLang = configDataEn.configDataEn;
+      // const configDataEn = await import("../config/configDataEn");
+      // configDataLang = configDataEn.configDataEn;
+      configDataLang = await configDataEn_D();
     }
 
     this.$GUI_CONFIG.language = configDataLang;
@@ -406,6 +409,13 @@ export class BaseStore {
   setIncreaseFeedDisplayed(value: boolean): void {
     this.$increaseFeedDisplayed = value;
   }
+  get onEnterOnce() {
+    return this.$onEnterOnce;
+  }
+  setOnEnterOnce(value: boolean): void {
+    this.$onEnterOnce = value;
+  }
+
   initAmountFeedDisplayed() {
     const increment = this.GUI_CONFIG.display.display.displayFeedIncrement;
     this.$amountFeedDisplayed = increment;
@@ -419,7 +429,11 @@ export class BaseStore {
 
   amount_loop_no_changes = 0;
   get feedItemsToDisplay(): IAtom[] {
-    if (this.increaseFeedDisplayed && this.amount_loop_no_changes < 2) {
+    if (
+      this.increaseFeedDisplayed &&
+      this.amount_loop_no_changes < 2 &&
+      this.onEnterOnce
+    ) {
       //Important: these 2 if(this.increaseFeedDisplayed) are mandatory to work
       setTimeout(() => {
         if (this.increaseFeedDisplayed) {
@@ -449,22 +463,6 @@ export class BaseStore {
     this.$related.clear();
   }
 
-  getRelatedFull(itemId: AtomID): IRelatedAtomFull[] {
-    if (itemId === undefined) {
-      return [];
-    }
-    const relatedFull: IRelatedAtomFull[] = this.$related
-      .get(itemId)
-      .map((related_element: IRelatedAtom) => {
-        const related_element_full: IRelatedAtomFull = {
-          relation: related_element.relation,
-          item: this.getHistoryItem(related_element.item),
-        };
-        return related_element_full;
-      });
-    return relatedFull;
-  }
-
   setRelated(id: AtomID, relatedItemsFull: IRelatedAtomFull[]) {
     if (
       id === undefined ||
@@ -490,21 +488,5 @@ export class BaseStore {
     this.$related.set(id, relatedItems);
 
     this.setHistory(related_items);
-  }
-
-  getRelatedItems(itemId: AtomID): AtomID[] {
-    if (itemId === undefined) {
-      return [];
-    }
-    const relatedAtoms: IRelatedAtom[] = this.$related.get(itemId);
-    if (relatedAtoms === undefined) {
-      return [];
-    }
-    const related_items: AtomID[] = relatedAtoms.map((atom) => {
-      return atom.item;
-    });
-
-    //No duplicates since they are removed in fetchRelated
-    return related_items;
   }
 }

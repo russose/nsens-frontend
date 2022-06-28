@@ -20,6 +20,7 @@ import {
   api_save,
   api_unsave,
 } from "./apiUserData";
+import { getRelatedFull } from "./helpersRelated";
 
 const delay_api_in_ms = 5000;
 
@@ -85,7 +86,7 @@ function performSavedWithRelated(
       stores.baseStore.setRelated(item.id, relatedList);
     })
     .then(() => {
-      item.related = JSON.stringify(stores.baseStore.getRelatedFull(item.id));
+      item.related = JSON.stringify(getRelatedFull(stores, item.id));
       return item;
     })
     .then((item) => {

@@ -9,14 +9,16 @@ import {
   KnowbookID,
   configGeneral,
   TUiBooleanStorage,
+  configFetching,
 } from "../config/globals";
+
 import { IStores } from "../stores/RootStore";
 import {
   api_getAllStaticKnowbooksExtractWithItemsLocal,
   api_getAllStaticKnowbooksLocal,
   api_getStaticKnowbookWithItemsLocal,
 } from "./apiItems";
-import { api_getUser, api_login } from "./apiUser";
+import { api_getUser } from "./apiUser";
 import { initializeMostviewed, updateHome } from "./helpersBase";
 import { readRelatedStringFromItem } from "./helpersRelated";
 
@@ -47,7 +49,10 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
       await initializeStaticKnowbooksExtract(stores);
       updateHome(stores);
 
-      await initDemo(stores);
+      if (configGeneral.demoModeForScreenshoots) {
+        const helpersBase = await import("./helpersBase");
+        await helpersBase.initDemo(stores);
+      }
 
       stores.baseStore.setInitCompleted(initStateCat.core, true);
       /************************************************************/
@@ -73,8 +78,7 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
         const helpersInitializeLogged = await import(
           "./helpersInitializeLogged"
         );
-
-        helpersInitializeLogged.initializeSavedLogged(stores);
+        await helpersInitializeLogged.initializeSavedLogged(stores);
         helpersInitializeLogged.initializeKnowbooksLogged(stores);
       } else {
         stores.savedStore.clearSaved();
@@ -84,23 +88,6 @@ export async function initializeApp(stores: IStores, paramsPage: IparamsPage) {
 
       stores.baseStore.setInitCompleted(initStateCat.userData, true);
     }
-  } catch (error) {
-    // console.log(error);
-  }
-}
-
-async function initDemo(stores: IStores): Promise<void> {
-  if (!configGeneral.demoModeForScreenshoots) {
-    return;
-  }
-  console.log(
-    "RUNNING IN DEMO MODE, activated with configGeneral.demoModeForScreenshoots"
-  );
-  try {
-    await api_login("demo@demo.org", "demo");
-    stores.baseStore.setUser({
-      username: "demo@demo.org",
-    });
   } catch (error) {
     // console.log(error);
   }
@@ -116,7 +103,7 @@ export async function initializeStaticKnowbooksFullSinglePage(
   if (
     staticKnowbook === undefined ||
     staticKnowbook.items.length <=
-      configGeneral.staticKnowbooks.amount_extractStaticKnowbooks
+      configFetching.staticKnowbooks.amount_extractStaticKnowbooks
   ) {
     // stores.uiStore.setShowLoading(true);
     stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);

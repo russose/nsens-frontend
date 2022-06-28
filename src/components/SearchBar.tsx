@@ -1,7 +1,6 @@
-import { Box } from "gestalt";
+import { Box, SearchField } from "gestalt";
 import React from "react";
 import { handlerT } from "../config/globals";
-import { JsSearchField } from "./_js_components";
 
 interface ISearchBarProps {
   placeholder: string;
@@ -23,7 +22,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = (props) => {
         value={props.value}
         onKeyDown={props.handlerKeyboard}
       /> */}
-      <JsSearchField
+      <SearchField
         accessibilityLabel="searchField"
         id="searchField"
         size="md"

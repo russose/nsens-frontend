@@ -1,7 +1,7 @@
-import { IPosition, TUiNumberStorage } from "../config/globals";
+import { IPosition, IStar, TUiNumberStorage } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { isMobile } from "./helpersBase";
-import { range } from "./utils";
+import { entierAleatoire, range } from "./utils";
 
 const REFERENCE_ANGLE = -90;
 export const DELTA_ALPHA = 1;
@@ -37,6 +37,14 @@ export function SVGMaxRadius(stores: IStores, hasMax = true): number {
   } else {
     return 400;
   }
+}
+
+export function setSVGGlobalDimensions(stores: IStores): void {
+  stores.uiStore.setUiNumberStorage(TUiNumberStorage.R0, SVGMaxRadius(stores));
+  stores.uiStore.setUiNumberStorage(
+    TUiNumberStorage.SVGMaxElementCircle,
+    SVGMaxElementCircle(stores)
+  );
 }
 
 export function SVGMaxElementCircle(stores: IStores): number {
@@ -99,4 +107,23 @@ export function indexFromTick(tick: number, amountDisplayed: number): number {
   const alpha = 360 / amountDisplayed;
   const i = Math.floor((tick * DELTA_ALPHA) / alpha);
   return i;
+}
+
+export function stars(stores: IStores): IStar[] {
+  const width = stores.baseStore.screen.width;
+  const height = stores.baseStore.screen.height;
+  const density_stars = 0.0005;
+  const amount = Math.floor(width * height * density_stars);
+
+  const stars: IStar[] = range(amount).map((ind) => {
+    return {
+      position: {
+        x: entierAleatoire(0, width),
+        y: entierAleatoire(0, height),
+      },
+      opacity: entierAleatoire(3, 10) / 10,
+    };
+  });
+
+  return stars;
 }

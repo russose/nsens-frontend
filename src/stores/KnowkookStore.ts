@@ -33,7 +33,7 @@ export class KnowkookStore {
       renameKnowbook: action,
       setImageKnowbook: action,
       setImageStaticKnowbook: action,
-      allItemsInStaticKnowbooks: computed,
+      // allItemsInStaticKnowbooks: computed,
       itemsInStaticKnowbooksForHome: computed,
     });
   }
@@ -65,10 +65,13 @@ export class KnowkookStore {
   }
 
   setImageStaticKnowbook(name: KnowbookID) {
-    this.$imgStaticKnowbooks.set(
-      name,
-      getRandomImageFromItems(this.staticKnowbooks.get(name).items)
-    );
+    if (!this.$imgStaticKnowbooks.has(name)) {
+      // To avoid that initial setup from extract is modified
+      this.$imgStaticKnowbooks.set(
+        name,
+        getRandomImageFromItems(this.staticKnowbooks.get(name).items)
+      );
+    }
   }
 
   /**
@@ -185,10 +188,10 @@ export class KnowkookStore {
     return itemsInStaticKnowbooks_;
   }
 
-  get allItemsInStaticKnowbooks(): Set<AtomID> {
-    const knowbookIds: KnowbookID[] = Array.from(this.staticKnowbooks.keys());
-    return this.itemsInStaticKnowbooks(knowbookIds);
-  }
+  // get allItemsInStaticKnowbooks(): Set<AtomID> {
+  //   const knowbookIds: KnowbookID[] = Array.from(this.staticKnowbooks.keys());
+  //   return this.itemsInStaticKnowbooks(knowbookIds);
+  // }
 
   get itemsInStaticKnowbooksForHome(): Set<AtomID> {
     const knowbookIds: KnowbookID[] = [];

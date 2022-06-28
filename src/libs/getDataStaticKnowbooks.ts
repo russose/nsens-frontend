@@ -18,9 +18,6 @@ export interface IPageStaticKnowbooks extends IPage {
   // items?: IAtom[];
 }
 
-const refreshAllStaticKnowbooks =
-  configFetching.staticKnowbooks.refreshAllStaticKnowbooks;
-
 async function getAllConfigStaticKnowbooks() {
   const allStaticKnowbooks = await getAllStaticKnowbooks();
   let guiConfigList: any = [];
@@ -102,9 +99,9 @@ async function getConfigDataGuiStaticKnowbooks(
 }
 
 export const I_getStaticPaths: GetStaticPaths = async (context) => {
-  if (refreshAllStaticKnowbooks) {
-    await buildAllStaticKnowbooks();
-  }
+  // if (configFetching.staticKnowbooks.refreshAllStaticKnowbooks) {
+  //   await buildAllStaticKnowbooks();
+  // }
 
   const paths = await getAllConfigStaticKnowbooks();
 

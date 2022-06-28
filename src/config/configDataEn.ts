@@ -6,7 +6,6 @@ import {
   TButtonID,
   TSpecialPages,
   CUSTOM_ICONS,
-  TScenarioStepID,
 } from "./globals";
 
 export const configDataEn: TconfigDataLanguage = {

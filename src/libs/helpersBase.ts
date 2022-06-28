@@ -11,12 +11,14 @@ import {
   configGeneral,
   initStateCat,
   AtomID,
+  CONFIG_ENV,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
   api_getItemsFeaturedFromWebWithoutImage,
   api_searchFromWebWithoutImage,
 } from "./apiItems";
+import { api_login } from "./apiUser";
 import { DateToStringWithZero, hasTouchScreen, shuffleArray } from "./utils";
 
 export function isMobile(stores: IStores): boolean {
@@ -269,6 +271,20 @@ export function goUserHandler(stores: IStores) {
   };
 }
 
+export function goLanding(stores: IStores) {
+  if (typeof window !== "undefined") {
+    const url_landing_en = CONFIG_ENV.LANDING_URL_EN;
+    const url_landing = url_landing_en.replace(
+      ".en.",
+      "." + stores.baseStore.paramsPage.lang + "."
+    );
+    window.open(
+      url_landing,
+      "_blank" // <- This is what makes it open in a new window.
+    );
+  }
+}
+
 // export function goRandomStaticKnowbook(stores: IStores) {
 //   const staticKnowbooksName: string[] = [
 //     ...Array.from(stores.knowbookStore.staticKnowbooks.keys()),
@@ -307,3 +323,62 @@ export function goUserHandler(stores: IStores) {
 //     false
 //   );
 // }
+
+const SLIDER_MOVE_TOLERANCE_RATE = 0.8;
+export function updateSliderCircular(
+  stores: IStores,
+  id: string,
+  value: number
+): void {
+  const slider = stores.uiStore.sliders.get(id);
+
+  if (slider === undefined) {
+    return;
+  }
+
+  const tolerance = slider.maxOneStep * SLIDER_MOVE_TOLERANCE_RATE;
+  const current_PositionOneStep = slider.positionOneStep;
+  const current_Position = slider.position;
+  const delta = value - current_PositionOneStep;
+
+  let new_Position: number;
+  if (Math.abs(delta) < tolerance) {
+    new_Position = current_Position + delta;
+  } else {
+    if (delta < 0) {
+      new_Position = current_Position + value;
+    } else {
+      new_Position = current_Position - slider.maxOneStep + value;
+    }
+  }
+
+  if (new_Position >= 0 && new_Position <= slider.max) {
+    slider.positionOneStep = value;
+    slider.position = new_Position;
+  } else if (new_Position < 0) {
+    slider.positionOneStep = value;
+    slider.position = 0;
+  } else if (new_Position > slider.max) {
+    slider.positionOneStep = value;
+    slider.position = slider.max;
+  }
+  stores.uiStore.setSliders(slider);
+  // this.$sliders.set(slider.id, slider);
+}
+
+export async function initDemo(stores: IStores): Promise<void> {
+  // if (!configGeneral.demoModeForScreenshoots) {
+  //   return;
+  // }
+  console.log(
+    "RUNNING IN DEMO MODE, activated with configGeneral.demoModeForScreenshoots"
+  );
+  try {
+    await api_login("demo@demo.org", "demo");
+    stores.baseStore.setUser({
+      username: "demo@demo.org",
+    });
+  } catch (error) {
+    // console.log(error);
+  }
+}

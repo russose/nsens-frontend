@@ -4,6 +4,7 @@ import React from "react";
 import { configGeneral, IPosition, SVG_T } from "../../config/globals";
 import { isMobile } from "../../libs/helpersBase";
 import { isFirefox } from "../../libs/utils";
+import { setSVGGlobalDimensions } from "../../libs/utilsSVG";
 import { IStores } from "../../stores/RootStore";
 import SVGElementsInPositionMatrix from "../SVGElementsInPositionMatrix";
 import SVGHeader from "../SVGHeader";
@@ -62,6 +63,8 @@ const AppLayoutPageHybridSVGBody: React.FunctionComponent<IProps> = (props) => {
   //     initWhenResized(props.stores, window);
   //   };
   // }
+
+  setSVGGlobalDimensions(props.stores);
 
   return (
     <Box>

@@ -18,6 +18,7 @@ export function isPage(page: TPages, router: NextRouter): boolean {
     return router.pathname === configPaths.rootPath + configPaths.pages[page];
   }
 }
+
 export function range(amount_element: number): number[] {
   //=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   return Array.from(Array(amount_element).keys());

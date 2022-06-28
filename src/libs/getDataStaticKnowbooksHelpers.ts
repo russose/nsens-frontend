@@ -318,7 +318,7 @@ async function buildStaticKnowbooksExtracts(
   const staticKnowbooks_with_items: IStaticKnowbookWithItemsDefinition[] = [];
 
   const amount_extractStaticKnowbooks =
-    configGeneral.staticKnowbooks.amount_extractStaticKnowbooks;
+    configFetching.staticKnowbooks.amount_extractStaticKnowbooks;
 
   const staticKnowbooks: IStaticKnowbookDefinition[] =
     allStaticKnowbooks.filter((knowbooks) => {

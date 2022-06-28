@@ -1,4 +1,9 @@
-import { AtomID, IAtom, IRelatedAtomFull } from "../config/globals";
+import {
+  AtomID,
+  IAtom,
+  IRelatedAtom,
+  IRelatedAtomFull,
+} from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { removeSavedFromItems } from "./helpersBase";
 import { empty_value_atom, makeArrayFlat, shuffleSized } from "./utils";
@@ -54,6 +59,41 @@ function shuffleSizedRemoveDoublesFilterIds(
   return items_shuffledSized_no_doubles_array_filtered;
 }
 
+export function getRelatedFull(
+  stores: IStores,
+  itemId: AtomID
+): IRelatedAtomFull[] {
+  if (itemId === undefined) {
+    return [];
+  }
+  const relatedFull: IRelatedAtomFull[] = stores.baseStore.related
+    .get(itemId)
+    .map((related_element: IRelatedAtom) => {
+      const related_element_full: IRelatedAtomFull = {
+        relation: related_element.relation,
+        item: stores.baseStore.getHistoryItem(related_element.item),
+      };
+      return related_element_full;
+    });
+  return relatedFull;
+}
+
+export function getRelatedItems(stores: IStores, itemId: AtomID): AtomID[] {
+  if (itemId === undefined) {
+    return [];
+  }
+  const relatedAtoms: IRelatedAtom[] = stores.baseStore.related.get(itemId);
+  if (relatedAtoms === undefined) {
+    return [];
+  }
+  const related_items: AtomID[] = relatedAtoms.map((atom) => {
+    return atom.item;
+  });
+
+  //No duplicates since they are removed in fetchRelated
+  return related_items;
+}
+
 export function getRelatedItemsForItemsShuffleSized(
   stores: IStores,
   itemIds: AtomID[],
@@ -64,7 +104,7 @@ export function getRelatedItemsForItemsShuffleSized(
   }
 
   const related_list: AtomID[][] = itemIds.map((id) => {
-    return stores.baseStore.getRelatedItems(id);
+    return getRelatedItems(stores, id);
   });
 
   const related_flat: AtomID[] = makeArrayFlat(related_list);

@@ -10,7 +10,6 @@ import {
   I_getStaticProps,
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
-import { getRelatedItemsForItemsShuffleSized } from "../../src/libs/helpersRelated";
 import { getKnowbookAtomsList } from "../../src/libs/helpersSavedKnowbooks";
 import { useStores } from "../../src/stores/RootStoreHook";
 import ContentLoading from "../../src/components/ContentLoading";
@@ -38,42 +37,18 @@ const Knowbook: React.FunctionComponent<IPage> = (props) => {
     return <ContentLoading stores={stores} />;
   }
 
-  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  // const pathTarget = configPaths.pages.Home;
-  const amount_related_displayed =
-    GUI_CONFIG.display.display.amount_related_displayed;
-
-  const items: IAtom[] = getKnowbookAtomsList(selected_knowbook, stores);
-
-  const related_items = getRelatedItemsForItemsShuffleSized(
-    stores,
-    getKnowbookAtomsList(selected_knowbook, stores).map((item: IAtom) => {
-      return item.id;
-    }),
-    amount_related_displayed
-  );
-
-  // const root_element: any = (
-  //   <SVGKnowbook
-  //     stores={stores}
-  //     id={selected_knowbook}
-  //     title={selected_knowbook}
-  //     image_url={stores.knowbookStore.getImageKnowbook(selected_knowbook)}
-  //     pathname={pathTarget}
-  //     queryObject={{}}
-  //     amount={0}
-  //     edit_handler={undefined}
-  //     delete_handler={undefined}
-  //   />
+  // const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
+  // const amount_related_displayed =
+  //   GUI_CONFIG.display.display.amount_related_displayed;
+  // const related_items = getRelatedItemsForItemsShuffleSized(
+  //   stores,
+  //   getKnowbookAtomsList(selected_knowbook, stores).map((item: IAtom) => {
+  //     return item.id;
+  //   }),
+  //   amount_related_displayed
   // );
 
-  // const elements: SVG_T[] = items.map((item, index) => {
-  //   return <SVGItem stores={stores} item={item} />;
-  // });
-
-  // const elements_related: SVG_T[] = related_items.map((item, index) => {
-  //   return <SVGItem stores={stores} item={item} />;
-  // });
+  const items: IAtom[] = getKnowbookAtomsList(selected_knowbook, stores);
 
   const content = (
     <>

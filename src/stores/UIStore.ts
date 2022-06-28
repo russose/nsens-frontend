@@ -10,10 +10,9 @@ import {
   TUiNumberStorage,
   TUiStringStorage,
 } from "../config/globals";
-import { SVGMaxElementCircle, SVGMaxRadius } from "../libs/utilsSVG";
 import { RootStore } from "./RootStore";
 
-const SLIDER_MOVE_TOLERANCE_RATE = 0.8;
+// const SLIDER_MOVE_TOLERANCE_RATE = 0.8;
 export class UIStore {
   $rootStore: RootStore;
   private $selectedAtom: IparamsAtom = { id: "", title: "" };
@@ -35,15 +34,16 @@ export class UIStore {
       initUiStorage: action,
       setUiStringStorage: action,
       setUiBooleanStorage: action,
+      setUiNumberStorage: action,
       initPageHeaderMode: action,
       setPageHeaderMode: action,
       setSelectedAtom: action,
       setEditKnowbookMembers: action,
-      clearEditKnowbookMembers: action,
+      // clearEditKnowbookMembers: action,
       setSelectedKnowbookIdName: action,
+      setSliders: action,
       initSlider: action,
-      updateSliderCircular: action,
-      setSVGGlobalDimensions: action,
+      // updateSliderCircular: action,
     });
   }
 
@@ -88,17 +88,6 @@ export class UIStore {
     this.$uiNumberStorage.set(key, value);
   }
 
-  setSVGGlobalDimensions(): void {
-    this.setUiNumberStorage(
-      TUiNumberStorage.R0,
-      SVGMaxRadius(this.$rootStore.stores())
-    );
-    this.setUiNumberStorage(
-      TUiNumberStorage.SVGMaxElementCircle,
-      SVGMaxElementCircle(this.$rootStore.stores())
-    );
-  }
-
   initPageHeaderMode(): void {
     // this.$pageHeaderMode.set(
     //   TPages.Home,
@@ -127,6 +116,9 @@ export class UIStore {
   get sliders() {
     return this.$sliders;
   }
+  setSliders(slider: ISlider): void {
+    this.$sliders.set(slider.id, slider);
+  }
 
   initSlider(sliderId: string, max: number): void {
     const slider = {
@@ -139,75 +131,40 @@ export class UIStore {
     this.$sliders.set(slider.id, slider);
   }
 
-  updateSliderCircular(id: string, value: number): void {
-    const slider = this.sliders.get(id);
-
-    if (slider === undefined) {
-      return;
-    }
-
-    const tolerance = slider.maxOneStep * SLIDER_MOVE_TOLERANCE_RATE;
-    const current_PositionOneStep = slider.positionOneStep;
-    const current_Position = slider.position;
-    const delta = value - current_PositionOneStep;
-
-    let new_Position: number;
-    if (Math.abs(delta) < tolerance) {
-      new_Position = current_Position + delta;
-    } else {
-      if (delta < 0) {
-        new_Position = current_Position + value;
-      } else {
-        new_Position = current_Position - slider.maxOneStep + value;
-      }
-    }
-
-    if (new_Position >= 0 && new_Position <= slider.max) {
-      slider.positionOneStep = value;
-      slider.position = new_Position;
-    } else if (new_Position < 0) {
-      slider.positionOneStep = value;
-      slider.position = 0;
-    } else if (new_Position > slider.max) {
-      slider.positionOneStep = value;
-      slider.position = slider.max;
-    }
-    this.$sliders.set(slider.id, slider);
-  }
-
-  // updateSliderLinear(id: string, value: number): void {
+  // updateSliderCircular(id: string, value: number): void {
   //   const slider = this.sliders.get(id);
 
   //   if (slider === undefined) {
   //     return;
   //   }
 
-  //   const tolerance = slider.maxOneStep * slider_move_tolerance_rate;
+  //   const tolerance = slider.maxOneStep * SLIDER_MOVE_TOLERANCE_RATE;
   //   const current_PositionOneStep = slider.positionOneStep;
+  //   const current_Position = slider.position;
   //   const delta = value - current_PositionOneStep;
-  //   const epsilon = slider.maxOneStep * slider_switch_tolerance_rate;
 
+  //   let new_Position: number;
   //   if (Math.abs(delta) < tolerance) {
-  //     if (delta > 0) {
-  //       if (slider.positionOneStep >= slider.maxOneStep - epsilon) {
-  //         slider.positionOneStep = epsilon;
-  //       } else if (slider.position + delta < slider.max) {
-  //         slider.position = slider.position + delta;
-  //         slider.positionOneStep = value;
-  //       }
-  //     } else if (delta < 0) {
-  //       if (slider.positionOneStep <= epsilon) {
-  //         slider.positionOneStep = slider.maxOneStep - epsilon;
-  //       } else if (slider.position + delta > epsilon) {
-  //         slider.position = slider.position + delta;
-  //         slider.positionOneStep = value;
-  //       }
-  //     } else if (delta === 0) {
-  //       return;
+  //     new_Position = current_Position + delta;
+  //   } else {
+  //     if (delta < 0) {
+  //       new_Position = current_Position + value;
+  //     } else {
+  //       new_Position = current_Position - slider.maxOneStep + value;
   //     }
-
-  //     this.setSlider(slider);
   //   }
+
+  //   if (new_Position >= 0 && new_Position <= slider.max) {
+  //     slider.positionOneStep = value;
+  //     slider.position = new_Position;
+  //   } else if (new_Position < 0) {
+  //     slider.positionOneStep = value;
+  //     slider.position = 0;
+  //   } else if (new_Position > slider.max) {
+  //     slider.positionOneStep = value;
+  //     slider.position = slider.max;
+  //   }
+  //   this.$sliders.set(slider.id, slider);
   // }
 
   get selectedKnowbookIdName() {
@@ -231,7 +188,7 @@ export class UIStore {
   setEditKnowbookMembers(knowbookId: KnowbookID, value: boolean): void {
     this.editKnowbookMembers.set(knowbookId, value);
   }
-  clearEditKnowbookMembers(): void {
-    this.editKnowbookMembers.clear();
-  }
+  // clearEditKnowbookMembers(): void {
+  //   this.editKnowbookMembers.clear();
+  // }
 }

@@ -10,8 +10,8 @@ temp/
 public/sw.js
 public/workbox-*.js
 frontend-static.tar.bz2
-public/staticKnowbooks
+public/staticKnowbooks/
+public/screenshots/
 public/sitemap.xml
 android/
-public/screenshots/
-public/staticKnowbooks/
+

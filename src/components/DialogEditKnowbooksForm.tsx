@@ -25,7 +25,8 @@ const DialogEditKnowbooksForm: React.FunctionComponent<
 > = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
-  const item_checkbox_size: SizeT = GUI_CONFIG.display.dialogs.item_size;
+  const item_checkbox_size: SizeT =
+    GUI_CONFIG.display.dialogs.item_checkbox_size;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
 
   return (

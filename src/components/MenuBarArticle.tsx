@@ -7,6 +7,7 @@ import {
   eventT,
   IButton,
   RoundingT,
+  SizeT,
   TUiBooleanStorage,
 } from "../config/globals";
 import { TButtonID } from "../config/globals";
@@ -33,6 +34,8 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
   const color_menu = configGeneral.colors.menu;
   const router = useRouter();
   const stores = props.stores;
+  const icon_size: SizeT =
+    stores.baseStore.GUI_CONFIG.display.size_icon_menu_article;
 
   const displayNavigationArrows =
     router.pathname.includes(configPaths.pages.Knowbook) ||
@@ -132,7 +135,7 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
       <MenuBarButtonLayout
         stores={props.stores}
         name="NavigationMenuBar"
-        icon_size="xs"
+        icon_size={icon_size}
         color={color_menu}
         direction="row"
         rounding={props.rounding}

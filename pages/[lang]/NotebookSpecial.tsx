@@ -36,7 +36,6 @@ const NotebookSpecial: React.FunctionComponent<IPage> = (props) => {
   const router = useRouter();
   const pageType = router.query.pageType;
 
-  // const pathTarget = configPaths.pages.Home;
   let knowbook_title = "";
   let items: IAtom[] = [];
   let url_image = "";
@@ -67,24 +66,6 @@ const NotebookSpecial: React.FunctionComponent<IPage> = (props) => {
   } else {
     // console.log("error:page type not implemented");
   }
-
-  // const root_element: SVG_T = (
-  //   <SVGKnowbook
-  //     stores={stores}
-  //     id={knowbook_title}
-  //     title={knowbook_title}
-  //     image_url={url_image}
-  //     pathname={pathTarget}
-  //     queryObject={{}}
-  //     amount={0}
-  //     edit_handler={undefined}
-  //     delete_handler={undefined}
-  //   />
-  // );
-
-  // const elements: SVG_T[] = items.map((item, index) => {
-  //   return <SVGItem stores={stores} item={item} />;
-  // });
 
   const content = (
     <>

@@ -4,14 +4,12 @@ import React from "react";
 import {
   configGeneral,
   configPaths,
-  CONFIG_ENV,
   IButton,
   RoundingT,
   SizeT,
-  TPages,
 } from "../config/globals";
 import { TButtonID } from "../config/globals";
-import { goPage, isMobile, updateHome } from "../libs/helpersBase";
+import { goLanding, goPage, isMobile, updateHome } from "../libs/helpersBase";
 
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./MenuBarButtonLayout";
@@ -107,17 +105,7 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     {
       Id: TButtonID.INFO,
       onClick: () => {
-        if (typeof window !== "undefined") {
-          const url_landing_en = CONFIG_ENV.LANDING_URL_EN;
-          const url_landing = url_landing_en.replace(
-            ".en.",
-            "." + props.stores.baseStore.paramsPage.lang + "."
-          );
-          window.open(
-            url_landing,
-            "_blank" // <- This is what makes it open in a new window.
-          );
-        }
+        goLanding(props.stores);
       },
     },
   ];

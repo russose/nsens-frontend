@@ -13,8 +13,9 @@ export const configDataMobile = {
   rounding_item_viz: 4,
   rounding_knowbooks: "circle",
   size_icon_menu: "lg",
+  size_icon_menu_article: "xs",
   size_icon_card: "xs",
-  header_title_size: "sm",
+  header_title_size: "300",
   layout: {
     heightUser: 700,
     heightChangePassword: "45vh",
@@ -33,9 +34,9 @@ export const configDataMobile = {
     ratio_H_W_Item: 1.33,
   },
   dialogs: {
-    title_size: "lg",
+    title_size: "300",
     texfield_size: "md",
-    item_size: "md",
+    item_checkbox_size: "md",
     button_icon_size: "lg",
   },
   dropdown: {
@@ -54,7 +55,7 @@ export const configDataMobile = {
     mdPadding: 2,
     smPadding: 2,
     padding: 2,
-    title_card_size: "sm",
+    title_card_size: "100",
     max_title_size: 30,
   },
   knowbook_sizes: {
@@ -69,7 +70,7 @@ export const configDataMobile = {
     mdPadding: 1,
     smPadding: 1,
     padding: 1,
-    title_card_size: "sm",
+    title_card_size: "100",
     max_title_size: 25,
   },
   About: {
@@ -83,7 +84,7 @@ export const configDataMobile = {
     mdPadding: 2,
     smPadding: 1,
     padding: 1,
-    title_card_size: "sm",
+    title_card_size: "100",
     max_title_size: 20,
   },
 };

@@ -4,6 +4,7 @@ import { IStores } from "../stores/RootStore";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getKnowbookStaticAtomsList } from "../libs/helpersSavedKnowbooks";
+import HeaderTitle from "./HeaderTitle";
 
 interface IHeaderTitleProps {
   stores: IStores;
@@ -74,13 +75,17 @@ const HeaderSEO: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   }
 
   const head = (
-    <Head>
-      {/* <link rel="canonical" href={canonical} /> */}
-      <title>{title_page}</title>
-      <meta name="description" content={description} />
-      {alternate_links()}
-      <meta name="robots" content="index, follow" />
-    </Head>
+    <>
+      <Head>
+        {/* <link rel="canonical" href={canonical} /> */}
+        <title>{title_page}</title>
+        <meta name="description" content={description} />
+        {alternate_links()}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Salvatore Russo" />
+      </Head>
+      <HeaderTitle stores={props.stores} title={title_page} hidden={true} />
+    </>
   );
 
   return <>{head}</>;

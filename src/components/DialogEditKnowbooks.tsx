@@ -1,5 +1,4 @@
 import { observer } from "mobx-react-lite";
-import { TUiBooleanStorage } from "../config/types";
 import {
   onChangeInputValueEditKnowbooks,
   onChangeKnwobooksInclusionEditKnowbooks,
@@ -20,9 +19,10 @@ const DialogEditKnowbooks: React.FunctionComponent<
 
   return (
     <>
-      {stores.uiStore.getUiBooleanStorage(
-        TUiBooleanStorage.editKnowbookOpened
-      ) && (
+      {
+        // stores.uiStore.getUiBooleanStorage(
+        //   TUiBooleanStorage.editKnowbookOpened
+        // ) &&
         <DialogEditKnowbooksForm
           id={stores.uiStore.selectedAtom.id}
           stores={stores}
@@ -37,7 +37,7 @@ const DialogEditKnowbooks: React.FunctionComponent<
           handler_inputValue={onChangeInputValueEditKnowbooks(stores)}
           handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(stores)}
         />
-      )}
+      }
     </>
   );
 };

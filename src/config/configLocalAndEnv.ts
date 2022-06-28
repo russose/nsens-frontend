@@ -48,7 +48,6 @@ export const configGeneral = {
     root_edge_color: "gray", //"darkWash",
     svg_background: "#020723", //"white",
     svg_elements: "white",
-
     item_color: "lightGray",
     knowbook_color: "lightGray",
     menu: "white",
@@ -63,7 +62,6 @@ export const configGeneral = {
   staticKnowbooks: {
     name_allStaticKnowbooks: "AllStatic.txt",
     name_extractStaticKnowbooks: "_AllStaticExtract.txt",
-    amount_extractStaticKnowbooks: 5,
     vitalKnowbooks_topLevelPattern:
       "Category:Wikipedia level-3 vital articles by topic",
   },
@@ -79,14 +77,14 @@ export const configFetching = {
   amount_related_wikipedia: 10,
   amount_max_by_node_wikidata: 30,
   amount_data_fetched_related_for_images: 2,
-  // maxArticlesSlide: 20,
   width_image_thumbnail: 300,
   cache_duration_in_sec: "2628000", //1 Mois pour le cache
   staticKnowbooks: {
     refreshAllStaticKnowbooks: false,
+    amount_best: 100,
+    amount_extractStaticKnowbooks: 10, //5,
     sleep_in_ms: 2000,
     size_chunk: 5,
-    amount_best: 100,
   },
 };
 

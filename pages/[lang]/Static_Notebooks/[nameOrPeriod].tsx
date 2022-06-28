@@ -13,7 +13,6 @@ import {
   initializeStaticKnowbooksFullSinglePage,
 } from "../../../src/libs/helpersInitialize";
 import { useStores } from "../../../src/stores/RootStoreHook";
-import { getRelatedItemsForItemsShuffleSized_Static } from "../../../src/libs/helpersRelated";
 import ContentLoading from "../../../src/components/ContentLoading";
 import CardAtomGrid from "../../../src/components/CardAtomGrid";
 import {
@@ -42,20 +41,18 @@ const BestKnowbook: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
     return <ContentLoading stores={stores} />;
   }
 
-  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
-  // const pathTarget = configPaths.pages.Home;
+  // const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
+  // const amount_related_displayed =
+  //   GUI_CONFIG.display.display.amount_related_displayed;
+
+  // const related_items = getRelatedItemsForItemsShuffleSized_Static(
+  //   stores,
+  //   items,
+  //   amount_related_displayed
+  // );
+
   const name_display = props.name_display;
-
   const items = knowbook.items;
-
-  const amount_related_displayed =
-    GUI_CONFIG.display.display.amount_related_displayed;
-
-  const related_items = getRelatedItemsForItemsShuffleSized_Static(
-    stores,
-    items,
-    amount_related_displayed
-  );
 
   // const root_element: SVG_T = (
   //   <SVGKnowbook

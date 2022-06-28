@@ -12,10 +12,12 @@ import VisibilitySensorFeed from "../VisibilitySensorFeed";
 import ContentLoading from "../ContentLoading";
 import HeaderSEO from "../HeaderSEO";
 import Article from "../Article";
+import DialogsLogged from "../DialogsLogged";
 import dynamic from "next/dynamic";
-import AppLayoutPageHybridSVGBody from "./AppLayoutPageHybridSVGBody";
 
-const DialogsLoggedDynamic = dynamic(() => import("../DialogsLogged"));
+const AppLayoutPageHybridSVGBody_D = dynamic(
+  () => import("./AppLayoutPageHybridSVGBody")
+);
 
 interface IPageLayoutProps {
   children?: React.ReactNode;
@@ -77,18 +79,19 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
                 >
                   {props.svgBody ? (
                     <>
-                      <AppLayoutPageHybridSVGBody stores={props.stores}>
+                      <AppLayoutPageHybridSVGBody_D stores={props.stores}>
                         {props.children}
-                      </AppLayoutPageHybridSVGBody>
+                      </AppLayoutPageHybridSVGBody_D>
                     </>
                   ) : (
-                    props.children
+                    <>{props.children}</>
                   )}
                 </Box>
               )}
             </Box>
           </Box>
-          {/* Attention, déplacer le VisibilitySensorFeed et le mettre au mauvais endroit peut le faire bugger! */}
+          {/* Attention, déplacer le VisibilitySensorFeed et le mettre au mauvais
+          endroit peut le faire bugger! */}
           <VisibilitySensorFeed stores={props.stores} />
         </Box>
         {props.svgBody ? (
@@ -112,7 +115,7 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
 
       <Article stores={props.stores} />
       {props.stores.baseStore.isLogged ? (
-        <DialogsLoggedDynamic stores={props.stores} />
+        <DialogsLogged stores={props.stores} />
       ) : (
         <></>
       )}

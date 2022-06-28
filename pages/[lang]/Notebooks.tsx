@@ -10,7 +10,6 @@ import {
 } from "../../src/libs/getDataParamsPage";
 import { initializeApp } from "../../src/libs/helpersInitialize";
 import ContentLoading from "../../src/components/ContentLoading";
-import { makeScreenshoots } from "../../src/libs/utilsServer";
 import {
   onDeleteKnowbook,
   onOpenRenameKnowbook,
@@ -79,7 +78,8 @@ const Notebooks: React.FunctionComponent<IPage> = (props) => {
       id: item.name,
       stores: stores,
       title: item.name_display,
-      image_url: getRandomImageFromItems(item.items),
+      // image_url: getRandomImageFromItems(item.items),
+      image_url: stores.knowbookStore.getImageStaticKnowbook(item.name),
       pathname: pathKnowbookStatic,
       queryObject: { nameOrPeriod: item.name },
       amount: undefined,
@@ -138,9 +138,10 @@ const Notebooks: React.FunctionComponent<IPage> = (props) => {
         id: item.name,
         stores: stores,
         title: item.name,
-        image_url: getRandomImageFromItems(
-          stores.baseStore.getHistoryItems(item.items)
-        ),
+        // image_url: getRandomImageFromItems(
+        //   stores.baseStore.getHistoryItems(item.items)
+        // ),
+        image_url: stores.knowbookStore.getImageKnowbook(item.name),
         pathname: pathKnowbook,
         queryObject: { nameOrPeriod: item.name },
         amount: item.items.length,
@@ -185,7 +186,6 @@ const Notebooks: React.FunctionComponent<IPage> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  makeScreenshoots();
   return await I_getStaticProps(context);
 };
 export const getStaticPaths: GetStaticPaths = async (context) => {

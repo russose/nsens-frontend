@@ -69,7 +69,7 @@ const CardGenericCompactExtra: React.FunctionComponent<
             passHref
           >
             <a>
-              <Text size="sm" align="start" weight="normal">
+              <Text size="100" align="start" weight="normal">
                 {title}
               </Text>
             </a>
