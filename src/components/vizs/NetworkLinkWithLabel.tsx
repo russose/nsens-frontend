@@ -25,8 +25,6 @@ const NetworkLinkWithLabel: React.FunctionComponent<LinkProvidedProps<any>> = (
     const a =
       (props.link.source.y - props.link.target.y) /
       (props.link.source.x - props.link.target.x);
-    // const X = (props.link.source.x + props.link.target.x) * 0.5;
-    // const Y = (props.link.source.y + props.link.target.y) * 0.5;
     const ecart_t = 0.65;
     x =
       (props.link.target.x - props.link.source.x) * ecart_t +
@@ -36,11 +34,16 @@ const NetworkLinkWithLabel: React.FunctionComponent<LinkProvidedProps<any>> = (
 
   const X = (props.link.source.x + props.link.target.x) * 0.5;
   const Y = (props.link.source.y + props.link.target.y) * 0.5;
-  // x = props.link.target.x;
-  // y = props.link.target.y;
 
   const Label = displayCondition && (
-    <Text textAnchor="middle" dy={Y} dx={X} fontSize={12}>
+    <Text
+      textAnchor="middle"
+      dy={Y}
+      dx={X}
+      fontSize={12}
+      fontFamily="Roboto"
+      style={{ fontWeight: 600 }}
+    >
       {link_label}
     </Text>
   );

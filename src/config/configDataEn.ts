@@ -10,7 +10,7 @@ import {
 
 export const configDataEn: TconfigDataLanguage = {
   searchBar: "Search...",
-  source_wikipedia: "Source: Wikipedia",
+  source_wikipedia: "Source: Wikipedia.",
   legend: "Legend:",
   tryButton: "Try n.Sens",
   labels: {
@@ -36,6 +36,7 @@ export const configDataEn: TconfigDataLanguage = {
       [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbooks]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
+      [TPages.Random]: { title: "", description: "" },
       [TPages.KnowbookSpecial]: {
         [TSpecialPages.Mostviewed]: { title: "Today", description: "" },
         [TSpecialPages.AllSaved]: {
@@ -95,10 +96,10 @@ export const configDataEn: TconfigDataLanguage = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.CIRCLE]: {
-      label: "Orbit",
-      icon: CUSTOM_ICONS.CIRCLE,
-    },
+    // [TButtonID.CIRCLE]: {
+    //   label: "Orbit",
+    //   icon: CUSTOM_ICONS.CIRCLE,
+    // },
     [TButtonID.NETWORK]: {
       label: "Network",
       icon: CUSTOM_ICONS.NETWORK,

@@ -1,22 +1,26 @@
 import { Box, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { configGeneral, ICONS, RoundingT } from "../config/globals";
+import { configGeneral, CUSTOM_ICONS, RoundingT } from "../config/globals";
 import { AtomID, TButtonID, handlerT, IconT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
+import Button from "./Button";
 import CardGeneric from "./CardGeneric";
+import LazyComponent from "./LazyComponent";
 
 interface ICardAtomProps {
   id: AtomID;
   stores: IStores;
   title: string;
   image_url: string;
-  pathname: string;
-  queryObject?: any;
+  // pathname: string;
+  // queryObject?: any;
+  image_handler: handlerT;
   saved_actionable: boolean;
   saved_enabled: boolean;
   saved_handler: handlerT;
   edit_handler: handlerT;
   top_handler: handlerT;
+  size_factor?: number;
   // viz?: boolean;
 }
 
@@ -29,55 +33,66 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
 
   const topIcon = (
-    <IconButton
-      accessibilityLabel="wikipedia"
-      size={size_icon}
-      icon={ICONS.WIKIPEDIA as any}
-      iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
+    <Button
+      stores={props.stores}
+      icon={CUSTOM_ICONS.NETWORK as any}
+      label="ItemPageDefault"
+      icon_size={size_icon}
       bgColor="lightGray"
+      displayLabel={false}
       onClick={props.top_handler}
     />
   );
 
   return (
-    <CardGeneric
-      id={props.id}
-      stores={props.stores}
-      title={props.title}
-      image_url={props.image_url}
-      color={color_item}
+    <LazyComponent
       sizes={card_sizes}
-      rounding={rounding}
-      pathname={props.pathname}
-      queryObject={props.queryObject}
-      TopIcon={topIcon}
+      topMargin={"200"}
+      onChangeHandler={() => {
+        props.stores.baseStore.setGoodImageInHistoryItem(props.id);
+      }}
     >
-      <Box paddingX={0}>
-        {props.saved_enabled && (
-          <IconButton
-            accessibilityLabel="edit"
-            icon={buttons_all[TButtonID.EDIT].icon as IconT}
-            iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
-            size={size_icon}
-            onClick={props.edit_handler}
-          />
-        )}
-      </Box>
-      <Box paddingX={0}>
-        <IconButton
-          accessibilityLabel="save"
-          icon={buttons_all[TButtonID.SAVE].icon as IconT}
-          iconColor={
-            props.saved_enabled
-              ? (configGeneral.colors.iconColorDefaultSelected as any)
-              : (configGeneral.colors.iconColorDefaultNotSelected as any)
-          }
-          size={size_icon}
-          onClick={props.saved_handler}
-          disabled={!props.saved_actionable}
-        />
-      </Box>
-    </CardGeneric>
+      <>
+        <CardGeneric
+          id={props.id}
+          stores={props.stores}
+          title={props.title}
+          image_url={props.image_url}
+          color={color_item}
+          sizes={card_sizes}
+          rounding={rounding}
+          image_handler={props.image_handler}
+          TopIcon={topIcon}
+          size_factor={props.size_factor}
+        >
+          <Box paddingX={0}>
+            {props.saved_enabled && (
+              <IconButton
+                accessibilityLabel="edit"
+                icon={buttons_all[TButtonID.EDIT].icon as IconT}
+                iconColor={configGeneral.colors.iconColorDefault as any}
+                size={size_icon}
+                onClick={props.edit_handler}
+              />
+            )}
+          </Box>
+          <Box paddingX={0}>
+            <IconButton
+              accessibilityLabel="save"
+              icon={buttons_all[TButtonID.SAVE].icon as IconT}
+              iconColor={
+                props.saved_enabled
+                  ? (configGeneral.colors.iconColorDefaultSelected as any)
+                  : (configGeneral.colors.iconColorDefaultNotSelected as any)
+              }
+              size={size_icon}
+              onClick={props.saved_handler}
+              disabled={!props.saved_actionable}
+            />
+          </Box>
+        </CardGeneric>
+      </>
+    </LazyComponent>
   );
 };
 

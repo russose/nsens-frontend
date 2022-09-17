@@ -5,51 +5,14 @@ import {
   TUiBooleanStorage,
   IAtom,
   configPaths,
-  TPages,
   AtomID,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { ROOT_URL_WIKIPEDIA_REST } from "../config/configURLs";
 import { fetchArticle } from "../libs/fetch";
 import { prepareArticle } from "../libs/utils";
-import {
-  getKnowbookAtomsList,
-  getKnowbookStaticAtomsList,
-} from "../libs/helpersSavedKnowbooks";
 
-/*******************Articles*************************** */
-
-export const showArticle =
-  (stores: IStores, item_title: string, item_id: string) =>
-  (input: { event: eventT }): void => {
-    if (item_title !== undefined && item_id !== undefined) {
-      stores.uiStore.setSelectedAtom(item_id, item_title);
-      stores.uiStore.setUiStringStorage(TUiStringStorage.articleContent, "");
-      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, true);
-      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
-      fetchArticle(
-        item_title,
-        ROOT_URL_WIKIPEDIA_REST(stores.baseStore.paramsPage.lang)
-      )
-        .then((value) => {
-          stores.uiStore.setUiStringStorage(
-            TUiStringStorage.articleContent,
-            prepareArticle(value)
-          );
-          stores.uiStore.setUiBooleanStorage(
-            TUiBooleanStorage.showLoading,
-            false
-          );
-        })
-        .catch(() => {
-          stores.uiStore.setUiBooleanStorage(
-            TUiBooleanStorage.showLoading,
-            false
-          );
-        });
-    }
-    input.event.preventDefault();
-  };
+/*******************Article Modal*************************** */
 
 export const showArticleBackNext =
   (stores: IStores, router: NextRouter, direction: number) =>
@@ -63,10 +26,10 @@ export const showArticleBackNext =
     let selected: string;
     if (router.pathname.includes(configPaths.pages.StaticKnowbook)) {
       selected = router.query.nameOrPeriod as string;
-      items = getKnowbookStaticAtomsList(selected, stores);
+      items = stores.knowbookStore.knowbookStaticAtomsList(selected);
     } else if (router.pathname.includes(configPaths.pages.Knowbook)) {
       selected = router.query.nameOrPeriod as string;
-      items = getKnowbookAtomsList(selected, stores);
+      items = stores.knowbookStore.knowbookAtomsList(selected);
     } else if (
       router.pathname.includes(configPaths.pages.ItemCircle) ||
       router.pathname.includes(configPaths.pages.ItemNetwork)
@@ -128,7 +91,8 @@ export const showArticleBackNext =
           );
         });
     }
-    input.event.preventDefault();
+    // input.event.preventDefault();
+    input.event.stopPropagation();
   };
 
 /*******************Article Slides*************************** */

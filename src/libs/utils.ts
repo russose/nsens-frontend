@@ -1,35 +1,12 @@
-import { NextRouter } from "next/router";
-import {
-  AtomID,
-  Tlanguage,
-  IAtom,
-  configPaths,
-  TPages,
-  IScreen,
-  SCREENSHOTS_LIST,
-  IScenarioStep,
-} from "../config/globals";
+import { AtomID, Tlanguage, IAtom, configPaths } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-
-export function isPage(page: TPages, router: NextRouter): boolean {
-  if (configPaths.pages[page] === "/") {
-    return router.pathname === configPaths.rootPath;
-  } else {
-    return router.pathname === configPaths.rootPath + configPaths.pages[page];
-  }
-}
 
 export function range(amount_element: number): number[] {
   //=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   return Array.from(Array(amount_element).keys());
 }
 
-export const empty_handler = () => {};
-
-const display_username = "none";
-export function getUserNameDisplay(): string {
-  return display_username;
-}
+// export const empty_handler = () => {};
 
 export function DateToStringWithZero(date: number): string {
   if (date < 10) {
@@ -39,36 +16,17 @@ export function DateToStringWithZero(date: number): string {
   }
 }
 
-export function filterAtomListFromPatterns(
-  atomList: IAtom[],
-  patterns: string[]
-): IAtom[] {
-  if (atomList === undefined || atomList.length === 0) {
-    return [];
+export function shortenString(input: string, max_size: number): string {
+  // const output_raw = input.substring(0, max_size) + "...";
+  const words: string[] = input.split(" ");
+  let i = 0;
+  let output_raw = "";
+  while (output_raw.length <= max_size) {
+    output_raw = output_raw + " " + words[i];
+    i = i + 1;
   }
-  let atomList_filterned: IAtom[] = atomList;
-  patterns.forEach((pattern: string) => {
-    atomList_filterned = atomList_filterned.filter((atom) => {
-      return !atom.title.includes(pattern);
-    });
-  });
-  return atomList_filterned;
-}
-
-export function filterTitlesListFromPatterns(
-  TitleList: string[],
-  patterns: string[]
-): string[] {
-  if (TitleList === undefined || TitleList.length === 0) {
-    return [];
-  }
-  let TitleList_filterned: string[] = TitleList;
-  patterns.forEach((pattern: string) => {
-    TitleList_filterned = TitleList_filterned.filter((title) => {
-      return title !== pattern;
-    });
-  });
-  return TitleList_filterned;
+  const output = output_raw;
+  return output + " ...";
 }
 
 export function prepareArticle(article: string): string {
@@ -156,33 +114,18 @@ export function getRandomImageFromItems(items: IAtom[]): string {
   }
 }
 
-export function pathScreenshots(
-  rootPath: string,
-  scenarioStep: IScenarioStep,
-  isMobile: boolean,
-  language: Tlanguage
-) {
-  const screen: IScreen = isMobile
-    ? SCREENSHOTS_LIST.mobile
-    : SCREENSHOTS_LIST.desktop;
-
-  return (
-    rootPath + scenarioStep.id + "_" + language + "_" + screen.name + ".webp"
-  );
-}
-
-export function path_link(id: AtomID, stores: IStores): string {
+export function path_link_main_item_page(id: AtomID, stores: IStores): string {
   if (
     stores.baseStore.screen === undefined ||
     stores.baseStore.screen.height === undefined
   ) {
-    return configPaths.pages.ItemCircle;
+    return configPaths.pages.ItemNetwork;
   }
 
-  if (stores.baseStore.screen.height <= 480) {
+  if (stores.baseStore.screen.width <= 375) {
     return configPaths.pages.ItemFlat;
   } else {
-    return configPaths.pages.ItemCircle;
+    return configPaths.pages.ItemNetwork;
   }
 }
 
@@ -268,21 +211,16 @@ export function shuffleSized(
   return shuffled_sized;
 }
 
-// export function waitForMessage(
-//   duration_in_seconds: number,
-//   message_after: string
-// ) {
-//   setTimeout(() => {
-//     console.log(message_after);
-//   }, duration_in_seconds);
-// }
-
 export function sleep(milliseconds: number) {
   const date = Date.now();
   let currentDate = null;
   do {
     currentDate = Date.now();
   } while (currentDate - date < milliseconds);
+}
+
+export function sleep_(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // export function findUndefined(list: Object[]) {

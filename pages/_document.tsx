@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { CONFIG_ENV } from "../src/config/globals";
-import { mediaStyles } from "../src/config/media";
+// import { mediaStyles } from "../src/config/media";
 
 const GA_TRACKING_ID =
   CONFIG_ENV.GA_TRACKING_ID !== undefined ? CONFIG_ENV.GA_TRACKING_ID : "";
@@ -10,6 +10,18 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <link rel="preconnect" href={CONFIG_ENV.BACK_URL} />
+
+          {/* <link rel="preconnect" href="http://192.168.1.51" /> */}
+          {/* <link rel="preconnect" href="https://fr.wikipedia.org" />
+          <link rel="preconnect" href="https://fr.wikipedia.org/api/rest_v1/" /> */}
+          {/* <link rel="preconnect" href="https://upload.wikimedia.org" /> */}
+
+          {/* <link
+            rel="preload"
+            href="http://192.168.1.51:3000/logo2_W_small.webp"
+          /> */}
+
           {/* Global Site Tag (gtag.js) - Google Analytics */}
           <script
             async
@@ -43,7 +55,7 @@ export default class MyDocument extends Document {
 
           <meta name="apple-mobile-web-app-capable" content="yes" />
 
-          <link
+          {/* <link
             rel="apple-touch-startup-image"
             href="/assets/apple-splash-2048-2732.jpg"
             media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
@@ -172,15 +184,15 @@ export default class MyDocument extends Document {
             rel="apple-touch-startup-image"
             href="/assets/apple-splash-1136-640.jpg"
             media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-          />
+          /> */}
           <meta name="theme-color" content="#3490de" />
           <link rel="manifest" href="/manifest.json" />
 
           {/* Fresnel */}
-          <style
+          {/* <style
             type="text/css"
             dangerouslySetInnerHTML={{ __html: mediaStyles }}
-          />
+          /> */}
         </Head>
         <body>
           <Main />

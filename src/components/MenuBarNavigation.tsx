@@ -5,11 +5,11 @@ import {
   configGeneral,
   configPaths,
   IButton,
+  TButtonID,
   RoundingT,
   SizeT,
 } from "../config/globals";
-import { TButtonID } from "../config/globals";
-import { goLanding, goPage, isMobile, updateHome } from "../libs/helpersBase";
+import { goLanding, goPage, isMobile } from "../libs/helpersBase";
 
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./MenuBarButtonLayout";
@@ -29,14 +29,10 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
 
   const buttons: IButton[] = [
     {
-      Id: TButtonID.HOME,
+      Id: TButtonID.KNOWBOOKS,
       onClick: () => {
-        updateHome(props.stores);
-        goPage(
-          props.stores,
-          props.stores.baseStore.paramsPage,
-          configPaths.pages.Home
-        );
+        // updateHome(props.stores);
+        goPage(props.stores, configPaths.pages.Home);
       },
     },
     {
@@ -45,41 +41,33 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
         router.back();
       },
     },
-    {
-      Id: TButtonID.KNOWBOOKS,
-    },
-    {
-      Id: TButtonID.CIRCLE,
-      hidden:
-        !router.pathname.includes(configPaths.pages.ItemNetwork) &&
-        !router.pathname.includes(configPaths.pages.ItemFlat),
-      onClick: () => {
-        goPage(
-          props.stores,
-          props.stores.baseStore.paramsPage,
-          configPaths.pages.ItemCircle,
-          {
-            title: props.stores.uiStore.selectedAtom.title,
-            id: props.stores.uiStore.selectedAtom.id,
-          }
-        );
-      },
-    },
+    // {
+    //   Id: TButtonID.CIRCLE,
+    //   hidden:
+    //     !router.pathname.includes(configPaths.pages.ItemNetwork) &&
+    //     !router.pathname.includes(configPaths.pages.ItemFlat),
+    //   onClick: () => {
+    //     goPage(
+    //       props.stores,
+    //       // props.stores.baseStore.paramsPage,
+    //       configPaths.pages.ItemCircle,
+    //       {
+    //         title: props.stores.uiStore.selectedAtom.title,
+    //         id: props.stores.uiStore.selectedAtom.id,
+    //       }
+    //     );
+    //   },
+    // },
     {
       Id: TButtonID.NETWORK,
       hidden:
         !router.pathname.includes(configPaths.pages.ItemCircle) &&
         !router.pathname.includes(configPaths.pages.ItemFlat),
       onClick: () => {
-        goPage(
-          props.stores,
-          props.stores.baseStore.paramsPage,
-          configPaths.pages.ItemNetwork,
-          {
-            title: props.stores.uiStore.selectedAtom.title,
-            id: props.stores.uiStore.selectedAtom.id,
-          }
-        );
+        goPage(props.stores, configPaths.pages.ItemNetwork, {
+          title: props.stores.uiStore.selectedAtom.title,
+          id: props.stores.uiStore.selectedAtom.id,
+        });
       },
     },
     {
@@ -88,19 +76,17 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
         !router.pathname.includes(configPaths.pages.ItemCircle) &&
         !router.pathname.includes(configPaths.pages.ItemNetwork),
       onClick: () => {
-        goPage(
-          props.stores,
-          props.stores.baseStore.paramsPage,
-          configPaths.pages.ItemFlat,
-          {
-            title: props.stores.uiStore.selectedAtom.title,
-            id: props.stores.uiStore.selectedAtom.id,
-          }
-        );
+        goPage(props.stores, configPaths.pages.ItemFlat, {
+          title: props.stores.uiStore.selectedAtom.title,
+          id: props.stores.uiStore.selectedAtom.id,
+        });
       },
     },
     {
       Id: TButtonID.LOGIN,
+      onClick: () => {
+        goPage(props.stores, configPaths.pages.User);
+      },
     },
     {
       Id: TButtonID.INFO,

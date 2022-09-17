@@ -3,13 +3,13 @@ import { TconfigDataDisplay } from "./globals";
 const card_compact_vizs_size = 120;
 
 export const configDataDesktop: TconfigDataDisplay = {
-  display: {
-    displayFeedIncrement: 20,
-    amount_related_displayed: 50,
-  },
+  // display: {
+  //   displayFeedIncrement: 3, //20,
+  //   amount_related_displayed: 50,
+  // },
   // max_nodes_network: 110, //Only Network
   // heightTopAndBottom: 250, //Only Network
-  rounding_menu: 4,
+  rounding_menu: 3,
   rounding_item: 6,
   rounding_item_viz: 4,
   rounding_knowbooks: "circle",
@@ -18,7 +18,7 @@ export const configDataDesktop: TconfigDataDisplay = {
   size_icon_card: "xs",
   header_title_size: "300",
   layout: {
-    heightUser: 700,
+    heightUser: "60vh", //700,
     heightChangePassword: "40vh",
     heightHeader: 60, //7%
     heightBody: "92vh", //"93%",
@@ -32,7 +32,7 @@ export const configDataDesktop: TconfigDataDisplay = {
     SVG_Element_Circle_Density: 0.7,
     SVG_Root_Ratio: 0.6,
     fontsize: "13",
-    ratio_H_W_Item: 1.33,
+    card_size_factor: 0.8,
   },
   dialogs: {
     title_size: "300",
@@ -46,12 +46,13 @@ export const configDataDesktop: TconfigDataDisplay = {
     delta_position: { x: -20, y: -30 },
   },
   atom_sizes: {
-    height: 155, //220
+    height: 200, //155
+    width: 200,
     image_ratio: "80%",
-    lgColumn: 3,
-    mdColumn: 3,
-    smColumn: 4,
-    column: 6,
+    // lgColumn: 3,
+    // mdColumn: 3,
+    // smColumn: 4,
+    // column: 6,
     lgPadding: 4,
     mdPadding: 4,
     smPadding: 2,

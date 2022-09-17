@@ -1,5 +1,4 @@
 import { AtomID, eventT } from "../config/globals";
-import { goUserHandler } from "../libs/helpersBase";
 import {
   addSaved,
   IsItemInAnyKnowbook,
@@ -13,19 +12,10 @@ export const onSaved =
   (stores: IStores) =>
   (itemID: AtomID) =>
   (input: { event: eventT }): void => {
-    if (!stores.baseStore.isLogged) {
-      // goPage(
-      //   {
-      //     lang: stores.baseStore.paramsPage.lang,
-      //     display: stores.baseStore.paramsPage.display,
-      //   },
-      //   configPaths.pages.User
-      // );
-      // input.event.preventDefault();
-      // return;
-      goUserHandler(stores)()(input);
-      return;
-    }
+    // if (!stores.baseStore.isLogged) {
+    //   goUserHandler(stores)()(input);
+    //   return;
+    // }
 
     if (
       stores.savedStore.saved.has(itemID) === undefined ||
@@ -35,7 +25,8 @@ export const onSaved =
     } else {
       removeSaved(itemID, stores);
     }
-    input.event.preventDefault();
+    // input.event.preventDefault();
+    input.event.stopPropagation();
   };
 
 export const isItemSaved = (stores: IStores) => (itemID: AtomID) => {

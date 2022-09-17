@@ -5,8 +5,6 @@ Allow from all
 #deny from all
 #allow from 84.4.236.83
 
-
-
 #1H: max-age=3600
 #1J: max-age=86400
 #1S: max-age=604800

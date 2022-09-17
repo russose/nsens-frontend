@@ -1,9 +1,7 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { handlerT, IAtom, PaddingT, SizeT } from "../config/globals";
-import { showArticle } from "../handlers/handlers_Articles";
-import { path_link } from "../libs/utils";
+import { handlerT, IAtom, PaddingT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import CardAtom from "./CardAtom";
 
@@ -11,10 +9,12 @@ interface ICardAtomGridProps {
   id: string;
   stores: IStores;
   atoms: IAtom[];
+  image_handler: handlerT;
   isItemSaved_handler: handlerT;
   isItemSavedActionable_handler: handlerT;
   saved_handler: handlerT;
   edit_handler: handlerT;
+  top_handler: handlerT;
 }
 
 const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
@@ -37,10 +37,10 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
           .map((item) => {
             return (
               <Box
-                lgColumn={card_sizes.lgColumn as SizeT}
-                mdColumn={card_sizes.mdColumn as SizeT}
-                smColumn={card_sizes.smColumn as SizeT}
-                column={card_sizes.column as SizeT}
+                // lgColumn={card_sizes.lgColumn as SizeT}
+                // mdColumn={card_sizes.mdColumn as SizeT}
+                // smColumn={card_sizes.smColumn as SizeT}
+                // column={card_sizes.column as SizeT}
                 lgPadding={card_sizes.lgPadding as PaddingT}
                 mdPadding={card_sizes.mdPadding as PaddingT}
                 smPadding={card_sizes.smPadding as PaddingT}
@@ -53,15 +53,28 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                   stores={props.stores}
                   title={item.title}
                   image_url={item.image_url}
-                  pathname={path_link(item.id, props.stores)}
-                  queryObject={{ title: item.title, id: item.id }}
-                  saved_enabled={props.isItemSaved_handler(item.id)}
-                  saved_actionable={props.isItemSavedActionable_handler(
-                    item.id
-                  )}
+                  image_handler={
+                    props.image_handler === undefined
+                      ? undefined
+                      : props.image_handler(item.title, item.id)
+                  }
+                  saved_enabled={
+                    props.isItemSaved_handler !== undefined
+                      ? props.isItemSaved_handler(item.id)
+                      : false
+                  }
+                  saved_actionable={
+                    props.isItemSavedActionable_handler !== undefined
+                      ? props.isItemSavedActionable_handler(item.id)
+                      : true
+                  }
                   saved_handler={props.saved_handler(item.id)}
-                  edit_handler={props.edit_handler(item.id)}
-                  top_handler={showArticle(props.stores, item.title, item.id)}
+                  edit_handler={
+                    props.edit_handler !== undefined
+                      ? props.edit_handler(item.id)
+                      : undefined
+                  }
+                  top_handler={props.top_handler(item.title, item.id)}
                 />
               </Box>
             );

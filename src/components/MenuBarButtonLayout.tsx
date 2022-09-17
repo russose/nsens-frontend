@@ -8,7 +8,6 @@ import {
   RoundingT,
   SizeT,
 } from "../config/globals";
-import { onMenuButtonPath } from "../handlers/handlers_Searchbar_Navigation";
 import { IStores } from "../stores/RootStore";
 import Button from "./Button";
 
@@ -54,7 +53,6 @@ const MenuBarButtonLayout: React.FunctionComponent<IProps> = (props) => {
               stores={props.stores}
               icon={buttons_all[button.Id].icon}
               label={buttons_all[button.Id].label}
-              path={onMenuButtonPath(props.stores)(button.Id)}
               icon_size={props.icon_size}
               iconColor={button.iconColor}
               disabled={button.disabled}

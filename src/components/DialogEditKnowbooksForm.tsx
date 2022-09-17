@@ -38,9 +38,7 @@ const DialogEditKnowbooksForm: React.FunctionComponent<
         ": " +
         props.stores.baseStore.getHistoryItem(props.id).title
       }
-      // onDismiss={props.handler_cancel}
       onDismiss={props.handler_confirm(props.id)}
-      // footer={validation}
       size="md"
     >
       <Box rounding={rounding} padding={0}>

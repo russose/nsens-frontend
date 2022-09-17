@@ -4,7 +4,12 @@ import { Box, Link, Sheet, Text } from "gestalt";
 import { ROOT_URL_WIKIPEDIA } from "../config/configURLs";
 import { IStores } from "../stores/RootStore";
 import { TUiBooleanStorage, TUiStringStorage } from "../config/globals";
-import MenuBarArticle from "./MenuBarArticle";
+import dynamic from "next/dynamic";
+import MenuBarArticle_NotLogged from "./MenuBarArticle_NotLogged";
+
+const MenuBarArticle_Logged_D = dynamic(
+  () => import("./MenuBarArticle_Logged")
+);
 
 interface IArticleProps {
   stores: IStores;
@@ -16,6 +21,8 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
 
   const item_title = props.stores.uiStore.selectedAtom.title;
   const rounding = props.stores.baseStore.GUI_CONFIG.display.rounding_menu;
+
+  const isLogged = props.stores.baseStore.isLogged;
 
   const article = (
     <iframe
@@ -63,7 +70,19 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
         {source}
         {/* <Box column={6}> */}
         <Box column={11} smColumn={8} mdColumn={5} lgColumn={5}>
-          <MenuBarArticle stores={props.stores} rounding={rounding} />
+          {/* <MenuBarArticle stores={props.stores} rounding={rounding} /> */}
+          {!isLogged ? (
+            <MenuBarArticle_NotLogged
+              stores={props.stores}
+              rounding={rounding}
+              specific_buttons={[]}
+            />
+          ) : (
+            <MenuBarArticle_Logged_D
+              stores={props.stores}
+              rounding={rounding}
+            />
+          )}
         </Box>
       </Box>
     </Box>
@@ -71,9 +90,10 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
 
   return (
     <>
-      {props.stores.uiStore.getUiBooleanStorage(
-        TUiBooleanStorage.showArticle
-      ) && (
+      {
+        // props.stores.uiStore.getUiBooleanStorage(
+        //   TUiBooleanStorage.showArticle
+        // ) &&
         <Sheet
           accessibilityDismissButtonLabel="Close wikipedia sheet"
           accessibilitySheetLabel="Wikipedia Article"
@@ -89,7 +109,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
         >
           {article}
         </Sheet>
-      )}
+      }
     </>
   );
 };

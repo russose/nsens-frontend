@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "gestalt";
+import { Box, Text, Image } from "gestalt";
 import React from "react";
 
 interface IInstallationProps {
@@ -21,7 +21,7 @@ const Installation: React.FunctionComponent<IInstallationProps> = (props) => {
           fit="contain"
           naturalHeight={1}
           naturalWidth={1}
-          loading="lazy"
+          // loading="lazy"
           src={props.path_image}
         ></Image>
       </Box>

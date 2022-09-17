@@ -1,6 +1,6 @@
 //Warning: different between back and front
 
-import { TButtonID, Tlanguage, TPages } from "./globals";
+import { Tlanguage, TPages } from "./globals";
 
 export const languages_activated: Tlanguage[] = [
   Tlanguage.fr,
@@ -34,38 +34,41 @@ export const configGeneral = {
   large_screen_breakpoint: 1400,
   extra_large_screen_breakpoint: 2500,
   // tiny_screen_breakpoint: 320,
-  display: {
-    amount_vitalKnowbook_for_each_mostview: 1, //3,
-    feed_time_increment_ms: 500,
-  },
+  // display: {
+  //   amount_vitalKnowbook_for_each_mostview: 1, //3,
+  //   feed_time_increment_ms: 30, //500,
+  // },
   colors: {
     //Theme: update below + style.css + manifest.json
     //https://www.rapidtables.com/web/color/RGB_Color.html
-    top: "green",
-    bottom_bar: "green",
-    background: "white", //"white",
+    top: "education",
+    top_opacity: 0.9,
+    bottom_bar: "education",
+    background: "light", //"white",
     knowbook_edge_color: "white", //"white", //"darkGray",
     root_edge_color: "gray", //"darkWash",
     svg_background: "#020723", //"white",
     svg_elements: "white",
-    item_color: "lightGray",
-    knowbook_color: "lightGray",
-    menu: "white",
-    item_compact_color: "white",
-    dialog: "white",
-    headers: "white",
+    item_color: "light",
+    knowbook_color: "lightWash",
+    menu: "light",
+    dialog: "light",
+    headers: "light",
     item_color_image: "rgb(220, 220, 220)",
     knowbook_color_image: "rgb(245, 245, 245)",
-    iconColorDefaultNotSelected: "darkGray",
+    iconColorDefault: "darkGray",
+    iconColorDefaultNotSelected: "lightWash",
     iconColorDefaultSelected: "red",
+    network_node_color: "infoWeak",
+    network_item_selected_color: "darkWash",
   },
   staticKnowbooks: {
     name_allStaticKnowbooks: "AllStatic.txt",
-    name_extractStaticKnowbooks: "_AllStaticExtract.txt",
+    // name_extractStaticKnowbooks: "_AllStaticExtract.txt",
     vitalKnowbooks_topLevelPattern:
       "Category:Wikipedia level-3 vital articles by topic",
   },
-  relation_name_wikipedia: "wikipedia",
+  relation_name_wikipedia: "Relations",
   successMessage: "you can now login...",
   loginDuration: 2000,
 };
@@ -75,27 +78,35 @@ export const configFetching = {
   amount_data_fetched_items_searched: 50,
   max_size_chunk_api: 49,
   amount_related_wikipedia: 10,
+  amount_data_fetched_related_for_images: 10,
   amount_max_by_node_wikidata: 30,
-  amount_data_fetched_related_for_images: 2,
   width_image_thumbnail: 300,
   cache_duration_in_sec: "2628000", //1 Mois pour le cache
   staticKnowbooks: {
     refreshAllStaticKnowbooks: false,
+    refreshAllStaticKnowbooksImages: false,
+    image_offset: 1,
+    includeRelated: false, //including related takes a lot of time to fetch and makes too big static pages
     amount_best: 100,
     amount_extractStaticKnowbooks: 10, //5,
-    sleep_in_ms: 2000,
-    size_chunk: 5,
+    sleep_in_ms: 100, //should be 2000 if related activated
+    size_chunk: 40, //should be 5 if related activated
   },
 };
 
 export const configPaths = {
-  rootPath: "/[lang]",
+  rootPath: "/[lang]/[display]",
   screenshots: "/screenshots/",
   // item_empty_image: "/The_Scientific_Universe_small.webp",
   item_empty_image: "/", //Don't put "" used to identify that an image shall be fetched!
-  knowbook_all_image: "/500px-Book_closed_template_small.svg.webp",
-  knowbook_none_image: "/The_Scientific_Universe_small.webp",
-  image_logo_B: "/logo2_B.webp",
+  // knowbook_all_image: "/500px-Book_closed_template_small.svg.webp",
+  // knowbook_none_image: "/The_Scientific_Universe_small.webp",
+  knowbook_all_image: "",
+  knowbook_none_image: "",
+  knowbook_all_color: "AntiqueWhite",
+  knowbook_none_color: "Beige",
+  mostviewed_image: "/News.webp",
+  // image_logo_B: "/logo2_B.webp",
   image_logo_W_small: "/logo2_W_small.webp",
   image_landing: "/landing.webp",
   image_install: "/install.webp",
@@ -110,17 +121,20 @@ export const configPaths = {
     [TPages.ItemNetwork]: "/ItemNetwork",
     [TPages.ItemFlat]: "/ItemFlat",
 
-    [TPages.Knowbooks]: "/Notebooks",
+    // [TPages.Knowbooks]: "/Notebooks",
+    [TPages.Knowbooks]: "/",
 
     [TPages.StaticKnowbook]: "/Static_Notebooks/[nameOrPeriod]",
 
     [TPages.Knowbook]: "/Notebook",
     [TPages.KnowbookSpecial]: "/NotebookSpecial",
 
+    [TPages.Random]: "/Random",
+
     empty: "",
   },
   static: {
-    knowbooks_location: "public/staticKnowbooks/",
+    knowbooks_directory: "public/staticKnowbooks/",
     base_cache: "cache/",
     cache_articles: "articles/",
     cache_nbviews: "nb_views/",
@@ -158,23 +172,23 @@ export const CUSTOM_ICONS = {
     "m 3.483871,0 c 0.643548,0 1.16129,0.520161 1.16129,1.16129 v 2.322581 c 0,0.643548 -0.517742,1.16129 -1.16129,1.16129 H 1.16129 C 0.520161,4.645161 0,4.127419 0,3.483871 V 1.16129 C 0,0.520161 0.520161,0 1.16129,0 Z M 22.451613,0.774194 C 23.308065,0.774194 24,1.467581 24,2.322581 24,3.179032 23.308065,3.870968 22.451613,3.870968 H 8.516129 c -0.856452,0 -1.548387,-0.691936 -1.548387,-1.548387 0,-0.855 0.691935,-1.548387 1.548387,-1.548387 z m 0,7.741935 C 23.308065,8.516129 24,9.208065 24,10.064516 c 0,0.856452 -0.691935,1.548387 -1.548387,1.548387 H 8.516129 c -0.856452,0 -1.548387,-0.691935 -1.548387,-1.548387 0,-0.856451 0.691935,-1.548387 1.548387,-1.548387 z m 0,7.741936 C 23.308065,16.258065 24,16.95 24,17.806452 c 0,0.856451 -0.691935,1.548387 -1.548387,1.548387 H 8.516129 c -0.856452,0 -1.548387,-0.691936 -1.548387,-1.548387 0,-0.856452 0.691935,-1.548387 1.548387,-1.548387 z M 0,8.903226 C 0,8.259677 0.520161,7.741935 1.16129,7.741935 h 2.322581 c 0.643548,0 1.16129,0.517742 1.16129,1.161291 v 2.32258 c 0,0.643549 -0.517742,1.161291 -1.16129,1.161291 H 1.16129 C 0.520161,12.387097 0,11.869355 0,11.225806 Z m 3.483871,6.580645 c 0.643548,0 1.16129,0.517742 1.16129,1.16129 v 2.322581 c 0,0.643548 -0.517742,1.16129 -1.16129,1.16129 H 1.16129 C 0.520161,20.129032 0,19.61129 0,18.967742 v -2.322581 c 0,-0.643548 0.520161,-1.16129 1.16129,-1.16129 z",
 };
 
-export const configButtonsPath = {
-  [TButtonID.HOME]: configPaths.pages.Home,
-  [TButtonID.LOGIN]: configPaths.pages.User,
-  // [TButtonID.INFO]: configPaths.pages.About,
-  [TButtonID.INFO]: "",
-  [TButtonID.SAVE]: configPaths.pages.empty,
-  [TButtonID.EDIT]: configPaths.pages.empty,
-  [TButtonID.CIRCLE]: configPaths.pages.ItemCircle,
-  [TButtonID.NETWORK]: configPaths.pages.ItemNetwork,
-  [TButtonID.NETWORKFLAT]: configPaths.pages.ItemFlat,
-  [TButtonID.KNOWBOOKS]: configPaths.pages.Knowbooks,
-  [TButtonID.KNOWBOOK]: configPaths.pages.Knowbook,
-  [TButtonID.SEPARATOR]: "",
-  [TButtonID.BACK]: "",
-  [TButtonID.ARTICLE_BACK]: "",
-  [TButtonID.ARTICLE_NEXT]: "",
-};
+// export const configButtonsPath = {
+//   [TButtonID.HOME]: configPaths.pages.Home,
+//   [TButtonID.LOGIN]: configPaths.pages.User,
+//   // [TButtonID.INFO]: configPaths.pages.About,
+//   [TButtonID.INFO]: "",
+//   [TButtonID.SAVE]: configPaths.pages.empty,
+//   [TButtonID.EDIT]: configPaths.pages.empty,
+//   [TButtonID.CIRCLE]: configPaths.pages.ItemCircle,
+//   [TButtonID.NETWORK]: configPaths.pages.ItemNetwork,
+//   [TButtonID.NETWORKFLAT]: configPaths.pages.ItemFlat,
+//   [TButtonID.KNOWBOOKS]: configPaths.pages.Knowbooks,
+//   [TButtonID.KNOWBOOK]: configPaths.pages.Knowbook,
+//   [TButtonID.SEPARATOR]: "",
+//   [TButtonID.BACK]: "",
+//   [TButtonID.ARTICLE_BACK]: "",
+//   [TButtonID.ARTICLE_NEXT]: "",
+// };
 
 export const group_name = "group";
 

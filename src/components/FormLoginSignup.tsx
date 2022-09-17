@@ -9,10 +9,14 @@ import {
   TUiStringStorage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { getUserNameDisplay } from "../libs/utils";
 import React from "react";
 import Link from "next/link";
 import { configGeneral, configPaths } from "../config/globals";
+
+const display_username = "none";
+function getUserNameDisplay(): string {
+  return display_username;
+}
 
 interface IFormLoginSignupProps {
   stores: IStores;
@@ -97,7 +101,7 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
             passHref
           >
             <a>
-              <Text align="end" size="sm" weight="bold">
+              <Text align="end" size="100" weight="bold">
                 {props.missing_password_text}
               </Text>
             </a>

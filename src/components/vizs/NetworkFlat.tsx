@@ -1,17 +1,11 @@
 import { Box } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { AtomID } from "../../config/globals";
+import { AtomID, configGeneral } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
 import { Text } from "gestalt";
 import { capitalizeFirstLetter } from "../../libs/utils";
-import {
-  isItemSaved,
-  isItemSavedActivated,
-  onSaved,
-} from "../../handlers/handlers_Saved";
-import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
-import CardAtomGrid from "../CardAtomGrid";
+import CardAtomGridDynamic from "../CardAtomGridDynamic";
 
 export type INetworkFlatProps = {
   rootItemId: AtomID;
@@ -20,38 +14,32 @@ export type INetworkFlatProps = {
 
 const NetworkFlat: React.FunctionComponent<INetworkFlatProps> = (props) => {
   const relatedMap = props.stores.graphStore.relatedMap;
-  for (const itemId of props.stores.graphStore.relatedMapFlat.atomIds) {
-    props.stores.baseStore.setGoodImageInHistoryItem(itemId);
-  }
+
   return (
     <Box>
       {Array.from(relatedMap).map((key_value) => {
         return (
           <Box key={`NetworkFlat-box0-${key_value[0]}`}>
-            <Box key={`NetworkFlat-box1-${key_value[0]}`} padding={3}>
-              <Text key={`NetworkFlat-text-${key_value[0]}`} weight="bold">
-                {capitalizeFirstLetter(key_value[0]) + " :"}
-              </Text>
+            <Box
+              key={`NetworkFlat-box1-${key_value[0]}`}
+              display="flex"
+              flex="grow"
+              direction="row"
+            >
+              <Box
+                key={`NetworkFlat-box2-${key_value[0]}`}
+                padding={3}
+                color={configGeneral.colors.network_node_color as any}
+              >
+                <Text key={`NetworkFlat-text-${key_value[0]}`} weight="bold">
+                  {capitalizeFirstLetter(key_value[0]) + " :"}
+                </Text>
+              </Box>
             </Box>
-            {/* <CardAtomGridCompact
+            <CardAtomGridDynamic
               id={`NetworkFlat-${key_value[0]}`}
               stores={props.stores}
-              // atoms={key_value[1]}
               atoms={props.stores.baseStore.getHistoryItems(key_value[1])}
-              isItemSaved_handler={isItemSaved(props.stores)}
-              isItemSavedActionable_handler={isItemSavedActivated(props.stores)}
-              saved_handler={onSaved(props.stores)}
-              edit_handler={onEditKnowbooks(props.stores)}
-            /> */}
-            <CardAtomGrid
-              id={`NetworkFlat-${key_value[0]}`}
-              stores={props.stores}
-              // atoms={key_value[1]}
-              atoms={props.stores.baseStore.getHistoryItems(key_value[1])}
-              isItemSaved_handler={isItemSaved(props.stores)}
-              isItemSavedActionable_handler={isItemSavedActivated(props.stores)}
-              saved_handler={onSaved(props.stores)}
-              edit_handler={onEditKnowbooks(props.stores)}
             />
           </Box>
         );

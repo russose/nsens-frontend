@@ -1,70 +1,49 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { IStores } from "../../stores/RootStore";
-import { TDisplay } from "../../config/globals";
-import { Media } from "../../config/media";
 import dynamic from "next/dynamic";
+import { IparamsPage, TDisplay } from "../../config/globals";
+import { useStores } from "../../stores/RootStoreHook";
+import { switchDisplayWhenResized } from "../../libs/helpersBase";
+import { useRouter } from "next/router";
 
-interface IAppLayoutProps {
+interface IProps {
   children?: React.ReactNode;
-  stores: IStores;
-  titleSEO?: string;
-  isBodySVG: boolean;
+  paramsPage: IparamsPage;
 }
 
 const AppLayoutMobile_D = dynamic(() => import("./AppLayoutMobile"));
 const AppLayoutDesktop_D = dynamic(() => import("./AppLayoutDesktop"));
 
-// const Media_ = observer(Media);
-const Media_ = Media;
+const AppLayout: React.FunctionComponent<IProps> = (props) => {
+  const stores = useStores();
+  const router = useRouter();
 
-const AppLayout: React.FunctionComponent<IAppLayoutProps> = (props) => {
-  const stores = props.stores;
+  if (typeof window !== "undefined") {
+    window.onresize = () => {
+      switchDisplayWhenResized(stores, router);
+    };
+  }
 
-  return (
-    <>
-      <Media_ at={TDisplay.mobile}>
-        <AppLayoutMobile_D
-          stores={stores}
-          titleSEO={props.titleSEO}
-          display={TDisplay.mobile}
-          svgBody={props.isBodySVG}
-        >
-          {props.children}
-        </AppLayoutMobile_D>
-      </Media_>
-      <Media_ at={TDisplay.desktop}>
-        <AppLayoutDesktop_D
-          stores={stores}
-          titleSEO={props.titleSEO}
-          display={TDisplay.desktop}
-          svgBody={props.isBodySVG}
-        >
-          {props.children}
-        </AppLayoutDesktop_D>
-      </Media_>
-      <Media_ at={TDisplay.large}>
-        <AppLayoutDesktop_D
-          stores={stores}
-          titleSEO={props.titleSEO}
-          display={TDisplay.large}
-          svgBody={props.isBodySVG}
-        >
-          {props.children}
-        </AppLayoutDesktop_D>
-      </Media_>
-      <Media_ greaterThanOrEqual={TDisplay.extra}>
-        <AppLayoutDesktop_D
-          stores={stores}
-          titleSEO={props.titleSEO}
-          display={TDisplay.extra}
-          svgBody={props.isBodySVG}
-        >
-          {props.children}
-        </AppLayoutDesktop_D>
-      </Media_>
-    </>
-  );
+  let content;
+  if (props.paramsPage.display === TDisplay.desktop) {
+    content = (
+      <AppLayoutDesktop_D
+        key={props.paramsPage.display + "-" + props.paramsPage.lang}
+      >
+        {props.children}
+      </AppLayoutDesktop_D>
+    );
+  } else {
+    content = (
+      <AppLayoutMobile_D
+        key={props.paramsPage.display + "-" + props.paramsPage.lang}
+      >
+        {props.children}
+      </AppLayoutMobile_D>
+    );
+  }
+
+  return <>{content}</>;
 };
 
 export default observer(AppLayout);

@@ -1,25 +1,35 @@
 import { observer } from "mobx-react-lite";
 import { Box, IconButton } from "gestalt";
-import { AtomID, TButtonID, handlerT, IconT, ICONS } from "../config/globals";
+import {
+  AtomID,
+  TButtonID,
+  handlerT,
+  IconT,
+  CUSTOM_ICONS,
+  ColorT,
+} from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { configGeneral } from "../config/globals";
 import React from "react";
 import CardGenericCompact from "./CardGenericCompact";
 import CardGenericCompactExtra from "./CardGenericCompactExtra";
+import Button from "./Button";
 
 interface ICardAtomCompactVizProps {
   id: AtomID;
   stores: IStores;
   title: string;
   image_url: string;
-  pathname?: string;
-  queryObject?: any;
+  image_handler: handlerT;
+
   saved_actionable: boolean;
   saved_enabled: boolean;
   saved_handler: handlerT;
   edit_handler: handlerT;
   top_handler: handlerT;
   CompactExtra?: boolean;
+
+  color: ColorT;
 }
 
 const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
@@ -27,7 +37,8 @@ const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   let size_icon: IconT = GUI_CONFIG.display.size_icon_card;
-  const color_item = configGeneral.colors.item_compact_color;
+  // const color_item = configGeneral.colors.item_compact_color;
+  const color_item = props.color;
   const color_image = configGeneral.colors.item_color_image;
   let card_sizes = GUI_CONFIG.display.atom_compact_vizs_sizes;
   // if (props.CompactExtra === true) {
@@ -37,12 +48,14 @@ const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
   const buttons_all = GUI_CONFIG.language.buttons;
 
   const topIcon = (
-    <IconButton
-      accessibilityLabel="wikipedia"
-      size={size_icon}
-      icon={ICONS.WIKIPEDIA as any}
-      iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
-      // bgColor="lightGray"
+    <Button
+      stores={props.stores}
+      icon={CUSTOM_ICONS.NETWORK as any}
+      label="ItemPageDefault"
+      icon_size={size_icon}
+      // iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
+      bgColor="lightGray"
+      displayLabel={false}
       onClick={props.top_handler}
     />
   );
@@ -69,7 +82,7 @@ const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
           <IconButton
             accessibilityLabel="edit"
             icon={buttons_all[TButtonID.EDIT].icon as IconT}
-            iconColor={configGeneral.colors.iconColorDefaultNotSelected as any}
+            iconColor={configGeneral.colors.iconColorDefault as any}
             size={size_icon}
             onClick={props.edit_handler}
           />
@@ -87,8 +100,7 @@ const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
       color={color_item}
       color_image={color_image}
       sizes={card_sizes}
-      pathname={props.pathname}
-      queryObject={props.queryObject}
+      image_handler={props.image_handler}
     >
       {icons}
     </CardGenericCompactExtra>
@@ -101,8 +113,7 @@ const CardAtomCompactViz: React.FunctionComponent<ICardAtomCompactVizProps> = (
       color={color_item}
       color_image={color_image}
       sizes={card_sizes}
-      pathname={props.pathname}
-      queryObject={props.queryObject}
+      image_handler={props.image_handler}
     >
       {icons}
     </CardGenericCompact>

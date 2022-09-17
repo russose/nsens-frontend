@@ -1,20 +1,17 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
-  configFetching,
   Tlanguage,
   configPaths,
   IStaticKnowbookWithItemsDefinition,
 } from "../config/globals";
 import { getAllConfigGui, getDataParamsPage, IPage } from "./getDataParamsPage";
-import {
-  buildAllStaticKnowbooks,
-  getAllStaticKnowbooks,
-} from "./getDataStaticKnowbooksHelpers";
+import { getAllStaticKnowbooks } from "./getDataStaticKnowbooksHelpers";
 import { readFileJson } from "./utilsServer";
 
-export interface IPageStaticKnowbooks extends IPage {
-  nameOrPeriod: string;
-  name_display: string;
+export interface IPageStaticKnowbook extends IPage {
+  // nameOrPeriod: string;
+  // name_display: string;
+  staticKnowbook: IStaticKnowbookWithItemsDefinition;
   // items?: IAtom[];
 }
 
@@ -45,14 +42,14 @@ async function getAllConfigStaticKnowbooks() {
 }
 
 //https://stackabuse.com/reading-and-writing-json-files-with-node-js/
-async function getConfigDataGuiStaticKnowbooks(
+async function getConfigDataGuiStaticKnowbook(
   params: any
-): Promise<IPageStaticKnowbooks> {
+): Promise<IPageStaticKnowbook> {
   const lang: Tlanguage = params.lang;
-  // const display = params.display;
+  const display = params.display;
   const nameOrPeriod = params.nameOrPeriod;
 
-  const static_path_base = configPaths.static.knowbooks_location + lang + "/";
+  const static_path_base = configPaths.static.knowbooks_directory + lang + "/";
   //  + nameOrPeriod + ".txt";
 
   // const date = new Date();
@@ -83,13 +80,33 @@ async function getConfigDataGuiStaticKnowbooks(
     //   console.log("Amount: ", difference);
     // }
 
-    const guiConfigDataStaticKnowbooks: IPageStaticKnowbooks = {
-      // paramsPage: (await getDataParamsPage({ lang: lang, display: display }))
-      paramsPage: (await getDataParamsPage({ lang: lang })).paramsPage,
-      ...staticKnowbook_with_items,
+    const datapage: IPage = await getDataParamsPage({
+      lang: lang,
+      display: display,
+    });
+
+    //Ensure related are removed for all items to reduce size and avoid static pages are huge in case related were computed in /public/staticKnowbooks/fr/XX.txt
+    //Additionnally, clean all unused attributes item attributes (thumbnail_url )
+    if (true) {
+      staticKnowbook_with_items.items = staticKnowbook_with_items.items.map(
+        (item) => {
+          const item_without_related = item;
+          item_without_related.related = "";
+          item_without_related.thumbnail_url = "";
+          return item_without_related;
+        }
+      );
+    }
+
+    const data: IPageStaticKnowbook = {
+      paramsPage: datapage.paramsPage,
+      GUI_CONFIG: datapage.GUI_CONFIG,
+      // nameOrPeriod: staticKnowbook_with_items.nameOrPeriod,
+      // name_display: staticKnowbook_with_items.name_display,
+      staticKnowbook: staticKnowbook_with_items,
     };
 
-    return guiConfigDataStaticKnowbooks;
+    return data;
   } catch {
     console.log(
       "disk files not found for Static Knowbooks, you need to generate them"
@@ -111,20 +128,20 @@ export const I_getStaticPaths: GetStaticPaths = async (context) => {
   };
 };
 export const I_getStaticProps: GetStaticProps = async (context) => {
-  const data_with_items: IPageStaticKnowbooks =
-    await getConfigDataGuiStaticKnowbooks(context.params);
-  const data_without_items: IPageStaticKnowbooks = {
-    paramsPage: data_with_items.paramsPage,
-    nameOrPeriod: data_with_items.nameOrPeriod,
-    name_display: data_with_items.name_display,
-  };
+  const data_with_items: IPageStaticKnowbook =
+    await getConfigDataGuiStaticKnowbook(context.params);
+  // const data_without_items: IPageStaticKnowbook = {
+  //   paramsPage: data_with_items.paramsPage,
+  //   nameOrPeriod: data_with_items.nameOrPeriod,
+  //   name_display: data_with_items.name_display,
+  // };
 
-  if (!data_without_items) {
+  if (!data_with_items) {
     return {
       notFound: true,
     };
   }
   return {
-    props: data_without_items,
+    props: data_with_items,
   };
 };

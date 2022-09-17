@@ -8,21 +8,25 @@ import {
 } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
 import { configGeneral } from "../../config/globals";
-import VisibilitySensorFeed from "../VisibilitySensorFeed";
 import ContentLoading from "../ContentLoading";
-import HeaderSEO from "../HeaderSEO";
-import Article from "../Article";
 import DialogsLogged from "../DialogsLogged";
 import dynamic from "next/dynamic";
 
 const AppLayoutPageHybridSVGBody_D = dynamic(
-  () => import("./AppLayoutPageHybridSVGBody")
+  () => import("./AppLayoutPageHybridSVGBody"),
+  {
+    ssr: false,
+  }
 );
+
+const Article_D = dynamic(() => import("./../Article"), {
+  ssr: false,
+});
 
 interface IPageLayoutProps {
   children?: React.ReactNode;
   stores: IStores;
-  titleSEO: string;
+  // titleSEO: string;
   top: reactComponentT;
   svgBody: boolean;
   bottom?: reactComponentT;
@@ -32,6 +36,7 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
   props
 ) => {
   const color_top: ColorT = configGeneral.colors.top;
+  const opacity_top: ColorT = configGeneral.colors.top_opacity;
   const bottom_bar: ColorT = configGeneral.colors.bottom_bar;
   const color_background: ColorT = configGeneral.colors.background;
   const heightHeader =
@@ -41,13 +46,16 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
   const heightBottom =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightBottom;
 
+  // console.log("rendered", "appLayoutHybrid");
+
   return (
     <>
-      <HeaderSEO stores={props.stores} title={props.titleSEO} />
+      {/* <HeaderSEO stores={props.stores} title={props.titleSEO} /> */}
       <Box padding={0} height="100vh" width="100%" color={color_background}>
         <Box
           padding={0}
           color={color_top}
+          opacity={opacity_top}
           height={heightHeader}
           width="100%"
           display="flex"
@@ -75,7 +83,6 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
                   display="flex"
                   direction="column"
                   justifyContent="between"
-                  // overflow="auto"
                 >
                   {props.svgBody ? (
                     <>
@@ -90,9 +97,6 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
               )}
             </Box>
           </Box>
-          {/* Attention, déplacer le VisibilitySensorFeed et le mettre au mauvais
-          endroit peut le faire bugger! */}
-          <VisibilitySensorFeed stores={props.stores} />
         </Box>
         {props.svgBody ? (
           <>
@@ -113,7 +117,15 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
         </Box>
       </Box>
 
-      <Article stores={props.stores} />
+      {/* <Article stores={props.stores} /> */}
+      {props.stores.uiStore.getUiBooleanStorage(
+        TUiBooleanStorage.showArticle
+      ) ? (
+        <Article_D stores={props.stores} />
+      ) : (
+        <></>
+      )}
+
       {props.stores.baseStore.isLogged ? (
         <DialogsLogged stores={props.stores} />
       ) : (

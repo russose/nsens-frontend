@@ -1,14 +1,14 @@
 const card_compact_vizs_size = 75;
 
 export const configDataMobile = {
-  display: {
-    displayFeedIncrement: 10,
-    amount_related_displayed: 32,
-  },
+  // display: {
+  //   displayFeedIncrement: 1, //10,
+  //   amount_related_displayed: 32,
+  // },
   // max_nodes_network: 50, //Only Network
   // heightTopAndBottom: 200, //Only Network
 
-  rounding_menu: 4,
+  rounding_menu: 3,
   rounding_item: 6,
   rounding_item_viz: 4,
   rounding_knowbooks: "circle",
@@ -17,7 +17,7 @@ export const configDataMobile = {
   size_icon_card: "xs",
   header_title_size: "300",
   layout: {
-    heightUser: 700,
+    heightUser: "80vh", //600,
     heightChangePassword: "45vh",
     heightHeader: 60, //7%
     heightBody: "90vh", //87%
@@ -31,7 +31,7 @@ export const configDataMobile = {
     SVG_Element_Circle_Density: 0.6,
     SVG_Root_Ratio: 0.8,
     fontsize: "12",
-    ratio_H_W_Item: 1.33,
+    card_size_factor: 0.6,
   },
   dialogs: {
     title_size: "300",
@@ -45,12 +45,13 @@ export const configDataMobile = {
     delta_position: { x: -30, y: -20 },
   },
   atom_sizes: {
-    height: 120,
+    height: 155,
+    width: 155,
     image_ratio: "75%",
-    lgColumn: 4,
-    mdColumn: 4,
-    smColumn: 6,
-    column: 6,
+    // lgColumn: 4,
+    // mdColumn: 4,
+    // smColumn: 6,
+    // column: 6,
     lgPadding: 2,
     mdPadding: 2,
     smPadding: 2,
@@ -59,8 +60,8 @@ export const configDataMobile = {
     max_title_size: 30,
   },
   knowbook_sizes: {
-    height: 120,
-    width: 120,
+    height: 160, //130,
+    width: 160, //130,
     image_ratio: "75%",
     // lgColumn: 4,
     // mdColumn: 4,

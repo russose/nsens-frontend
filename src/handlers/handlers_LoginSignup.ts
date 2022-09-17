@@ -9,28 +9,19 @@ import { api_login, api_signup, api_logout } from "../libs/apiUser";
 import { IStores } from "../stores/RootStore";
 import { configPaths, configGeneral } from "../config/globals";
 import { goPage } from "../libs/helpersBase";
-import { initializeApp } from "../libs/helpersInitialize";
 
 export const onChangeLanguage =
   (stores: IStores, language: Tlanguage) => (): void => {
     stores.baseStore.setInitCompleted(initStateCat.core, undefined);
-    stores.baseStore.setInitCompleted(
-      initStateCat.staticKnowbooksFull,
-      undefined
-    );
     stores.baseStore.setInitCompleted(initStateCat.userData, undefined);
 
     const paramsPage: IparamsPage = {
       lang: language,
+      display: stores.baseStore.paramsPage.display,
     };
 
-    initializeApp(stores, paramsPage)
-      .then(() => {
-        goPage(stores, paramsPage, configPaths.pages.User, {}, true);
-      })
-      .catch(function (error) {
-        // console.log(error);
-      });
+    stores.baseStore.setParamsPage(paramsPage);
+    goPage(stores, configPaths.pages.User, {}, false);
   };
 
 /*******************Login and Signup*************************** */
@@ -78,7 +69,9 @@ export const onLogout = (stores: IStores) => (): void => {
     })
     .then(() => {
       initStateAfterLoginOrLoggout(stores);
-      goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+      // goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+      goPage(stores, configPaths.pages.Home);
+
       //To do: faire une fonction initLoginScreen
       stores.uiStore.setUiStringStorage(
         TUiStringStorage.loginScreenUsername,
@@ -117,7 +110,8 @@ export const onSubmitLoginSignup =
         .then(() => {
           //Go Home
           initStateAfterLoginOrLoggout(stores);
-          goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+          // goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+          goPage(stores, configPaths.pages.Home);
         })
         .catch(function (error) {
           // console.log(error);
@@ -160,7 +154,8 @@ export const onSubmitLoginSignup =
           // initializeUserDataBaseLogged(stores);
           //Go Home
           initStateAfterLoginOrLoggout(stores);
-          goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+          // goPage(stores, stores.baseStore.paramsPage, configPaths.pages.Home);
+          goPage(stores, configPaths.pages.Home);
         })
         .catch(function (error) {
           // console.log("error in signing...");

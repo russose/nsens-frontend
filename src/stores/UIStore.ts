@@ -188,7 +188,4 @@ export class UIStore {
   setEditKnowbookMembers(knowbookId: KnowbookID, value: boolean): void {
     this.editKnowbookMembers.set(knowbookId, value);
   }
-  // clearEditKnowbookMembers(): void {
-  //   this.editKnowbookMembers.clear();
-  // }
 }

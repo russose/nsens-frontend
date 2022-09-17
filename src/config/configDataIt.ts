@@ -40,7 +40,7 @@ export const configDataIt: TconfigDataLanguage = {
       [TPages.Knowbooks]: { title: "", description: "" },
       [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
-
+      [TPages.Random]: { title: "", description: "" },
       [TPages.KnowbookSpecial]: {
         [TSpecialPages.Mostviewed]: { title: "Oggi", description: "" },
         [TSpecialPages.AllSaved]: {
@@ -100,10 +100,10 @@ export const configDataIt: TconfigDataLanguage = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.CIRCLE]: {
-      label: "Orbita",
-      icon: CUSTOM_ICONS.CIRCLE,
-    },
+    // [TButtonID.CIRCLE]: {
+    //   label: "Orbita",
+    //   icon: CUSTOM_ICONS.CIRCLE,
+    // },
     [TButtonID.NETWORK]: {
       label: "Rete",
       icon: CUSTOM_ICONS.NETWORK,

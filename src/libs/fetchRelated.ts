@@ -12,7 +12,7 @@ import {
   improveImageFromWikipediaParallel_blocking,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage_chunked_Parallel,
   ItemsRelatedFromWikipediaRaw,
-  removeBigImages,
+  removeImages,
 } from "./fetchBase";
 
 const relation_name_wikipedia = configGeneral.relation_name_wikipedia;
@@ -164,7 +164,7 @@ async function ItemsRelatedFromWikipediaWithoutImage(
   const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
 
   const atomsList_filtered_without_images: IAtom[] =
-    removeBigImages(atomsList_filtered);
+    removeImages(atomsList_filtered);
 
   const related: IRelatedAtomFull[] = atomsList_filtered_without_images.map(
     (item: IAtom) => {

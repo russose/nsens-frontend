@@ -35,10 +35,8 @@ const HeaderTitle: React.FunctionComponent<IHeaderTitleProps> = (props) => {
             mdColumn={6}
             lgColumn={4}
             padding={2}
-            // paddingX={5}
-            // paddingY={2}
             color={color_headers}
-            borderStyle="lg"
+            borderStyle="shadow"
             alignItems="center"
             rounding={rounding_menu}
           >

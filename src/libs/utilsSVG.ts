@@ -1,4 +1,4 @@
-import { IPosition, IStar, TUiNumberStorage } from "../config/globals";
+import { IPosition, IStar, ISlider, TUiNumberStorage } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { isMobile } from "./helpersBase";
 import { entierAleatoire, range } from "./utils";
@@ -126,4 +126,52 @@ export function stars(stores: IStores): IStar[] {
   });
 
   return stars;
+}
+
+const SLIDER_MOVE_TOLERANCE_RATE = 0.8;
+export function updateSliderCircular(
+  stores: IStores,
+  id: string,
+  value: number
+): void {
+  const slider_ = stores.uiStore.sliders.get(id);
+  const slider: ISlider = {
+    id: slider_.id,
+    position: slider_.position,
+    positionOneStep: slider_.positionOneStep,
+    max: slider_.max,
+    maxOneStep: slider_.maxOneStep,
+  };
+
+  if (slider === undefined) {
+    return;
+  }
+
+  const tolerance = slider.maxOneStep * SLIDER_MOVE_TOLERANCE_RATE;
+  const current_PositionOneStep = slider.positionOneStep;
+  const current_Position = slider.position;
+  const delta = value - current_PositionOneStep;
+
+  let new_Position: number;
+  if (Math.abs(delta) < tolerance) {
+    new_Position = current_Position + delta;
+  } else {
+    if (delta < 0) {
+      new_Position = current_Position + value;
+    } else {
+      new_Position = current_Position - slider.maxOneStep + value;
+    }
+  }
+
+  if (new_Position >= 0 && new_Position <= slider.max) {
+    slider.positionOneStep = value;
+    slider.position = new_Position;
+  } else if (new_Position < 0) {
+    slider.positionOneStep = value;
+    slider.position = 0;
+  } else if (new_Position > slider.max) {
+    slider.positionOneStep = value;
+    slider.position = slider.max;
+  }
+  stores.uiStore.setSliders(slider);
 }

@@ -34,6 +34,7 @@ const amount_max_by_node_wikidata = configFetching.amount_max_by_node_wikidata;
 const sleep_in_ms = configFetching.staticKnowbooks.sleep_in_ms;
 const size_chunk = configFetching.staticKnowbooks.size_chunk;
 const amount_best = configFetching.staticKnowbooks.amount_best;
+const includeRelated = configFetching.staticKnowbooks.includeRelated;
 
 const start_time_all = Date.now();
 
@@ -55,7 +56,7 @@ export async function getAllStaticKnowbooks(): Promise<
   let allStaticKnowbooks: IStaticKnowbookDefinition[];
   const name_allStaticKnowbooks =
     configGeneral.staticKnowbooks.name_allStaticKnowbooks;
-  const allStaticKnowbooks_path_base = configPaths.static.knowbooks_location;
+  const allStaticKnowbooks_path_base = configPaths.static.knowbooks_directory;
 
   try {
     allStaticKnowbooks = (await readFileJson(
@@ -227,7 +228,7 @@ async function buildOneStaticKnowbooks(
   allStaticKnowbooks: IStaticKnowbookDefinition[]
 ): Promise<void> {
   const exclusion_patterns: string[] = EXCLUSION_PATTERNS(lang);
-  const static_path_base = configPaths.static.knowbooks_location + lang + "/";
+  const static_path_base = configPaths.static.knowbooks_directory + lang + "/";
   //  + nameOrPeriod + ".txt";
   const static_name = nameOrPeriod + ".txt";
 
@@ -266,7 +267,10 @@ async function buildOneStaticKnowbooks(
       lang
     );
 
-  if (staticKnowbook.type !== StaticKnowbookFamilyType.TREND) {
+  if (
+    includeRelated &&
+    staticKnowbook.type !== StaticKnowbookFamilyType.TREND
+  ) {
     const items_with_images_with_related: IAtom[] =
       await addImagesAndGetRelatedCleanImage_chunked_Parallel(
         items_without_images_without_related,
@@ -307,67 +311,69 @@ async function buildOneStaticKnowbooks(
   console.log("Duration Total: ", (Date.now() - start_time_all) / 1000);
 }
 
-async function buildStaticKnowbooksExtracts(
-  lang: Tlanguage,
-  allStaticKnowbooks: IStaticKnowbookDefinition[]
-): Promise<void> {
-  const staticKnowbooks_path_base_lang =
-    configPaths.static.knowbooks_location + lang + "/";
-  const name_extractStaticKnowbooks =
-    configGeneral.staticKnowbooks.name_extractStaticKnowbooks;
-  const staticKnowbooks_with_items: IStaticKnowbookWithItemsDefinition[] = [];
+// async function buildStaticKnowbooksExtracts(
+//   lang: Tlanguage,
+//   allStaticKnowbooks: IStaticKnowbookDefinition[]
+// ): Promise<void> {
+//   const staticKnowbooks_path_base_lang =
+//     configPaths.static.knowbooks_location + lang + "/";
+//   const name_extractStaticKnowbooks =
+//     configGeneral.staticKnowbooks.name_extractStaticKnowbooks;
+//   const staticKnowbooks_with_items: IStaticKnowbookWithItemsDefinition[] = [];
 
-  const amount_extractStaticKnowbooks =
-    configFetching.staticKnowbooks.amount_extractStaticKnowbooks;
+//   const amount_extractStaticKnowbooks =
+//     configFetching.staticKnowbooks.amount_extractStaticKnowbooks;
 
-  const staticKnowbooks: IStaticKnowbookDefinition[] =
-    allStaticKnowbooks.filter((knowbooks) => {
-      return (
-        // knowbooks.lang === lang &&
-        // knowbooks.type === StaticKnowbookFamilyType.VITAL
-        knowbooks.lang === lang
-      );
-    });
+//   const staticKnowbooks: IStaticKnowbookDefinition[] =
+//     allStaticKnowbooks.filter((knowbooks) => {
+//       return (
+//         // knowbooks.lang === lang &&
+//         // knowbooks.type === StaticKnowbookFamilyType.VITAL
+//         knowbooks.lang === lang
+//       );
+//     });
 
-  for (const staticKnowbook of staticKnowbooks) {
-    const file_name = staticKnowbook.nameOrPeriod + ".txt";
-    try {
-      const staticKnowbook_with_items: IStaticKnowbookWithItemsDefinition =
-        (await readFileJson(
-          staticKnowbooks_path_base_lang,
-          file_name
-        )) as IStaticKnowbookWithItemsDefinition;
+//   for (const staticKnowbook of staticKnowbooks) {
+//     const file_name = staticKnowbook.nameOrPeriod + ".txt";
+//     try {
+//       const staticKnowbook_with_items: IStaticKnowbookWithItemsDefinition =
+//         (await readFileJson(
+//           staticKnowbooks_path_base_lang,
+//           file_name
+//         )) as IStaticKnowbookWithItemsDefinition;
 
-      staticKnowbook_with_items.items = staticKnowbook_with_items.items.map(
-        (item: IAtom) => {
-          const item_ = item;
-          item_.related = "";
-          return item_;
-        }
-      );
+//       if (includeRelated) {
+//         staticKnowbook_with_items.items = staticKnowbook_with_items.items.map(
+//           (item: IAtom) => {
+//             const item_ = item;
+//             item_.related = "";
+//             return item_;
+//           }
+//         );
+//       }
 
-      staticKnowbook_with_items.items = shuffleSized(
-        staticKnowbook_with_items.items,
-        amount_extractStaticKnowbooks
-      );
+//       staticKnowbook_with_items.items = shuffleSized(
+//         staticKnowbook_with_items.items,
+//         amount_extractStaticKnowbooks
+//       );
 
-      staticKnowbooks_with_items.push(staticKnowbook_with_items);
-    } catch {
-      console.log(
-        "impossible to read: ",
-        staticKnowbooks_path_base_lang + file_name
-      );
-    }
-  }
+//       staticKnowbooks_with_items.push(staticKnowbook_with_items);
+//     } catch {
+//       console.log(
+//         "impossible to read: ",
+//         staticKnowbooks_path_base_lang + file_name
+//       );
+//     }
+//   }
 
-  await writeFileJson(
-    staticKnowbooks_path_base_lang,
-    name_extractStaticKnowbooks,
-    staticKnowbooks_with_items
-  );
+//   await writeFileJson(
+//     staticKnowbooks_path_base_lang,
+//     name_extractStaticKnowbooks,
+//     staticKnowbooks_with_items
+//   );
 
-  return undefined;
-}
+//   return undefined;
+// }
 
 export async function buildAllStaticKnowbooks(): Promise<void> {
   const allStaticKnowbooks = await getAllStaticKnowbooks();
@@ -386,7 +392,7 @@ export async function buildAllStaticKnowbooks(): Promise<void> {
     );
   }
 
-  for (const lang of Object.values(Tlanguage)) {
-    await buildStaticKnowbooksExtracts(lang, allStaticKnowbooks);
-  }
+  // for (const lang of Object.values(Tlanguage)) {
+  //   await buildStaticKnowbooksExtracts(lang, allStaticKnowbooks);
+  // }
 }

@@ -1,17 +1,12 @@
 import { configFetching, configPaths } from "../config/globals";
 import { Tlanguage, IAtom, JSONDataT } from "../config/globals";
-import {
-  chunk,
-  filterAtomListFromPatterns,
-  makeArrayFlat,
-  newAtom,
-} from "./utils";
+import { chunk, makeArrayFlat, newAtom } from "./utils";
 import { fetch_data_wiki_rest, fetch_data_wiki_action } from "./fetch";
 import { ROOT_URL_WIKIPEDIA_ACTION } from "../config/configURLs";
 
 const amount_data_fetched_related_for_images =
   configFetching.amount_data_fetched_related_for_images;
-const ROOT_URL_WIKIPEDIA_EN = ROOT_URL_WIKIPEDIA_ACTION(Tlanguage.en);
+// const ROOT_URL_WIKIPEDIA_EN = ROOT_URL_WIKIPEDIA_ACTION(Tlanguage.en);
 
 const width_image_thumbnail = configFetching.width_image_thumbnail;
 
@@ -19,11 +14,27 @@ const cache_duration_in_sec = configFetching.cache_duration_in_sec;
 
 const max_size_api = configFetching.max_size_chunk_api;
 
+function filterAtomListFromPatterns(
+  atomList: IAtom[],
+  patterns: string[]
+): IAtom[] {
+  if (atomList === undefined || atomList.length === 0) {
+    return [];
+  }
+  let atomList_filterned: IAtom[] = atomList;
+  patterns.forEach((pattern: string) => {
+    atomList_filterned = atomList_filterned.filter((atom) => {
+      return !atom.title.includes(pattern);
+    });
+  });
+  return atomList_filterned;
+}
+
 /**
  * Interfaces
  */
 
-export function removeBigImages(items: IAtom[]): IAtom[] {
+export function removeImages(items: IAtom[]): IAtom[] {
   const items_without_image: IAtom[] = items.map((item) => {
     const item_without_image: IAtom = item;
     item_without_image.image_url = "";
@@ -101,7 +112,7 @@ export async function ItemsFeaturedFromWikipediaWithoutImage(
   const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
 
   const atomsList_filtered_without_images: IAtom[] =
-    removeBigImages(atomsList_filtered);
+    removeImages(atomsList_filtered);
 
   return atomsList_filtered_without_images;
 }
@@ -131,8 +142,10 @@ export async function ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWi
 
   const atomsList_filtered = filterItems(atomsList, exclusion_patterns);
 
+  // return atomsList_filtered;
+
   const atomsList_filtered_without_images: IAtom[] =
-    removeBigImages(atomsList_filtered);
+    removeImages(atomsList_filtered);
 
   return atomsList_filtered_without_images;
 }
@@ -500,10 +513,18 @@ interface IImage {
 async function getAllPageImagesReducedFromWikipediaAction(
   title: string,
   width: number,
-  ROOT_URL_ACTION_API: string
+  // ROOT_URL_ACTION_API: string,
+  lang: Tlanguage,
+  targeted_image_name: string = ""
 ): Promise<IImage[]> {
   try {
     //
+    const prefix_file = {
+      [Tlanguage.en]: "File:",
+      [Tlanguage.fr]: "Fichier:",
+      [Tlanguage.it]: "File:",
+    };
+
     const PARAMS = {
       action: "query",
       format: "json",
@@ -518,10 +539,14 @@ async function getAllPageImagesReducedFromWikipediaAction(
       // gimlimit: amount_data_fetched_images.toString(),
       gimlimit: "50",
       maxage: cache_duration_in_sec, //1 semaine pour le cache
+      gimimages:
+        targeted_image_name === ""
+          ? ""
+          : prefix_file[lang] + decodeURIComponent(targeted_image_name),
     };
 
     const data = await fetch_data_wiki_action(
-      ROOT_URL_ACTION_API,
+      ROOT_URL_WIKIPEDIA_ACTION(lang),
       PARAMS,
       false
     );
@@ -555,6 +580,47 @@ async function getAllPageImagesReducedFromWikipediaAction(
   }
 }
 
+async function findMainImage(
+  item_title: string,
+  lang: Tlanguage
+): Promise<IImage | undefined> {
+  if (item_title === undefined) {
+    return undefined;
+  }
+
+  const ids: string[] = await idsFromSearchOrRandomOrTitlesFromWikipedia(
+    item_title,
+    ROOT_URL_WIKIPEDIA_ACTION(lang),
+    -1,
+    "titles"
+  );
+  const atomsList = await getAtomsFromWikipediaAction(
+    ids[0],
+    ROOT_URL_WIKIPEDIA_ACTION(lang),
+    lang
+  );
+  const item: IAtom = atomsList[0];
+
+  let images: IImage[] = [];
+  if (item !== undefined && item.image_url.length > 0) {
+    const targeted_image_name_list = item.image_url.split("/");
+    const targeted_image_name =
+      targeted_image_name_list[targeted_image_name_list.length - 1];
+
+    images = await getAllPageImagesReducedFromWikipediaAction(
+      item.title,
+      width_image_thumbnail,
+      lang,
+      targeted_image_name
+    );
+    if (images !== undefined) {
+      return images[0];
+    }
+  }
+
+  return undefined;
+}
+
 async function improveImageFromWikipedia_blocking(
   item_input: IAtom,
   ROOT_URL_REST_API: string,
@@ -578,25 +644,6 @@ async function improveImageFromWikipedia_blocking(
       return false;
     }
     return true;
-  }
-
-  function findImageFromUrl(
-    images: IImage[],
-    itemUrl: string
-  ): IImage | undefined {
-    if (images === undefined || images.length === 0) {
-      return undefined;
-    }
-
-    const image_list = images.filter((image) => {
-      return image.url === itemUrl;
-    });
-
-    if (image_list.length === undefined || image_list.length === 0) {
-      return undefined;
-    } else {
-      return image_list[0];
-    }
   }
 
   function findBiggestImage(images: IImage[]): IImage | undefined {
@@ -634,54 +681,52 @@ async function improveImageFromWikipedia_blocking(
   }
 
   let best_image: IImage;
-  let images = await getAllPageImagesReducedFromWikipediaAction(
-    item.title,
-    width_image_thumbnail,
-    ROOT_URL_ACTION_API
-  );
-  if (images === undefined) {
-    images = [];
+
+  best_image = await findMainImage(item.title, lang);
+
+  // if (best_image !== undefined) {
+  //   console.log("Main:", item.title, best_image.url);
+  // }
+
+  if (best_image === undefined && item.title_en !== "") {
+    best_image = await findMainImage(item.title_en, Tlanguage.en);
+
+    // if (best_image !== undefined) {
+    //   console.log("Main EN:", item.title, best_image.url);
+    // }
   }
 
-  best_image = findImageFromUrl(images, item.image_url);
-
-  let images_en: IImage[] = [];
-  if (best_image === undefined && item.title_en !== "") {
-    //Try with Wikipedia_EN with more front image
-    const ids_en: string[] = await idsFromSearchOrRandomOrTitlesFromWikipedia(
-      item.title_en,
-      ROOT_URL_WIKIPEDIA_EN,
-      -1,
-      "titles"
+  let images: IImage[] = [];
+  if (best_image === undefined) {
+    images = await getAllPageImagesReducedFromWikipediaAction(
+      item.title,
+      width_image_thumbnail,
+      lang
     );
-    const atomsList = await getAtomsFromWikipediaAction(
-      ids_en[0],
-      ROOT_URL_WIKIPEDIA_EN,
+    best_image = findBiggestImage(images);
+
+    // if (best_image !== undefined) {
+    //   console.log("Big:", item.title, best_image.url);
+    // }
+  }
+
+  if (best_image === undefined) {
+    images = await getAllPageImagesReducedFromWikipediaAction(
+      item.title_en,
+      width_image_thumbnail,
       Tlanguage.en
     );
-    const item_en: IAtom = atomsList[0];
-    if (item_en !== undefined) {
-      images_en = await getAllPageImagesReducedFromWikipediaAction(
-        item_en.title,
-        width_image_thumbnail,
-        ROOT_URL_WIKIPEDIA_EN
-      );
-      if (images_en === undefined) {
-        images_en = [];
-      }
-      best_image = findImageFromUrl(images_en, item_en.image_url);
-    }
-  }
 
-  if (best_image === undefined && images.length > 0) {
     best_image = findBiggestImage(images);
+
+    // if (best_image !== undefined) {
+    //   console.log("Big EN:", item.title, best_image.url);
+    // }
   }
 
-  if (best_image === undefined && images_en.length > 0) {
-    best_image = findBiggestImage(images_en);
-  }
-  if (best_image === undefined) {
-    //Finalyze with related items
+  const fetching_related_activated = true;
+  if (best_image === undefined && fetching_related_activated) {
+    //Finalyze with related items from wikipedia when no result
     let items_related: IAtom[] = await ItemsRelatedFromWikipediaRaw(
       item.title,
       amount_data_fetched_related_for_images,
@@ -695,14 +740,8 @@ async function improveImageFromWikipedia_blocking(
     });
 
     for (const item_related of items_related) {
-      // if (best_image === undefined) {
-      const images_related = await getAllPageImagesReducedFromWikipediaAction(
-        item_related.title,
-        width_image_thumbnail,
-        ROOT_URL_ACTION_API
-      );
-      best_image = findImageFromUrl(images_related, item_related.image_url);
-      // }
+      best_image = await findMainImage(item_related.title, lang);
+
       if (best_image !== undefined) {
         break;
       }
@@ -723,6 +762,178 @@ async function improveImageFromWikipedia_blocking(
 
   return item;
 }
+
+// async function improveImageFromWikipedia_blocking(
+//   item_input: IAtom,
+//   ROOT_URL_REST_API: string,
+//   ROOT_URL_ACTION_API: string,
+//   lang: Tlanguage
+// ): Promise<IAtom> {
+//   if (item_input === undefined) {
+//     return item_input;
+//   }
+
+//   const item = { ...item_input };
+
+//   function isValidImage(image: IImage): boolean {
+//     // ["jpg", "JPG", "png", "PNG", "tif", "TIF", "svg", "SVG"]
+//     // const extension = image.title.slice(-3);
+
+//     // if ((extension === "svg" || extension === "SVG") && image.width < 800) {
+//     //   return false;
+//     // }
+//     if (image.width < 200) {
+//       return false;
+//     }
+//     return true;
+//   }
+
+//   //Used to compare the images url with the itemUrl with is the url of the main image (main page)
+//   function findImageFromUrl(
+//     images: IImage[],
+//     itemUrl: string
+//   ): IImage | undefined {
+//     if (images === undefined || images.length === 0) {
+//       return undefined;
+//     }
+
+//     const image_list = images.filter((image) => {
+//       return image.url === itemUrl;
+//     });
+
+//     if (image_list.length === undefined || image_list.length === 0) {
+//       return undefined;
+//     } else {
+//       return image_list[0];
+//     }
+//   }
+
+//   function findBiggestImage(images: IImage[]): IImage | undefined {
+//     if (images === undefined || images.length === 0) {
+//       return undefined;
+//     }
+
+//     //Filter svg
+//     const images_filtered: IImage[] = images.filter((image) => {
+//       if (image === undefined) {
+//         return false;
+//       }
+//       const extension = image.title.slice(-3);
+//       return !(extension === "svg" || extension === "SVG");
+//     });
+
+//     if (images_filtered.length === 0) {
+//       return undefined;
+//     }
+
+//     const images_sorted_size: IImage[] = images_filtered.sort((a, b) => {
+//       if (a.size > b.size) {
+//         //a est avant à b
+//         return -1;
+//       } else {
+//         //a est après à b
+//         return 1;
+//       }
+//     });
+//     const best_image = images_sorted_size[0];
+//     if (!isValidImage(best_image)) {
+//       return undefined;
+//     }
+//     return best_image;
+//   }
+
+//   let best_image: IImage;
+//   let images = await getAllPageImagesReducedFromWikipediaAction(
+//     item.title,
+//     width_image_thumbnail,
+//     ROOT_URL_ACTION_API
+//   );
+//   if (images === undefined) {
+//     images = [];
+//   }
+
+//   best_image = findImageFromUrl(images, item.image_url);
+
+//   let images_en: IImage[] = [];
+//   if (best_image === undefined && item.title_en !== "") {
+//     //Try with Wikipedia_EN with more front image
+//     const ids_en: string[] = await idsFromSearchOrRandomOrTitlesFromWikipedia(
+//       item.title_en,
+//       ROOT_URL_WIKIPEDIA_EN,
+//       -1,
+//       "titles"
+//     );
+//     const atomsList = await getAtomsFromWikipediaAction(
+//       ids_en[0],
+//       ROOT_URL_WIKIPEDIA_EN,
+//       Tlanguage.en
+//     );
+//     const item_en: IAtom = atomsList[0];
+
+//     if (item_en !== undefined) {
+//       images_en = await getAllPageImagesReducedFromWikipediaAction(
+//         item_en.title,
+//         width_image_thumbnail,
+//         ROOT_URL_WIKIPEDIA_EN
+//       );
+//       if (images_en === undefined) {
+//         images_en = [];
+//       }
+//       best_image = findImageFromUrl(images_en, item_en.image_url);
+//     }
+//     // console.log(item_en.title, item_en.image_url, images_en);
+//   }
+
+//   if (best_image === undefined && images.length > 0) {
+//     best_image = findBiggestImage(images);
+//   }
+
+//   if (best_image === undefined && images_en.length > 0) {
+//     best_image = findBiggestImage(images_en);
+//   }
+//   if (best_image === undefined) {
+//     //Finalyze with related items from wikipedia when no results
+//     let items_related: IAtom[] = await ItemsRelatedFromWikipediaRaw(
+//       item.title,
+//       amount_data_fetched_related_for_images,
+//       ROOT_URL_REST_API,
+//       ROOT_URL_ACTION_API,
+//       lang
+//     );
+
+//     items_related = items_related.filter((item) => {
+//       return item !== undefined;
+//     });
+
+//     for (const item_related of items_related) {
+//       // if (best_image === undefined) {
+//       const images_related = await getAllPageImagesReducedFromWikipediaAction(
+//         item_related.title,
+//         width_image_thumbnail,
+//         ROOT_URL_ACTION_API
+//       );
+//       best_image = findImageFromUrl(images_related, item_related.image_url);
+//       // }
+//       if (best_image !== undefined) {
+//         break;
+//       }
+//     }
+//   }
+
+//   if (best_image === undefined) {
+//     item.image_url = configPaths.item_empty_image;
+//     item.image_height = 1;
+//     item.image_width = 1;
+//     return item;
+//   }
+
+//   // Replace item image by the smaller optimyzed version
+//   item.image_url = best_image.thumburl;
+//   item.image_height = best_image.thumbheight;
+//   item.image_width = best_image.thumbwidth;
+
+//   return item;
+// }
 
 /**
  * Related Items

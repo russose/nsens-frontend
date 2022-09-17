@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { TUiStringStorage } from "../config/globals";
 import {
-  onCancel,
+  onCancelEditKnowbook,
   onChangeInputValueRenameKnowbook,
   onRenameKnowbook,
 } from "../handlers/handlers_Knowbooks";
@@ -20,9 +20,6 @@ const DialogRenameKnowbooks: React.FunctionComponent<
   return (
     <>
       {
-        // stores.uiStore.getUiBooleanStorage(
-        //   TUiBooleanStorage.renameKnowbookOpened
-        // ) &&
         <DialogRenameKnowbookForm
           stores={stores}
           title={GUI_CONFIG.language.renameDeleteKnowbook.title}
@@ -32,7 +29,7 @@ const DialogRenameKnowbooks: React.FunctionComponent<
           label_rename={GUI_CONFIG.language.renameDeleteKnowbook.rename_label}
           label_cancel={GUI_CONFIG.language.renameDeleteKnowbook.cancel_label}
           handler_rename={onRenameKnowbook(stores)}
-          handler_cancel={onCancel(stores)}
+          handler_cancel={onCancelEditKnowbook(stores)}
           handler_inputValue={onChangeInputValueRenameKnowbook(stores)}
         />
       }

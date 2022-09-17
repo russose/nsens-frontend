@@ -8,15 +8,10 @@ const Index: React.FunctionComponent = (props) => {
   const stores = useStores();
 
   getParamsPageFromContext()
-    .then((paramsPageContext) => {
-      if (paramsPageContext !== undefined) {
-        goPage(
-          stores,
-          {
-            lang: paramsPageContext.lang,
-          },
-          configPaths.pages.Home
-        );
+    .then((paramsPage) => {
+      if (paramsPage !== undefined) {
+        stores.baseStore.setParamsPage(paramsPage);
+        goPage(stores, configPaths.pages.Home);
       }
     })
     .catch(function (error) {

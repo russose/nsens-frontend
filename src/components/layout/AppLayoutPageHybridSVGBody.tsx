@@ -6,9 +6,9 @@ import { isMobile } from "../../libs/helpersBase";
 import { isFirefox } from "../../libs/utils";
 import { setSVGGlobalDimensions } from "../../libs/utilsSVG";
 import { IStores } from "../../stores/RootStore";
-import SVGElementsInPositionMatrix from "../SVGElementsInPositionMatrix";
-import SVGHeader from "../SVGHeader";
-import SVGStars from "../SVGStars";
+import SVGElementsInPositionMatrix from "../SVG/SVGElementsInPositionMatrix";
+import SVGHeader from "../SVG/SVGHeader";
+import SVGStars from "../SVG/SVGStars";
 
 function vhReduceString(original: string, reduction: number): string {
   const result =
@@ -49,7 +49,7 @@ const AppLayoutPageHybridSVGBody: React.FunctionComponent<IProps> = (props) => {
 
   //For Firefox Mobile, the menu bar at the buttom disappears when scrolling dow and address bar is hidden (bug?)
   //To solve this issue, 1) add a box on top of svg 2) reduce the height to avoid the scrolling bar
-  //3) but for firefox mobile, reducing height prevent the bug to be solved to let it and keep the scrolling bar issue
+  //3) but for firefox mobile, reducing height prevent the bug to be solved so let it and keep the scrolling bar issue
 
   const dontReduceheightBody = isFirefox() && isMobile(props.stores);
 

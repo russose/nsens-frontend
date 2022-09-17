@@ -13,7 +13,6 @@ import {
   Tlanguage,
   TScenarioStepID,
 } from "../config/globals";
-import { pathScreenshots } from "./utils";
 
 export async function readFileJson(
   pathBase: string,
@@ -38,11 +37,11 @@ export async function writeFileJson(
 /*************** Screenshoots with Puppeteer ************************/
 
 const scenarios: IScenarioStep[] = [
-  {
-    id: TScenarioStepID.home,
-    url: configPaths.pages.Home,
-    text: "",
-  },
+  // {
+  //   id: TScenarioStepID.home,
+  //   url: configPaths.pages.Home,
+  //   text: "",
+  // },
   {
     id: TScenarioStepID.knowbooks,
     url: configPaths.pages.Knowbooks,
@@ -55,10 +54,18 @@ const scenarios: IScenarioStep[] = [
     text: "",
     // additionnal_element: knowbookIcons,
   },
+  // {
+  //   id: TScenarioStepID.itemArticle,
+  //   url:
+  //     configPaths.pages.ItemNetwork +
+  //     "?title=Albert+Einstein&id=Q937&articleOpen=toto",
+  //   text: "",
+  //   // additionnal_element: topIcon,
+  // },
   {
     id: TScenarioStepID.itemArticle,
     url:
-      configPaths.pages.ItemCircle +
+      configPaths.pages.ItemFlat +
       "?title=Albert+Einstein&id=Q937&articleOpen=toto",
     text: "",
     // additionnal_element: topIcon,
@@ -68,11 +75,11 @@ const scenarios: IScenarioStep[] = [
     url: configPaths.pages.Search + "?search=einstein",
     text: "",
   },
-  {
-    id: TScenarioStepID.itemCircle,
-    url: configPaths.pages.ItemCircle + "?title=Albert+Einstein&id=Q937",
-    text: "",
-  },
+  // {
+  //   id: TScenarioStepID.itemCircle,
+  //   url: configPaths.pages.ItemCircle + "?title=Albert+Einstein&id=Q937",
+  //   text: "",
+  // },
   {
     id: TScenarioStepID.itemNetwork,
     url: configPaths.pages.ItemNetwork + "?title=Albert+Einstein&id=Q937",
@@ -93,6 +100,21 @@ const scenarios: IScenarioStep[] = [
   // },
 ];
 
+function pathScreenshots(
+  rootPath: string,
+  scenarioStep: IScenarioStep,
+  isMobile: boolean,
+  language: Tlanguage
+) {
+  const screen: IScreen = isMobile
+    ? SCREENSHOTS_LIST.mobile
+    : SCREENSHOTS_LIST.desktop;
+
+  return (
+    rootPath + scenarioStep.id + "_" + language + "_" + screen.name + ".webp"
+  );
+}
+
 async function makeOneScreenshoot(
   browser: any,
   screen: IScreen,
@@ -105,6 +127,7 @@ async function makeOneScreenshoot(
     height: screen.height,
   });
   await page.goto(url, { waitUntil: "networkidle0" });
+  await page.reload({ waitUntil: ["networkidle0"] });
   await page.screenshot({ path: pathFilename, omitBackground: true });
   console.log(pathFilename, "saved...");
 }
@@ -131,12 +154,12 @@ export async function makeScreenshoots(): Promise<void> {
         pathScreenshots(rootPath, scenarioStep, isMobile, language),
         "utf-8"
       );
-      console.log(
-        "Screenshoot present: ",
-        language,
-        scenarioStep.id,
-        screen.name
-      );
+      // console.log(
+      //   "Screenshoot present: ",
+      //   language,
+      //   scenarioStep.id,
+      //   screen.name
+      // );
       return;
     } catch (e) {
       console.log(
@@ -153,10 +176,15 @@ export async function makeScreenshoots(): Promise<void> {
         "utf8"
       );
 
+      console.log(
+        "url:",
+        rootUrl + "/" + language + "/" + screen.name + scenarioStep.url
+      );
+
       await makeOneScreenshoot(
         browser,
         screen,
-        rootUrl + "/" + language + "/" + scenarioStep.url,
+        rootUrl + "/" + language + "/" + screen.name + scenarioStep.url,
         pathScreenshots(rootPath, scenarioStep, isMobile, language)
       );
     }

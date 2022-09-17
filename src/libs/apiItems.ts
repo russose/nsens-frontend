@@ -1,11 +1,4 @@
-import {
-  IAtom,
-  Tlanguage,
-  configPaths,
-  IStaticKnowbookDefinition,
-  configGeneral,
-  IStaticKnowbookWithItemsDefinition,
-} from "../config/globals";
+import { IAtom, Tlanguage } from "../config/globals";
 import {
   ItemsFeaturedFromWikipediaWithoutImage,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage,
@@ -17,7 +10,6 @@ import {
   ROOT_URL_WIKIPEDIA_ACTION,
   ROOT_URL_WIKIPEDIA_REST,
 } from "../config/configURLs";
-import { fetch_data_local } from "./fetch";
 
 export const amount_data_fetched_items_searched =
   configFetching.amount_data_fetched_items_searched;
@@ -113,59 +105,59 @@ export async function api_getItemsFromTitlesFromWebCleanImage_blocking(
   }
 }
 
-export async function api_getStaticKnowbookWithItemsLocal(
-  name: string,
-  lang: Tlanguage
-): Promise<IStaticKnowbookDefinition> {
-  try {
-    const result: IStaticKnowbookDefinition = (await fetch_data_local(
-      configPaths.static.knowbooks_location.split("/")[1] +
-        "/" +
-        lang +
-        "/" +
-        name +
-        ".txt"
-    )) as IStaticKnowbookDefinition;
+// export async function api_getAllStaticKnowbooksExtractWithItemsLocal(
+//   lang: Tlanguage
+// ): Promise<IStaticKnowbookWithItemsDefinition[]> {
+//   try {
+//     const result: IStaticKnowbookWithItemsDefinition[] =
+//       (await fetch_data_local(
+//         configPaths.static.knowbooks_location.split("/")[1] +
+//           "/" +
+//           lang +
+//           "/" +
+//           configGeneral.staticKnowbooks.name_extractStaticKnowbooks
+//       )) as IStaticKnowbookWithItemsDefinition[];
+//     return result;
+//   } catch (error) {
+//     // console.log(error);
+//     return [];
+//   }
+// }
 
-    return result;
-  } catch (error) {
-    // console.log(error);
-    return undefined;
-  }
-}
+// export async function api_getStaticKnowbookWithItemsLocal(
+//   name: string,
+//   lang: Tlanguage
+// ): Promise<IStaticKnowbookDefinition> {
+//   try {
+//     const result: IStaticKnowbookDefinition = (await fetch_data_local(
+//       configPaths.static.knowbooks_location.split("/")[1] +
+//         "/" +
+//         lang +
+//         "/" +
+//         name +
+//         ".txt"
+//     )) as IStaticKnowbookDefinition;
 
-export async function api_getAllStaticKnowbooksLocal(): Promise<
-  IStaticKnowbookDefinition[]
-> {
-  try {
-    const result: IStaticKnowbookDefinition[] = (await fetch_data_local(
-      configPaths.static.knowbooks_location.split("/")[1] +
-        "/" +
-        configGeneral.staticKnowbooks.name_allStaticKnowbooks
-    )) as IStaticKnowbookDefinition[];
+//     return result;
+//   } catch (error) {
+//     // console.log(error);
+//     return undefined;
+//   }
+// }
 
-    return result;
-  } catch (error) {
-    // console.log(error);
-    return [];
-  }
-}
+// export async function api_getAllStaticKnowbooksLocal(): Promise<
+//   IStaticKnowbookDefinition[]
+// > {
+//   try {
+//     const result: IStaticKnowbookDefinition[] = (await fetch_data_local(
+//       configPaths.static.knowbooks_location.split("/")[1] +
+//         "/" +
+//         configGeneral.staticKnowbooks.name_allStaticKnowbooks
+//     )) as IStaticKnowbookDefinition[];
 
-export async function api_getAllStaticKnowbooksExtractWithItemsLocal(
-  lang: Tlanguage
-): Promise<IStaticKnowbookWithItemsDefinition[]> {
-  try {
-    const result: IStaticKnowbookWithItemsDefinition[] =
-      (await fetch_data_local(
-        configPaths.static.knowbooks_location.split("/")[1] +
-          "/" +
-          lang +
-          "/" +
-          configGeneral.staticKnowbooks.name_extractStaticKnowbooks
-      )) as IStaticKnowbookWithItemsDefinition[];
-    return result;
-  } catch (error) {
-    // console.log(error);
-    return [];
-  }
-}
+//     return result;
+//   } catch (error) {
+//     // console.log(error);
+//     return [];
+//   }
+// }

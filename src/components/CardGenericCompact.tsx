@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite";
-import { Image, Box, Mask, Text } from "gestalt";
-import { AtomID, ColorT, RoundingT, SizeT } from "../config/globals";
-import Link from "next/link";
+import { Image, Box, Mask, Text, TapArea } from "gestalt";
+import { AtomID, ColorT, handlerT, RoundingT, SizeT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { configPaths } from "../config/globals";
+import { shortenString } from "../libs/utils";
 
 interface ICardSizes {
   height: number | string;
@@ -21,8 +20,7 @@ interface ICardGenericCompactProps {
   color: ColorT;
   color_image?: string;
   sizes: ICardSizes;
-  pathname?: string;
-  queryObject?: any;
+  image_handler: handlerT;
 }
 
 const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
@@ -36,7 +34,8 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
 
   let title = props.title;
   if (title.length > max_title_size) {
-    title = props.title.substring(0, max_title_size) + "...";
+    // title = props.title.substring(0, max_title_size) + "...";
+    title = shortenString(title, max_title_size);
   }
   return (
     <Box height={props.sizes.height} width={props.sizes.width}>
@@ -59,33 +58,22 @@ const CardGenericCompact: React.FunctionComponent<ICardGenericCompactProps> = (
         >
           <Box padding={1} height="90%" width="100%">
             <Mask rounding={rounding} height="100%" width="100%">
-              <Link
-                prefetch={false}
-                href={{
-                  pathname: configPaths.rootPath + props.pathname,
-                  query: {
-                    ...props.stores.baseStore.paramsPage,
-                    ...props.queryObject,
-                  },
-                }}
-                passHref
-              >
-                <a>
-                  <Image
-                    alt={props.title}
-                    color={
-                      props.color_image !== undefined
-                        ? props.color_image
-                        : "white"
-                    }
-                    fit="cover"
-                    naturalHeight={1}
-                    naturalWidth={1}
-                    loading="lazy"
-                    src={props.image_url !== undefined ? props.image_url : ""}
-                  ></Image>
-                </a>
-              </Link>
+              <TapArea fullHeight={true} onTap={props.image_handler}>
+                <Image
+                  alt={props.title}
+                  color={
+                    props.color_image !== undefined
+                      ? props.color_image
+                      : "white"
+                  }
+                  fit="cover"
+                  naturalHeight={1}
+                  naturalWidth={1}
+                  loading="lazy"
+                  src={props.image_url !== undefined ? props.image_url : ""}
+                  // importance="high"
+                ></Image>
+              </TapArea>
             </Mask>
           </Box>
 

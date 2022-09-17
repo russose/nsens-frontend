@@ -33,6 +33,7 @@ export const configDataFr = {
       [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbooks]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
+      [TPages.Random]: { title: "", description: "" },
       [TPages.KnowbookSpecial]: {
         [TSpecialPages.Mostviewed]: { title: "Aujourd'hui", description: "" },
         [TSpecialPages.AllSaved]: {
@@ -93,10 +94,10 @@ export const configDataFr = {
       label: "Wikipedia",
       icon: ICONS.ARTICLE,
     },
-    [TButtonID.CIRCLE]: {
-      label: "Orbite",
-      icon: CUSTOM_ICONS.CIRCLE,
-    },
+    // [TButtonID.CIRCLE]: {
+    //   label: "Orbite",
+    //   icon: CUSTOM_ICONS.CIRCLE,
+    // },
     [TButtonID.NETWORK]: {
       label: "Réseau",
       icon: CUSTOM_ICONS.NETWORK,

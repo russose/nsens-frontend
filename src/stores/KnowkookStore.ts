@@ -6,8 +6,8 @@ import {
   IKnowbookStatic,
   KnowbookID,
   StaticKnowbookFamilyType,
+  IAtom,
 } from "../config/globals";
-import { getKnowbookAtomsList } from "../libs/helpersSavedKnowbooks";
 import { getRandomImageFromItems } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
@@ -33,7 +33,6 @@ export class KnowkookStore {
       renameKnowbook: action,
       setImageKnowbook: action,
       setImageStaticKnowbook: action,
-      // allItemsInStaticKnowbooks: computed,
       itemsInStaticKnowbooksForHome: computed,
     });
   }
@@ -56,22 +55,24 @@ export class KnowkookStore {
   }
 
   setImageKnowbook(name: KnowbookID) {
-    this.$imgKnowbooks.set(
-      name,
-      getRandomImageFromItems(
-        getKnowbookAtomsList(name, this.$rootStore.stores())
-      )
-    );
+    let image_url = "";
+    let i = 0;
+    while (image_url === "" && i < 5) {
+      image_url = getRandomImageFromItems(this.knowbookAtomsList(name));
+      i = i + 1;
+    }
+    this.$imgKnowbooks.set(name, image_url);
   }
 
-  setImageStaticKnowbook(name: KnowbookID) {
-    if (!this.$imgStaticKnowbooks.has(name)) {
-      // To avoid that initial setup from extract is modified
-      this.$imgStaticKnowbooks.set(
-        name,
-        getRandomImageFromItems(this.staticKnowbooks.get(name).items)
-      );
-    }
+  setImageStaticKnowbook(name: KnowbookID, image_url: string) {
+    // if (!this.$imgStaticKnowbooks.has(name)) {
+    // To avoid that initial setup from extract is modified
+    this.$imgStaticKnowbooks.set(
+      name,
+      // getRandomImageFromItems(this.staticKnowbooks.get(name).items)
+      image_url
+    );
+    // }
   }
 
   /**
@@ -101,8 +102,9 @@ export class KnowkookStore {
   }
   setStaticKnowbooks(key: KnowbookID, knowbook: IKnowbookStatic) {
     this.$staticKnowbooks.set(key, knowbook);
-    this.setImageStaticKnowbook(key);
+    // this.setImageStaticKnowbook(key);
   }
+
   clearStaticKnowbooks(): void {
     this.$staticKnowbooks.clear();
     this.$imgStaticKnowbooks.clear();
@@ -188,11 +190,6 @@ export class KnowkookStore {
     return itemsInStaticKnowbooks_;
   }
 
-  // get allItemsInStaticKnowbooks(): Set<AtomID> {
-  //   const knowbookIds: KnowbookID[] = Array.from(this.staticKnowbooks.keys());
-  //   return this.itemsInStaticKnowbooks(knowbookIds);
-  // }
-
   get itemsInStaticKnowbooksForHome(): Set<AtomID> {
     const knowbookIds: KnowbookID[] = [];
     this.staticKnowbooks.forEach((staticknowbook, name) => {
@@ -202,5 +199,58 @@ export class KnowkookStore {
     });
 
     return this.itemsInStaticKnowbooks(knowbookIds);
+  }
+
+  savedAtomsFromIds(list_atoms: AtomID[]): IAtom[] {
+    if (list_atoms === undefined || list_atoms.length === 0) {
+      return [];
+    }
+
+    const stores = this.$rootStore.stores();
+    const result = list_atoms.map((id) => {
+      if (stores.savedStore.saved.has(id)) {
+        return stores.baseStore.getHistoryItem(id);
+      } else {
+        // console.log("not in saved", id);
+        return undefined;
+      }
+    });
+    const result_no_undefined: IAtom[] = result.filter((item) => {
+      return item !== undefined;
+    });
+
+    return result_no_undefined;
+  }
+
+  knowbookAtomsList(knowbookID: KnowbookID): IAtom[] {
+    if (!this.knowbooks.has(knowbookID)) {
+      // console.log("impossible to provide Atoms List from knowbook");
+      return [];
+    } else {
+      const stores = this.$rootStore.stores();
+      const my_knowbook = stores.knowbookStore.knowbooks.get(knowbookID);
+      if (my_knowbook !== undefined) {
+        return this.savedAtomsFromIds(my_knowbook.items);
+      } else {
+        // console.log("impossible to provide Atoms List from knowbook 2");
+        return [];
+      }
+    }
+  }
+
+  knowbookStaticAtomsList(knowbookID: KnowbookID): IAtom[] {
+    if (!this.staticKnowbooks.has(knowbookID)) {
+      // console.log("impossible to provide Atoms List from knowbook");
+      return [];
+    } else {
+      const stores = this.$rootStore.stores();
+      const my_knowbook = stores.knowbookStore.staticKnowbooks.get(knowbookID);
+      if (my_knowbook !== undefined) {
+        return my_knowbook.items;
+      } else {
+        // console.log("impossible to provide Atoms List from knowbook 2");
+        return [];
+      }
+    }
   }
 }

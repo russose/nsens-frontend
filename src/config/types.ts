@@ -19,10 +19,10 @@ export enum Tlanguage {
 }
 
 export enum TDisplay {
-  mobile = "Mobile",
-  desktop = "Desktop",
-  large = "Large",
-  extra = "Extra",
+  mobile = "mobile",
+  desktop = "desktop",
+  // large = "Large",
+  // extra = "Extra",
 }
 
 export interface IScreen {
@@ -77,6 +77,8 @@ export enum TPages {
   StaticKnowbook = "StaticKnowbook",
   Knowbook = "Knowbook",
   KnowbookSpecial = "KnowbookSpecial",
+
+  Random = "Random",
   // ArticleSlide = "ArticleSlide",
 }
 
@@ -95,7 +97,7 @@ export enum TSpecialPages {
 
 export enum initStateCat {
   core = "core",
-  staticKnowbooksFull = "staticKnowbooksFull",
+  // staticKnowbooksFull = "staticKnowbooksFull",
   userData = "userData",
   itemRelated = "itemRelated",
 }
@@ -144,10 +146,12 @@ export interface IGUICONFIG {
   // id: string;
   language: TconfigDataLanguage;
   display: TconfigDataDisplay;
+  id: string;
 }
 
 export interface IparamsPage {
   lang: Tlanguage;
+  display: TDisplay;
 }
 
 export interface IparamsAtom {
@@ -160,8 +164,11 @@ export interface ICardKnowProps {
   stores: IStores;
   title: string;
   image_url: string;
-  pathname: string;
-  queryObject: any;
+  image_handler: handlerT;
+  color_image?: string;
+
+  // pathname: string;
+  // queryObject: any;
   amount: number | string;
   rename_handler: handlerT;
   delete_handler: handlerT;
@@ -180,7 +187,7 @@ export enum TButtonID {
   SAVE = "SAVE",
   EDIT = "EDIT",
   NETWORK = "NETWORK",
-  CIRCLE = "CIRCLE",
+  // CIRCLE = "CIRCLE",
   NETWORKFLAT = "NETWORKFLAT",
 
   KNOWBOOKS = "KNOWBOOKS",
@@ -195,10 +202,10 @@ export enum TButtonID {
 
 export interface IButton {
   Id: TButtonID;
+  onClick: handlerT; //handler
   iconColor?: IconT; //handler
   disabled?: boolean;
   hidden?: boolean;
-  onClick?: handlerT; //handler
 }
 
 export type UserID = string;
@@ -223,6 +230,12 @@ export interface IAtom {
   related: string;
 }
 
+export enum StaticKnowbookFamilyType {
+  FEATURED = "FEATURED",
+  TREND = "TREND",
+  VITAL = "VITAL",
+}
+
 export interface IKnowbook {
   id: number;
   name: KnowbookID;
@@ -242,18 +255,13 @@ export interface IKnowbookStatic extends IKnowbookFull {
   name_display: string;
 }
 
-export enum StaticKnowbookFamilyType {
-  FEATURED = "FEATURED",
-  TREND = "TREND",
-  VITAL = "VITAL",
-}
-
 export interface IStaticKnowbookDefinition {
   type: StaticKnowbookFamilyType;
   nameOrPeriod: string;
   name_display?: string;
   lang?: Tlanguage;
   items?: AtomID[];
+  image_url?: string;
 }
 
 export interface IStaticKnowbookWithItemsDefinition {
@@ -286,11 +294,11 @@ export enum TLogAction {
   loginUser = "loginUser",
 }
 
-export interface IFeature {
-  title: string;
-  description: string;
-  icon: IconT;
-}
+// export interface IFeature {
+//   title: string;
+//   description: string;
+//   icon: IconT;
+// }
 
 export interface ISlider {
   id: string;

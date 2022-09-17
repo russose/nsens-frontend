@@ -1,12 +1,15 @@
+import { IAtom } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { api_getKnowbooksList, api_getSavedList } from "./apiUserData";
-import { initialyzeRelatedFromSaved } from "./helpersRelated";
 
 export async function initializeSavedLogged(stores: IStores) {
   try {
-    const saved = await api_getSavedList(stores.baseStore.paramsPage.lang);
+    const saved: IAtom[] = await api_getSavedList(
+      stores.baseStore.paramsPage.lang
+    );
     await stores.savedStore.setSaved(saved, true);
-    initialyzeRelatedFromSaved(stores);
+
+    // initialyzeRelatedFromSaved(stores);
   } catch (error) {
     // console.log(error);
   }

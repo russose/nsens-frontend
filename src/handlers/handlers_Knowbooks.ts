@@ -17,7 +17,7 @@ import { IStores } from "../stores/RootStore";
 
 /******************* Edit Knowbooks ************************************ */
 
-export const onCancel = (stores: IStores) => (): void => {
+export const onCancelEditKnowbook = (stores: IStores) => (): void => {
   stores.uiStore.setUiBooleanStorage(
     TUiBooleanStorage.editKnowbookOpened,
     false
@@ -38,7 +38,8 @@ export const onEditKnowbooks =
       TUiBooleanStorage.editKnowbookOpened,
       true
     );
-    input.event.preventDefault();
+    // input.event.preventDefault();
+    input.event.stopPropagation();
   };
 
 export const onChangeInputValueEditKnowbooks =
@@ -114,7 +115,8 @@ export const onOpenRenameKnowbook =
       TUiBooleanStorage.renameKnowbookOpened,
       true
     );
-    input.event.preventDefault();
+    // input.event.preventDefault();
+    input.event.stopPropagation();
   };
 
 export const onChangeInputValueRenameKnowbook =
@@ -143,5 +145,6 @@ export const onDeleteKnowbook =
   (name: KnowbookID) =>
   (input: { event: eventT }): void => {
     deleteKnowbook(name, stores);
-    input.event.preventDefault();
+    // input.event.preventDefault();
+    input.event.stopPropagation();
   };

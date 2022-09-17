@@ -1,5 +1,5 @@
 import { Tlanguage, IStaticKnowbookDefinition } from "./globals";
-import { StaticKnowbookFamilyType } from "./types";
+import { StaticKnowbookFamilyType } from "./globals";
 
 export const staticTrendFeaturedKnowbooks: IStaticKnowbookDefinition[] = [
   { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2016-2022" },

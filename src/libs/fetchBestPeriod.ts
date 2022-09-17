@@ -5,8 +5,24 @@ import {
   JSONDataT,
 } from "../config/globals";
 import { fetch_data_wiki_rest } from "./fetch";
-import { DateToStringWithZero, filterTitlesListFromPatterns } from "./utils";
+import { DateToStringWithZero } from "./utils";
 import { writeFileJson } from "./utilsServer";
+
+function filterTitlesListFromPatterns(
+  TitleList: string[],
+  patterns: string[]
+): string[] {
+  if (TitleList === undefined || TitleList.length === 0) {
+    return [];
+  }
+  let TitleList_filterned: string[] = TitleList;
+  patterns.forEach((pattern: string) => {
+    TitleList_filterned = TitleList_filterned.filter((title) => {
+      return title !== pattern;
+    });
+  });
+  return TitleList_filterned;
+}
 
 /**
  * Interface

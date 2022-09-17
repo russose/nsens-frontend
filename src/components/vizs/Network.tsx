@@ -3,21 +3,17 @@ import { Links, Nodes } from "@visx/network";
 import { NodeProvidedProps } from "@visx/network/lib/types";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { group_name, IAtom } from "../../config/globals";
-import { showArticle } from "../../handlers/handlers_Articles";
-import { onEditKnowbooks } from "../../handlers/handlers_Knowbooks";
-import {
-  isItemSaved,
-  isItemSavedActivated,
-  onSaved,
-} from "../../handlers/handlers_Saved";
-import { isMobile } from "../../libs/helpersBase";
-import { path_link } from "../../libs/utils";
+import { configGeneral, group_name, IAtom } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
 import { useStores } from "../../stores/RootStoreHook";
-import CardAtomCompactViz from "../CardAtomCompactViz";
 import NetworkLinkWithLabel from "./NetworkLinkWithLabel";
 import NodeGroup from "./NodeGroup";
+import CardAtomCompactViz_NotLogged from "../CardAtomCompactViz_NotLogged";
+import dynamic from "next/dynamic";
+
+const CardAtomCompactViz_Logged_D = dynamic(
+  () => import("./../CardAtomCompactViz_Logged")
+);
 
 export type INetworkWithGroupProps = {
   title: string;
@@ -50,6 +46,30 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
     );
   } else {
     const item: IAtom = stores.baseStore.getHistoryItem(props.node.item);
+
+    let cardAtom;
+    const color =
+      item.id === stores.graphStore.graph.nodes[0].item
+        ? configGeneral.colors.network_item_selected_color
+        : configGeneral.colors.item_color;
+    if (stores.baseStore.isLogged) {
+      cardAtom = (
+        <CardAtomCompactViz_Logged_D
+          stores={stores}
+          item={item}
+          color={color}
+        />
+      );
+    } else {
+      cardAtom = (
+        <CardAtomCompactViz_NotLogged
+          stores={stores}
+          item={item}
+          color={color}
+        />
+      );
+    }
+
     node = (
       <foreignObject
         x={-node_dx / 2}
@@ -57,22 +77,7 @@ const NetworkNode_: React.FunctionComponent<NodeProvidedProps<any>> = (
         width={node_dx}
         height={node_dy}
       >
-        <CardAtomCompactViz
-          key={`cardAtomNetwork-${item.id}`}
-          id={item.id}
-          stores={stores}
-          title={item.title}
-          image_url={item.image_url}
-          // pathname={path_Itemview}
-          pathname={path_link(item.id, stores)}
-          queryObject={{ title: item.title, id: item.id }}
-          saved_enabled={isItemSaved(stores)(item.id)}
-          saved_actionable={isItemSavedActivated(stores)(item.id)}
-          saved_handler={onSaved(stores)(item.id)}
-          edit_handler={onEditKnowbooks(stores)(item.id)}
-          top_handler={showArticle(stores, item.title, item.id)}
-          CompactExtra={isMobile(stores)}
-        />
+        {cardAtom}
       </foreignObject>
     );
   }

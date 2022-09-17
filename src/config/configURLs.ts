@@ -3,7 +3,7 @@ import { Tlanguage } from "./globals";
 export const URLs = {
   ROOT_URL_WIKIDATA: "https://query.wikidata.org/sparql",
   ROOT_URL_WIKIDATA_ACTION: "https://www.wikidata.org/w/api.php",
-  ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
+  // ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
 };
 
 export function ROOT_URL_WIKIPEDIA_ACTION(lang: Tlanguage): string {

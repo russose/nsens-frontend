@@ -1,18 +1,19 @@
 import { observer } from "mobx-react-lite";
-import { Image, Box, Mask, Text } from "gestalt";
+import { Box, Mask, Text, TapArea, Image } from "gestalt";
 import {
   AtomID,
   ColorT,
+  handlerT,
   reactComponentT,
   RoundingT,
   SizeT,
 } from "../config/globals";
-import Link from "next/link";
 import { IStores } from "../stores/RootStore";
-import { configPaths } from "../config/globals";
 import React from "react";
+import { shortenString } from "../libs/utils";
+// import ImageLazy from "./ImageLazy";
 
-interface ICardSizes {
+export interface ICardSizes {
   height: number | string;
   width?: number;
   image_ratio: string;
@@ -31,11 +32,13 @@ interface ICardGenericProps {
   color_image?: string;
   sizes: ICardSizes;
   rounding: RoundingT;
-  pathname: string;
-  queryObject?: any;
+  // pathname: string;
+  // queryObject?: any;
+  image_handler: handlerT;
   full?: boolean;
   width_text?: string;
   TopIcon?: any;
+  size_factor?: number;
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
@@ -47,7 +50,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
 
   let title = props.title;
   if (title.length > max_title_size) {
-    title = props.title.substring(0, max_title_size) + "...";
+    title = shortenString(title, max_title_size);
   }
 
   const color_image =
@@ -61,10 +64,11 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         alt={props.title}
         color={color_image}
         fit="cover"
-        naturalHeight={3000}
-        naturalWidth={3000}
+        naturalHeight={300}
+        naturalWidth={300}
         loading="lazy"
         src={path_image}
+        // importance="high"
       >
         <Box
           display="flex"
@@ -79,23 +83,14 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
       </Image>
     );
   };
+
   const image_with_link = (component: reactComponentT) => {
     return (
-      <Link
-        prefetch={false}
-        href={{
-          pathname: configPaths.rootPath + props.pathname,
-          query: { ...props.stores.baseStore.paramsPage, ...props.queryObject },
-        }}
-        passHref
-      >
-        <a>{image_only(component)}</a>
-      </Link>
+      <TapArea fullHeight={true} onTap={props.image_handler}>
+        {image_only(component)}
+      </TapArea>
     );
   };
-
-  const hasLink: boolean =
-    props.pathname !== undefined && props.pathname !== "";
 
   let c_width: string;
   let c_rounding: any;
@@ -161,28 +156,46 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     </>
   );
 
+  let height_ = props.sizes.height;
+  let width_ = props.sizes.width;
+  if (
+    props.size_factor !== undefined &&
+    typeof props.sizes.height === "number" &&
+    typeof props.sizes.width === "number"
+  ) {
+    height_ = Math.round((height_ as number) * props.size_factor);
+    width_ = Math.round((width_ as number) * props.size_factor);
+  }
+
   return (
-    <Box
-      height={props.sizes.height}
-      width={props.sizes.width !== undefined ? props.sizes.width : undefined}
-      borderStyle="shadow"
-      // borderStyle="lg"
-      rounding={rounding}
-      display="flex"
-      direction="column"
-    >
+    <>
       <Box
-        height="100%"
-        width="100%"
-        color={props.colorEdge === undefined ? "transparent" : props.colorEdge}
-        padding={props.colorEdge === undefined ? 0 : 1}
+        // height={props.sizes.height}
+        // width={props.sizes.width !== undefined ? props.sizes.width : undefined}
+        height={height_}
+        width={width_ !== undefined ? width_ : undefined}
+        borderStyle="shadow"
         rounding={rounding}
+        display="flex"
+        direction="column"
       >
-        <Mask rounding={rounding as RoundingT} height="100%" width="100%">
-          {hasLink ? image_with_link(content) : image_only(content)}
-        </Mask>
+        <Box
+          height="100%"
+          width="100%"
+          color={
+            props.colorEdge === undefined ? "transparent" : props.colorEdge
+          }
+          padding={props.colorEdge === undefined ? 0 : 1}
+          rounding={rounding}
+        >
+          <Mask rounding={rounding as RoundingT} height="100%" width="100%">
+            {props.image_handler !== undefined
+              ? image_with_link(content)
+              : image_only(content)}
+          </Mask>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

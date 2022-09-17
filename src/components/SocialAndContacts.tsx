@@ -1,19 +1,19 @@
 import { Box, Icon, Text } from "gestalt";
 import React from "react";
-import {
-  EmailIcon,
-  EmailShareButton,
-  FacebookIcon,
-  FacebookShareButton,
-  LinkedinIcon,
-  LinkedinShareButton,
-  PinterestIcon,
-  PinterestShareButton,
-  TwitterIcon,
-  TwitterShareButton,
-  WhatsappIcon,
-  WhatsappShareButton,
-} from "react-share";
+// import {
+//   EmailIcon,
+//   EmailShareButton,
+//   FacebookIcon,
+//   FacebookShareButton,
+//   LinkedinIcon,
+//   LinkedinShareButton,
+//   PinterestIcon,
+//   PinterestShareButton,
+//   TwitterIcon,
+//   TwitterShareButton,
+//   WhatsappIcon,
+//   WhatsappShareButton,
+// } from "react-share";
 import { configPaths, CONFIG_ENV, getEmail } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 
@@ -35,7 +35,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
     CONFIG_ENV.FRONT_URL + "/" + configPaths.image_landing;
 
   const icon_size = 32;
-  const text_size = "lg";
+  const text_size = "300";
   const icon_color = "default";
 
   const contact_icons = (
@@ -55,7 +55,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
           size={icon_size}
         />
       </a>
-      <a href={twitter_link} target="_blank">
+      <a href={twitter_link} target="_blank" rel="noreferrer">
         <Icon
           accessibilityLabel={"twitter"}
           icon="twitter"
@@ -63,7 +63,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
           size={icon_size}
         />
       </a>
-      <a href={instagram_link} target="_blank">
+      <a href={instagram_link} target="_blank" rel="noreferrer">
         <Icon
           accessibilityLabel={"Instagram"}
           icon="camera"
@@ -71,7 +71,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
           size={icon_size}
         />
       </a>
-      <a href={pinterest_link} target="_blank">
+      <a href={pinterest_link} target="_blank" rel="noreferrer">
         <Icon
           accessibilityLabel={"pinterest"}
           icon="pinterest"
@@ -82,53 +82,55 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
     </Box>
   );
 
-  const social_icons = (
-    <Box
-      padding={0}
-      display="flex"
-      direction="row"
-      flex="grow"
-      width="100%"
-      justifyContent="around"
-    >
-      <TwitterShareButton url={url} title={description} hashtags={[""]}>
-        <TwitterIcon size={icon_size} round={true} />
-      </TwitterShareButton>
+  // const social_icons = (
+  //   <Box
+  //     padding={0}
+  //     display="flex"
+  //     direction="row"
+  //     flex="grow"
+  //     width="100%"
+  //     justifyContent="around"
+  //   >
+  //     <TwitterShareButton url={url} title={description} hashtags={[""]}>
+  //       <TwitterIcon size={icon_size} round={true} />
+  //     </TwitterShareButton>
 
-      <LinkedinShareButton
-        url={url}
-        title={"n.Sens"}
-        summary={description}
-        source={url}
-      >
-        <LinkedinIcon size={icon_size} round={true} />
-      </LinkedinShareButton>
+  //     <LinkedinShareButton
+  //       url={url}
+  //       title={"n.Sens"}
+  //       summary={description}
+  //       source={url}
+  //     >
+  //       <LinkedinIcon size={icon_size} round={true} />
+  //     </LinkedinShareButton>
 
-      <FacebookShareButton
-        url={url}
-        quote={description}
-        hashtag="#nsens #wikipedia #knowledge"
-      >
-        <FacebookIcon size={icon_size} round={true} />
-      </FacebookShareButton>
+  //     <FacebookShareButton
+  //       url={url}
+  //       quote={description}
+  //       hashtag="#nsens #wikipedia #knowledge"
+  //     >
+  //       <FacebookIcon size={icon_size} round={true} />
+  //     </FacebookShareButton>
 
-      <WhatsappShareButton url={url} title={description}>
-        <WhatsappIcon size={icon_size} round={true} />
-      </WhatsappShareButton>
+  //     <WhatsappShareButton url={url} title={description}>
+  //       <WhatsappIcon size={icon_size} round={true} />
+  //     </WhatsappShareButton>
 
-      <PinterestShareButton
-        url={url}
-        description={description}
-        media={path_image_full}
-      >
-        <PinterestIcon size={icon_size} round={true} />
-      </PinterestShareButton>
+  //     <PinterestShareButton
+  //       url={url}
+  //       description={description}
+  //       media={path_image_full}
+  //     >
+  //       <PinterestIcon size={icon_size} round={true} />
+  //     </PinterestShareButton>
 
-      <EmailShareButton url={url} subject={description} body={description}>
-        <EmailIcon size={icon_size} round={true} />
-      </EmailShareButton>
-    </Box>
-  );
+  //     <EmailShareButton url={url} subject={description} body={description}>
+  //       <EmailIcon size={icon_size} round={true} />
+  //     </EmailShareButton>
+  //   </Box>
+  // );
+
+  const social_icons = <></>;
 
   return (
     <Box

@@ -1,14 +1,14 @@
 import React from "react";
-import { Tlanguage, CONFIG_ENV, configPaths } from "../config/globals";
+import { Tlanguage, CONFIG_ENV } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { getKnowbookStaticAtomsList } from "../libs/helpersSavedKnowbooks";
 import HeaderTitle from "./HeaderTitle";
 
 interface IHeaderTitleProps {
   stores: IStores;
   title: string;
+  additional_description?: string;
 }
 
 const HeaderSEO: React.FunctionComponent<IHeaderTitleProps> = (props) => {
@@ -24,23 +24,26 @@ const HeaderSEO: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   let description =
     title_page + " - " + GUI_CONFIG.language.SEO.description_page_base;
 
-  if (router.pathname.includes(configPaths.pages.StaticKnowbook)) {
-    const staticKnowbookID = router.query.nameOrPeriod as string;
-    getKnowbookStaticAtomsList(staticKnowbookID, props.stores).forEach(
-      (item) => {
-        description = description + " | " + item.title;
-      }
-    );
+  if (props.additional_description !== undefined) {
+    description = description + " | " + props.additional_description;
   }
+  // if (router.pathname.includes(configPaths.pages.StaticKnowbook)) {
+  //   const staticKnowbookID = router.query.nameOrPeriod as string;
+  //   getKnowbookStaticAtomsList(staticKnowbookID, props.stores).forEach(
+  //     (item) => {
+  //       description = description + " | " + item.title;
+  //     }
+  //   );
+  // }
 
-  if (router.pathname.includes(configPaths.pages.Knowbooks)) {
-    const staticKnowbookIDList: string[] = Array.from(
-      props.stores.knowbookStore.staticKnowbooks.keys()
-    );
-    staticKnowbookIDList.forEach((staticKnowbookID) => {
-      description = description + " | " + staticKnowbookID;
-    });
-  }
+  // if (router.pathname.includes(configPaths.pages.Knowbooks)) {
+  //   const staticKnowbookIDList: string[] = Array.from(
+  //     props.stores.knowbookStore.staticKnowbooks.keys()
+  //   );
+  //   staticKnowbookIDList.forEach((staticKnowbookID) => {
+  //     description = description + " | " + staticKnowbookID;
+  //   });
+  // }
 
   // console.log(description);
 

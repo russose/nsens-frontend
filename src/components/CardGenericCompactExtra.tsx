@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite";
-import { Box, Text } from "gestalt";
-import { AtomID, ColorT } from "../config/globals";
-import Link from "next/link";
+import { Box, TapArea, Text } from "gestalt";
+import { AtomID, ColorT, handlerT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import { configPaths } from "../config/globals";
+import { shortenString } from "../libs/utils";
 
 interface ICardSizes {
   height: number | string;
@@ -21,21 +20,17 @@ interface ICardGenericCompactExtraProps {
   color: ColorT;
   color_image?: string;
   sizes: ICardSizes;
-  pathname?: string;
-  queryObject?: any;
+  image_handler: handlerT;
 }
 
 const CardGenericCompactExtra: React.FunctionComponent<
   ICardGenericCompactExtraProps
 > = (props) => {
   const rounding = 3;
-  // const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
   const max_title_size = props.sizes.max_title_size;
-  // const title_card_size: SizeT = props.sizes.title_card_size;
-
   let title = props.title;
   if (title.length > max_title_size) {
-    title = props.title.substring(0, max_title_size) + "...";
+    title = shortenString(title, max_title_size);
   }
   return (
     <Box height={props.sizes.height} width={props.sizes.width}>
@@ -57,23 +52,11 @@ const CardGenericCompactExtra: React.FunctionComponent<
           width="65%"
           paddingX={1}
         >
-          <Link
-            prefetch={false}
-            href={{
-              pathname: configPaths.rootPath + props.pathname,
-              query: {
-                ...props.stores.baseStore.paramsPage,
-                ...props.queryObject,
-              },
-            }}
-            passHref
-          >
-            <a>
-              <Text size="100" align="start" weight="normal">
-                {title}
-              </Text>
-            </a>
-          </Link>
+          <TapArea fullHeight={true} onTap={props.image_handler}>
+            <Text size="100" align="start" weight="normal">
+              {title}
+            </Text>
+          </TapArea>
         </Box>
 
         <Box

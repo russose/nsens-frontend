@@ -1,4 +1,4 @@
-import { Box, Image, TapArea } from "gestalt";
+import { Box, TapArea, Image } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import SearchBar from "../SearchBar";
@@ -8,20 +8,25 @@ import {
   onSearchHomeKeyboard,
   onSearchHomeSubmit,
   onSearchHomeText,
-  onTapLogo,
-} from "../../handlers/handlers_Searchbar_Navigation";
+} from "../../handlers/handlers_Searchbar";
 import { configPaths, TUiStringStorage } from "../../config/globals";
-import { IAppLayoutProps } from "./AppLayoutMobile";
+import { useStores } from "../../stores/RootStoreHook";
+import { useRouter } from "next/router";
+import { onTapLogo } from "../../handlers/handlers_Navigation";
 
-const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
-  const stores = props.stores;
+interface IProps {
+  children?: React.ReactNode;
+}
 
-  stores.baseStore.setGUICONFIGFromDisplay(props.display);
-  // setSVGGlobalDimensions(stores);
+const AppLayoutDesktop: React.FunctionComponent<IProps> = (props) => {
+  const stores = useStores();
+  const router = useRouter();
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const path_logo_image = configPaths.image_logo_W_small;
-  const rounding = stores.baseStore.GUI_CONFIG.display.rounding_menu;
+  const rounding = GUI_CONFIG.display.rounding_menu;
+
+  const svgBody = router.pathname.includes(configPaths.pages.ItemCircle);
 
   const searchbar = (
     <SearchBar
@@ -41,7 +46,7 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
         fit="contain"
         naturalHeight={1}
         naturalWidth={1}
-        loading="lazy"
+        // loading="eager"
         src={path_logo_image}
       ></Image>
     </TapArea>
@@ -93,10 +98,9 @@ const AppLayoutDesktop: React.FunctionComponent<IAppLayoutProps> = (props) => {
     <>
       <AppLayoutPageHybrid
         stores={stores}
-        titleSEO={props.titleSEO}
         top={top_desktop}
         bottom={<></>}
-        svgBody={props.svgBody}
+        svgBody={svgBody}
       >
         {props.children}
       </AppLayoutPageHybrid>

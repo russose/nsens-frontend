@@ -47,8 +47,8 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
                   stores={props.stores}
                   title={item.title}
                   image_url={item.image_url}
-                  pathname={item.pathname}
-                  queryObject={item.queryObject}
+                  color_image={item.color_image}
+                  image_handler={item.image_handler}
                   amount={item.amount}
                   rename_handler={item.rename_handler}
                   delete_handler={item.delete_handler}

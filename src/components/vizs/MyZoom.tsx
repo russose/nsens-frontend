@@ -5,6 +5,7 @@ import { Zoom } from "@visx/zoom";
 import { Group } from "@visx/group";
 
 export type IMyZoomProps = {
+  children?: React.ReactNode;
   width: number;
   height: number;
 };
@@ -64,7 +65,6 @@ const MyZoom: React.FunctionComponent<IMyZoomProps> = (props) => {
                 }}
               />
               <Group transform={zoom.toString()}>{props.children}</Group>
-              {/* <g transform={zoom.toString()}>{props.children}</g> */}
             </svg>
           </div>
         )}
