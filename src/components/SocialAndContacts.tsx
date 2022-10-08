@@ -97,7 +97,7 @@ const SocialAndContacts: React.FunctionComponent<IContactsProps> = (props) => {
 
   //     <LinkedinShareButton
   //       url={url}
-  //       title={"n.Sens"}
+  //       title={"nSens"}
   //       summary={description}
   //       source={url}
   //     >

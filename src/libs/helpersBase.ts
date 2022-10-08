@@ -9,6 +9,7 @@ import {
   TUiStringStorage,
   AtomID,
   CONFIG_ENV,
+  TUiBooleanStorage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import {
@@ -220,6 +221,13 @@ export async function goPage(
   if (typeof window !== "undefined") {
     const paramsPage = stores.baseStore.paramsPage;
     stores.uiStore.setUiStringStorage(TUiStringStorage.searchPattern, "");
+
+    stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, false);
+    stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showHistory, false);
+    stores.uiStore.setUiBooleanStorage(
+      TUiBooleanStorage.editKnowbookOpened,
+      false
+    );
 
     await Router.push({
       pathname: configPaths.rootPath + page,

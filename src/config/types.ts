@@ -120,10 +120,11 @@ export enum TUiStringStorage {
 }
 
 export enum TUiBooleanStorage {
-  editKnowbookOpened = "editKnowbookOpened",
   renameKnowbookOpened = "renameKnowbookOpened",
   showLoading = "showLoading",
+  editKnowbookOpened = "editKnowbookOpened",
   showArticle = "showArticle",
+  showHistory = "showHistory",
   renderGraphNetwork = "renderGraphNetwork",
 }
 
@@ -198,6 +199,8 @@ export enum TButtonID {
 
   ARTICLE_BACK = "ARTICLE_BACK",
   ARTICLE_NEXT = "ARTICLE_NEXT",
+
+  HISTORY = "HISTORY",
 }
 
 export interface IButton {

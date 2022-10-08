@@ -2,7 +2,7 @@ import { Box, Button } from "gestalt";
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
 import React from "react";
-import FormLoginSignup from "../../../src/components/FormLoginSignup";
+import DialogFormLoginSignup from "../../../src/components/DialogFormLoginSignup";
 import LanguageSelector from "../../../src/components/LanguageSelector";
 import { configPaths } from "../../../src/config/globals";
 import {
@@ -48,7 +48,7 @@ const User: React.FunctionComponent<IPage> = (props) => {
 
   const loginSignup = (
     <Box padding={0} column={11} smColumn={11} mdColumn={5} lgColumn={3}>
-      <FormLoginSignup
+      <DialogFormLoginSignup
         stores={stores}
         placeholder_username={placeholder_username}
         placeholder_password={password_placeholder}

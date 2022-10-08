@@ -4,18 +4,18 @@ import { IStores } from "../stores/RootStore";
 import { TUiBooleanStorage } from "../config/globals";
 import dynamic from "next/dynamic";
 
-const DialogEditKnowbooks_D = dynamic(
-  () => import("../components/DialogEditKnowbooks")
-);
+const DialogEditKnowbooks_D = dynamic(() => import("./DialogEditKnowbooks"));
 const DialogRenameKnowbooks_D = dynamic(
-  () => import("../components/DialogRenameKnowbooks")
+  () => import("./DialogRenameKnowbooks")
 );
 
 interface IDialogsLoggedProps {
   stores: IStores;
 }
 
-const DialogsLogged: React.FunctionComponent<IDialogsLoggedProps> = (props) => {
+const DialogsAllLogged: React.FunctionComponent<IDialogsLoggedProps> = (
+  props
+) => {
   const stores = props.stores;
 
   return (
@@ -38,4 +38,4 @@ const DialogsLogged: React.FunctionComponent<IDialogsLoggedProps> = (props) => {
   );
 };
 
-export default observer(DialogsLogged);
+export default observer(DialogsAllLogged);

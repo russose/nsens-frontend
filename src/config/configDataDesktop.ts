@@ -21,7 +21,7 @@ export const configDataDesktop: TconfigDataDisplay = {
     heightUser: "60vh", //700,
     heightChangePassword: "40vh",
     heightHeader: 60, //7%
-    heightBody: "92vh", //"93%",
+    heightBody: "92vh",
     heightBottom: "6vh",
     // heightSlideArticle: "80vh",
     SVG_R_Max: 400,

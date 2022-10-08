@@ -1,5 +1,3 @@
-const card_compact_vizs_size = 75;
-
 export const configDataMobile = {
   // display: {
   //   displayFeedIncrement: 1, //10,
@@ -79,8 +77,8 @@ export const configDataMobile = {
     ratio_image: "80%",
   },
   atom_compact_vizs_sizes: {
-    height: card_compact_vizs_size,
-    width: card_compact_vizs_size,
+    height: 80,
+    width: 80,
     lgPadding: 2,
     mdPadding: 2,
     smPadding: 1,

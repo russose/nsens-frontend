@@ -4,25 +4,19 @@ import { Box, Link, Sheet, Text } from "gestalt";
 import { ROOT_URL_WIKIPEDIA } from "../config/configURLs";
 import { IStores } from "../stores/RootStore";
 import { TUiBooleanStorage, TUiStringStorage } from "../config/globals";
-import dynamic from "next/dynamic";
-import MenuBarArticle_NotLogged from "./MenuBarArticle_NotLogged";
+import MenuBarItem from "./MenuBarItem";
 
-const MenuBarArticle_Logged_D = dynamic(
-  () => import("./MenuBarArticle_Logged")
-);
+// const MenuBarArticle_Logged_D = dynamic(() => import("./MenuBarItem_Logged"));
 
 interface IArticleProps {
   stores: IStores;
 }
 
-const Article: React.FunctionComponent<IArticleProps> = (props) => {
+const DialogArticle: React.FunctionComponent<IArticleProps> = (props) => {
   const source_wikipedia =
     props.stores.baseStore.GUI_CONFIG.language.source_wikipedia;
 
   const item_title = props.stores.uiStore.selectedAtom.title;
-  const rounding = props.stores.baseStore.GUI_CONFIG.display.rounding_menu;
-
-  const isLogged = props.stores.baseStore.isLogged;
 
   const article = (
     <iframe
@@ -59,34 +53,7 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
     </Box>
   );
 
-  const subHeading = (
-    <Box width="100%" paddingX={1}>
-      <Box
-        display="flex"
-        direction="row"
-        justifyContent="between"
-        alignItems="center"
-      >
-        {source}
-        {/* <Box column={6}> */}
-        <Box column={11} smColumn={8} mdColumn={5} lgColumn={5}>
-          {/* <MenuBarArticle stores={props.stores} rounding={rounding} /> */}
-          {!isLogged ? (
-            <MenuBarArticle_NotLogged
-              stores={props.stores}
-              rounding={rounding}
-              specific_buttons={[]}
-            />
-          ) : (
-            <MenuBarArticle_Logged_D
-              stores={props.stores}
-              rounding={rounding}
-            />
-          )}
-        </Box>
-      </Box>
-    </Box>
-  );
+  const menuBar = <MenuBarItem stores={props.stores} titleComponent={source} />;
 
   return (
     <>
@@ -95,10 +62,10 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
         //   TUiBooleanStorage.showArticle
         // ) &&
         <Sheet
-          accessibilityDismissButtonLabel="Close wikipedia sheet"
+          accessibilityDismissButtonLabel="Close wikipedia Panel"
           accessibilitySheetLabel="Wikipedia Article"
           heading={item_title}
-          subHeading={subHeading}
+          subHeading={menuBar}
           onDismiss={() => {
             props.stores.uiStore.setUiBooleanStorage(
               TUiBooleanStorage.showArticle,
@@ -114,4 +81,4 @@ const Article: React.FunctionComponent<IArticleProps> = (props) => {
   );
 };
 
-export default observer(Article);
+export default observer(DialogArticle);

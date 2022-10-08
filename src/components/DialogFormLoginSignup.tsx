@@ -29,7 +29,7 @@ interface IFormLoginSignupProps {
   handler_button: handlerT;
 }
 
-const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
+const DialogFormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
@@ -135,4 +135,4 @@ const FormLoginSignup: React.FunctionComponent<IFormLoginSignupProps> = (
   );
 };
 
-export default observer(FormLoginSignup);
+export default observer(DialogFormLoginSignup);

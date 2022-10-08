@@ -15,6 +15,8 @@ import HeaderSEO from "../../../src/components/HeaderSEO";
 import { initializeApp } from "../../../src/libs/helpersInitialize";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import { showArticle } from "../../../src/handlers/handlers_Navigation";
+import HeaderItem from "../../../src/components/HeaderItem";
+import { Box } from "gestalt";
 
 const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
@@ -39,7 +41,9 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const content = (
     <>
       <HeaderSEO stores={stores} title={item_title} />
-      <HeaderTitle stores={stores} title={item_title} />
+      <HeaderTitle stores={stores} title={item_title} hidden={true} />
+      <HeaderItem stores={stores} title={item_title} />
+      <Box padding={2}></Box>
       <NetworkFlat rootItemId={item_id} stores={stores} />
     </>
   );

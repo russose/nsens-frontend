@@ -127,7 +127,7 @@ async function makeOneScreenshoot(
     height: screen.height,
   });
   await page.goto(url, { waitUntil: "networkidle0" });
-  await page.reload({ waitUntil: ["networkidle0"] });
+  // await page.reload({ waitUntil: ["networkidle0"] }); //Uncomment to generate screenshots not working (full white)
   await page.screenshot({ path: pathFilename, omitBackground: true });
   console.log(pathFilename, "saved...");
 }
@@ -202,6 +202,6 @@ export async function makeScreenshoots(): Promise<void> {
     }
   }
 
-  console.log("All screenshoots saved!");
+  // console.log("All screenshoots saved!");
   await browser.close();
 }

@@ -26,6 +26,7 @@ export const showArticle =
   (input: { event: eventT }): void => {
     if (item_title !== undefined && item_id !== undefined) {
       stores.uiStore.setSelectedAtom(item_id, item_title);
+      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showHistory, false);
       stores.uiStore.setUiStringStorage(TUiStringStorage.articleContent, "");
       stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, true);
       stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
@@ -80,5 +81,6 @@ export const goUserHandler_ =
   (itemID: AtomID) =>
   (input: { event: eventT }): void => {
     goUserHandler(stores)()(input);
+    // stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, false);
     return;
   };

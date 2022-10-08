@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.nsens.www.twa",
+      "sha256_cert_fingerprints":
+        ["C8:9F:A8:78:D4:52:92:AB:98:EB:97:C8:39:18:8A:B1:C8:49:2E:E8:30:50:84:83:79:87:88:91:16:C4:82:9B"]
+    }
+  }]

@@ -11,7 +11,7 @@ import {
 import { IStores } from "../stores/RootStore";
 import React from "react";
 
-interface IFormChangePasswordProps {
+interface IProps {
   stores: IStores;
   placeholder_username: string;
   placeholder_password: string;
@@ -23,9 +23,7 @@ interface IFormChangePasswordProps {
   value_username: string | undefined;
 }
 
-const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
-  props
-) => {
+const DialogChangePassword: React.FunctionComponent<IProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const texfield_size: SizeT = GUI_CONFIG.display.dialogs.texfield_size;
   const button_icon_size: SizeT = GUI_CONFIG.display.dialogs.button_icon_size;
@@ -122,4 +120,4 @@ const FormChangePassword: React.FunctionComponent<IFormChangePasswordProps> = (
   );
 };
 
-export default observer(FormChangePassword);
+export default observer(DialogChangePassword);

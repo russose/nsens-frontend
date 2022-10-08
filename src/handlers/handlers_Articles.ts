@@ -30,14 +30,16 @@ export const showArticleBackNext =
     } else if (router.pathname.includes(configPaths.pages.Knowbook)) {
       selected = router.query.nameOrPeriod as string;
       items = stores.knowbookStore.knowbookAtomsList(selected);
-    } else if (
-      router.pathname.includes(configPaths.pages.ItemCircle) ||
-      router.pathname.includes(configPaths.pages.ItemNetwork)
-    ) {
-      selected = router.query.id as string;
-      const related_Ids: AtomID[] = stores.graphStore.relatedMapFlat.atomIds;
-      items = stores.baseStore.getHistoryItems([selected].concat(related_Ids));
-    } else {
+    }
+    // else if (
+    //   router.pathname.includes(configPaths.pages.ItemCircle) ||
+    //   router.pathname.includes(configPaths.pages.ItemNetwork)
+    // ) {
+    //   selected = router.query.id as string;
+    //   const related_Ids: AtomID[] = stores.graphStore.relatedMapFlat.atomIds;
+    //   items = stores.baseStore.getHistoryItems([selected].concat(related_Ids));
+    // }
+    else {
       return;
     }
 

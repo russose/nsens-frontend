@@ -6,14 +6,14 @@ import {
   TPages,
   TSpecialPages,
   CUSTOM_ICONS,
-  TScenarioStepID,
 } from "./globals";
 
 export const configDataIt: TconfigDataLanguage = {
   searchBar: "Cerca...",
+  historyNavigation: "Percorso di navigazione",
   source_wikipedia: "Sorgente: Wikipedia",
   legend: "Leggenda:",
-  tryButton: "Prova n.Sens",
+  // tryButton: "Prova nSens",
   labels: {
     knowbookUser: "Le mie collezioni",
     knowbookFeatured: "Scopri",
@@ -21,9 +21,9 @@ export const configDataIt: TconfigDataLanguage = {
   SEO: {
     // canonical: "https://www.nsens.org/it/Mobile/About/",
     title_page_base:
-      "n.Sens - n.Sens aggiunge una nuova dimensione alla Wikipedia, esplorando visualmente la Conoscenza attraverso delle schede di Wikipedia. Un viaggio illimitato, di scoperta in scoperta.",
+      "nSens - nSens aggiunge una nuova dimensione alla Wikipedia, esplorando visualmente la Conoscenza attraverso delle schede di Wikipedia. Un viaggio illimitato, di scoperta in scoperta.",
     description_page_base:
-      "n.Sens - n.Sens aggiunge una nuova dimensione alla Wikipedia, esplorando visualmente la Conoscenza attraverso delle schede di Wikipedia. Un viaggio illimitato, di scoperta in scoperta.",
+      "nSens - nSens aggiunge una nuova dimensione alla Wikipedia, esplorando visualmente la Conoscenza attraverso delle schede di Wikipedia. Un viaggio illimitato, di scoperta in scoperta.",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -131,6 +131,10 @@ export const configDataIt: TconfigDataLanguage = {
     [TButtonID.ARTICLE_NEXT]: {
       label: "",
       icon: ICONS.ARTICLE_NEXT,
+    },
+    [TButtonID.HISTORY]: {
+      label: "Percorso",
+      icon: CUSTOM_ICONS.HISTORY,
     },
   },
   knowbooks_User: {

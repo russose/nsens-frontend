@@ -1,5 +1,5 @@
 import { LinkProvidedProps } from "@visx/network/lib/types";
-import { LinkVerticalLine } from "@visx/shape";
+import { LinkVerticalCurve, LinkVerticalLine } from "@visx/shape";
 import { Text } from "@visx/text";
 import { observer } from "mobx-react-lite";
 import { group_name } from "../../config/globals";
@@ -50,20 +50,20 @@ const NetworkLinkWithLabel: React.FunctionComponent<LinkProvidedProps<any>> = (
 
   return (
     <svg>
-      {/* <LinkVerticalCurve<Node, Node>
-        data={props.link}
-        stroke={black}
-        strokeWidth="2"
-        strokeOpacity={0.9}
-        fill="none"
-      /> */}
-      <LinkVerticalLine<Node, Node>
+      <LinkVerticalCurve<Node, Node>
         data={props.link}
         stroke={black}
         strokeWidth="2"
         strokeOpacity={0.9}
         fill="none"
       />
+      {/* <LinkVerticalLine<Node, Node>
+        data={props.link}
+        stroke={black}
+        strokeWidth="2"
+        strokeOpacity={0.9}
+        fill="none"
+      /> */}
       {Label}
     </svg>
   );

@@ -10,16 +10,16 @@ import {
 } from "../handlers/handlers_Saved";
 
 import { IStores } from "../stores/RootStore";
-import MenuBarArticle_NotLogged from "./MenuBarArticle_NotLogged";
+import MenuBarItem_NotLogged from "./MenuBarItem_NotLogged";
 
 interface IMenuBarNavigationProps {
   stores: IStores;
   rounding: RoundingT;
 }
 
-const MenuBarArticle_Logged: React.FunctionComponent<
-  IMenuBarNavigationProps
-> = (props) => {
+const MenuBarItem_Logged: React.FunctionComponent<IMenuBarNavigationProps> = (
+  props
+) => {
   const stores = props.stores;
 
   const buttons: IButton[] = [
@@ -40,7 +40,7 @@ const MenuBarArticle_Logged: React.FunctionComponent<
 
   return (
     <>
-      <MenuBarArticle_NotLogged
+      <MenuBarItem_NotLogged
         stores={props.stores}
         rounding={props.rounding}
         specific_buttons={buttons}
@@ -49,4 +49,4 @@ const MenuBarArticle_Logged: React.FunctionComponent<
   );
 };
 
-export default observer(MenuBarArticle_Logged);
+export default observer(MenuBarItem_Logged);

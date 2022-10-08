@@ -29,11 +29,16 @@ const NodeGroup: React.FunctionComponent<INodeGroupProps> = (props) => {
   return (
     <Box
       borderStyle="lg"
-      color={configGeneral.colors.network_node_color as any}
+      // color={configGeneral.colors.network_node_color as any}
       rounding={rounding}
       padding={1}
       width={node_dx}
       height={node_dy * 0.7}
+      dangerouslySetInlineStyle={{
+        __style: {
+          backgroundColor: configGeneral.colors.network_node_color_css,
+        },
+      }}
     >
       <Box
         height="100%"

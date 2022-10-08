@@ -29,7 +29,13 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
     return <></>;
   } else {
     return (
-      <Box wrap={true} display="flex" direction="row" justifyContent="around">
+      <Box
+        wrap={true}
+        display="flex"
+        direction="row"
+        justifyContent="around"
+        // color="primary"
+      >
         {props.atoms
           .filter((item_) => {
             return item_ !== undefined;

@@ -13,6 +13,8 @@ import HeaderSEO from "../../../src/components/HeaderSEO";
 import { initializeApp } from "../../../src/libs/helpersInitialize";
 import AppLayout from "../../../src/components/layout/AppLayout";
 import dynamic from "next/dynamic";
+import HeaderTitle from "../../../src/components/HeaderTitle";
+import HeaderItem from "../../../src/components/HeaderItem";
 
 const NetworkItem_D = dynamic(
   () => import("../../../src/components/vizs/NetworkItem"),
@@ -39,6 +41,8 @@ const ItemNetwork: React.FunctionComponent<IPage> = (props) => {
   const content = (
     <>
       <HeaderSEO stores={stores} title={item_title} />
+      <HeaderTitle stores={stores} title={item_title} hidden={true} />
+      <HeaderItem stores={stores} title={item_title} />
       <NetworkItem_D
         stores={stores}
         item_title={item_title}

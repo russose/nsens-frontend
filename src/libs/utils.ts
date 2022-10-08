@@ -21,7 +21,7 @@ export function shortenString(input: string, max_size: number): string {
   const words: string[] = input.split(" ");
   let i = 0;
   let output_raw = "";
-  while (output_raw.length <= max_size) {
+  while (output_raw.length <= max_size && i < words.length) {
     output_raw = output_raw + " " + words[i];
     i = i + 1;
   }

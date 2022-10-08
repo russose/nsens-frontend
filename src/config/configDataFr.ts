@@ -3,20 +3,21 @@ import { Tlanguage, ICONS, TButtonID, TPages, TSpecialPages } from "./globals";
 
 export const configDataFr = {
   searchBar: "Rechercher...",
+  historyNavigation: "Fil d'Ariane",
   source_wikipedia: "Source: Wikipedia",
   legend: "Légende:",
-  tryButton: "Essayer n.Sens",
+  // tryButton: "Essayer nSens",
   labels: {
     knowbookUser: "Mes collections",
     knowbookFeatured: "Explorer",
   },
   SEO: {
     // canonical: "https://www.nsens.org/fr/Mobile/About/",
-    // title_page_base: "n.Sens - Explorer la Connaissance libre autrement",
+    // title_page_base: "nSens - Explorer la Connaissance libre autrement",
     title_page_base:
-      "n.Sens - n.Sens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes.",
+      "nSens - nSens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes.",
     description_page_base:
-      "n.Sens - n.Sens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes.",
+      "nSens - nSens permet d'ajouter une nouvelle dimension à la Wikipedia en naviguant visuellement dans les cartes de Connaissance de la Wikipedia. Un voyage sans limite, de découvertes en découvertes.",
     title_description: {
       [TPages.Home]: { title: "Accueil", description: "" },
       [TPages.About]: {
@@ -125,6 +126,10 @@ export const configDataFr = {
     [TButtonID.ARTICLE_NEXT]: {
       label: "",
       icon: ICONS.ARTICLE_NEXT,
+    },
+    [TButtonID.HISTORY]: {
+      label: "Fil d'Ariane",
+      icon: CUSTOM_ICONS.HISTORY,
     },
   },
   knowbooks_User: {

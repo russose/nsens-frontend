@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Box, TapArea, Text } from "gestalt";
-import { AtomID, ColorT, handlerT } from "../config/globals";
+import { AtomID, ColorT, handlerT, SizeT } from "../config/globals";
 import { IStores } from "../stores/RootStore";
 import { shortenString } from "../libs/utils";
 
@@ -29,6 +29,7 @@ const CardGenericCompactExtra: React.FunctionComponent<
   const rounding = 3;
   const max_title_size = props.sizes.max_title_size;
   let title = props.title;
+  const title_card_size: SizeT = props.sizes.title_card_size;
   if (title.length > max_title_size) {
     title = shortenString(title, max_title_size);
   }
@@ -53,7 +54,7 @@ const CardGenericCompactExtra: React.FunctionComponent<
           paddingX={1}
         >
           <TapArea fullHeight={true} onTap={props.image_handler}>
-            <Text size="100" align="start" weight="normal">
+            <Text size={title_card_size} align="start" weight="normal">
               {title}
             </Text>
           </TapArea>

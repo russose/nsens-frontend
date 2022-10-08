@@ -10,9 +10,10 @@ import {
 
 export const configDataEn: TconfigDataLanguage = {
   searchBar: "Search...",
+  historyNavigation: "Breadcrumb",
   source_wikipedia: "Source: Wikipedia.",
   legend: "Legend:",
-  tryButton: "Try n.Sens",
+  // tryButton: "Try nSens",
   labels: {
     knowbookUser: "My collections",
     knowbookFeatured: "Explore",
@@ -20,9 +21,9 @@ export const configDataEn: TconfigDataLanguage = {
   SEO: {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
     title_page_base:
-      "n.Sens - n.Sens enable to add a new dimension to the Wikipedia, browsing visually through knowledge card from Wikipedia. A journey with no limit, from findings to findings.",
+      "nSens - nSens enable to add a new dimension to the Wikipedia, browsing visually through knowledge card from Wikipedia. A journey with no limit, from findings to findings.",
     description_page_base:
-      "n.Sens - n.Sens enable to add a new dimension to the Wikipedia, browsing visually through knowledge card from Wikipedia. A journey with no limit, from findings to findings.",
+      "nSens - nSens enable to add a new dimension to the Wikipedia, browsing visually through knowledge card from Wikipedia. A journey with no limit, from findings to findings.",
     title_description: {
       [TPages.Home]: { title: "Home", description: "" },
       [TPages.About]: {
@@ -127,6 +128,10 @@ export const configDataEn: TconfigDataLanguage = {
     [TButtonID.ARTICLE_NEXT]: {
       label: "",
       icon: ICONS.ARTICLE_NEXT,
+    },
+    [TButtonID.HISTORY]: {
+      label: "Breadcrumb",
+      icon: CUSTOM_ICONS.HISTORY,
     },
   },
   knowbooks_User: {

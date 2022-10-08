@@ -8,6 +8,7 @@ import {
   TButtonID,
   RoundingT,
   SizeT,
+  TUiBooleanStorage,
 } from "../config/globals";
 import { goLanding, goPage, isMobile } from "../libs/helpersBase";
 
@@ -41,6 +42,15 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
         router.back();
       },
     },
+    {
+      Id: TButtonID.HISTORY,
+      onClick: () => {
+        props.stores.uiStore.setUiBooleanStorage(
+          TUiBooleanStorage.showHistory,
+          true
+        );
+      },
+    },
     // {
     //   Id: TButtonID.CIRCLE,
     //   hidden:
@@ -58,30 +68,30 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
     //     );
     //   },
     // },
-    {
-      Id: TButtonID.NETWORK,
-      hidden:
-        !router.pathname.includes(configPaths.pages.ItemCircle) &&
-        !router.pathname.includes(configPaths.pages.ItemFlat),
-      onClick: () => {
-        goPage(props.stores, configPaths.pages.ItemNetwork, {
-          title: props.stores.uiStore.selectedAtom.title,
-          id: props.stores.uiStore.selectedAtom.id,
-        });
-      },
-    },
-    {
-      Id: TButtonID.NETWORKFLAT,
-      hidden:
-        !router.pathname.includes(configPaths.pages.ItemCircle) &&
-        !router.pathname.includes(configPaths.pages.ItemNetwork),
-      onClick: () => {
-        goPage(props.stores, configPaths.pages.ItemFlat, {
-          title: props.stores.uiStore.selectedAtom.title,
-          id: props.stores.uiStore.selectedAtom.id,
-        });
-      },
-    },
+    // {
+    //   Id: TButtonID.NETWORK,
+    //   hidden:
+    //     !router.pathname.includes(configPaths.pages.ItemCircle) &&
+    //     !router.pathname.includes(configPaths.pages.ItemFlat),
+    //   onClick: () => {
+    //     goPage(props.stores, configPaths.pages.ItemNetwork, {
+    //       title: props.stores.uiStore.selectedAtom.title,
+    //       id: props.stores.uiStore.selectedAtom.id,
+    //     });
+    //   },
+    // },
+    // {
+    //   Id: TButtonID.NETWORKFLAT,
+    //   hidden:
+    //     !router.pathname.includes(configPaths.pages.ItemCircle) &&
+    //     !router.pathname.includes(configPaths.pages.ItemNetwork),
+    //   onClick: () => {
+    //     goPage(props.stores, configPaths.pages.ItemFlat, {
+    //       title: props.stores.uiStore.selectedAtom.title,
+    //       id: props.stores.uiStore.selectedAtom.id,
+    //     });
+    //   },
+    // },
     {
       Id: TButtonID.LOGIN,
       onClick: () => {

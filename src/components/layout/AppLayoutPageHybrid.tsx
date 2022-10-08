@@ -9,8 +9,9 @@ import {
 import { IStores } from "../../stores/RootStore";
 import { configGeneral } from "../../config/globals";
 import ContentLoading from "../ContentLoading";
-import DialogsLogged from "../DialogsLogged";
+import DialogsAllLogged from "../DialogsAllLogged";
 import dynamic from "next/dynamic";
+import DialogsAllNotLogged from "../DialogsAllNotLogged";
 
 const AppLayoutPageHybridSVGBody_D = dynamic(
   () => import("./AppLayoutPageHybridSVGBody"),
@@ -18,10 +19,6 @@ const AppLayoutPageHybridSVGBody_D = dynamic(
     ssr: false,
   }
 );
-
-const Article_D = dynamic(() => import("./../Article"), {
-  ssr: false,
-});
 
 interface IPageLayoutProps {
   children?: React.ReactNode;
@@ -117,7 +114,7 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
         </Box>
       </Box>
 
-      {/* <Article stores={props.stores} /> */}
+      {/* <Article stores={props.stores} />
       {props.stores.uiStore.getUiBooleanStorage(
         TUiBooleanStorage.showArticle
       ) ? (
@@ -126,8 +123,18 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
         <></>
       )}
 
+      {props.stores.uiStore.getUiBooleanStorage(
+        TUiBooleanStorage.showHistory
+      ) ? (
+        <History_D stores={props.stores} />
+      ) : (
+        <></>
+      )} */}
+
+      <DialogsAllNotLogged stores={props.stores} />
+
       {props.stores.baseStore.isLogged ? (
-        <DialogsLogged stores={props.stores} />
+        <DialogsAllLogged stores={props.stores} />
       ) : (
         <></>
       )}

@@ -28,11 +28,13 @@ const NetworkItem: React.FunctionComponent<INetworkItemNoSSR> = (props) => {
 
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const heightBody = GUI_CONFIG.display.layout.heightBody;
+  const heightHeader = GUI_CONFIG.display.layout.heightHeader;
 
   const height =
     stores.baseStore.screen.height *
-    0.01 *
-    convertStringToNumberWithoutLast(heightBody, 2);
+      0.01 *
+      convertStringToNumberWithoutLast(heightBody, 2) -
+    heightHeader;
   const width = stores.baseStore.screen.width;
 
   return (

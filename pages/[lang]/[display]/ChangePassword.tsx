@@ -8,7 +8,7 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
 import { Box } from "gestalt";
-import FormChangePassword from "../../../src/components/FormChangePassword";
+import DialogChangePassword from "../../../src/components/DialogChangePassword";
 import {
   onChangePassword_button,
   onChangePassword_text,
@@ -62,7 +62,7 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
       overflow="hidden"
     >
       <Box padding={2} column={12} smColumn={10} mdColumn={8} lgColumn={4}>
-        <FormChangePassword
+        <DialogChangePassword
           stores={stores}
           placeholder_username={placeholder_username}
           placeholder_password={password_placeholder}

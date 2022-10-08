@@ -1,6 +1,7 @@
-import { observable, action, makeObservable } from "mobx";
+import { observable, action, computed, makeObservable } from "mobx";
 import {
   AtomID,
+  IAtom,
   IparamsAtom,
   ISlider,
   KnowbookID,
@@ -10,12 +11,15 @@ import {
   TUiNumberStorage,
   TUiStringStorage,
 } from "../config/globals";
+import { reorder } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
 // const SLIDER_MOVE_TOLERANCE_RATE = 0.8;
 export class UIStore {
   $rootStore: RootStore;
   private $selectedAtom: IparamsAtom = { id: "", title: "" };
+  private $navigationHistory = observable.set<AtomID>();
+
   private $editKnowbookMembers = observable.map<KnowbookID, boolean>();
   private $selectedKnowbookIdName: KnowbookID = "";
   private $sliders = observable.map<string, ISlider>();
@@ -36,7 +40,7 @@ export class UIStore {
       setUiBooleanStorage: action,
       setUiNumberStorage: action,
       initPageHeaderMode: action,
-      setPageHeaderMode: action,
+      // setPageHeaderMode: action,
       setSelectedAtom: action,
       setEditKnowbookMembers: action,
       // clearEditKnowbookMembers: action,
@@ -44,12 +48,14 @@ export class UIStore {
       setSliders: action,
       initSlider: action,
       // updateSliderCircular: action,
+      navigationHistoryItems: computed,
     });
   }
 
   init() {
     this.initPageHeaderMode();
     this.initUiStorage();
+    this.$navigationHistory.clear();
   }
 
   initUiStorage(): void {
@@ -106,9 +112,9 @@ export class UIStore {
       }
     }
   }
-  setPageHeaderMode(page: TPages, mode: TPageHeaderModes): void {
-    this.$pageHeaderMode.set(page, mode);
-  }
+  // setPageHeaderMode(page: TPages, mode: TPageHeaderModes): void {
+  //   this.$pageHeaderMode.set(page, mode);
+  // }
   isPageHeaderMode(page: TPages, mode: TPageHeaderModes): boolean {
     return this.$pageHeaderMode.get(page) === mode;
   }
@@ -180,6 +186,12 @@ export class UIStore {
   setSelectedAtom(id: AtomID, title: string): void {
     this.$selectedAtom.id = id;
     this.$selectedAtom.title = title;
+    this.$navigationHistory.add(id);
+  }
+
+  get navigationHistoryItems(): IAtom[] {
+    const itemsId = Array.from(this.$navigationHistory).reverse();
+    return this.$rootStore.stores().baseStore.getHistoryItems(itemsId);
   }
 
   get editKnowbookMembers() {
