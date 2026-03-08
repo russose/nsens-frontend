@@ -9,7 +9,7 @@ import {
   SizeT,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import Button from "./Button";
+import Buttons from "./Buttons";
 
 interface IProps {
   stores: IStores;
@@ -21,47 +21,34 @@ interface IProps {
   // width: string;
   displayLabel: boolean;
   buttons: IButton[];
+
+  withoutBorder?: boolean;
 }
 
 const MenuBarButtonLayout: React.FunctionComponent<IProps> = (props) => {
-  const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const buttons_all = GUI_CONFIG.language.buttons;
   const rounding_menu: RoundingT = props.rounding;
 
   return (
     <Box
-      paddingY={1}
+      paddingY={0}
+      height={"100%"}
+      // width={"100%"}
       color={props.color}
       display="flex"
       direction={props.direction}
       alignItems="center"
       justifyContent="around"
-      borderStyle="lg"
+      borderStyle={props.withoutBorder !== true ? "lg" : undefined}
       rounding={rounding_menu}
       opacity={1}
     >
-      {props.buttons.map((button) => {
-        const display = button.hidden ? "none" : "block";
-        return (
-          <Box
-            key={`'box'-${props.name}-${button.Id}`}
-            alignItems="center"
-            display={display}
-          >
-            <Button
-              key={`${props.name}-${button.Id}`}
-              stores={props.stores}
-              icon={buttons_all[button.Id].icon}
-              label={buttons_all[button.Id].label}
-              icon_size={props.icon_size}
-              iconColor={button.iconColor}
-              disabled={button.disabled}
-              onClick={button.onClick}
-              displayLabel={props.displayLabel}
-            />
-          </Box>
-        );
-      })}
+      <Buttons
+        stores={props.stores}
+        name={props.name}
+        displayLabel={props.displayLabel}
+        icon_size={props.icon_size}
+        buttons={props.buttons}
+      />
     </Box>
   );
 };

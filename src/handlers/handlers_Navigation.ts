@@ -1,65 +1,33 @@
-import { configPaths } from "./../config/configLocalAndEnv";
-import { ROOT_URL_WIKIPEDIA_REST } from "../config/configURLs";
+import { NextRouter } from "next/router";
 import {
   AtomID,
+  CONFIG_ENV,
   eventT,
+  IKnowbookQuery,
   TUiBooleanStorage,
   TUiStringStorage,
 } from "../config/globals";
-import { fetchArticle } from "../libs/fetch";
 import { goPage, goUserHandler } from "../libs/helpersBase";
-import { path_link_main_item_page, prepareArticle } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
+import { configPaths } from "./../config/configLocalAndEnv";
 
 /*******************Logo*************************** */
 export const onTapLogo = (stores: IStores) => (): void => {
-  // updateHome(stores);
   goPage(stores, configPaths.pages.Home);
-  // goLanding(stores);
 };
 
-/*******************Go to Article*************************** */
+/*******************Go to *************************** */
 
-export const showArticle =
-  (stores: IStores) =>
+export const onGoItemNetworkPage =
+  (stores: IStores, desactivateGoNetwork = false) =>
   (item_title: string, item_id: string) =>
   (input: { event: eventT }): void => {
-    if (item_title !== undefined && item_id !== undefined) {
-      stores.uiStore.setSelectedAtom(item_id, item_title);
-      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showHistory, false);
-      stores.uiStore.setUiStringStorage(TUiStringStorage.articleContent, "");
-      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, true);
-      stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showLoading, true);
-      fetchArticle(
-        item_title,
-        ROOT_URL_WIKIPEDIA_REST(stores.baseStore.paramsPage.lang)
-      )
-        .then((value) => {
-          stores.uiStore.setUiStringStorage(
-            TUiStringStorage.articleContent,
-            prepareArticle(value)
-          );
-          stores.uiStore.setUiBooleanStorage(
-            TUiBooleanStorage.showLoading,
-            false
-          );
-        })
-        .catch(() => {
-          stores.uiStore.setUiBooleanStorage(
-            TUiBooleanStorage.showLoading,
-            false
-          );
-        });
+    // goPage(stores, path_link_main_item_page(item_id, stores), {
+    if (desactivateGoNetwork === true) {
+      input.event.stopPropagation();
+      return;
     }
-    // input.event.preventDefault();
-    input.event.stopPropagation();
-  };
-
-export const onGoItemMainPage =
-  (stores: IStores) =>
-  (item_title: string, item_id: string) =>
-  (input: { event: eventT }): void => {
-    goPage(stores, path_link_main_item_page(item_id, stores), {
+    goPage(stores, configPaths.pages.ItemNetwork, {
       title: item_title,
       id: item_id,
     });
@@ -67,9 +35,9 @@ export const onGoItemMainPage =
     input.event.stopPropagation();
   };
 
-export const onGoNotebookPage =
+export const onGoKnowbookPage =
   (stores: IStores) =>
-  (pathname: string, queryObject: object) =>
+  (pathname: string, queryObject: IKnowbookQuery) =>
   (input: { event: eventT }): void => {
     goPage(stores, pathname, queryObject);
     // input.event.preventDefault();
@@ -80,7 +48,38 @@ export const goUserHandler_ =
   (stores: IStores) =>
   (itemID: AtomID) =>
   (input: { event: eventT }): void => {
+    itemID === undefined ? true : true; // itemID is indispensible and should be kept
     goUserHandler(stores)()(input);
     // stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, false);
     return;
+  };
+
+export const copyLink =
+  (stores: IStores) =>
+  (router: NextRouter) =>
+  (input: { event: eventT }): void => {
+    const page_url = CONFIG_ENV.FRONT_URL + router.asPath;
+
+    // copyToClipboard(page_url);
+    // stores.uiStore.setUiStringStorage(
+    //   TUiStringStorage.sharingInformation,
+    //   stores.baseStore.GUI_CONFIG.language.sharingURL_Base + page_url
+    // );
+
+    stores.uiStore.setUiStringStorage(
+      TUiStringStorage.sharingInformation,
+      page_url
+    );
+
+    stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showSharing, true);
+
+    // setTimeout(() => {
+    //   stores.uiStore.setUiBooleanStorage(
+    //     TUiBooleanStorage.informationOpened,
+    //     false
+    //   );
+    // }, 800);
+
+    // input.event.preventDefault();
+    input.event.stopPropagation();
   };

@@ -1,24 +1,22 @@
+import { Box, Image, Mask, TapArea, Text } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { Box, Mask, Text, TapArea, Image } from "gestalt";
+import React from "react";
 import {
   AtomID,
   ColorT,
-  handlerT,
-  reactComponentT,
   RoundingT,
   SizeT,
+  handlerT,
+  reactComponentT,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import React from "react";
-import { shortenString } from "../libs/utils";
-// import ImageLazy from "./ImageLazy";
 
 export interface ICardSizes {
   height: number | string;
   width?: number;
   image_ratio: string;
-  max_title_size: number;
-  title_card_size: string;
+  // max_title_size: number;
+  size_text_title: string;
 }
 
 interface ICardGenericProps {
@@ -38,20 +36,24 @@ interface ICardGenericProps {
   full?: boolean;
   width_text?: string;
   TopIcon?: any;
+
+  TypeIcon: any;
   size_factor?: number;
+  externalyzeTitle: boolean;
 }
 
 const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
   const rounding = props.rounding;
-  const max_title_size = props.sizes.max_title_size;
-  const title_card_size: SizeT = props.sizes.title_card_size;
+  // const max_title_size = props.sizes.max_title_size;
+  const title_card_size: SizeT = props.sizes.size_text_title;
 
-  const width = props.width_text === undefined ? "75%" : props.width_text;
+  // const width = props.width_text === undefined ? "75%" : props.width_text;
+  const width = props.width_text === undefined ? "100%" : props.width_text;
 
-  let title = props.title;
-  if (title.length > max_title_size) {
-    title = shortenString(title, max_title_size);
-  }
+  // let title = props.title;
+  // if (title.length > max_title_size) {
+  //   title = shortenString(title, max_title_size);
+  // }
 
   const color_image =
     props.color_image !== undefined ? props.color_image : "white";
@@ -66,7 +68,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         fit="cover"
         naturalHeight={300}
         naturalWidth={300}
-        loading="lazy"
+        // loading="lazy"
         src={path_image}
         // importance="high"
       >
@@ -106,6 +108,24 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
     c_marginBottom = 4;
   }
 
+  const title_card = (
+    <Text size={title_card_size} align="center" weight="bold" lineClamp={4}>
+      {props.title}
+    </Text>
+  );
+  const title_card_inside =
+    props.externalyzeTitle === true ? <></> : title_card;
+
+  const title_card_externalyzed =
+    props.externalyzeTitle === true ? (
+      <>
+        <Box padding={1} />
+        <Box>{title_card}</Box>
+      </>
+    ) : (
+      <></>
+    );
+
   const content: reactComponentT = (
     <>
       {props.TopIcon !== undefined && (
@@ -128,7 +148,7 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         justifyContent="between"
         alignItems="center"
         color={props.color}
-        opacity={0.9}
+        opacity={1} //0.9
         padding={0}
         borderStyle="none"
         //
@@ -137,10 +157,12 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
         marginBottom={c_marginBottom}
         //
       >
-        <Box paddingX={1} paddingY={1} width={width}>
-          <Text size={title_card_size} align="center" weight="bold">
+        <Box paddingX={1}>{props.TypeIcon}</Box>
+        <Box paddingX={0} paddingY={1} width={width}>
+          {/* <Text size={title_card_size} align="center" weight="bold">
             {title}
-          </Text>
+          </Text> */}
+          {title_card_inside}
         </Box>
         <Box
           display="flex"
@@ -169,31 +191,34 @@ const CardGeneric: React.FunctionComponent<ICardGenericProps> = (props) => {
 
   return (
     <>
-      <Box
-        // height={props.sizes.height}
-        // width={props.sizes.width !== undefined ? props.sizes.width : undefined}
-        height={height_}
-        width={width_ !== undefined ? width_ : undefined}
-        borderStyle="shadow"
-        rounding={rounding}
-        display="flex"
-        direction="column"
-      >
+      <Box width={width_ !== undefined ? width_ : undefined}>
         <Box
-          height="100%"
-          width="100%"
-          color={
-            props.colorEdge === undefined ? "transparent" : props.colorEdge
-          }
-          padding={props.colorEdge === undefined ? 0 : 1}
+          // height={props.sizes.height}
+          // width={props.sizes.width !== undefined ? props.sizes.width : undefined}
+          height={height_}
+          // width={width_ !== undefined ? width_ : undefined}
+          borderStyle="shadow"
           rounding={rounding}
+          display="flex"
+          direction="column"
         >
-          <Mask rounding={rounding as RoundingT} height="100%" width="100%">
-            {props.image_handler !== undefined
-              ? image_with_link(content)
-              : image_only(content)}
-          </Mask>
+          <Box
+            height="100%"
+            width="100%"
+            color={
+              props.colorEdge === undefined ? "transparent" : props.colorEdge
+            }
+            padding={props.colorEdge === undefined ? 0 : 1}
+            rounding={rounding}
+          >
+            <Mask rounding={rounding as RoundingT} height="100%" width="100%">
+              {props.image_handler !== undefined
+                ? image_with_link(content)
+                : image_only(content)}
+            </Mask>
+          </Box>
         </Box>
+        {title_card_externalyzed}
       </Box>
     </>
   );

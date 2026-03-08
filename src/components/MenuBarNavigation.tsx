@@ -1,16 +1,15 @@
 import { observer } from "mobx-react-lite";
-import { useRouter } from "next/router";
 import React from "react";
 import {
-  configGeneral,
-  configPaths,
   IButton,
-  TButtonID,
   RoundingT,
   SizeT,
+  TButtonID,
   TUiBooleanStorage,
+  configGeneral,
+  configPaths,
 } from "../config/globals";
-import { goLanding, goPage, isMobile } from "../libs/helpersBase";
+import { goPage } from "../libs/helpersBase";
 
 import { IStores } from "../stores/RootStore";
 import MenuBarButtonLayout from "./MenuBarButtonLayout";
@@ -24,24 +23,48 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
   props
 ) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
-  const icon_size: SizeT = GUI_CONFIG.display.size_icon_menu;
+  const icon_size: SizeT = GUI_CONFIG.display.size_icon_menu_navigation;
   const color_menu = configGeneral.colors.menu;
-  const router = useRouter();
 
   const buttons: IButton[] = [
     {
-      Id: TButtonID.KNOWBOOKS,
+      Id: TButtonID.KNOWBOOKS_BEST,
       onClick: () => {
         // updateHome(props.stores);
         goPage(props.stores, configPaths.pages.Home);
       },
     },
     {
-      Id: TButtonID.BACK,
+      Id: TButtonID.KNOWBOOK_FOLLOWED,
       onClick: () => {
-        router.back();
+        // updateHome(props.stores);
+        goPage(props.stores, configPaths.pages.KnowbooksSaved);
+      },
+      hidden: !props.stores.baseStore.isLogged,
+    },
+    {
+      Id: TButtonID.KNOWBOOK_MINE,
+      onClick: () => {
+        // updateHome(props.stores);
+        goPage(props.stores, configPaths.pages.KnowbooksMine);
+      },
+      hidden: !props.stores.baseStore.isLogged,
+    },
+    {
+      Id: TButtonID.SEARCH,
+      onClick: () => {
+        // updateHome(props.stores);
+        goPage(props.stores, configPaths.pages.Search);
       },
     },
+
+    // {
+    //   Id: TButtonID.,
+    //   onClick: () => {
+    //     goPage(props.stores, configPaths.pages.Search);
+    //   },
+    // },
+
     {
       Id: TButtonID.HISTORY,
       onClick: () => {
@@ -51,62 +74,22 @@ const MenuBarNavigation: React.FunctionComponent<IMenuBarNavigationProps> = (
         );
       },
     },
-    // {
-    //   Id: TButtonID.CIRCLE,
-    //   hidden:
-    //     !router.pathname.includes(configPaths.pages.ItemNetwork) &&
-    //     !router.pathname.includes(configPaths.pages.ItemFlat),
-    //   onClick: () => {
-    //     goPage(
-    //       props.stores,
-    //       // props.stores.baseStore.paramsPage,
-    //       configPaths.pages.ItemCircle,
-    //       {
-    //         title: props.stores.uiStore.selectedAtom.title,
-    //         id: props.stores.uiStore.selectedAtom.id,
-    //       }
-    //     );
-    //   },
-    // },
-    // {
-    //   Id: TButtonID.NETWORK,
-    //   hidden:
-    //     !router.pathname.includes(configPaths.pages.ItemCircle) &&
-    //     !router.pathname.includes(configPaths.pages.ItemFlat),
-    //   onClick: () => {
-    //     goPage(props.stores, configPaths.pages.ItemNetwork, {
-    //       title: props.stores.uiStore.selectedAtom.title,
-    //       id: props.stores.uiStore.selectedAtom.id,
-    //     });
-    //   },
-    // },
-    // {
-    //   Id: TButtonID.NETWORKFLAT,
-    //   hidden:
-    //     !router.pathname.includes(configPaths.pages.ItemCircle) &&
-    //     !router.pathname.includes(configPaths.pages.ItemNetwork),
-    //   onClick: () => {
-    //     goPage(props.stores, configPaths.pages.ItemFlat, {
-    //       title: props.stores.uiStore.selectedAtom.title,
-    //       id: props.stores.uiStore.selectedAtom.id,
-    //     });
-    //   },
-    // },
     {
       Id: TButtonID.LOGIN,
       onClick: () => {
         goPage(props.stores, configPaths.pages.User);
       },
     },
-    {
-      Id: TButtonID.INFO,
-      onClick: () => {
-        goLanding(props.stores);
-      },
-    },
+    // {
+    //   Id: TButtonID.INFO,
+    //   onClick: () => {
+    //     goLanding(props.stores);
+    //   },
+    // },
   ];
 
-  const displayLabel = !isMobile(props.stores);
+  // const displayLabel = !isMobile(props.stores);
+  const displayLabel = false;
 
   return (
     <>

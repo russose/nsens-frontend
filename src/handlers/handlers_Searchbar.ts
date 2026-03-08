@@ -1,5 +1,10 @@
-import { configPaths, eventT, TUiStringStorage } from "../config/globals";
-import { goPage, setFeedFromSearch } from "../libs/helpersBase";
+import {
+  configPaths,
+  eventT,
+  TLogAction,
+  TUiStringStorage,
+} from "../config/globals";
+import { goPage, submitLog } from "../libs/helpersBase";
 import { IStores } from "../stores/RootStore";
 
 /*******************Searchbar*************************** */
@@ -11,16 +16,23 @@ export const onSearchHomeText =
       TUiStringStorage.searchPattern,
       input.value
     );
-    // console.log(uiStore.searchPattern);
   };
 
 export const onSearchHomeSubmit = (stores: IStores) => (): void => {
+  // const guillements = '"';
+  // const searchPattern =
+  //   guillements +
+  //   stores.uiStore.getUiStringStorage(TUiStringStorage.searchPattern) +
+  //   guillements;
   const searchPattern = stores.uiStore.getUiStringStorage(
     TUiStringStorage.searchPattern
   );
   if (searchPattern.length > 0) {
-    setFeedFromSearch(stores, searchPattern);
-    goPage(stores, configPaths.pages.Search);
+    // setFeedFromSearch(stores, searchPattern);
+    goPage(stores, configPaths.pages.Search, {
+      search: searchPattern,
+    });
+    submitLog(stores, TLogAction.search, searchPattern, false);
   } else {
     goPage(stores, configPaths.pages.Home);
   }

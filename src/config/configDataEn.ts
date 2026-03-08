@@ -1,138 +1,132 @@
 import {
+  TButtonID,
   TconfigDataLanguage,
   Tlanguage,
-  ICONS,
   TPages,
-  TButtonID,
-  TSpecialPages,
-  CUSTOM_ICONS,
+  TKnowbooksPages,
 } from "./globals";
 
 export const configDataEn: TconfigDataLanguage = {
-  searchBar: "Search...",
-  historyNavigation: "Breadcrumb",
-  source_wikipedia: "Source: Wikipedia.",
+  historyNavigation: "History",
+  source_wikipedia: "Source: Wikipedia",
+  source_arxiv: "Source: Arxiv",
   legend: "Legend:",
-  // tryButton: "Try nSens",
-  labels: {
-    knowbookUser: "My collections",
-    knowbookFeatured: "Explore",
+  moreBestKnowbooksLabel: "More",
+  // sharingURL_Base: "URL copied in the clipboard: ",
+  search: {
+    searchBar: "Search...",
+    control_wiki: "Wiki",
+    control_books: "Books",
+    control_arxiv: "Arxiv",
+    control_knowbooks: "Notebooks",
+  },
+  network: {
+    nodeNameWikidata: "Wikidata",
+    nodeNameWikipedia: "Wikipedia",
+    nodeNameForPublicKnowbooks: "Suggested notebooks",
+    nodeNameForArxivItems: "Scientific papers",
+    nodeNameForBooksItems: "Books",
+    nodeNameForContentKnowbooks: "Contains",
+  },
+  knowbooks: {
+    // knowbookFeatured: "Top",
+    // knowbookFollowedPublic: "Saved",
+    // knowbookUser: "My notebooks",
+    privateLabel: " (private)",
   },
   SEO: {
     // canonical: "https://www.nsens.org/en/Mobile/About/",
     title_page_base:
-      "nSens - nSens enable to add a new dimension to the Wikipedia, browsing visually through knowledge card from Wikipedia. A journey with no limit, from findings to findings.",
+      "nSens: Empower Your Knowledge Sharing with Interactive Graphs and Notebooks.",
     description_page_base:
-      "nSens - nSens enable to add a new dimension to the Wikipedia, browsing visually through knowledge card from Wikipedia. A journey with no limit, from findings to findings.",
+      "Discover the power of nSens, the innovative platform that allows you to effortlessly build and share knowledge notebooks and interactive graphs. Organize your ideas, data, and resources seamlessly in customizable notebooks. Keep your valuable content private or engage with your community by sharing it. Unlock the potential of collaborative learning and knowledge exchange with nSens.",
     title_description: {
-      [TPages.Home]: { title: "Home", description: "" },
-      [TPages.About]: {
-        title: "About",
-        description: "",
-      },
+      [TPages.Home]: { title: "Top Notebooks", description: "" },
+      [TPages.KnowbooksSaved]: { title: "Followed Notebooks", description: "" },
+      [TPages.KnowbooksMine]: { title: "My Notebooks", description: "" },
+      // [TPages.About]: {
+      //   title: "About",
+      //   description: "",
+      // },
       [TPages.User]: { title: "", description: "" },
       [TPages.ChangePassword]: { title: "Update password", description: "" },
-      [TPages.ItemCircle]: { title: "", description: "" },
       [TPages.ItemNetwork]: { title: "", description: "" },
-      [TPages.StaticKnowbook]: { title: "", description: "" },
       [TPages.Knowbooks]: { title: "", description: "" },
       [TPages.Knowbook]: { title: "", description: "" },
-      [TPages.Random]: { title: "", description: "" },
       [TPages.KnowbookSpecial]: {
-        [TSpecialPages.Mostviewed]: { title: "Today", description: "" },
-        [TSpecialPages.AllSaved]: {
+        [TKnowbooksPages.Mostviewed]: { title: "Today", description: "" },
+        [TKnowbooksPages.AllSaved]: {
           title: "Saved (all)",
           description: "",
         },
-        [TSpecialPages.NoKnowbook]: {
-          title: "Without collection",
-          description: "",
-        },
+        // [TKnowbooksPages.NoKnowbook]: {
+        //   title: "Without notebook",
+        //   description: "",
+        // },
       },
     },
   },
-  about: {
-    // scenario_texts: {
-    //   [TScenarioStepID.Home]: "Turn around the blue ball to scroll elements",
-    //   [TScenarioStepID.knowbook]:
-    //     "Create personalized collections with your findings using: ",
-    //   [TScenarioStepID.mostviewed]:
-    //     "Access most popular elements with the daily collection",
-    //   [TScenarioStepID.search]: "Find quickly any items",
-    //   [TScenarioStepID.itemCircle]:
-    //     "Browse and explore relations making new findings",
-    //   [TScenarioStepID.itemArticle]:
-    //     "Access Wikipedia content of any items with: ",
-    //   [TScenarioStepID.language]: "Many languages are supported",
-    //   [TScenarioStepID.home]:
-    //     "Have a nice journey in our infinite knowledge...",
-    // },
-  },
-  buttons: {
-    [TButtonID.BACK]: {
-      label: "Back",
-      icon: CUSTOM_ICONS.BACK,
-    },
+  buttons_all_label: {
     [TButtonID.HOME]: {
       label: "Home",
-      icon: CUSTOM_ICONS.HOME,
+    },
+    [TButtonID.KNOWBOOKS_BEST]: {
+      label: "Top",
+    },
+    [TButtonID.KNOWBOOK_FOLLOWED]: {
+      label: "Followed",
+    },
+    [TButtonID.KNOWBOOK_MINE]: {
+      label: "Personal",
+    },
+    [TButtonID.SEARCH]: {
+      label: "Search",
     },
     [TButtonID.LOGIN]: {
       label: "User",
-      icon: ICONS.LOGIN,
     },
     [TButtonID.INFO]: {
       label: "Info",
-      icon: ICONS.INFO,
     },
-    [TButtonID.SAVE]: {
+    [TButtonID.BACK]: {
+      label: "Back",
+    },
+    [TButtonID.FOLLOW_PUBLIC]: {
       label: "Save",
-      icon: ICONS.SAVE,
     },
-    [TButtonID.EDIT]: {
+    [TButtonID.EDIT_CONTENT]: {
       label: "Modify",
-      icon: ICONS.EDIT,
     },
     [TButtonID.ARTICLE]: {
       label: "Wikipedia",
-      icon: ICONS.ARTICLE,
     },
-    // [TButtonID.CIRCLE]: {
-    //   label: "Orbit",
-    //   icon: CUSTOM_ICONS.CIRCLE,
-    // },
     [TButtonID.NETWORK]: {
       label: "Network",
-      icon: CUSTOM_ICONS.NETWORK,
-    },
-    [TButtonID.NETWORKFLAT]: {
-      label: "List",
-      icon: CUSTOM_ICONS.NETWORKFLAT,
-    },
-    [TButtonID.KNOWBOOKS]: {
-      label: "Collections",
-      icon: ICONS.KNOWBOOKS,
-    },
-    [TButtonID.KNOWBOOK]: {
-      label: "Overview",
-      icon: ICONS.KNOWBOOK,
-    },
-    [TButtonID.SEPARATOR]: {
-      label: "",
-      icon: ICONS.SEPARATOR,
-    },
-    [TButtonID.ARTICLE_BACK]: {
-      label: "",
-      icon: ICONS.ARTICLE_BACK,
-    },
-    [TButtonID.ARTICLE_NEXT]: {
-      label: "",
-      icon: ICONS.ARTICLE_NEXT,
     },
     [TButtonID.HISTORY]: {
-      label: "Breadcrumb",
-      icon: CUSTOM_ICONS.HISTORY,
+      label: "History",
     },
+    [TButtonID.EDIT_USER]: {
+      label: "Update",
+    },
+    [TButtonID.LOGOUT]: {
+      label: "Logout",
+    },
+  },
+  arxiv_Details: {
+    header: "Scholar paper details",
+    title: "Title:",
+    Author: "Authors:",
+    summary: "Summary:",
+    more_info: "More détails",
+    download: "Download pdf",
+  },
+  books_Details: {
+    header: "Book details",
+    title: "Title:",
+    Author: "Authors:",
+    summary: "Summary:",
+    more_info: "Détails (Amazon)",
   },
   knowbooks_User: {
     Related_title: "Explore :",
@@ -141,13 +135,29 @@ export const configDataEn: TconfigDataLanguage = {
     knowbooks_title: "Featured",
   },
   editKnowbook: {
-    title: "Update collections",
-    input_placeholder: "New collection",
+    title: "Store in notebooks: ",
+    input_placeholder: "New notebook",
+  },
+  editKnowbookProps: {
+    heading: "Notebook properties",
+    nameLabel: "Name",
+    descriptionLabel: "Description",
+    nameSource: "Learn more",
+    imageLabel: "Image",
+    shareLabelTitle: "Visibility",
+    shareLabelPublic: "Public notebook",
+    shareLabelPrivate: "Private notebook",
+    deletionLabel: "Delete",
+    deletionLabelConfirmation: "Delete with all included items?",
   },
   renameDeleteKnowbook: {
-    title: "Rename collection",
+    title: "Rename notebook",
     rename_label: "Rename",
     cancel_label: "Cancel",
+  },
+  editUserProps: {
+    username: "Username",
+    email: "Email",
   },
   changePassword: {
     password_placeholder: "New password",
@@ -158,13 +168,17 @@ export const configDataEn: TconfigDataLanguage = {
     sendValidationCode_success: "Validation code sent by email (check spams)",
     changePassword_error: "Wrong validation code or empty password",
   },
+  social: {
+    title: "Link to Share",
+    description_base: "nSens - Item shared with you : ",
+  },
   user: {
     guest: "Create account - Login",
     contact: "Contact",
-    social: "Share",
-    install_instructions:
-      "Install for a better user experience (Chrome/Safari)",
-    deconnexion: "Logout",
+    // install_instructions:
+    //   "Install for a better user experience (Chrome/Safari)",
+    // deconnexion: "Logout",
+    modification: "Update user properties",
     changePassword: "Update password",
     catchup_message:
       "Create an account to save your content and personalize your user experience",

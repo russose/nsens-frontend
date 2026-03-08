@@ -31,6 +31,9 @@ interface IProps {
   id: string;
   atoms: IAtom[];
   SSR?: boolean;
+  size_factor?: number;
+  desactivateGoNetwork?: boolean;
+  externalyzeTitle?: boolean;
 }
 
 const CardAtomGridDynamic: React.FunctionComponent<IProps> = (props) => {
@@ -43,6 +46,9 @@ const CardAtomGridDynamic: React.FunctionComponent<IProps> = (props) => {
           id={props.id + "_NotLogged"}
           stores={props.stores}
           atoms={props.atoms}
+          size_factor={props.size_factor}
+          desactivateGoNetwork={props.desactivateGoNetwork}
+          externalyzeTitle={props.externalyzeTitle}
         />
       </>
     ) : (
@@ -51,6 +57,9 @@ const CardAtomGridDynamic: React.FunctionComponent<IProps> = (props) => {
           id={props.id + "_NotLogged"}
           stores={props.stores}
           atoms={props.atoms}
+          size_factor={props.size_factor}
+          desactivateGoNetwork={props.desactivateGoNetwork}
+          externalyzeTitle={props.externalyzeTitle}
         />
       </>
     );
@@ -61,6 +70,9 @@ const CardAtomGridDynamic: React.FunctionComponent<IProps> = (props) => {
           id={props.id + "_Logged"}
           stores={props.stores}
           atoms={props.atoms}
+          size_factor={props.size_factor}
+          desactivateGoNetwork={props.desactivateGoNetwork}
+          externalyzeTitle={props.externalyzeTitle}
         />
       </>
     ) : (
@@ -69,6 +81,9 @@ const CardAtomGridDynamic: React.FunctionComponent<IProps> = (props) => {
           id={props.id + "_Logged"}
           stores={props.stores}
           atoms={props.atoms}
+          size_factor={props.size_factor}
+          desactivateGoNetwork={props.desactivateGoNetwork}
+          externalyzeTitle={props.externalyzeTitle}
         />
       </>
     );

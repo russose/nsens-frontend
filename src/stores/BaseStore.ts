@@ -7,34 +7,35 @@ import {
 } from "mobx";
 import {
   AtomID,
-  IGUICONFIG,
-  IAtom,
-  IparamsPage,
-  IRelatedAtom,
-  IUser,
-  initStateCat,
-  IRelatedAtomFull,
-  IDate,
-  IPosition,
   configPaths,
+  IAtom,
+  IDate,
+  IGUICONFIG,
+  IparamsPage,
+  IPosition,
+  IUser,
+  placeholder_image_not_refreshed,
+  Tlanguage,
 } from "../config/globals";
 import { api_getCleanImageFromWeb_blocking } from "../libs/apiItems";
 import { newAtom } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
-interface IInitState {
-  [initStateCat.core]: boolean;
-  [initStateCat.userData]: boolean;
-  [initStateCat.itemRelated]: boolean;
-}
+// interface IInitState {
+//   [initStateCat.core]: boolean;
+//   [initStateCat.userData]: boolean;
+//   [initStateCat.itemRelated]: boolean;
+//   [initStateCat.staticKnowbooks]: boolean;
+// }
 
 export class BaseStore {
   $rootStore: RootStore;
-  private $initCompleted: IInitState = {
-    [initStateCat.core]: undefined,
-    [initStateCat.userData]: undefined,
-    [initStateCat.itemRelated]: undefined,
-  };
+  // private $initCompleted: IInitState = {
+  //   [initStateCat.core]: undefined,
+  //   [initStateCat.userData]: undefined,
+  //   [initStateCat.itemRelated]: undefined,
+  //   [initStateCat.staticKnowbooks]: undefined,
+  // };
 
   private $user: IUser | null = null;
 
@@ -50,14 +51,15 @@ export class BaseStore {
     width: number;
     height: number;
     center: IPosition;
+    realLocation: Tlanguage; //Especially for Amazon link opening
   } = undefined;
 
   private $history = observable.map<AtomID, IAtom>(); //Containing all items content
-  private $feed = observable.set<AtomID>();
+  // private $searchFeed = observable.set<AtomID>();
   private $mostviewed = observable.set<AtomID>();
   private $dateLastMostviewed: IDate;
 
-  private $related = observable.map<AtomID, IRelatedAtom[]>();
+  // private $related = observable.map<AtomID, IRelatedAtom[]>();
 
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
@@ -71,11 +73,11 @@ export class BaseStore {
       clearHistory: action,
       setMostviewed: action,
       clearMostviewed: action,
-      clearFeed: action,
-      setFeed: action,
+      // clearSearchFeed: action,
+      // setSearchFeed: action,
       setGoodImageInHistoryItem: action,
-      setRelated: action,
-      clearRelated: action,
+      // setRelated: action,
+      // clearRelated: action,
       isLogged: computed,
       mostviewedIds: computed,
     });
@@ -84,25 +86,25 @@ export class BaseStore {
   init() {
     this.initDateLastMostviewed();
     this.clearHistory();
-    this.clearFeed();
+    // this.clearSearchFeed();
     this.clearMostviewed();
-    this.clearRelated();
+    // this.clearRelated();
   }
 
   /**  General **/
-  get initCompleted(): IInitState {
-    return this.$initCompleted;
-  }
+  // get initCompleted(): IInitState {
+  //   return this.$initCompleted;
+  // }
 
-  setInitCompleted(state: initStateCat, value: boolean): void {
-    this.$initCompleted[state] = value;
-  }
+  // setInitCompleted(state: initStateCat, value: boolean): void {
+  //   this.$initCompleted[state] = value;
+  // }
 
   get isLogged(): boolean {
     if (
       this.$user === undefined ||
-      this.$user === null ||
-      this.$user.username === ""
+      this.$user === null
+      // ||this.$user.email === ""
     ) {
       return false;
     } else {
@@ -123,13 +125,25 @@ export class BaseStore {
   setScreenNoSSR(): void {
     // if (process.browser) {
     if (typeof window !== "undefined") {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const width = Math.min(window.innerWidth, window.outerWidth);
+      const height = Math.min(window.innerHeight, window.outerHeight);
+
+      const language_navigator = navigator.language;
+      let realLocation: Tlanguage;
+      if (language_navigator.includes("fr")) {
+        realLocation = Tlanguage.fr;
+      } else if (language_navigator.includes("it")) {
+        realLocation = Tlanguage.it;
+      } else {
+        realLocation = Tlanguage.en;
+      }
       const screen = {
         width: width,
         height: height,
         center: { x: width / 2, y: height / 2 },
+        realLocation: realLocation,
       };
+
       this.$screen = screen;
     }
   }
@@ -264,20 +278,33 @@ export class BaseStore {
       return [];
     }
 
-    return ids.map((id) => {
+    const items = ids.map((id) => {
       return this.$history.get(id);
     });
+
+    const items_without_undefined = items.filter((item) => {
+      return item !== undefined;
+    });
+
+    return items_without_undefined;
+
+    // return ids.map((id) => {
+    //   return this.$history.get(id);
+    // });
   }
 
   async setGoodImageInHistoryItem(id: AtomID): Promise<void> {
     const item = this.getHistoryItem(id);
+    if (item === undefined) {
+      return;
+    }
 
     if (item.image_url === "") {
       // console.log("setGoodImageInHistoryItem for ", item.title);
 
       //Prevent lauching many fechting during the compleion of this method
       runInAction(() => {
-        item.image_url = ".";
+        item.image_url = placeholder_image_not_refreshed;
       });
 
       let item_copy_non_observable: IAtom = newAtom(undefined, undefined, item);
@@ -303,7 +330,13 @@ export class BaseStore {
   }
 
   setHistory(atoms: IAtom[], forceUpdate = false): void {
-    if (atoms === undefined || atoms.length === 0) {
+    if (
+      atoms === undefined ||
+      atoms.length === 0 ||
+      atoms.filter((i) => {
+        return i !== undefined;
+      }).length === 0
+    ) {
       return;
     }
     atoms.forEach((item) => {
@@ -334,24 +367,24 @@ export class BaseStore {
     this.$mostviewed.clear();
   }
 
-  clearFeed(): void {
-    this.$feed.clear();
-  }
-  setFeed(atoms: IAtom[]): void {
-    if (atoms === undefined || atoms.length === 0) {
-      return;
-    }
+  // clearSearchFeed(): void {
+  //   this.$searchFeed.clear();
+  // }
+  // setSearchFeed(atoms: IAtom[]): void {
+  //   if (atoms === undefined || atoms.length === 0) {
+  //     return;
+  //   }
 
-    atoms.forEach((item) => {
-      this.$feed.add(item.id);
-    });
+  //   atoms.forEach((item) => {
+  //     this.$searchFeed.add(item.id);
+  //   });
 
-    this.setHistory(atoms);
-  }
+  //   this.setHistory(atoms);
+  // }
 
-  get feedItems(): IAtom[] {
-    return this.getHistoryItems(Array.from(this.$feed));
-  }
+  // get seachFeedItems(): IAtom[] {
+  //   return this.getHistoryItems(Array.from(this.$searchFeed));
+  // }
 
   /**  Feed Display**/
   get dateLastMostviewed(): IDate {
@@ -466,39 +499,4 @@ export class BaseStore {
   //   }
   //   return this.getHistoryItems(itemsId);
   // }
-
-  /**  Related **/
-  get related() {
-    return this.$related;
-  }
-  clearRelated(): void {
-    this.$related.clear();
-  }
-
-  setRelated(id: AtomID, relatedItemsFull: IRelatedAtomFull[]) {
-    if (
-      id === undefined ||
-      relatedItemsFull === undefined ||
-      relatedItemsFull.length === 0
-    ) {
-      return;
-    }
-
-    const related_items: IAtom[] = relatedItemsFull.map((relatedItemFull) => {
-      return relatedItemFull.item;
-    });
-
-    const relatedItems: IRelatedAtom[] = relatedItemsFull.map(
-      (relatedItemFull) => {
-        return {
-          relation: relatedItemFull.relation,
-          item: relatedItemFull.item.id,
-        };
-      }
-    );
-
-    this.$related.set(id, relatedItems);
-
-    this.setHistory(related_items);
-  }
 }

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../../src/stores/RootStoreHook";
-import React from "react";
+import React, { useEffect } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   IPage,
@@ -8,7 +8,7 @@ import {
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
 import { Box } from "gestalt";
-import DialogChangePassword from "../../../src/components/DialogChangePassword";
+import FormChangePassword from "../../../src/components/FormChangePassword";
 import {
   onChangePassword_button,
   onChangePassword_text,
@@ -17,14 +17,20 @@ import HeaderTitle from "../../../src/components/HeaderTitle";
 import HeaderSEO from "../../../src/components/HeaderSEO";
 import { initializeApp } from "../../../src/libs/helpersInitialize";
 import AppLayout from "../../../src/components/layout/AppLayout";
-import { TUiStringStorage } from "../../../src/config/globals";
+import { initStateCat, TUiStringStorage } from "../../../src/config/globals";
 
 const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
+  // initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
+  useEffect(() => {
+    initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
+  }, []);
+  if (stores.uiStore.getInitCompleted(initStateCat.core) !== true) {
+    return <></>;
+  }
 
   const GUI_CONFIG = props.GUI_CONFIG;
-  const placeholder_username =
+  const placeholder_email =
     GUI_CONFIG.language.user.loginSignup.username_placeholder;
   const password_placeholder =
     GUI_CONFIG.language.changePassword.password_placeholder;
@@ -41,12 +47,12 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
 
   const height_elements = GUI_CONFIG.display.layout.heightChangePassword;
 
-  let value_username = undefined;
+  let value_email = undefined;
   if (isLogged && stores.baseStore.user !== null) {
-    value_username = stores.baseStore.user.username;
+    value_email = stores.baseStore.user.email;
     stores.uiStore.setUiStringStorage(
-      TUiStringStorage.changePasswordUsername,
-      stores.baseStore.user.username
+      TUiStringStorage.changePasswordEmail,
+      stores.baseStore.user.email
     );
   }
 
@@ -62,16 +68,16 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
       overflow="hidden"
     >
       <Box padding={2} column={12} smColumn={10} mdColumn={8} lgColumn={4}>
-        <DialogChangePassword
+        <FormChangePassword
           stores={stores}
-          placeholder_username={placeholder_username}
+          placeholder_email={placeholder_email}
           placeholder_password={password_placeholder}
           placeholder_validationCode={placeholder_validationCode}
           label_sendValidationCode={label_sendValidationCode}
           label_changePassword={label_changePassword}
           handler_text={onChangePassword_text(stores)}
           handler_button={onChangePassword_button(stores)}
-          value_username={value_username}
+          value_email={value_email}
         />
       </Box>
     </Box>
@@ -82,7 +88,12 @@ const ChangePassword: React.FunctionComponent<IPage> = (props) => {
   const content = (
     <>
       <HeaderSEO stores={stores} title={title} />
-      <HeaderTitle stores={stores} title={title} />
+      <HeaderTitle
+        stores={stores}
+        title={title}
+        // addtional_buttons_right={[]}
+        hidden={false}
+      />
       {changePasswordForm}
     </>
   );

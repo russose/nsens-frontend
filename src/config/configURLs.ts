@@ -3,6 +3,10 @@ import { Tlanguage } from "./globals";
 export const URLs = {
   ROOT_URL_WIKIDATA: "https://query.wikidata.org/sparql",
   ROOT_URL_WIKIDATA_ACTION: "https://www.wikidata.org/w/api.php",
+  ROOT_URL_ARXIV: "https://export.arxiv.org/api/",
+  SEMANTICSCHOLAR_URL: "https://api.semanticscholar.org/graph/v1/paper/",
+  ROOT_URL_OPEN_LIBRARY: "https://openlibrary.org/",
+  GOOGLE_BOOKS_URL: "https://www.googleapis.com/books/v1/volumes",
   // ROOT_URL_WIKICOMMON: "https://commons.wikimedia.org/w/api.php",
 };
 

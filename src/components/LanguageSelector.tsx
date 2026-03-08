@@ -2,7 +2,7 @@ import { Box, RadioButton } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { Tlanguage } from "../config/globals";
-import { onChangeLanguage } from "../handlers/handlers_LoginSignup";
+import { onChangeLanguage } from "../handlers/handlers_User";
 import { IStores } from "../stores/RootStore";
 
 interface ILanguageSelectorProps {

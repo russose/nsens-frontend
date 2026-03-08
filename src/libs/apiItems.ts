@@ -4,15 +4,12 @@ import {
   ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage,
   ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaCleanImage_blocking,
   improveImageFromWikipediaParallel_blocking,
-} from "./fetchBase";
+} from "./fetchWikiBase";
 import { configFetching } from "../config/globals";
 import {
   ROOT_URL_WIKIPEDIA_ACTION,
   ROOT_URL_WIKIPEDIA_REST,
 } from "../config/configURLs";
-
-export const amount_data_fetched_items_searched =
-  configFetching.amount_data_fetched_items_searched;
 
 /**
  * From Web (Client side directly)
@@ -67,11 +64,16 @@ export async function api_searchFromWebWithoutImage(
   exclusion_patterns: string[]
 ): Promise<IAtom[]> {
   try {
+    const searchPattern_truncated = searchPattern.slice(
+      0,
+      configFetching.max_size_searchString_wikipedia_arxiv
+    );
+
     const items: IAtom[] =
       await ItemsFromSearchOrRandomOrTitlesOrMostviewedFromWikipediaWithoutImage(
-        searchPattern,
+        searchPattern_truncated,
         ROOT_URL_WIKIPEDIA_ACTION(lang),
-        amount_data_fetched_items_searched,
+        configFetching.amount_data_fetched_items_searched,
         "search",
         lang,
         exclusion_patterns
@@ -104,60 +106,3 @@ export async function api_getItemsFromTitlesFromWebCleanImage_blocking(
     return [];
   }
 }
-
-// export async function api_getAllStaticKnowbooksExtractWithItemsLocal(
-//   lang: Tlanguage
-// ): Promise<IStaticKnowbookWithItemsDefinition[]> {
-//   try {
-//     const result: IStaticKnowbookWithItemsDefinition[] =
-//       (await fetch_data_local(
-//         configPaths.static.knowbooks_location.split("/")[1] +
-//           "/" +
-//           lang +
-//           "/" +
-//           configGeneral.staticKnowbooks.name_extractStaticKnowbooks
-//       )) as IStaticKnowbookWithItemsDefinition[];
-//     return result;
-//   } catch (error) {
-//     // console.log(error);
-//     return [];
-//   }
-// }
-
-// export async function api_getStaticKnowbookWithItemsLocal(
-//   name: string,
-//   lang: Tlanguage
-// ): Promise<IStaticKnowbookDefinition> {
-//   try {
-//     const result: IStaticKnowbookDefinition = (await fetch_data_local(
-//       configPaths.static.knowbooks_location.split("/")[1] +
-//         "/" +
-//         lang +
-//         "/" +
-//         name +
-//         ".txt"
-//     )) as IStaticKnowbookDefinition;
-
-//     return result;
-//   } catch (error) {
-//     // console.log(error);
-//     return undefined;
-//   }
-// }
-
-// export async function api_getAllStaticKnowbooksLocal(): Promise<
-//   IStaticKnowbookDefinition[]
-// > {
-//   try {
-//     const result: IStaticKnowbookDefinition[] = (await fetch_data_local(
-//       configPaths.static.knowbooks_location.split("/")[1] +
-//         "/" +
-//         configGeneral.staticKnowbooks.name_allStaticKnowbooks
-//     )) as IStaticKnowbookDefinition[];
-
-//     return result;
-//   } catch (error) {
-//     // console.log(error);
-//     return [];
-//   }
-// }

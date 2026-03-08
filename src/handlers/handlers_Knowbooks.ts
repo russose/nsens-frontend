@@ -1,32 +1,66 @@
 import {
-  KnowbookID,
   AtomID,
-  eventT,
+  IKnowbook,
+  IKnowbookUpdate,
+  KnowbookID,
+  TKnowbookUpdateAction,
   TUiBooleanStorage,
-  TUiStringStorage,
+  configPaths,
+  eventT,
 } from "../config/globals";
 import {
-  addItemInKnowbook,
+  api_addPublicKnowbook,
+  api_removePublicKnowbook,
+} from "../libs/apiPublicKnowbooks";
+import { closeAllDialogs, goPage } from "../libs/helpersBase";
+import {
+  IsItemInAnyKnowbook,
+  addItemInKnowbookAndCreateKnowbook_Batch,
   deleteKnowbook,
-  initKnowbookEditionElements,
   isItemInKnowbook,
-  removeItemFromKnowbook,
-  renameKnowbook,
+  updateKnowbookProps,
 } from "../libs/helpersSavedKnowbooks";
 import { IStores } from "../stores/RootStore";
 
+/******************* Follow Public Knowbooks ************************************ */
+
+export const onFollowPublicKnowbook =
+  (stores: IStores) =>
+  (knowbook: IKnowbook) =>
+  (input: { event: eventT }): void => {
+    // prevent following own knowbooks
+    if (
+      knowbook === undefined ||
+      knowbook.owner === stores.baseStore.user.userId
+    ) {
+      return;
+    }
+
+    if (stores.knowbookStore.followedPublicKnowbooks.has(knowbook.id)) {
+      stores.knowbookStore.deleteFollowedPublicKnowbook(knowbook.id);
+      api_removePublicKnowbook(knowbook.id);
+    } else {
+      stores.knowbookStore.setFollowedPublicKnowbooks([knowbook]);
+      api_addPublicKnowbook(knowbook.id);
+    }
+
+    // input.event.preventDefault();
+    input.event.stopPropagation();
+  };
+
 /******************* Edit Knowbooks ************************************ */
 
-export const onCancelEditKnowbook = (stores: IStores) => (): void => {
-  stores.uiStore.setUiBooleanStorage(
-    TUiBooleanStorage.editKnowbookOpened,
-    false
-  );
-  stores.uiStore.setUiBooleanStorage(
-    TUiBooleanStorage.renameKnowbookOpened,
-    false
-  );
-};
+function initKnowbookEditionElements(atomID: AtomID, stores: IStores): void {
+  stores.uiStore.clearEditKnowbookMembers();
+
+  const knowbook_id_list = Array.from(stores.knowbookStore.knowbooks.keys());
+  knowbook_id_list.forEach((knowbookId) => {
+    stores.uiStore.setEditKnowbookMembers(
+      knowbookId,
+      isItemInKnowbook(atomID, knowbookId, stores)
+    );
+  });
+}
 
 export const onEditKnowbooks =
   (stores: IStores) =>
@@ -35,116 +69,193 @@ export const onEditKnowbooks =
     stores.uiStore.setSelectedAtom(itemId, "title");
     initKnowbookEditionElements(itemId, stores);
     stores.uiStore.setUiBooleanStorage(
-      TUiBooleanStorage.editKnowbookOpened,
+      TUiBooleanStorage.showEditKnowbooks,
       true
     );
     // input.event.preventDefault();
     input.event.stopPropagation();
-  };
-
-export const onChangeInputValueEditKnowbooks =
-  (stores: IStores) =>
-  (input: { value: string; syntheticEvent: eventT }): void => {
-    stores.uiStore.setUiStringStorage(
-      TUiStringStorage.editKnowbookNewValue,
-      input.value
-    );
   };
 
 export const onChangeKnwobooksInclusionEditKnowbooks =
   (stores: IStores) =>
-  (tag: KnowbookID) =>
+  (id: KnowbookID) =>
   (input: { checked: boolean; syntheticEvent: eventT }): void => {
-    stores.uiStore.setEditKnowbookMembers(tag, input.checked);
+    stores.uiStore.setEditKnowbookMembers(id, input.checked);
   };
 
 export const onSubmitChangesEditKnowbooks =
-  (stores: IStores) => (itemId: AtomID) => (): void => {
+  (stores: IStores) =>
+  (itemId: AtomID, newKnowbookName: string) =>
+  (): void => {
     if (itemId === undefined) {
       return;
     }
 
-    stores.uiStore.editKnowbookMembers.forEach((value, key) => {
-      if (value === true && !isItemInKnowbook(itemId, key, stores)) {
-        addItemInKnowbook(key, itemId, stores);
-      } else if (value === false && isItemInKnowbook(itemId, key, stores)) {
-        removeItemFromKnowbook(key, itemId, stores);
+    const actions: IKnowbookUpdate[] = [];
+
+    stores.uiStore.editKnowbookMembers.forEach((value, id) => {
+      const knowbook = stores.knowbookStore.knowbooks.get(id);
+      const action = {
+        KnowbookId: knowbook.id,
+        KnowbookName: knowbook.name,
+        itemId: itemId,
+        action: TKnowbookUpdateAction.add,
+      };
+      if (value === true && !isItemInKnowbook(itemId, id, stores)) {
+        // addItemInKnowbookAndCreateKnowbook(knowbook.name, itemId, stores);
+        // action.action = TKnowbookUpdateAction.add;
+        actions.push(action);
+      } else if (value === false && isItemInKnowbook(itemId, id, stores)) {
+        // removeItemFromKnowbook(id, itemId, stores);
+        action.action = TKnowbookUpdateAction.delete;
+        actions.push(action);
       }
     });
 
-    const knowbookIds: KnowbookID[] = Array.from(
-      stores.knowbookStore.knowbooks.keys()
-    );
-    const value = stores.uiStore.getUiStringStorage(
-      TUiStringStorage.editKnowbookNewValue
-    );
-    if (value.length !== 0) {
-      if (knowbookIds.includes(value)) {
-        if (!isItemInKnowbook(itemId, value, stores)) {
-          addItemInKnowbook(
-            stores.uiStore.getUiStringStorage(
-              TUiStringStorage.editKnowbookNewValue
-            ),
-            itemId,
-            stores
-          );
-        }
-      } else {
-        addItemInKnowbook(value, itemId, stores);
-      }
+    // const knowbookNewName: IKnowbook[] = Array.from(
+    //   stores.knowbookStore.knowbooks.values()
+    // ).filter((knowbook) => {
+    //   return knowbook.name === newKnowbookName;
+    // });
+
+    if (newKnowbookName.length !== 0) {
+      // if (knowbookNewName.length !== 0) {
+      //   if (!isItemInKnowbook(itemId, knowbookNewName[0].id, stores)) {
+      //     // addItemInKnowbookAndCreateKnowbook(newKnowbookName, itemId, stores);
+      //     actions.push({
+      //       KnowbookId: knowbookNewName[0].id,
+      //       KnowbookName: newKnowbookName,
+      //       itemId: itemId,
+      //       action: TKnowbookUpdateAction.add,
+      //     });
+      //   }
+      // } else {
+      //   // addItemInKnowbookAndCreateKnowbook(newKnowbookName, itemId, stores);
+      //   actions.push({
+      //     KnowbookId: knowbookNewName[0].id,
+      //     KnowbookName: newKnowbookName,
+      //     itemId: itemId,
+      //     action: TKnowbookUpdateAction.add,
+      //   });
+      // }
+
+      actions.push({
+        // KnowbookId: knowbookNewName.length !== 0 ? knowbookNewName[0].id : -1,  // Only applicable for deletion
+        KnowbookId: -1, // Only applicable for deletion
+        KnowbookName: newKnowbookName,
+        itemId: itemId,
+        action: TKnowbookUpdateAction.add,
+      });
     }
 
-    stores.uiStore.setUiBooleanStorage(
-      TUiBooleanStorage.editKnowbookOpened,
-      false
-    );
+    addItemInKnowbookAndCreateKnowbook_Batch(actions, stores);
+
+    closeAllDialogs(stores);
   };
 
-/******************* Rename or Delete Knowbook ************************************ */
+/******************* Edit Knowbook Props ****************************************** */
 
-export const onOpenRenameKnowbook =
+export const onEditKnowbookProps =
   (stores: IStores) =>
-  (name: KnowbookID) =>
+  (knowbookId: KnowbookID) =>
   (input: { event: eventT }): void => {
-    stores.uiStore.setSelectedKnowbookIdName(name);
-    stores.uiStore.setUiStringStorage(
-      TUiStringStorage.renameKnowbookNewName,
-      name
-    );
+    stores.uiStore.setSelectedKnowbook(knowbookId);
+    // initKnowbookEditionElements(itemId, stores);
     stores.uiStore.setUiBooleanStorage(
-      TUiBooleanStorage.renameKnowbookOpened,
+      TUiBooleanStorage.showEditKnowbookProps,
       true
     );
     // input.event.preventDefault();
     input.event.stopPropagation();
   };
 
-export const onChangeInputValueRenameKnowbook =
+export const onSubmitChangesEditKnowbooksProps =
   (stores: IStores) =>
-  (input: { value: string; syntheticEvent: eventT }): void => {
-    stores.uiStore.setUiStringStorage(
-      TUiStringStorage.renameKnowbookNewName,
-      input.value
+  (
+    knowbookId: KnowbookID,
+    newName: string,
+    newDescription: string,
+    newSource: string,
+    imageUrl: string,
+    isPublic: string
+  ) =>
+  (): void => {
+    updateKnowbookProps(
+      stores,
+      knowbookId,
+      newName,
+      newDescription,
+      newSource,
+      imageUrl,
+      isPublic === "true" ? true : false
     );
+
+    closeAllDialogs(stores);
   };
 
-export const onRenameKnowbook = (stores: IStores) => (): void => {
-  renameKnowbook(
-    stores.uiStore.selectedKnowbookIdName,
-    stores.uiStore.getUiStringStorage(TUiStringStorage.renameKnowbookNewName),
-    stores
-  );
-  stores.uiStore.setUiBooleanStorage(
-    TUiBooleanStorage.renameKnowbookOpened,
-    false
-  );
-};
+/******************* Delete Knowbook ************************************ */
 
 export const onDeleteKnowbook =
   (stores: IStores) =>
-  (name: KnowbookID) =>
-  (input: { event: eventT }): void => {
-    deleteKnowbook(name, stores);
-    // input.event.preventDefault();
-    input.event.stopPropagation();
+  (knowbookId: KnowbookID) =>
+  // (input: { event: eventT }): void => {
+  () => {
+    deleteKnowbook(knowbookId, stores);
+    goPage(stores, configPaths.pages.KnowbooksMine);
   };
+
+/*** Misc****************/
+
+export const IsItemInAnyKnowbook_handler =
+  (stores: IStores) => (itemID: AtomID) => {
+    return IsItemInAnyKnowbook(itemID, stores);
+  };
+
+/******************* Rename or Delete Knowbook ************************************ */
+
+// export const onOpenRenameKnowbook =
+//   (stores: IStores) =>
+//   (name: KnowbookID) =>
+//   (input: { event: eventT }): void => {
+//     stores.uiStore.setSelectedKnowbookIdName(name);
+//     stores.uiStore.setUiStringStorage(
+//       TUiStringStorage.renameKnowbookNewName,
+//       name
+//     );
+//     stores.uiStore.setUiBooleanStorage(
+//       TUiBooleanStorage.renameKnowbookOpened,
+//       true
+//     );
+//     // input.event.preventDefault();
+//     input.event.stopPropagation();
+//   };
+
+// export const onChangeInputValueRenameKnowbook =
+//   (stores: IStores) =>
+//   (input: { value: string; syntheticEvent: eventT }): void => {
+//     stores.uiStore.setUiStringStorage(
+//       TUiStringStorage.renameKnowbookNewName,
+//       input.value
+//     );
+//   };
+
+// export const onRenameKnowbook = (stores: IStores) => (): void => {
+//   renameKnowbook(
+//     stores.uiStore.selectedKnowbookIdName,
+//     stores.uiStore.getUiStringStorage(TUiStringStorage.renameKnowbookNewName),
+//     stores
+//   );
+//   stores.uiStore.setUiBooleanStorage(
+//     TUiBooleanStorage.renameKnowbookOpened,
+//     false
+//   );
+// };
+
+// export const onDeleteKnowbook =
+//   (stores: IStores) =>
+//   (name: KnowbookID) =>
+//   (input: { event: eventT }): void => {
+//     deleteKnowbook(name, stores);
+//     // input.event.preventDefault();
+//     input.event.stopPropagation();
+//   };

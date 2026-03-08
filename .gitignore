@@ -15,3 +15,5 @@ public/screenshots/
 public/sitemap.xml
 android/
 
+.env
+.htaccess

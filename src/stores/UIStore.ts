@@ -1,61 +1,72 @@
-import { observable, action, computed, makeObservable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import {
   AtomID,
   IAtom,
+  IKnowbook,
+  initStateCat,
   IparamsAtom,
-  ISlider,
+  ISearchResults,
   KnowbookID,
-  TPageHeaderModes,
-  TPages,
+  TSource,
   TUiBooleanStorage,
   TUiNumberStorage,
   TUiStringStorage,
 } from "../config/globals";
-import { reorder } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
-// const SLIDER_MOVE_TOLERANCE_RATE = 0.8;
 export class UIStore {
   $rootStore: RootStore;
+
+  private $initCompleted = observable.map<initStateCat, boolean>();
+
   private $selectedAtom: IparamsAtom = { id: "", title: "" };
+
+  private $selectedKnowbook: KnowbookID = -1;
+
   private $navigationHistory = observable.set<AtomID>();
 
   private $editKnowbookMembers = observable.map<KnowbookID, boolean>();
-  private $selectedKnowbookIdName: KnowbookID = "";
-  private $sliders = observable.map<string, ISlider>();
-  private $pageHeaderMode = observable.map<TPages, TPageHeaderModes>();
+
   private $uiStringStorage = observable.map<TUiStringStorage, string>();
   private $uiBooleanStorage = observable.map<TUiBooleanStorage, boolean>();
 
   private $uiNumberStorage = observable.map<TUiNumberStorage, number>();
 
+  private $searchResults: ISearchResults = undefined;
+
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
-    makeObservable<UIStore, "$selectedAtom" | "$selectedKnowbookIdName">(this, {
+    makeObservable<UIStore, "$selectedAtom" | "$selectedKnowbook">(this, {
       $selectedAtom: observable,
-      $selectedKnowbookIdName: observable,
+      $selectedKnowbook: observable,
       init: action,
+      initInitCompleted: action,
+      setInitCompleted: action,
       initUiStorage: action,
+      resetUiBooelean: action,
       setUiStringStorage: action,
       setUiBooleanStorage: action,
       setUiNumberStorage: action,
-      initPageHeaderMode: action,
-      // setPageHeaderMode: action,
       setSelectedAtom: action,
       setEditKnowbookMembers: action,
-      // clearEditKnowbookMembers: action,
-      setSelectedKnowbookIdName: action,
-      setSliders: action,
-      initSlider: action,
-      // updateSliderCircular: action,
+      clearEditKnowbookMembers: action,
+      setSelectedKnowbook: action,
       navigationHistoryItems: computed,
     });
   }
 
   init() {
-    this.initPageHeaderMode();
     this.initUiStorage();
+    this.initInitCompleted();
     this.$navigationHistory.clear();
+    this.setSearchResults([], [], [], []);
+  }
+
+  initInitCompleted(): void {
+    this.$initCompleted.set(initStateCat.core, undefined);
+    this.$initCompleted.set(initStateCat.userData, undefined);
+    this.$initCompleted.set(initStateCat.itemRelated, undefined);
+    this.$initCompleted.set(initStateCat.alreadyRendered, undefined);
   }
 
   initUiStorage(): void {
@@ -71,6 +82,21 @@ export class UIStore {
     }
     for (const key of TUiNumberStorage_list) {
       this.$uiNumberStorage.set(key, 0);
+    }
+  }
+
+  getInitCompleted(key: initStateCat): boolean {
+    return this.$initCompleted.get(key);
+  }
+
+  setInitCompleted(state: initStateCat, value: boolean): void {
+    this.$initCompleted.set(state, value);
+  }
+
+  resetUiBooelean(): void {
+    const TUiBooleanStorage_list = Object.values(TUiBooleanStorage);
+    for (const key of TUiBooleanStorage_list) {
+      this.$uiBooleanStorage.set(key, false);
     }
   }
 
@@ -94,90 +120,30 @@ export class UIStore {
     this.$uiNumberStorage.set(key, value);
   }
 
-  initPageHeaderMode(): void {
-    // this.$pageHeaderMode.set(
-    //   TPages.Home,
-    //   TPageHeaderModes.homeFeaturedKnowbooks
-    // );
-    this.$pageHeaderMode.set(
-      TPages.ItemCircle,
-      TPageHeaderModes.itemAllRelated
-    );
-
-    const pages_list = Object.values(TPages);
-
-    for (const page of pages_list) {
-      if (!this.$pageHeaderMode.has(page)) {
-        this.$pageHeaderMode.set(page, TPageHeaderModes.none);
-      }
-    }
-  }
-  // setPageHeaderMode(page: TPages, mode: TPageHeaderModes): void {
-  //   this.$pageHeaderMode.set(page, mode);
-  // }
-  isPageHeaderMode(page: TPages, mode: TPageHeaderModes): boolean {
-    return this.$pageHeaderMode.get(page) === mode;
+  get searchResults() {
+    return this.$searchResults;
   }
 
-  get sliders() {
-    return this.$sliders;
-  }
-  setSliders(slider: ISlider): void {
-    this.$sliders.set(slider.id, slider);
-  }
-
-  initSlider(sliderId: string, max: number): void {
-    const slider = {
-      id: sliderId,
-      position: 0,
-      positionOneStep: 0,
-      max: max,
-      maxOneStep: 360,
+  setSearchResults(
+    wiki: AtomID[],
+    books: AtomID[],
+    arxiv: AtomID[],
+    knowbooks: KnowbookID[]
+  ): void {
+    this.$searchResults = {
+      [TSource.wiki]: wiki,
+      [TSource.books]: books,
+      [TSource.arxiv]: arxiv,
+      knowbooksIds: knowbooks,
     };
-    this.$sliders.set(slider.id, slider);
   }
 
-  // updateSliderCircular(id: string, value: number): void {
-  //   const slider = this.sliders.get(id);
-
-  //   if (slider === undefined) {
-  //     return;
-  //   }
-
-  //   const tolerance = slider.maxOneStep * SLIDER_MOVE_TOLERANCE_RATE;
-  //   const current_PositionOneStep = slider.positionOneStep;
-  //   const current_Position = slider.position;
-  //   const delta = value - current_PositionOneStep;
-
-  //   let new_Position: number;
-  //   if (Math.abs(delta) < tolerance) {
-  //     new_Position = current_Position + delta;
-  //   } else {
-  //     if (delta < 0) {
-  //       new_Position = current_Position + value;
-  //     } else {
-  //       new_Position = current_Position - slider.maxOneStep + value;
-  //     }
-  //   }
-
-  //   if (new_Position >= 0 && new_Position <= slider.max) {
-  //     slider.positionOneStep = value;
-  //     slider.position = new_Position;
-  //   } else if (new_Position < 0) {
-  //     slider.positionOneStep = value;
-  //     slider.position = 0;
-  //   } else if (new_Position > slider.max) {
-  //     slider.positionOneStep = value;
-  //     slider.position = slider.max;
-  //   }
-  //   this.$sliders.set(slider.id, slider);
-  // }
-
-  get selectedKnowbookIdName() {
-    return this.$selectedKnowbookIdName;
+  get selectedKnowbook() {
+    return this.$selectedKnowbook;
   }
-  setSelectedKnowbookIdName(knowbookId: KnowbookID): void {
-    this.$selectedKnowbookIdName = knowbookId;
+
+  setSelectedKnowbook(knowbookId: KnowbookID): void {
+    this.$selectedKnowbook = knowbookId;
   }
 
   get selectedAtom() {
@@ -199,5 +165,9 @@ export class UIStore {
   }
   setEditKnowbookMembers(knowbookId: KnowbookID, value: boolean): void {
     this.editKnowbookMembers.set(knowbookId, value);
+  }
+
+  clearEditKnowbookMembers(): void {
+    this.editKnowbookMembers.clear();
   }
 }

@@ -1,4 +1,13 @@
-import { IAtom, AtomID, IKnowbook, Tlanguage } from "../config/globals";
+import {
+  AtomID,
+  IAtom,
+  IKnowbook,
+  IKnowbookFull,
+  IKnowbookProps,
+  KnowbookID,
+  KnowbookName,
+  Tlanguage,
+} from "../config/globals";
 import { my_api } from "./fetch";
 
 /**
@@ -41,6 +50,7 @@ export async function api_getSavedList(lang: Tlanguage): Promise<IAtom[]> {
     return [];
   }
 }
+
 /**
  * Knowbooks
  */
@@ -57,29 +67,15 @@ export async function api_getKnowbooksList(
   }
 }
 
-export async function api_addKnowbook(
-  name: string,
+export async function api_getKnowbookFull(
+  // name: KnowbookName,
+  knowbookId: KnowbookID,
   lang: Tlanguage
-): Promise<string> {
-  try {
-    const knowbook = { name: name, language: lang };
-    const res = await my_api("post", "/knowbooks", knowbook);
-    return res.data;
-  } catch (error) {
-    // console.log(error);
-    return undefined;
-  }
-}
-
-export async function api_renameKnowbook(
-  name: string,
-  new_name: string,
-  lang: Tlanguage
-): Promise<string> {
+): Promise<IKnowbookFull> {
   try {
     const res = await my_api(
-      "post",
-      "/knowbooks/rename/" + lang + "/" + name + "/" + new_name,
+      "get",
+      "/knowbooks" + "/" + lang + "/" + knowbookId,
       {}
     );
     return res.data;
@@ -89,8 +85,22 @@ export async function api_renameKnowbook(
   }
 }
 
+export async function api_addKnowbook(
+  name: KnowbookName,
+  lang: Tlanguage
+): Promise<number> {
+  try {
+    const knowbook = { name: name, language: lang };
+    const res = await my_api("post", "/knowbooks", knowbook);
+    return Number(res.data);
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
+}
+
 export async function api_removeKnowbook(
-  name: string,
+  name: KnowbookName,
   lang: Tlanguage
 ): Promise<string> {
   try {
@@ -102,21 +112,8 @@ export async function api_removeKnowbook(
   }
 }
 
-// export async function _addItemInKnowbook(
-//   name: string,
-//   item: IAtom
-// ): Promise<IKnowbook> {
-//   // try {
-//   const res = await _api("post", "/knowbooks/" + name, item);
-//   return res.data;
-//   // } catch (error) {
-//   //   console.log(error);
-//   //   return undefined;
-//   // }
-// }
-
 export async function api_addItemInKnowbook(
-  name: string,
+  name: KnowbookName,
   id: AtomID,
   lang: Tlanguage
 ): Promise<IKnowbook | undefined> {
@@ -134,7 +131,7 @@ export async function api_addItemInKnowbook(
 }
 
 export async function api_removeItemFromKnowbook(
-  name: string,
+  name: KnowbookName,
   id: AtomID,
   lang: Tlanguage
 ): Promise<IKnowbook> {
@@ -144,6 +141,30 @@ export async function api_removeItemFromKnowbook(
       "/knowbooks/" + lang + "/" + name + "/" + id,
       {}
     );
+    return res.data;
+  } catch (error) {
+    // console.log(error);
+    return undefined;
+  }
+}
+
+export async function api_updateKnowbook(
+  name: KnowbookName,
+  lang: Tlanguage,
+  // input_object: {
+  //   name?: string;
+  //   image_url?: string;
+  //   public?: boolean;
+  // }
+  input_object: IKnowbookProps
+): Promise<string> {
+  try {
+    const res = await my_api(
+      "put",
+      "/knowbooks/update/" + lang + "/" + name,
+      input_object
+    );
+
     return res.data;
   } catch (error) {
     // console.log(error);

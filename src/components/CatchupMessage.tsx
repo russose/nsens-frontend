@@ -1,12 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { IStores } from "../stores/RootStore";
-import { Box, Callout } from "gestalt";
+import { Box, Callout, SlimBanner } from "gestalt";
 import { goUserHandler } from "../libs/helpersBase";
 
 interface ICatchupMessageProps {
   stores: IStores;
-  withButton?: boolean;
 }
 
 const CatchupMessage: React.FunctionComponent<ICatchupMessageProps> = (
@@ -32,29 +31,17 @@ const CatchupMessage: React.FunctionComponent<ICatchupMessageProps> = (
           lgColumn={9}
           alignItems="center"
         >
-          {props.withButton ? (
-            <Callout
-              type={type}
-              iconAccessibilityLabel="info"
-              title={GUI_CONFIG.language.user.catchup_message}
-              message=""
-              primaryAction={{
-                label:
-                  GUI_CONFIG.language.user.loginSignup.signup_label +
-                  " / " +
-                  GUI_CONFIG.language.user.loginSignup.login_label,
-                onClick: goUserHandler(props.stores)(),
-                accessibilityLabel: "Se connecter",
-              }}
-            />
-          ) : (
-            <Callout
-              type={type}
-              iconAccessibilityLabel="info"
-              title={GUI_CONFIG.language.user.catchup_message}
-              message=""
-            />
-          )}
+          {/* <Callout
+            type={type}
+            iconAccessibilityLabel="info"
+            title={GUI_CONFIG.language.user.catchup_message}
+            message=""
+          /> */}
+          <SlimBanner
+            type={type}
+            message={GUI_CONFIG.language.user.catchup_message}
+            iconAccessibilityLabel="info"
+          />
         </Box>
       </Box>
     </>

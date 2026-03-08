@@ -13,9 +13,9 @@ export const onChangePassword_text =
   (stores: IStores) =>
   (type: string) =>
   (input: { value: string; syntheticEvent: eventT }): void => {
-    if (type === "username") {
+    if (type === "email") {
       stores.uiStore.setUiStringStorage(
-        TUiStringStorage.changePasswordUsername,
+        TUiStringStorage.changePasswordEmail,
         input.value
       );
     } else if (type === "password") {
@@ -36,9 +36,7 @@ export const onChangePassword_button =
   (stores: IStores) => (type: string) => (): void => {
     if (type === "sendValidationCode") {
       api_getValidationNewPassword(
-        stores.uiStore.getUiStringStorage(
-          TUiStringStorage.changePasswordUsername
-        )
+        stores.uiStore.getUiStringStorage(TUiStringStorage.changePasswordEmail)
       )
         .then(() => {
           stores.uiStore.setUiStringStorage(
@@ -56,9 +54,7 @@ export const onChangePassword_button =
         });
     } else if (type === "changePassword") {
       api_setNewPassword(
-        stores.uiStore.getUiStringStorage(
-          TUiStringStorage.changePasswordUsername
-        ),
+        stores.uiStore.getUiStringStorage(TUiStringStorage.changePasswordEmail),
         stores.uiStore.getUiStringStorage(
           TUiStringStorage.changePasswordPassword
         ),

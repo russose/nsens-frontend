@@ -1,28 +1,50 @@
+import Router from "next/router";
 import {
-  TDisplay,
-  Tlanguage,
+  AtomID,
   configPaths,
+  CONFIG_ENV,
   eventT,
   EXCLUSION_PATTERNS,
   IAtom,
   IparamsPage,
-  TUiStringStorage,
-  AtomID,
-  CONFIG_ENV,
+  IUser,
+  TDisplay,
+  Tlanguage,
   TUiBooleanStorage,
+  ILog,
+  TLogAction,
+  IKnowbook,
+  TUiNumberStorage,
 } from "../config/globals";
 import { IStores } from "../stores/RootStore";
-import {
-  api_getItemsFeaturedFromWebWithoutImage,
-  api_searchFromWebWithoutImage,
-} from "./apiItems";
-import { api_login } from "./apiUser";
+import { api_getItemsFeaturedFromWebWithoutImage } from "./apiItems";
+import { api_getUser, api_login, api_updateUserProps } from "./apiUser";
 import { DateToStringWithZero, shuffleArray } from "./utils";
-import Router from "next/router";
+import { api_log_logged, api_log_public } from "./apiLog";
+import { api_getBestPublicKnowbooks } from "./apiPublicKnowbooks";
 
-function getDisplayFromWindow(): TDisplay {
+export function submitLog(
+  stores: IStores,
+  action: TLogAction,
+  details: string,
+  anonymous: boolean
+): void {
+  const log: ILog = {
+    action: action,
+    details: stores.baseStore.GUI_CONFIG.id + " ; " + details,
+    anonymous: anonymous,
+  };
+
+  if (stores.baseStore.isLogged) {
+    api_log_logged(log);
+  } else {
+    api_log_public(log);
+  }
+}
+
+export function getDisplayFromWindow(): TDisplay {
   if (typeof window !== "undefined") {
-    const width = window.innerWidth;
+    const width = Math.min(window.innerWidth, window.outerWidth);
     // console.log(width);
     if (width < 640) {
       return TDisplay.mobile;
@@ -46,6 +68,8 @@ export async function getParamsPageFromContext(): Promise<IparamsPage> {
       paramsPage_lang = Tlanguage.en;
     }
 
+    // const paramsPage_lang = Tlanguage.en;
+
     const paramsPage_display = getDisplayFromWindow();
 
     return { lang: paramsPage_lang, display: paramsPage_display };
@@ -53,37 +77,34 @@ export async function getParamsPageFromContext(): Promise<IparamsPage> {
   return undefined;
 }
 
-export function switchDisplayWhenResized(stores: IStores, router: any): void {
-  const paramsPage_display = getDisplayFromWindow();
-  if (paramsPage_display !== stores.baseStore.paramsPage.display) {
-    const paramsPage: IparamsPage = {
-      lang: stores.baseStore.paramsPage.lang,
-      display: paramsPage_display,
-    };
-    stores.baseStore.setParamsPage(paramsPage);
-    const query = router.query;
-    query.display = paramsPage_display;
-    Router.push({
-      pathname: router.pathname,
-      query: query,
-    });
+export async function fetchMoreBestPublicKnowbooks(stores: IStores) {
+  const lang = stores.baseStore.paramsPage.lang;
+  const amount_bestPublic =
+    stores.baseStore.GUI_CONFIG.display.amount_bestPublicKnowbooks;
+
+  try {
+    const indexLastBestKnowbooks = stores.uiStore.getUiNumberStorage(
+      TUiNumberStorage.indexLastBestKnowbooks
+    );
+
+    const newBestPublicKnowbooks: IKnowbook[] =
+      await api_getBestPublicKnowbooks(
+        lang,
+        amount_bestPublic,
+        indexLastBestKnowbooks
+      );
+
+    stores.knowbookStore.setPublicKnowbooks(newBestPublicKnowbooks);
+
+    stores.uiStore.setUiNumberStorage(
+      TUiNumberStorage.indexLastBestKnowbooks,
+      indexLastBestKnowbooks + amount_bestPublic
+    );
+  } catch (error) {
+    // console.log(error);
+    return;
   }
 }
-
-// export function removeSavedFromItems(stores: IStores, items: IAtom[]): IAtom[] {
-//   if (!stores.baseStore.isLogged || items === undefined || items.length === 0) {
-//     return items;
-//   }
-
-//   const items_filtered: IAtom[] = items.filter((item) => {
-//     if (item === undefined) {
-//       return false;
-//     } else {
-//       return !stores.savedStore.saved.has(item.id);
-//     }
-//   });
-//   return items_filtered;
-// }
 
 export async function fetchNewMostviewed(stores: IStores): Promise<IAtom[]> {
   const lang = stores.baseStore.paramsPage.lang;
@@ -105,62 +126,50 @@ export async function fetchNewMostviewed(stores: IStores): Promise<IAtom[]> {
 }
 
 export async function initializeMostviewed(stores: IStores): Promise<void> {
-  fetchNewMostviewed(stores)
-    .then((items: IAtom[]) => {
-      stores.baseStore.setMostviewed(items);
-      //Force feed update when fetchNewMostviewed completed (otherwise first init fails)
-      // setFeedForHome(stores);
-
-      // for (const item of items.slice(0, 1)) {
-      //   stores.baseStore.setGoodImageInHistoryItem(item.id);
-      //   console.log("ok_most3");
-      // }
-    })
-    .catch(() => {
-      // console.log("error in initializeMostviewed");
-    });
+  const items: IAtom[] = await fetchNewMostviewed(stores);
+  stores.baseStore.setMostviewed(items);
 }
 
-export function setFeedFromSearch(
-  stores: IStores,
-  searchPattern: string
-): void {
-  if (searchPattern === undefined) {
-    return;
-  }
-  const lang = stores.baseStore.paramsPage.lang;
-  const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
+// export async function setFeedFromSearch(
+//   stores: IStores,
+//   searchPattern: string
+// ): Promise<void> {
+//   if (searchPattern === undefined) {
+//     return;
+//   }
+//   const lang = stores.baseStore.paramsPage.lang;
+//   const exclusion_patterns_items = EXCLUSION_PATTERNS(lang);
 
-  api_searchFromWebWithoutImage(searchPattern, lang, exclusion_patterns_items)
-    .then((atoms) => {
-      // stores.baseStore.initAmountFeedDisplayed();
-      stores.baseStore.clearFeed();
-      stores.baseStore.setFeed(atoms);
-    })
-    .catch(() => {
-      // console.log("error in setFeedFromSearch");
-    });
-}
-
-// export function updateHome(stores: IStores): void {
-//   // stores.baseStore.initAmountFeedDisplayed();
-//   // stores.baseStore.clearFeed();
-
-//   setFeedForHome(stores);
-// }
-
-// export function setFeedForHome(stores: IStores): void {
-//   const mixedIds: AtomID[] = Mix2Array_main_minoritaire(
-//     shuffleArray(stores.baseStore.mostviewedIds),
-//     shuffleArray(
-//       Array.from(stores.knowbookStore.itemsInStaticKnowbooksForHome)
-//     ),
-//     configGeneral.display.amount_vitalKnowbook_for_each_mostview
+//   const wiki_items = await api_searchFromWebWithoutImage(
+//     searchPattern,
+//     lang,
+//     exclusion_patterns_items
+//   );
+//   const arxiv_items = await searchAndStoreArxivAtoms(
+//     stores,
+//     searchPattern,
+//     configFetching.amount_searchArxiv
 //   );
 
-//   const mixedItems: IAtom[] = stores.baseStore.getHistoryItems(mixedIds);
+//   const publicKnowbooks = await api_getSearchPublicKnowbooks(
+//     lang,
+//     searchPattern
+//   );
 
-//   stores.baseStore.setFeed(mixedItems);
+//   const atoms = [...wiki_items.slice(0, 5), ...arxiv_items.slice(0, 5)];
+
+//   stores.baseStore.clearSearchFeed();
+//   stores.baseStore.setSearchFeed(atoms);
+
+//   // api_searchFromWebWithoutImage(searchPattern, lang, exclusion_patterns_items)
+//   //   .then((atoms) => {
+//   //     // stores.baseStore.initAmountFeedDisplayed();
+//   //     stores.baseStore.clearSearchFeed();
+//   //     stores.baseStore.setSearchFeed(atoms);
+//   //   })
+//   //   .catch(() => {
+//   //     // console.log("error in setFeedFromSearch");
+//   //   });
 // }
 
 export function Mix2Array_main_minoritaire(
@@ -200,6 +209,33 @@ export function Mix2Array_main_minoritaire(
   return mixed;
 }
 
+export function closeAllDialogs(stores: IStores): void {
+  stores.uiStore.setUiBooleanStorage(
+    TUiBooleanStorage.showEditKnowbooks,
+    false
+  );
+
+  stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showWikiArticle, false);
+
+  stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArxivCentent, false);
+
+  stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showBookCentent, false);
+
+  stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showHistory, false);
+
+  stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showSharing, false);
+
+  stores.uiStore.setUiBooleanStorage(
+    TUiBooleanStorage.showEditKnowbookProps,
+    false
+  );
+
+  stores.uiStore.setUiBooleanStorage(
+    TUiBooleanStorage.showEditUserProps,
+    false
+  );
+}
+
 export function isMobile(stores: IStores): boolean {
   // const result: boolean = stores.baseStore.currentDisplay === TDisplay.mobile;
   const result: boolean =
@@ -211,6 +247,30 @@ export function isHome(router: any): boolean {
   return router.route === configPaths.rootPath;
 }
 
+export async function switchDisplayWhenResized(
+  stores: IStores,
+  router: any,
+  reload: boolean
+): Promise<void> {
+  const paramsPage_display = getDisplayFromWindow();
+  if (paramsPage_display !== stores.baseStore.paramsPage.display) {
+    const paramsPage: IparamsPage = {
+      lang: stores.baseStore.paramsPage.lang,
+      display: paramsPage_display,
+    };
+    stores.baseStore.setParamsPage(paramsPage);
+    const query = router.query;
+    query.display = paramsPage_display;
+    await Router.push({
+      pathname: router.pathname,
+      query: query,
+    });
+    if (reload) {
+      await Router.reload();
+    }
+  }
+}
+
 export async function goPage(
   stores: IStores,
   // paramsPage: IparamsPage,
@@ -220,14 +280,8 @@ export async function goPage(
 ) {
   if (typeof window !== "undefined") {
     const paramsPage = stores.baseStore.paramsPage;
-    stores.uiStore.setUiStringStorage(TUiStringStorage.searchPattern, "");
-
-    stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showArticle, false);
-    stores.uiStore.setUiBooleanStorage(TUiBooleanStorage.showHistory, false);
-    stores.uiStore.setUiBooleanStorage(
-      TUiBooleanStorage.editKnowbookOpened,
-      false
-    );
+    // stores.uiStore.setUiStringStorage(TUiStringStorage.searchPattern, "");
+    stores.uiStore.resetUiBooelean();
 
     await Router.push({
       pathname: configPaths.rootPath + page,
@@ -236,6 +290,15 @@ export async function goPage(
     if (reload) {
       await Router.reload();
     }
+  }
+}
+
+export function goNewPage(url: string) {
+  if (typeof window !== "undefined") {
+    window.open(
+      url,
+      "_blank" // <- This is what makes it open in a new window.
+    );
   }
 }
 
@@ -269,10 +332,52 @@ export async function initDemo(stores: IStores): Promise<void> {
     "RUNNING IN DEMO MODE, activated with configGeneral.demoModeForScreenshoots"
   );
   try {
-    await api_login("demo@demo.org", "demo");
-    stores.baseStore.setUser({
-      username: "demo@demo.org",
-    });
+    await api_login("demo@demo.org", "test");
+    const user = await api_getUser();
+    stores.baseStore.setUser(user);
+  } catch (error) {
+    // console.log(error);
+  }
+}
+
+export async function updateUserProps(
+  stores: IStores,
+  username: string,
+  email: string
+) {
+  if (username === undefined || email === undefined) {
+    return;
+  }
+
+  if (
+    username === stores.baseStore.user.username &&
+    email === stores.baseStore.user.email
+  ) {
+    return;
+  }
+
+  let username_ = username;
+  if (username === undefined) {
+    username_ = stores.baseStore.user.username;
+  }
+
+  let email_ = email;
+  if (email === undefined) {
+    email_ = stores.baseStore.user.email;
+  }
+
+  const user: IUser = {
+    email: email_,
+    username: username_,
+    userId: stores.baseStore.user.userId,
+    publicKnowbooks: stores.baseStore.user.publicKnowbooks,
+  };
+
+  try {
+    const result = await api_updateUserProps(email_, username_);
+    if (result !== undefined) {
+      stores.baseStore.setUser(user);
+    }
   } catch (error) {
     // console.log(error);
   }

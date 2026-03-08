@@ -1,10 +1,6 @@
 import { readFile, writeFile } from "fs/promises";
 import puppeteer from "puppeteer";
-import {
-  configGeneral,
-  configPaths,
-  CONFIG_ENV,
-} from "../config/configLocalAndEnv";
+import { configPaths, CONFIG_ENV } from "../config/configLocalAndEnv";
 import {
   IScenarioStep,
   IScreen,
@@ -28,32 +24,47 @@ export async function writeFileJson(
   pathBase: string,
   title: string,
   data: object
-) {
+): Promise<boolean> {
   const title_ = title.replace(/\//g, "_");
   const jsondata = JSON.stringify(data, null, 2);
-  writeFile(pathBase + title_, jsondata, "utf8");
+  try {
+    writeFile(pathBase + title_, jsondata, "utf8");
+    const success = true;
+    return success;
+  } catch {
+    console.log("error in writing:", pathBase + title_);
+    return false;
+  }
 }
 
 /*************** Screenshoots with Puppeteer ************************/
 
 const scenarios: IScenarioStep[] = [
+  {
+    id: TScenarioStepID.home,
+    url: configPaths.pages.Home,
+    text: "",
+  },
   // {
-  //   id: TScenarioStepID.home,
-  //   url: configPaths.pages.Home,
+  //   id: TScenarioStepID.knowbooks,
+  //   url: configPaths.pages.Knowbooks,
   //   text: "",
+  //   // additionnal_element: knowbookIcons,
   // },
-  {
-    id: TScenarioStepID.knowbooks,
-    url: configPaths.pages.Knowbooks,
-    text: "",
-    // additionnal_element: knowbookIcons,
-  },
-  {
-    id: TScenarioStepID.knowbook,
-    url: configPaths.pages.Knowbook + "?nameOrPeriod=Europe",
-    text: "",
-    // additionnal_element: knowbookIcons,
-  },
+  // {
+  //   id: TScenarioStepID.knowbook,
+  //   url: configPaths.pages.Knowbook + "?name=Europe",
+  //   text: "",
+  //   // additionnal_element: knowbookIcons,
+  // },
+  // {
+  //   id: TScenarioStepID.itemArticle,
+  //   url:
+  //     configPaths.pages.ItemNetwork +
+  //     "?title=Albert+Einstein&id=Q937&articleOpen=toto",
+  //   text: "",
+  //   // additionnal_element: topIcon,
+  // },
   // {
   //   id: TScenarioStepID.itemArticle,
   //   url:
@@ -63,41 +74,20 @@ const scenarios: IScenarioStep[] = [
   //   // additionnal_element: topIcon,
   // },
   {
-    id: TScenarioStepID.itemArticle,
-    url:
-      configPaths.pages.ItemFlat +
-      "?title=Albert+Einstein&id=Q937&articleOpen=toto",
-    text: "",
-    // additionnal_element: topIcon,
-  },
-  {
     id: TScenarioStepID.search,
     url: configPaths.pages.Search + "?search=einstein",
     text: "",
   },
   // {
-  //   id: TScenarioStepID.itemCircle,
-  //   url: configPaths.pages.ItemCircle + "?title=Albert+Einstein&id=Q937",
+  //   id: TScenarioStepID.itemNetwork,
+  //   url: configPaths.pages.ItemNetwork + "?title=Albert+Einstein&id=Q937",
   //   text: "",
   // },
   {
     id: TScenarioStepID.itemNetwork,
-    url: configPaths.pages.ItemNetwork + "?title=Albert+Einstein&id=Q937",
+    url: configPaths.pages.ItemNetwork + "?title=Supernova&id=Q3937",
     text: "",
   },
-  // {
-  //   id: TScenarioStepID.mostviewed,
-  //   url:
-  //     configPaths.pages.KnowbookSpecial +
-  //     "?pageType=" +
-  //     TSpecialPages.Mostviewed,
-  //   text: "",
-  // },
-  // {
-  //   id: TScenarioStepID.language,
-  //   url: configPaths.pages.User,
-  //   text: "",
-  // },
 ];
 
 function pathScreenshots(
@@ -127,6 +117,8 @@ async function makeOneScreenshoot(
     height: screen.height,
   });
   await page.goto(url, { waitUntil: "networkidle0" });
+  // Wait 10 more seconds
+  // await page.waitForTimeout(20000);
   // await page.reload({ waitUntil: ["networkidle0"] }); //Uncomment to generate screenshots not working (full white)
   await page.screenshot({ path: pathFilename, omitBackground: true });
   console.log(pathFilename, "saved...");
@@ -191,7 +183,8 @@ export async function makeScreenshoots(): Promise<void> {
   }
 
   const browser = await puppeteer.launch({
-    headless: true,
+    // headless: true,
+    headless: "new",
   });
 
   for (const screen of screen_l) {

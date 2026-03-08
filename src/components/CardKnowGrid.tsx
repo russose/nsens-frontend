@@ -8,7 +8,9 @@ import CardKnow from "./CardKnow";
 interface ICardKnowGridProps {
   id: string;
   stores: IStores;
-  knowbooks: ICardKnowProps[];
+  cardKnowProps: ICardKnowProps[];
+
+  size_factor?: number;
 }
 
 const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
@@ -16,15 +18,15 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
   const card_sizes = GUI_CONFIG.display.knowbook_sizes;
 
   if (
-    props.knowbooks === undefined ||
-    props.knowbooks === null ||
-    props.knowbooks.length === 0
+    props.cardKnowProps === undefined ||
+    props.cardKnowProps === null ||
+    props.cardKnowProps.length === 0
   ) {
     return <></>;
   } else {
     return (
       <Box wrap={true} display="flex" direction="row" justifyContent="around">
-        {props.knowbooks
+        {props.cardKnowProps
           .filter((item_) => {
             return item_ !== undefined;
           })
@@ -39,19 +41,25 @@ const CardKnowGrid: React.FunctionComponent<ICardKnowGridProps> = (props) => {
                 mdPadding={card_sizes.mdPadding as PaddingT}
                 smPadding={card_sizes.smPadding as PaddingT}
                 padding={card_sizes.padding as PaddingT}
-                key={`Box-CardKnowGrid-${props.id}-${item.id}`}
+                key={`Box-CardKnowGrid-${props.id}-${item.knowbook.id}-${item.knowbook.name}`}
               >
                 <CardKnow
-                  key={`CardKnowGrid-${props.id}-${item.id}`}
-                  id={item.id}
+                  key={`CardKnowGrid-${props.id}-${item.knowbook.id}-${item.knowbook.name}`}
+                  id={item.knowbook.id}
                   stores={props.stores}
-                  title={item.title}
-                  image_url={item.image_url}
+                  knowbook={item.knowbook}
+                  // title={item.knowbook.name}
+                  // image_url={item.knowbook.image_url}
                   color_image={item.color_image}
                   image_handler={item.image_handler}
-                  amount={item.amount}
-                  rename_handler={item.rename_handler}
-                  delete_handler={item.delete_handler}
+                  // amount={item.knowbook.amount}
+                  // followPublic_handler={item.followPublic_handler}
+                  // delete_handler={item.delete_handler}
+                  // followPublic_color={item.followPublic_color}
+                  buttons={item.buttons}
+                  // nb_saved={item.knowbook.nb_saved}
+                  // public={item.knowbook.public}
+                  size_factor={props.size_factor}
                 />
               </Box>
             );

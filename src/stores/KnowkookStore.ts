@@ -1,90 +1,142 @@
-import { observable, action, makeObservable, computed } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import {
   AtomID,
-  Tlanguage,
-  IKnowbook,
-  IKnowbookStatic,
-  KnowbookID,
-  StaticKnowbookFamilyType,
   IAtom,
+  IKnowbook,
+  KnowbookID,
+  KnowbookName,
 } from "../config/globals";
-import { getRandomImageFromItems } from "../libs/utils";
+import { PLATFORM_OWNER_USERNAME } from "./../config/configStaticKnowbooks";
 import { RootStore } from "./RootStore";
 
 export class KnowkookStore {
   $rootStore: RootStore;
+
+  //Contains all knowbooks of the user (public or private)
   private $knowbooks = observable.map<KnowbookID, IKnowbook>();
-  private $staticKnowbooks = observable.map<KnowbookID, IKnowbookStatic>();
-  private $imgKnowbooks = observable.map<KnowbookID, string>();
-  private $imgStaticKnowbooks = observable.map<KnowbookID, string>();
+
+  private $followedPublicKnowbooks = observable.set<KnowbookID>();
+
+  private $historyPublicKnowbooks = observable.map<KnowbookID, IKnowbook>(); //Containing all publicKnowbooks related
 
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
     makeObservable<KnowkookStore>(this, {
       init: action,
       setKnowbook: action,
-      clearStaticKnowbooks: action,
       clearKnowbooks: action,
       deleteKnowbook: action,
       setKnowbooksFromList: action,
-      setStaticKnowbooks: action,
-      addItemInKnowbook: action,
-      removeItemFromKnowbook: action,
+      addItemInKnowbookStore: action,
+      removeItemFromKnowbookStore: action,
       renameKnowbook: action,
-      setImageKnowbook: action,
-      setImageStaticKnowbook: action,
-      itemsInStaticKnowbooksForHome: computed,
+      setImage: action,
+      // setPublic: action,
+      setPublicDesciptionSource: action,
+      setPublicKnowbooks: action,
+      setFollowedPublicKnowbooks: action,
+      deleteFollowedPublicKnowbook: action,
+      getSelectedKnowbook: computed,
     });
   }
 
   init() {
-    this.clearStaticKnowbooks();
     this.clearKnowbooks();
+    this.$followedPublicKnowbooks.clear();
+    this.$historyPublicKnowbooks.clear();
   }
 
-  /**
-   * Images
-   */
-
-  getImageKnowbook(name: KnowbookID): string {
-    return this.$imgKnowbooks.get(name);
+  get followedPublicKnowbooks() {
+    return this.$followedPublicKnowbooks;
   }
-
-  getImageStaticKnowbook(name: KnowbookID): string {
-    return this.$imgStaticKnowbooks.get(name);
-  }
-
-  setImageKnowbook(name: KnowbookID) {
-    let image_url = "";
-    let i = 0;
-    while (image_url === "" && i < 5) {
-      image_url = getRandomImageFromItems(this.knowbookAtomsList(name));
-      i = i + 1;
-    }
-    this.$imgKnowbooks.set(name, image_url);
-  }
-
-  setImageStaticKnowbook(name: KnowbookID, image_url: string) {
-    // if (!this.$imgStaticKnowbooks.has(name)) {
-    // To avoid that initial setup from extract is modified
-    this.$imgStaticKnowbooks.set(
-      name,
-      // getRandomImageFromItems(this.staticKnowbooks.get(name).items)
-      image_url
-    );
-    // }
-  }
-
-  /**
-   * Knowbook
-   */
 
   get knowbooks() {
     return this.$knowbooks;
   }
+
+  get historyPublicKnowbooks() {
+    return this.$historyPublicKnowbooks;
+  }
+
+  getKnowbookFromId(
+    id: KnowbookID,
+    privateOnly = false,
+    publicOnly = false
+  ): IKnowbook {
+    if (privateOnly) {
+      if (this.$knowbooks.has(id)) {
+        return this.$knowbooks.get(id);
+      } else {
+        return undefined;
+      }
+    }
+    if (publicOnly) {
+      if (this.$historyPublicKnowbooks.has(id)) {
+        return this.$historyPublicKnowbooks.get(id);
+      } else {
+        return undefined;
+      }
+    }
+
+    // comes first since $knowbooks has both private and public knowbook from me
+    if (this.$knowbooks.has(id)) {
+      return this.$knowbooks.get(id);
+    }
+
+    if (this.$historyPublicKnowbooks.has(id)) {
+      return this.$historyPublicKnowbooks.get(id);
+    }
+
+    return undefined;
+  }
+
+  get getSelectedKnowbook(): IKnowbook {
+    const key = this.$rootStore.stores().uiStore.selectedKnowbook;
+    return this.getKnowbookFromId(key);
+  }
+
+  getPublicKnowbooks_all(): IKnowbook[] {
+    return Array.from(this.$historyPublicKnowbooks.values());
+  }
+
+  setPublicKnowbooks(knowbooks: IKnowbook[]): void {
+    if (knowbooks === undefined || knowbooks.length === 0) {
+      return;
+    }
+
+    knowbooks.forEach((knowbook) => {
+      if (knowbook.owner === -1) {
+        knowbook.owner_username = PLATFORM_OWNER_USERNAME;
+      }
+      if (
+        (this.$historyPublicKnowbooks.has(knowbook.id) &&
+          knowbook.items.length !== 0) ||
+        !this.$historyPublicKnowbooks.has(knowbook.id)
+      ) {
+        this.$historyPublicKnowbooks.set(knowbook.id, knowbook);
+      }
+    });
+  }
+
+  setFollowedPublicKnowbooks(knowbooks: IKnowbook[]): void {
+    if (knowbooks === undefined || knowbooks.length === 0) {
+      return;
+    }
+
+    knowbooks.forEach((knowbook) => {
+      this.$followedPublicKnowbooks.add(knowbook.id);
+    });
+
+    // ensure knowbooks are stored in historyPublicKnowbooks
+    this.setPublicKnowbooks(knowbooks);
+  }
+
+  deleteFollowedPublicKnowbook(key: KnowbookID): void {
+    this.$followedPublicKnowbooks.delete(key);
+  }
+
   setKnowbook(key: KnowbookID, item: IKnowbook) {
     this.$knowbooks.set(key, item);
-    this.setImageKnowbook(key);
   }
 
   setKnowbooksFromList(knowbooks: IKnowbook[]): void {
@@ -93,34 +145,96 @@ export class KnowkookStore {
     }
 
     knowbooks.forEach((knowbook) => {
-      this.setKnowbook(knowbook.name, knowbook);
+      this.setKnowbook(knowbook.id, knowbook);
     });
-  }
-
-  get staticKnowbooks() {
-    return this.$staticKnowbooks;
-  }
-  setStaticKnowbooks(key: KnowbookID, knowbook: IKnowbookStatic) {
-    this.$staticKnowbooks.set(key, knowbook);
-    // this.setImageStaticKnowbook(key);
-  }
-
-  clearStaticKnowbooks(): void {
-    this.$staticKnowbooks.clear();
-    this.$imgStaticKnowbooks.clear();
   }
 
   clearKnowbooks(): void {
     this.$knowbooks.clear();
-    this.$imgKnowbooks.clear();
   }
   deleteKnowbook(key: KnowbookID): void {
     this.$knowbooks.delete(key);
   }
-  addItemInKnowbook(
+
+  renameKnowbook(id: KnowbookID, new_name: KnowbookName): void {
+    if (
+      new_name === "" ||
+      !this.knowbooks.has(id)
+      // ||
+      // this.knowbooks.has(new_name)
+    ) {
+      return;
+    }
+
+    const is_any_knowbooks_with_new_name: boolean = Array.from(
+      this.knowbooks.values()
+    )
+      .map((knowbook) => {
+        return knowbook.name;
+      })
+      .includes(new_name);
+
+    if (is_any_knowbooks_with_new_name) {
+      return;
+    }
+
+    const knowbook: IKnowbook = this.knowbooks.get(id);
+    knowbook.name = new_name;
+    this.knowbooks.delete(id);
+    this.knowbooks.set(id, knowbook);
+  }
+
+  setImage(knowbookId: KnowbookID, image_url: string) {
+    if (knowbookId === undefined || image_url === undefined) {
+      return;
+    }
+    const knowbook = this.knowbooks.get(knowbookId);
+    if (knowbook === undefined) {
+      return;
+    }
+
+    knowbook.image_url = image_url;
+    this.$knowbooks.set(knowbookId, knowbook);
+  }
+
+  // setPublic(knowbookId: KnowbookID, isPublic: boolean) {
+  //   if (knowbookId === undefined || isPublic === undefined) {
+  //     return;
+  //   }
+  //   const knowbook = this.knowbooks.get(knowbookId);
+  //   if (knowbook === undefined) {
+  //     return;
+  //   }
+
+  //   knowbook.public = isPublic;
+  //   this.$knowbooks.set(knowbookId, knowbook);
+  // }
+
+  setPublicDesciptionSource(
+    knowbookId: KnowbookID,
+    isPublic: boolean,
+    description: string,
+    sourceUrl: string
+  ) {
+    if (knowbookId === undefined || isPublic === undefined) {
+      return;
+    }
+    const knowbook = this.knowbooks.get(knowbookId);
+    if (knowbook === undefined) {
+      return;
+    }
+
+    knowbook.public = isPublic;
+    knowbook.description = description !== undefined ? description : "";
+    knowbook.sourceUrl = sourceUrl !== undefined ? sourceUrl : "";
+
+    this.$knowbooks.set(knowbookId, knowbook);
+  }
+
+  addItemInKnowbookStore(
     knowbookID: KnowbookID,
-    atomId: AtomID,
-    lang: Tlanguage
+    atomId: AtomID
+    // lang: Tlanguage
   ): void {
     if (!this.$knowbooks.has(knowbookID)) {
       return;
@@ -133,18 +247,24 @@ export class KnowkookStore {
 
     const items_updated: AtomID[] = knowbook_to_update.items.concat(atomId);
 
-    this.$knowbooks.set(knowbookID, {
-      id: knowbook_to_update.id,
-      language: lang,
-      name: knowbook_to_update.name,
-      items: items_updated,
-    });
+    knowbook_to_update.items = items_updated;
+    this.$knowbooks.set(knowbookID, knowbook_to_update);
+
+    // this.$knowbooks.set(knowbookID, {
+    //   id: knowbook_to_update.id,
+    //   language: knowbook_to_update.language,
+    //   name: knowbook_to_update.name,
+    //   items: items_updated,
+    //   image_url: knowbook_to_update.image_url,
+    //   image_rank: knowbook_to_update.image_rank,
+    //   public: knowbook_to_update.public,
+    // });
   }
 
-  removeItemFromKnowbook(
+  removeItemFromKnowbookStore(
     knowbookID: KnowbookID,
-    atomId: AtomID,
-    lang: Tlanguage
+    atomId: AtomID
+    // lang: Tlanguage
   ): void {
     if (!this.$knowbooks.has(knowbookID)) {
       return;
@@ -157,48 +277,18 @@ export class KnowkookStore {
       }
     );
 
-    this.$knowbooks.set(knowbookID, {
-      id: knowbook_to_update.id,
-      language: lang,
-      name: knowbook_to_update.name,
-      items: items_updated,
-    });
-  }
+    knowbook_to_update.items = items_updated;
+    this.$knowbooks.set(knowbookID, knowbook_to_update);
 
-  renameKnowbook(name: KnowbookID, new_name: KnowbookID): void {
-    if (
-      new_name === "" ||
-      !this.knowbooks.has(name) ||
-      this.knowbooks.has(new_name)
-    ) {
-      return;
-    }
-
-    const knowbook: IKnowbook = this.knowbooks.get(name);
-    knowbook.name = new_name;
-    this.knowbooks.delete(name);
-    this.knowbooks.set(new_name, knowbook);
-  }
-
-  itemsInStaticKnowbooks(ids: KnowbookID[]): Set<AtomID> {
-    const itemsInStaticKnowbooks_ = new Set<AtomID>();
-    for (let knowbookId of ids) {
-      this.staticKnowbooks.get(knowbookId).items.forEach((item) => {
-        itemsInStaticKnowbooks_.add(item.id);
-      });
-    }
-    return itemsInStaticKnowbooks_;
-  }
-
-  get itemsInStaticKnowbooksForHome(): Set<AtomID> {
-    const knowbookIds: KnowbookID[] = [];
-    this.staticKnowbooks.forEach((staticknowbook, name) => {
-      if (staticknowbook.type !== StaticKnowbookFamilyType.TREND) {
-        knowbookIds.push(name);
-      }
-    });
-
-    return this.itemsInStaticKnowbooks(knowbookIds);
+    // this.$knowbooks.set(knowbookID, {
+    //   id: knowbook_to_update.id,
+    //   language: knowbook_to_update.language,
+    //   name: knowbook_to_update.name,
+    //   items: items_updated,
+    //   image_url: knowbook_to_update.image_url,
+    //   image_rank: knowbook_to_update.image_rank,
+    //   public: knowbook_to_update.public,
+    // });
   }
 
   savedAtomsFromIds(list_atoms: AtomID[]): IAtom[] {
@@ -222,35 +312,35 @@ export class KnowkookStore {
     return result_no_undefined;
   }
 
-  knowbookAtomsList(knowbookID: KnowbookID): IAtom[] {
-    if (!this.knowbooks.has(knowbookID)) {
-      // console.log("impossible to provide Atoms List from knowbook");
-      return [];
-    } else {
-      const stores = this.$rootStore.stores();
-      const my_knowbook = stores.knowbookStore.knowbooks.get(knowbookID);
-      if (my_knowbook !== undefined) {
-        return this.savedAtomsFromIds(my_knowbook.items);
-      } else {
-        // console.log("impossible to provide Atoms List from knowbook 2");
-        return [];
-      }
-    }
-  }
+  // knowbookAtomsList(knowbookID: KnowbookID): IAtom[] {
+  //   if (!this.knowbooks.has(knowbookID)) {
+  //     // console.log("impossible to provide Atoms List from knowbook");
+  //     return [];
+  //   } else {
+  //     const stores = this.$rootStore.stores();
+  //     const my_knowbook = stores.knowbookStore.knowbooks.get(knowbookID);
+  //     if (my_knowbook !== undefined) {
+  //       return this.savedAtomsFromIds(my_knowbook.items);
+  //     } else {
+  //       // console.log("impossible to provide Atoms List from knowbook 2");
+  //       return [];
+  //     }
+  //   }
+  // }
 
-  knowbookStaticAtomsList(knowbookID: KnowbookID): IAtom[] {
-    if (!this.staticKnowbooks.has(knowbookID)) {
-      // console.log("impossible to provide Atoms List from knowbook");
-      return [];
-    } else {
-      const stores = this.$rootStore.stores();
-      const my_knowbook = stores.knowbookStore.staticKnowbooks.get(knowbookID);
-      if (my_knowbook !== undefined) {
-        return my_knowbook.items;
-      } else {
-        // console.log("impossible to provide Atoms List from knowbook 2");
-        return [];
-      }
-    }
-  }
+  // knowbookStaticAtomsList(knowbookID: KnowbookID): IAtom[] {
+  //   if (!this.staticKnowbooks.has(knowbookID)) {
+  //     // console.log("impossible to provide Atoms List from knowbook");
+  //     return [];
+  //   } else {
+  //     const stores = this.$rootStore.stores();
+  //     const my_knowbook = stores.knowbookStore.staticKnowbooks.get(knowbookID);
+  //     if (my_knowbook !== undefined) {
+  //       return my_knowbook.items;
+  //     } else {
+  //       // console.log("impossible to provide Atoms List from knowbook 2");
+  //       return [];
+  //     }
+  //   }
+  // }
 }

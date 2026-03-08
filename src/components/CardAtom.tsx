@@ -1,7 +1,18 @@
-import { Box, IconButton } from "gestalt";
+import { Box, Icon, IconButton } from "gestalt";
 import { observer } from "mobx-react-lite";
-import { configGeneral, CUSTOM_ICONS, RoundingT } from "../config/globals";
-import { AtomID, TButtonID, handlerT, IconT } from "../config/globals";
+import {
+  AtomID,
+  CUSTOM_ICONS,
+  IconT,
+  RoundingT,
+  TButtonID,
+  TSource,
+  buttons_all,
+  configGeneral,
+  configPaths,
+  handlerT,
+} from "../config/globals";
+import { getSourceFromId } from "../libs/utils";
 import { IStores } from "../stores/RootStore";
 import Button from "./Button";
 import CardGeneric from "./CardGeneric";
@@ -12,30 +23,52 @@ interface ICardAtomProps {
   stores: IStores;
   title: string;
   image_url: string;
-  // pathname: string;
-  // queryObject?: any;
   image_handler: handlerT;
-  saved_actionable: boolean;
-  saved_enabled: boolean;
-  saved_handler: handlerT;
+  isInAnyKnowbook: boolean;
   edit_handler: handlerT;
   top_handler: handlerT;
+  source: TSource;
   size_factor?: number;
-  // viz?: boolean;
+
+  externalyzeTitle?: boolean;
 }
 
 const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
   const GUI_CONFIG = props.stores.baseStore.GUI_CONFIG;
   const size_icon: IconT = GUI_CONFIG.display.size_icon_card;
+  const size_icon_type: IconT = GUI_CONFIG.display.size_icon_card_type;
   const color_item = configGeneral.colors.item_color;
-  const buttons_all = GUI_CONFIG.language.buttons;
   const card_sizes = GUI_CONFIG.display.atom_sizes;
   const rounding: RoundingT = GUI_CONFIG.display.rounding_item;
+
+  const type = getSourceFromId(props.id);
+  // let icon = undefined;
+  let __path = undefined;
+
+  if (type === TSource.wiki) {
+    __path = CUSTOM_ICONS.WIKI;
+  } else if (type === TSource.arxiv) {
+    __path = CUSTOM_ICONS.GRADUATE_USER;
+  } else if (type === TSource.books) {
+    __path = CUSTOM_ICONS.BOOKS;
+  }
+
+  const TypeIcon = (
+    <Icon
+      accessibilityLabel="Type of Atom"
+      // icon={icon as any}
+      dangerouslySetSvgPath={{
+        __path: __path,
+      }}
+      color="dark"
+      size={size_icon_type}
+    />
+  );
 
   const topIcon = (
     <Button
       stores={props.stores}
-      icon={CUSTOM_ICONS.NETWORK as any}
+      icon={CUSTOM_ICONS.FORK as any}
       label="ItemPageDefault"
       icon_size={size_icon}
       bgColor="lightGray"
@@ -43,6 +76,11 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
       onClick={props.top_handler}
     />
   );
+
+  let image_url = props.image_url;
+  if (props.source === TSource.arxiv) {
+    image_url = configPaths.arxiv_image;
+  }
 
   return (
     <LazyComponent
@@ -57,37 +95,27 @@ const CardAtom: React.FunctionComponent<ICardAtomProps> = (props) => {
           id={props.id}
           stores={props.stores}
           title={props.title}
-          image_url={props.image_url}
+          image_url={image_url}
           color={color_item}
           sizes={card_sizes}
           rounding={rounding}
           image_handler={props.image_handler}
           TopIcon={topIcon}
+          TypeIcon={TypeIcon}
           size_factor={props.size_factor}
+          externalyzeTitle={props.externalyzeTitle}
         >
           <Box paddingX={0}>
-            {props.saved_enabled && (
-              <IconButton
-                accessibilityLabel="edit"
-                icon={buttons_all[TButtonID.EDIT].icon as IconT}
-                iconColor={configGeneral.colors.iconColorDefault as any}
-                size={size_icon}
-                onClick={props.edit_handler}
-              />
-            )}
-          </Box>
-          <Box paddingX={0}>
             <IconButton
-              accessibilityLabel="save"
-              icon={buttons_all[TButtonID.SAVE].icon as IconT}
+              accessibilityLabel="edit"
+              icon={buttons_all[TButtonID.EDIT_CONTENT].icon as IconT}
               iconColor={
-                props.saved_enabled
+                props.isInAnyKnowbook
                   ? (configGeneral.colors.iconColorDefaultSelected as any)
                   : (configGeneral.colors.iconColorDefaultNotSelected as any)
               }
               size={size_icon}
-              onClick={props.saved_handler}
-              disabled={!props.saved_actionable}
+              onClick={props.edit_handler}
             />
           </Box>
         </CardGeneric>

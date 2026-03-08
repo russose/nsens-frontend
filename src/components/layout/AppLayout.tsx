@@ -1,10 +1,13 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
 import dynamic from "next/dynamic";
-import { IparamsPage, TDisplay } from "../../config/globals";
-import { useStores } from "../../stores/RootStoreHook";
-import { switchDisplayWhenResized } from "../../libs/helpersBase";
 import { useRouter } from "next/router";
+import React from "react";
+import { IparamsPage, TDisplay, initStateCat } from "../../config/globals";
+import {
+  getDisplayFromWindow,
+  switchDisplayWhenResized,
+} from "../../libs/helpersBase";
+import { useStores } from "../../stores/RootStoreHook";
 
 interface IProps {
   children?: React.ReactNode;
@@ -18,9 +21,21 @@ const AppLayout: React.FunctionComponent<IProps> = (props) => {
   const stores = useStores();
   const router = useRouter();
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && router.isReady) {
+    //check that link is consistent with screen, otherwise redirect to the right mode
+    if (
+      stores.uiStore.getInitCompleted(initStateCat.alreadyRendered) ===
+      undefined
+    ) {
+      stores.uiStore.setInitCompleted(initStateCat.alreadyRendered, true);
+
+      if (!router.asPath.includes(getDisplayFromWindow())) {
+        switchDisplayWhenResized(stores, router, true);
+      }
+    }
+
     window.onresize = () => {
-      switchDisplayWhenResized(stores, router);
+      switchDisplayWhenResized(stores, router, false);
     };
   }
 

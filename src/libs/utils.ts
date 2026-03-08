@@ -1,9 +1,117 @@
-import { AtomID, Tlanguage, IAtom, configPaths } from "../config/globals";
-import { IStores } from "../stores/RootStore";
+import {
+  AtomID,
+  IAtom,
+  IKnowbook,
+  IKnowbookFull,
+  IRelatedAtom,
+  IRelatedAtomFull,
+  TPrefixSource,
+  TSource,
+  Tlanguage,
+} from "../config/globals";
+
+export function IKnowbookFull2IKnowbook(
+  knowbookFull: IKnowbookFull
+): IKnowbook {
+  return {
+    id: knowbookFull.id,
+    name: knowbookFull.name,
+    description: knowbookFull.description,
+    sourceUrl: knowbookFull.sourceUrl,
+    owner: knowbookFull.owner,
+    owner_username: knowbookFull.owner_username,
+    language: knowbookFull.language,
+    public: knowbookFull.public,
+    nb_saved: knowbookFull.nb_saved,
+    image_url: knowbookFull.image_url,
+    items: knowbookFull.items.map((item) => {
+      return item.id;
+    }),
+  };
+}
+
+export function IRelatedAtomFull2IRelatedAtom(
+  relatedFullList: IRelatedAtomFull[]
+): IRelatedAtom[] {
+  const relatedList: IRelatedAtom[] = relatedFullList.map((relatedItem) => {
+    return {
+      relation: relatedItem.relation,
+      item: relatedItem.item.id,
+    };
+  });
+
+  return relatedList;
+}
+
+export function getSourceFromId(id: AtomID): TSource {
+  let source: TSource = TSource.wiki;
+
+  if (id.includes(TPrefixSource.arxiv)) {
+    source = TSource.arxiv;
+  } else if (id.includes(TPrefixSource.books)) {
+    source = TSource.books;
+  }
+
+  return source;
+}
+
+// export function getSourceFromId(id: AtomID): TSource {
+//   let source: TSource = TSource.wiki;
+
+//   if (id.includes(".")) {
+//     source = TSource.arxiv;
+//   }
+
+//   return source;
+// }
+
+export function stringList2String(array: string[], separator: string): string {
+  let list_of_string = "";
+  Object.values(array).forEach((item: string) => {
+    if (item !== undefined) {
+      list_of_string = list_of_string + item + separator;
+    }
+  });
+
+  if (list_of_string === "") {
+    return "";
+  } else {
+    list_of_string = list_of_string.slice(0, -1);
+  }
+  return list_of_string.slice(0, -1);
+}
+
+// export const buildPublicName_separator = " (";
+export function buildPublicName(name: string, owner_username: string): string {
+  return name + " (" + owner_username + ")";
+}
+
+export function copyToClipboard(content: string) {
+  if (typeof window !== "undefined") {
+    // console.log(content);
+    navigator.clipboard.writeText(content);
+  }
+}
 
 export function range(amount_element: number): number[] {
   //=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   return Array.from(Array(amount_element).keys());
+}
+
+export function suite(
+  start: number,
+  end: number,
+  delta: number,
+  precision = 2
+): number[] {
+  const output = [];
+  let value = start;
+  while (value <= end) {
+    output.push(value);
+    value = Number.parseFloat((value + delta).toFixed(precision));
+  }
+
+  return output;
 }
 
 // export const empty_handler = () => {};
@@ -76,8 +184,14 @@ export function newAtom(
       image_url: empty_value_atom,
       image_width: -1,
       image_height: -1,
-      thumbnail_url: empty_value_atom,
+      // thumbnail_url: empty_value_atom,
       related: empty_value_atom,
+      source: TSource.wiki,
+
+      url: "",
+      author: "",
+      summary: "",
+      attachment: "",
     };
     return atom;
   } else {
@@ -91,8 +205,14 @@ export function newAtom(
       image_url: itemToCopy.image_url,
       image_width: itemToCopy.image_width,
       image_height: itemToCopy.image_height,
-      thumbnail_url: itemToCopy.thumbnail_url,
+      // thumbnail_url: itemToCopy.thumbnail_url,
       related: itemToCopy.related,
+      source: TSource.wiki,
+
+      url: itemToCopy.url,
+      author: itemToCopy.author,
+      summary: itemToCopy.summary,
+      attachment: itemToCopy.attachment,
     };
     return item_copy;
   }
@@ -114,20 +234,22 @@ export function getRandomImageFromItems(items: IAtom[]): string {
   }
 }
 
-export function path_link_main_item_page(id: AtomID, stores: IStores): string {
-  if (
-    stores.baseStore.screen === undefined ||
-    stores.baseStore.screen.height === undefined
-  ) {
-    return configPaths.pages.ItemNetwork;
-  }
+// export function path_link_main_item_page(id: AtomID, stores: IStores): string {
+//   if (
+//     stores.baseStore.screen === undefined ||
+//     stores.baseStore.screen.height === undefined
+//   ) {
+//     return configPaths.pages.ItemNetwork;
+//   }
 
-  if (stores.baseStore.screen.width <= 375) {
-    return configPaths.pages.ItemFlat;
-  } else {
-    return configPaths.pages.ItemNetwork;
-  }
-}
+//   // if (stores.baseStore.screen.width <= 375) {
+//   //   return configPaths.pages.ItemFlat;
+//   // } else {
+//   //   return configPaths.pages.ItemNetwork;
+//   // }
+
+//   return configPaths.pages.ItemNetwork;
+// }
 
 export function hasTouchScreen(window: any): boolean {
   //https://developer.mozilla.org/fr/docs/Web/API/Navigator
@@ -219,7 +341,7 @@ export function sleep(milliseconds: number) {
   } while (currentDate - date < milliseconds);
 }
 
-export function sleep_(ms: number) {
+export async function sleep_(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 

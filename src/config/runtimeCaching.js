@@ -42,8 +42,8 @@ module.exports = [
     options: {
       cacheName: "static-image-assets",
       expiration: {
-        maxEntries: 640,
-        maxAgeSeconds: 6 * 30 * 24 * 60 * 60, // 6*30 days
+        maxEntries: 128,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
       },
     },
   },
@@ -75,8 +75,8 @@ module.exports = [
     options: {
       cacheName: "static-js-assets",
       expiration: {
-        maxEntries: 320,
-        maxAgeSeconds: 6 * 30 * 24 * 60 * 60, // 6*30 * days
+        maxEntries: 128,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 * days
       },
     },
   },
@@ -87,21 +87,21 @@ module.exports = [
       cacheName: "static-style-assets",
       expiration: {
         maxEntries: 32,
-        maxAgeSeconds: 6 * 30 * 24 * 60 * 60, // 6*30 * days
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 * days
       },
     },
   },
-  // {
-  //   urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
-  //   handler: "StaleWhileRevalidate",
-  //   options: {
-  //     cacheName: "next-data",
-  //     expiration: {
-  //       maxEntries: 32,
-  //       maxAgeSeconds: 24 * 60 * 60, // 24 hours
-  //     },
-  //   },
-  // },
+  {
+    urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
+    handler: "StaleWhileRevalidate",
+    options: {
+      cacheName: "next-data",
+      expiration: {
+        maxEntries: 32,
+        maxAgeSeconds: 24 * 60 * 60, // 24 hours
+      },
+    },
+  },
   // {
   //   urlPattern: /\.(?:json|xml|csv)$/i,
   //   handler: "NetworkFirst",
@@ -118,10 +118,10 @@ module.exports = [
   //     const isSameOrigin = self.origin === url.origin;
   //     if (!isSameOrigin) return false;
   //     const pathname = url.pathname;
-  //     // Exclude /api/auth/callback/* to fix OAuth workflow in Safari without impact other environment
+  //     // Exclude /api/public/callback/* to fix OAuth workflow in Safari without impact other environment
   //     // Above route is default for next-auth, you may need to change it if your OAuth workflow has a different callback route
   //     // Issue: https://github.com/shadowwalker/next-pwa/issues/131#issuecomment-821894809
-  //     // if (pathname.startsWith("/api/auth/")) return false;
+  //     // if (pathname.startsWith("/api/public/")) return false;
   //     if (pathname.startsWith("/api/")) return true;
   //     return false;
   //   },
@@ -180,7 +180,12 @@ module.exports = [
       // if (pathname.startsWith("/api/")) return false;
 
       const pathname = url.pathname;
-      if (pathname.startsWith("/nsens_v1/")) return false;
+      if (
+        pathname.startsWith("/nsens_v1/") &&
+        !pathname.includes("/public/knowbooksPublic/best/")
+      )
+        return false;
+      // if (pathname.startsWith("/nsens_v1/")) return false;
 
       return true;
     },
@@ -188,8 +193,8 @@ module.exports = [
     options: {
       cacheName: "others",
       expiration: {
-        maxEntries: 320,
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 * days
+        maxEntries: 64,
+        maxAgeSeconds: 24 * 60 * 60, // 24 * hours
       },
       // networkTimeoutSeconds: 10,
     },

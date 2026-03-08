@@ -1,158 +1,91 @@
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
-import React from "react";
-import { useStores } from "../../../src/stores/RootStoreHook";
-import { I_getStaticPaths } from "../../../src/libs/getDataParamsPage";
-import {
-  configFetching,
-  configGeneral,
-  configPaths,
-  ICardKnowProps,
-  TSpecialPages,
-} from "../../../src/config/globals";
+import React, { useEffect } from "react";
 import HeaderSEO from "../../../src/components/HeaderSEO";
-import { initializeApp } from "../../../src/libs/helpersInitialize";
 import AppLayout from "../../../src/components/layout/AppLayout";
-import dynamic from "next/dynamic";
-import { onGoNotebookPage } from "../../../src/handlers/handlers_Navigation";
+import { configGeneral, initStateCat } from "../../../src/config/globals";
 import {
-  IPageStaticKnowbooks,
+  IPage,
+  I_getStaticPaths,
   I_getStaticProps,
-} from "../../../src/libs/getDataStaticKnowbooksMain";
+} from "../../../src/libs/getDataParamsPage";
+
+import { Box, Button } from "gestalt";
+import dynamic from "next/dynamic";
 import HeaderTitle from "../../../src/components/HeaderTitle";
+import { fetchMoreBestPublicKnowbooks } from "../../../src/libs/helpersBase";
+import { initializeApp } from "../../../src/libs/helpersInitialize";
 import { makeScreenshoots } from "../../../src/libs/utilsServer";
-import { buildAllStaticKnowbooks } from "../../../src/libs/getDataStaticKnowbooksHelpers";
+import { useStores } from "../../../src/stores/RootStoreHook";
 
-const CardKnowGrid_D = dynamic(
-  () => import("../../../src/components/CardKnowGrid"),
+const CardKnowGridPublicKnowbooks_D = dynamic(
+  () => import("../../../src/components/ContentCardKnowGridPublicKnowbooks"),
   {
     ssr: false,
   }
 );
 
-const CardKnowPageLogged_D = dynamic(
-  () => import("../../../src/components/CardKnowPage_Logged"),
-  {
-    ssr: false,
-  }
-);
-
-// async function initializeStaticKnowbooksMain(
-//   stores: IStores,
-//   staticKnowbookDefinition: IStaticKnowbookDefinition[]
-// ) {
-//   if (stores.knowbookStore.staticKnowbooks.size! > 1) {
-//     //>1 and not !==0 in case navigation starts with a static knobooks (ex: Art)
-//     return;
-//   }
-
-//   for (const staticKnowbook of staticKnowbookDefinition) {
-//     // const nameOrPeriod = staticKnowbook.nameOrPeriod;
-//     const knowbook: IKnowbookStatic = {
-//       id: -1, //id not used in front but only in back
-//       language: staticKnowbook.lang,
-//       type: staticKnowbook.type,
-//       name: staticKnowbook.nameOrPeriod,
-//       name_display: staticKnowbook.name_display,
-//       // items:
-//       //   stores.knowbookStore.staticKnowbooks.get(nameOrPeriod) === undefined
-//       //     ? []
-//       //     : stores.knowbookStore.staticKnowbooks.get(nameOrPeriod).items,
-//       items: [],
-//     };
-//     stores.knowbookStore.setStaticKnowbooks(knowbook.name, knowbook);
-//     stores.knowbookStore.setImageStaticKnowbook(
-//       knowbook.name,
-//       staticKnowbook.image_url
-//     );
-//   }
-// }
-
-const Notebooks: React.FunctionComponent<IPageStaticKnowbooks> = (props) => {
+const Notebooks: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
-  // initializeStaticKnowbooksMain(stores, props.staticKnowbooks);
+  // initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
+  useEffect(() => {
+    initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
+  }, []);
+  if (stores.uiStore.getInitCompleted(initStateCat.core) !== true) {
+    return <></>;
+  }
 
   const GUI_CONFIG = props.GUI_CONFIG;
-  const pathKnowbookStatic = configPaths.pages.StaticKnowbook;
-  const pathKnowbookSpecial = configPaths.pages.KnowbookSpecial;
-  const knowbook_mostviewed_title =
-    GUI_CONFIG.language.SEO.title_description.KnowbookSpecial.Mostviewed.title;
-  const mostviewed_image = configPaths.mostviewed_image;
+  const title = GUI_CONFIG.language.SEO.title_description.Home.title;
+  const size_button = GUI_CONFIG.display.size_button_generic as any;
+  const button_color = configGeneral.colors.button_color_default as any;
 
-  let cardKnowPropsStatic: ICardKnowProps[] = [];
-  let cardKnowPropsMostviewed: ICardKnowProps[] = [];
-  let description = "";
-
-  const staticKnowbookIDList: string[] = Array.from(
-    props.staticKnowbooks.map((staticKnowbook) => {
-      return staticKnowbook.nameOrPeriod;
-    })
+  const button_more = (
+    <Box
+      display="flex"
+      direction="row"
+      flex="grow"
+      justifyContent="center"
+      padding={0}
+    >
+      <Box
+        column={6}
+        smColumn={5}
+        mdColumn={2}
+        lgColumn={1}
+        padding={0}
+        alignItems="center"
+      >
+        <Box height={100}></Box>
+        <Box padding={0}>
+          <Button
+            accessibilityLabel="More best knowbooks"
+            text={GUI_CONFIG.language.moreBestKnowbooksLabel}
+            size={size_button}
+            onClick={() => {
+              fetchMoreBestPublicKnowbooks(stores);
+            }}
+            color={button_color}
+            fullWidth
+          />
+        </Box>
+      </Box>
+    </Box>
   );
-  staticKnowbookIDList.forEach((staticKnowbookID) => {
-    description = description + " | " + staticKnowbookID;
-  });
-
-  cardKnowPropsStatic = props.staticKnowbooks.map((item) => {
-    return {
-      id: item.nameOrPeriod,
-      stores: stores,
-      title: item.name_display,
-      image_url: item.image_url,
-      image_handler: onGoNotebookPage(stores)(pathKnowbookStatic, {
-        nameOrPeriod: item.nameOrPeriod,
-      }),
-      amount: undefined,
-      rename_handler: undefined,
-      delete_handler: undefined,
-    };
-  });
-
-  cardKnowPropsMostviewed = [
-    {
-      id: knowbook_mostviewed_title,
-      stores: stores,
-      title: knowbook_mostviewed_title,
-      image_url: mostviewed_image,
-      image_handler: onGoNotebookPage(stores)(pathKnowbookSpecial, {
-        pageType: TSpecialPages.Mostviewed,
-      }),
-      amount: undefined,
-      rename_handler: undefined,
-      delete_handler: undefined,
-    },
-  ];
-
-  const content = (
-    <>
-      <HeaderTitle
-        stores={stores}
-        title={GUI_CONFIG.language.labels.knowbookFeatured}
-      />
-      <CardKnowGrid_D
-        id="Notebooks"
-        stores={stores}
-        knowbooks={[...cardKnowPropsMostviewed, ...cardKnowPropsStatic]}
-        // knowbooks={cardKnowPropsStatic}
-      />
-    </>
-  );
-
-  let content_logged = <></>;
-  if (stores.baseStore.isLogged) {
-    content_logged = <CardKnowPageLogged_D stores={stores} />;
-  }
 
   return (
     <>
       <AppLayout paramsPage={props.paramsPage}>
-        <HeaderSEO
+        <HeaderSEO stores={stores} title={title} additional_description={""} />
+        <HeaderTitle
           stores={stores}
-          title={GUI_CONFIG.language.SEO.title_description.Home.title}
-          additional_description={description}
+          title={title}
+          // addtional_buttons_right={[]}
+          hidden={false}
         />
-        {content_logged}
-        {content}
+        {/* <ContentKnowbooks stores={stores} /> */}
+        <CardKnowGridPublicKnowbooks_D stores={stores} />
+        {button_more}
       </AppLayout>
     </>
   );
@@ -162,9 +95,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (configGeneral.demoModeForScreenshoots) {
     makeScreenshoots();
   }
-  if (configFetching.staticKnowbooks.refreshAllStaticKnowbooks) {
-    buildAllStaticKnowbooks();
-  }
+  // if (configFetching.staticKnowbooks.refreshAllStaticKnowbooks) {
+  //   buildAllStaticKnowbooks();
+  // }
   return await I_getStaticProps(context);
 };
 export const getStaticPaths: GetStaticPaths = async (context) => {

@@ -1,5 +1,13 @@
 import { action, computed, makeObservable, observable } from "mobx";
-import { AtomID, IGraph, ILink, INode } from "../config/globals";
+import {
+  AtomID,
+  IGraph,
+  ILink,
+  INode,
+  IRelatedAtom,
+  KnowbookID,
+  NodeID,
+} from "../config/globals";
 import { makeArrayFlat } from "../libs/utils";
 import { RootStore } from "./RootStore";
 
@@ -10,28 +18,61 @@ export interface IRelatedMapFlat {
 
 export class GraphStore {
   $rootStore: RootStore;
-  private $rootItemId: AtomID = undefined;
+  private $rootNetworkId: NodeID = undefined;
   private $graph: IGraph = { nodes: [], links: [] };
-  private $relatedMap = observable.map<string, AtomID[]>();
+
+  private $relatedAtoms = observable.map<NodeID, IRelatedAtom[]>();
+
+  private $relatedPublicKnowbooks = observable.map<NodeID, KnowbookID[]>();
+
+  private $networkMap = observable.map<string, NodeID[]>();
 
   constructor(rootStore: RootStore) {
     this.$rootStore = rootStore;
-    makeObservable<GraphStore, "$rootItemId" | "$graph">(this, {
-      $rootItemId: observable,
+    makeObservable<GraphStore, "$rootNetworkId" | "$graph">(this, {
+      $rootNetworkId: observable,
       $graph: observable,
-      setRootItemId: action,
+      init: action,
+      setRootNetworkId: action,
       setGraph: action,
-      setRelatedMap: action,
-      clearRelatedMap: action,
+      setRelatedAtoms: action,
+      setRelatedPublicKnowbooks: action,
+      clearRelatedAtoms: action,
+      clearRelatedPublicKnowbooks: action,
+      setNetworkMap: action,
+      clearNetworkMap: action,
       relatedMapFlat: computed,
+      isRootNetworkItem: computed,
     });
   }
 
-  get rootItemId() {
-    return this.$rootItemId;
+  init() {
+    this.clearRelatedAtoms();
+    this.clearRelatedPublicKnowbooks();
+    this.clearNetworkMap();
   }
-  setRootItemId(id: AtomID): void {
-    this.$rootItemId = id;
+
+  isItem(id: NodeID): boolean {
+    //if false, it is a knowbook
+    const isKnowbook: boolean = !isNaN(Number(id));
+    if (!isKnowbook) {
+      //is AtomID
+      return true;
+    } else {
+      //is KnowbookId
+      return false;
+    }
+  }
+
+  get isRootNetworkItem(): boolean {
+    return this.isItem(this.$rootNetworkId);
+  }
+
+  get rootNetworkId() {
+    return this.$rootNetworkId;
+  }
+  setRootNetworkId(id: NodeID): void {
+    this.$rootNetworkId = id;
   }
 
   get graph() {
@@ -41,20 +82,64 @@ export class GraphStore {
     this.$graph = { nodes: nodes, links: links };
   }
 
-  get relatedMap() {
-    return this.$relatedMap;
+  /**  RelatedAtoms **/
+  get relatedAtoms() {
+    return this.$relatedAtoms;
   }
-  setRelatedMap(key: string, item: AtomID[]): void {
-    this.$relatedMap.set(key, item);
+  clearRelatedAtoms(): void {
+    this.$relatedAtoms.clear();
   }
 
-  clearRelatedMap(): void {
-    this.$relatedMap.clear();
+  setRelatedAtoms(id: NodeID, relatedItems: IRelatedAtom[]) {
+    if (
+      id === undefined ||
+      relatedItems === undefined ||
+      relatedItems.length === 0
+    ) {
+      return;
+    }
+
+    this.$relatedAtoms.set(id, relatedItems);
+  }
+
+  get relatedPublicKnowbooks() {
+    return this.$relatedPublicKnowbooks;
+  }
+
+  clearRelatedPublicKnowbooks(): void {
+    this.$relatedPublicKnowbooks.clear();
+  }
+
+  setRelatedPublicKnowbooks(
+    id: NodeID,
+    relatedPublicKnowbooksIds: KnowbookID[]
+  ) {
+    if (
+      id === undefined ||
+      relatedPublicKnowbooksIds === undefined ||
+      relatedPublicKnowbooksIds.length === 0
+    ) {
+      return;
+    }
+
+    this.$relatedPublicKnowbooks.set(id, relatedPublicKnowbooksIds);
+  }
+
+  get networkMap() {
+    return this.$networkMap;
+  }
+  setNetworkMap(key: string, items: NodeID[]): void {
+    this.$networkMap.set(key, items);
+  }
+
+  clearNetworkMap(): void {
+    this.$networkMap.clear();
   }
 
   get relatedMapFlat(): IRelatedMapFlat {
-    const keys_: string[] = Array.from(this.relatedMap.keys());
-    const valuesList: AtomID[][] = Array.from(this.relatedMap.values());
+    const keys_: string[] = Array.from(this.networkMap.keys());
+    // const valuesList: AtomID[][] = Array.from(this.relatedMap.values());
+    const valuesList: NodeID[][] = Array.from(this.networkMap.values());
 
     const keysList: string[][] = valuesList.map((values, index) => {
       const keys: string[] = values.map((value) => {

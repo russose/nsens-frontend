@@ -1,19 +1,21 @@
+const siteUrl = "https://www.nsens.org/";
+
 module.exports = {
-  siteUrl: "https://www.nsens.org",
+  siteUrl: siteUrl,
   generateRobotsTxt: true,
   generateIndexSitemap: false,
-  // exclude: ['/protected-page', '/awesome/secret-page'],
+  exclude: ["/*batch*"],
   alternateRefs: [
+    // {
+    //   href: siteUrl + "en",
+    //   hreflang: "en",
+    // },
     {
-      href: "https://www.nsens.org/en/",
-      hreflang: "en",
-    },
-    {
-      href: "https://www.nsens.org/fr/",
+      href: siteUrl + "fr",
       hreflang: "fr",
     },
     {
-      href: "https://www.nsens.org/it/",
+      href: siteUrl + "it",
       hreflang: "it",
     },
   ],
@@ -28,10 +30,12 @@ module.exports = {
   transform: async (config, path) => {
     function customIgnoreFunction(path) {
       const path_to_be_included =
-        path.endsWith("/fr") ||
-        path.endsWith("/en") ||
-        path.endsWith("/it") ||
-        path.includes("Notebooks");
+        // path.endsWith("/fr") ||
+        // path.endsWith("/en") ||
+        // path.endsWith("/it") ||
+        // !path.includes("/batch");
+        // path.includes("Notebooks");
+        path.includes("/en");
       return !path_to_be_included;
     }
 
@@ -46,7 +50,15 @@ module.exports = {
       changefreq: config.changefreq,
       priority: config.priority,
       lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
-      alternateRefs: config.alternateRefs ?? [],
+      // alternateRefs: config.alternateRefs ?? [],
+      alternateRefs: config.alternateRefs.map((alternateRef) => ({
+        href: `${alternateRef.href}` + `${path}`.slice(3),
+        // href: `${alternateRef.href}`,
+        // href: `${path}`.slice(3),
+        // href: siteUrl,
+        hreflang: alternateRef.hreflang,
+        hrefIsAbsolute: true,
+      })),
     };
   },
 };

@@ -1,154 +1,19 @@
-import { Tlanguage, IStaticKnowbookDefinition } from "./globals";
-import { StaticKnowbookFamilyType } from "./globals";
+import { KnowbookName, Tlanguage } from "./globals";
 
-export const staticTrendFeaturedKnowbooks: IStaticKnowbookDefinition[] = [
-  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2016-2022" },
-  // { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2020" },
-  // {
-  //   type: StaticKnowbookFamilyType.FEATURED,
-  //   nameOrPeriod: "Infinis",
-  //   lang: ConfigLanguage.fr,
-  //   items: [
-  //     "Physique quantique",
-  //     "Relativité générale",
-  //     "Calculateur quantique",
-  //     "Infini",
-  //     "Intrication quantique",
-  //     "Voie lactée",
-  //     "Exoplanète",
-  //     "Système solaire",
-  //     "Trou noir",
-  //   ],
-  // },
-];
+export interface IPublicKnowbookDefinition {
+  name: KnowbookName;
+  language: Tlanguage;
+  items_name: string[];
+}
 
-export const staticTrendFeaturedKnowbooks_old: IStaticKnowbookDefinition[] = [
-  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2016-2020" },
-  { type: StaticKnowbookFamilyType.TREND, nameOrPeriod: "2021" },
+export const PLATFORM_OWNER_USERNAME = "-";
+
+export const TREND_KEYWORD = "Top ";
+
+export const trendKnowbooksDefinitions: IPublicKnowbookDefinition[] = [
   {
-    type: StaticKnowbookFamilyType.FEATURED,
-    nameOrPeriod: "Ecologie_Developpement_Durable",
-    name_display: "Ecologie et Développement Durable",
-    lang: Tlanguage.fr,
-    items: [
-      "Classification scientifique des espèces",
-      "Extinction des espèces",
-      "Grand requin blanc",
-      "Développement durable",
-      "Homo sapiens",
-      "Ressources et consommation énergétiques mondiales",
-      "Orque",
-      "Les Limites à la croissance",
-      "Jean-Marc Jancovici",
-      "Environnement",
-      "Biodiversité",
-      "Énergie (économie)",
-      "Greta Thunberg",
-      "Objectifs de développement durable",
-      "Pandémie de Covid-19",
-    ],
-  },
-  {
-    type: StaticKnowbookFamilyType.FEATURED,
-    nameOrPeriod: "Infinis",
-    lang: Tlanguage.fr,
-    items: [
-      "Physique quantique",
-      "Relativité générale",
-      "Calculateur quantique",
-      "Infini",
-      "Intrication quantique",
-      "Voie lactée",
-      "Exoplanète",
-      "Système solaire",
-      "Trou noir",
-    ],
-  },
-  {
-    type: StaticKnowbookFamilyType.FEATURED,
-    nameOrPeriod: "Philosophie",
-    lang: Tlanguage.fr,
-    items: [
-      "William James",
-      "Blaise Pascal",
-      "Marc Aurèle",
-      "Sénèque",
-      "Albert Camus",
-      "Baruch Spinoza",
-      "Arthur Schopenhauer",
-      "Henri Bergson",
-      "Épicure",
-      "Stoïcisme",
-      "Philosophe",
-      "Jean-Jacques Rousseau",
-      "Platon",
-      "Aristote",
-      "Karl Marx",
-      "Voltaire",
-      "Socrate",
-      "René Descartes",
-      "Georg Wilhelm Friedrich Hegel",
-      "Emmanuel Kant",
-      "Friedrich Nietzsche",
-      "Jean-Paul Sartre",
-      "Adam Smith",
-      "Épistémologie",
-      "Alchimie",
-    ],
-  },
-  {
-    type: StaticKnowbookFamilyType.FEATURED,
-    nameOrPeriod: "Ecologia",
-    lang: Tlanguage.it,
-    items: [
-      "Ecologia",
-      "Sviluppo sostenibile",
-      "Rapporto sui limiti dello sviluppo",
-      "Biodiversità",
-      "Greta Thunberg",
-      "Obiettivi di sviluppo sostenibile",
-      "COVID-19",
-    ],
-  },
-  {
-    type: StaticKnowbookFamilyType.FEATURED,
-    nameOrPeriod: "Infinito",
-    lang: Tlanguage.it,
-    items: [
-      "Meccanica quantistica",
-      "Relatività generale",
-      "Infinito (matematica)",
-      "Via Lattea",
-      "Pianeta extrasolare",
-      "Sistema solare",
-      "Buco nero",
-    ],
-  },
-  {
-    type: StaticKnowbookFamilyType.FEATURED,
-    nameOrPeriod: "Ecology",
-    lang: Tlanguage.en,
-    items: [
-      "Ecology",
-      "Sustainable development",
-      "The Limits to Growth",
-      "Biodiversity",
-      "Greta Thunberg",
-      "Sustainable Development Goals",
-      "COVID-19",
-    ],
-  },
-  {
-    type: StaticKnowbookFamilyType.FEATURED,
-    nameOrPeriod: "Infinity",
-    lang: Tlanguage.en,
-    items: [
-      "Quantum mechanics",
-      "General relativity",
-      "Milky Way",
-      "Exoplanet",
-      "Solar System",
-      "Black hole",
-    ],
+    name: TREND_KEYWORD + "2016-2023",
+    language: null,
+    items_name: [],
   },
 ];

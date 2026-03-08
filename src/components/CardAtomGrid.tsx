@@ -10,11 +10,11 @@ interface ICardAtomGridProps {
   stores: IStores;
   atoms: IAtom[];
   image_handler: handlerT;
-  isItemSaved_handler: handlerT;
-  isItemSavedActionable_handler: handlerT;
-  saved_handler: handlerT;
+  isInAnyKnowbook_handler: handlerT;
   edit_handler: handlerT;
   top_handler: handlerT;
+  size_factor?: number;
+  externalyzeTitle?: boolean;
 }
 
 const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
@@ -62,25 +62,22 @@ const CardAtomGrid: React.FunctionComponent<ICardAtomGridProps> = (props) => {
                   image_handler={
                     props.image_handler === undefined
                       ? undefined
-                      : props.image_handler(item.title, item.id)
+                      : props.image_handler(item.title, item.id, item.source)
                   }
-                  saved_enabled={
-                    props.isItemSaved_handler !== undefined
-                      ? props.isItemSaved_handler(item.id)
+                  isInAnyKnowbook={
+                    props.isInAnyKnowbook_handler !== undefined
+                      ? props.isInAnyKnowbook_handler(item.id)
                       : false
                   }
-                  saved_actionable={
-                    props.isItemSavedActionable_handler !== undefined
-                      ? props.isItemSavedActionable_handler(item.id)
-                      : true
-                  }
-                  saved_handler={props.saved_handler(item.id)}
                   edit_handler={
                     props.edit_handler !== undefined
                       ? props.edit_handler(item.id)
                       : undefined
                   }
                   top_handler={props.top_handler(item.title, item.id)}
+                  source={item.source}
+                  size_factor={props.size_factor}
+                  externalyzeTitle={props.externalyzeTitle}
                 />
               </Box>
             );

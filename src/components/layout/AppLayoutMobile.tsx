@@ -1,4 +1,4 @@
-import { Box, TapArea, Image } from "gestalt";
+import { Box, TapArea, Image, DeviceTypeProvider } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import SearchBar from "../SearchBar";
@@ -25,11 +25,11 @@ const AppLayoutMobile: React.FunctionComponent<IProps> = (props) => {
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const path_logo_image = configPaths.image_logo_W_small;
 
-  const svgBody = router.pathname.includes(configPaths.pages.ItemCircle);
+  // const svgBody = router.pathname.includes(configPaths.pages.ItemCircle);
 
   const searchbar = (
     <SearchBar
-      placeholder={GUI_CONFIG.language.searchBar}
+      placeholder={GUI_CONFIG.language.search.searchBar}
       handlerText={onSearchHomeText(stores)}
       handlerSubmit={onSearchHomeSubmit(stores)}
       handlerKeyboard={onSearchHomeKeyboard(stores)}
@@ -67,7 +67,7 @@ const AppLayoutMobile: React.FunctionComponent<IProps> = (props) => {
 
   const top_mobile = (
     <>
-      <Box height="100%" padding={1} column={3}>
+      <Box height="100%" padding={2} column={3}>
         {logo_with_tap}
       </Box>
       <Box padding={2} />
@@ -86,21 +86,22 @@ const AppLayoutMobile: React.FunctionComponent<IProps> = (props) => {
   // IMPORTANT: ce free space évite aussi que le menu du bas disparaisse
   // (50vh pour avoir un contenu qui dépasse les 100vh)
   const free_space_buttom_mobile = !(
-    router.pathname.includes(configPaths.pages.ItemCircle) ||
-    router.pathname.includes(configPaths.pages.Search)
+    // router.pathname.includes(configPaths.pages.Search) ||
+    router.pathname.includes(configPaths.pages.ItemNetwork)
   ) && <Box height="30vh" />;
 
   return (
     <>
-      <AppLayoutPageHybrid
-        stores={stores}
-        top={top_mobile}
-        bottom={menu_mobile}
-        svgBody={svgBody}
-      >
-        {props.children}
-        {free_space_buttom_mobile}
-      </AppLayoutPageHybrid>
+      <DeviceTypeProvider deviceType="mobile">
+        <AppLayoutPageHybrid
+          stores={stores}
+          top={top_mobile}
+          bottom={menu_mobile}
+        >
+          {props.children}
+          {free_space_buttom_mobile}
+        </AppLayoutPageHybrid>
+      </DeviceTypeProvider>
     </>
   );
 };

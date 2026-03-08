@@ -1,22 +1,23 @@
-const withPWA = require("next-pwa");
+// const withPWA = require("next-pwa");
 const runtimeCaching = require("./src/config/runtimeCaching");
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  runtimeCaching: runtimeCaching,
+  skipWaiting: true,
+  // dynamicStartUrl=false,
+  // cacheOnFrontEndNav: true,
+});
 
 module.exports = withPWA({
   trailingSlash: true,
   reactStrictMode: true,
-  swcMinify: true,
+  // swcMinify: true,
   compiler: {
     // removeConsole: true,
   },
   // productionBrowserSourceMaps: true, // for bundle-wizard
-  pwa: {
-    dest: "public",
-    disable: process.env.NODE_ENV === "development",
-    runtimeCaching: runtimeCaching,
-    skipWaiting: true,
-    // dynamicStartUrl=false,
-    // cacheOnFrontEndNav: true,
-  },
 });
 
 // To use bundle-analyzer, uncomment, run build and see ./next/analyse directory

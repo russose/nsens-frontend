@@ -16,6 +16,7 @@ export class SavedStore {
       setSaved: action,
       clearSaved: action,
       deleteSaved: action,
+      setSavedWithHistory: action,
     });
   }
 
@@ -39,13 +40,27 @@ export class SavedStore {
     this.$saved.delete(key);
   }
 
-  async setSaved(atoms: IAtom[], forceUpdateHistory: boolean): Promise<void> {
-    if (atoms === undefined || atoms.length === 0) {
+  async setSaved(atomIds: AtomID[]): Promise<void> {
+    if (atomIds === undefined || atomIds.length === 0) {
       return;
+    }
+    atomIds.forEach((id) => {
+      this.$saved.add(id);
+    });
+  }
+
+  async setSavedWithHistory(
+    atoms: IAtom[],
+    forceUpdateHistory: boolean
+  ): Promise<boolean> {
+    let success = false;
+    if (atoms === undefined || atoms.length === 0) {
+      return success;
     }
     atoms.forEach((item) => {
       this.$saved.add(item.id);
     });
     this.$rootStore.stores().baseStore.setHistory(atoms, forceUpdateHistory);
+    return true;
   }
 }

@@ -1,9 +1,8 @@
-import React from "react";
-import { Tlanguage, CONFIG_ENV } from "../config/globals";
-import { IStores } from "../stores/RootStore";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import HeaderTitle from "./HeaderTitle";
+import React from "react";
+import { CONFIG_ENV, Tlanguage, configPaths } from "../config/globals";
+import { IStores } from "../stores/RootStore";
 
 interface IHeaderTitleProps {
   stores: IStores;
@@ -24,11 +23,16 @@ const HeaderSEO: React.FunctionComponent<IHeaderTitleProps> = (props) => {
   let description =
     title_page + " - " + GUI_CONFIG.language.SEO.description_page_base;
 
+  const path_image_opengraph_full =
+    CONFIG_ENV.FRONT_URL + "/" + configPaths.opengraph_image;
+
+  const page_url = CONFIG_ENV.FRONT_URL + router.asPath;
+
   if (props.additional_description !== undefined) {
     description = description + " | " + props.additional_description;
   }
   // if (router.pathname.includes(configPaths.pages.StaticKnowbook)) {
-  //   const staticKnowbookID = router.query.nameOrPeriod as string;
+  //   const staticKnowbookID = router.query.name as string;
   //   getKnowbookStaticAtomsList(staticKnowbookID, props.stores).forEach(
   //     (item) => {
   //       description = description + " | " + item.title;
@@ -87,7 +91,6 @@ const HeaderSEO: React.FunctionComponent<IHeaderTitleProps> = (props) => {
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Salvatore Russo" />
       </Head>
-      <HeaderTitle stores={props.stores} title={title_page} hidden={true} />
     </>
   );
 

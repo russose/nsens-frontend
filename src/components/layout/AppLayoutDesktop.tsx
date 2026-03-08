@@ -1,4 +1,4 @@
-import { Box, TapArea, Image } from "gestalt";
+import { Box, TapArea, Image, DeviceTypeProvider } from "gestalt";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import SearchBar from "../SearchBar";
@@ -11,7 +11,7 @@ import {
 } from "../../handlers/handlers_Searchbar";
 import { configPaths, TUiStringStorage } from "../../config/globals";
 import { useStores } from "../../stores/RootStoreHook";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { onTapLogo } from "../../handlers/handlers_Navigation";
 
 interface IProps {
@@ -20,17 +20,17 @@ interface IProps {
 
 const AppLayoutDesktop: React.FunctionComponent<IProps> = (props) => {
   const stores = useStores();
-  const router = useRouter();
+  // const router = useRouter();
 
   const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
   const path_logo_image = configPaths.image_logo_W_small;
   const rounding = GUI_CONFIG.display.rounding_menu;
 
-  const svgBody = router.pathname.includes(configPaths.pages.ItemCircle);
+  // const svgBody = router.pathname.includes(configPaths.pages.ItemCircle);
 
   const searchbar = (
     <SearchBar
-      placeholder={GUI_CONFIG.language.searchBar}
+      placeholder={GUI_CONFIG.language.search.searchBar}
       handlerText={onSearchHomeText(stores)}
       handlerSubmit={onSearchHomeSubmit(stores)}
       handlerKeyboard={onSearchHomeKeyboard(stores)}
@@ -96,14 +96,11 @@ const AppLayoutDesktop: React.FunctionComponent<IProps> = (props) => {
 
   return (
     <>
-      <AppLayoutPageHybrid
-        stores={stores}
-        top={top_desktop}
-        bottom={<></>}
-        svgBody={svgBody}
-      >
-        {props.children}
-      </AppLayoutPageHybrid>
+      <DeviceTypeProvider deviceType="desktop">
+        <AppLayoutPageHybrid stores={stores} top={top_desktop} bottom={<></>}>
+          {props.children}
+        </AppLayoutPageHybrid>
+      </DeviceTypeProvider>
     </>
   );
 };

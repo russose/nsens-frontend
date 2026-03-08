@@ -1,51 +1,73 @@
 import { observer } from "mobx-react-lite";
 import { GetStaticPaths, GetStaticProps } from "next";
-import React from "react";
-import { useStores } from "../../../src/stores/RootStoreHook";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+import ContentSearch from "../../../src/components/ContentSearch ";
+import HeaderSEO from "../../../src/components/HeaderSEO";
+import HeaderTitle from "../../../src/components/HeaderTitle";
+import AppLayout from "../../../src/components/layout/AppLayout";
+import { initStateCat } from "../../../src/config/globals";
 import {
   IPage,
   I_getStaticPaths,
   I_getStaticProps,
 } from "../../../src/libs/getDataParamsPage";
-import { useRouter } from "next/router";
-import { setFeedFromSearch } from "../../../src/libs/helpersBase";
-import { TUiStringStorage } from "../../../src/config/globals";
-import CardAtomGridDynamic from "../../../src/components/CardAtomGridDynamic";
-import HeaderSEO from "../../../src/components/HeaderSEO";
 import { initializeApp } from "../../../src/libs/helpersInitialize";
-import AppLayout from "../../../src/components/layout/AppLayout";
+import { useStores } from "../../../src/stores/RootStoreHook";
 
 const Search: React.FunctionComponent<IPage> = (props) => {
   const stores = useStores();
-  initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
-
   const router = useRouter();
-  const search_string = router.query.search as string;
-
-  if (search_string !== undefined) {
-    if (
-      stores.uiStore.getUiStringStorage(TUiStringStorage.searchPattern) === ""
-    ) {
-      setFeedFromSearch(stores, search_string);
-      stores.uiStore.setUiStringStorage(
-        TUiStringStorage.searchPattern,
-        search_string
-      );
-    }
+  // initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
+  useEffect(() => {
+    initializeApp(stores, props.paramsPage, props.GUI_CONFIG);
+  }, []);
+  if (stores.uiStore.getInitCompleted(initStateCat.core) !== true) {
+    return <></>;
   }
+
+  // const router = useRouter();
+  let search_string = router.query.search as string;
+
+  // const previous_search_string: string = stores.uiStore.getUiStringStorage(
+  //   TUiStringStorage.searchPattern
+  // );
+
+  // if (
+  //   search_string === undefined &&
+  //   previous_search_string !== undefined &&
+  //   previous_search_string.length !== 0
+  // ) {
+  //   stores.uiStore.setUiStringStorage(
+  //     TUiStringStorage.searchPattern,
+  //     previous_search_string
+  //   );
+  // } else {
+  //   stores.uiStore.setUiStringStorage(
+  //     TUiStringStorage.searchPattern,
+  //     search_string
+  //   );
+  // }
+
+  const refresh = search_string !== undefined && search_string.length !== 0;
+
+  const title =
+    stores.baseStore.GUI_CONFIG.language.SEO.title_description.Home.title;
 
   const content = (
     <>
-      <HeaderSEO
+      <HeaderSEO stores={stores} title={title} />
+      <HeaderTitle
         stores={stores}
-        title={
-          stores.baseStore.GUI_CONFIG.language.SEO.title_description.Home.title
-        }
+        title={title}
+        // addtional_buttons_right={[]}
+        hidden={true}
       />
-      <CardAtomGridDynamic
-        id={"Search"}
+
+      <ContentSearch
         stores={stores}
-        atoms={stores.baseStore.feedItems}
+        refresh={refresh}
+        search_string={search_string}
       />
     </>
   );

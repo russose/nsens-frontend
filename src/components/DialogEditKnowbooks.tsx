@@ -1,11 +1,10 @@
 import { observer } from "mobx-react-lite";
 import {
-  onChangeInputValueEditKnowbooks,
   onChangeKnwobooksInclusionEditKnowbooks,
   onSubmitChangesEditKnowbooks,
 } from "../handlers/handlers_Knowbooks";
 import { IStores } from "../stores/RootStore";
-import DialogEditKnowbooksForm from "./DialogEditKnowbooksForm";
+import FormEditKnowbooks from "./FormEditKnowbooks";
 
 interface IDialogEditKnowbooksProps {
   stores: IStores;
@@ -15,7 +14,7 @@ const DialogEditKnowbooks: React.FunctionComponent<
   IDialogEditKnowbooksProps
 > = (props) => {
   const stores = props.stores;
-  const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
+  // const GUI_CONFIG = stores.baseStore.GUI_CONFIG;
 
   return (
     <>
@@ -23,18 +22,18 @@ const DialogEditKnowbooks: React.FunctionComponent<
         // stores.uiStore.getUiBooleanStorage(
         //   TUiBooleanStorage.editKnowbookOpened
         // ) &&
-        <DialogEditKnowbooksForm
+        <FormEditKnowbooks
           id={stores.uiStore.selectedAtom.id}
           stores={stores}
-          title={GUI_CONFIG.language.editKnowbook.title}
-          input_placeholder={GUI_CONFIG.language.editKnowbook.input_placeholder}
-          checkboxes={Array.from(stores.uiStore.editKnowbookMembers)
-            .sort()
-            .map(([key, value]) => {
-              return { label: key, activated: value };
-            })}
+          // title={GUI_CONFIG.language.editKnowbook.title}
+          // input_placeholder={GUI_CONFIG.language.editKnowbook.input_placeholder}
+          // checkboxes={Array.from(stores.uiStore.editKnowbookMembers)
+          //   .sort()
+          //   .map(([key, value]) => {
+          //     return { label: key, activated: value };
+          //   })}
           handler_confirm={onSubmitChangesEditKnowbooks(stores)}
-          handler_inputValue={onChangeInputValueEditKnowbooks(stores)}
+          // handler_inputValue={onChangeInputValueEditKnowbooks(stores)}
           handler_inputTags={onChangeKnwobooksInclusionEditKnowbooks(stores)}
         />
       }

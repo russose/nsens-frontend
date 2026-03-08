@@ -1,9 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { CONFIG_ENV } from "../src/config/globals";
-// import { mediaStyles } from "../src/config/media";
 
-const GA_TRACKING_ID =
-  CONFIG_ENV.GA_TRACKING_ID !== undefined ? CONFIG_ENV.GA_TRACKING_ID : "";
+// const GA_TRACKING_ID =
+//   CONFIG_ENV.GA_TRACKING_ID !== undefined ? CONFIG_ENV.GA_TRACKING_ID : "";
 
 export default class MyDocument extends Document {
   render() {
@@ -11,22 +10,20 @@ export default class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="preconnect" href={CONFIG_ENV.BACK_URL} />
-
           {/* <link rel="preconnect" href="http://192.168.1.51" /> */}
           {/* <link rel="preconnect" href="https://fr.wikipedia.org" />
           <link rel="preconnect" href="https://fr.wikipedia.org/api/rest_v1/" /> */}
           {/* <link rel="preconnect" href="https://upload.wikimedia.org" /> */}
-
           {/* <link
             rel="preload"
             href="http://192.168.1.51:3000/logo2_W_small.webp"
           /> */}
-
           {/* Global Site Tag (gtag.js) - Google Analytics */}
-          <script
+          {/* <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           />
+
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -42,20 +39,17 @@ export default class MyDocument extends Document {
 
           `,
             }}
-          />
-
+          /> */}
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
           <link
             rel="icon"
             type="image/png"
             sizes="196x196"
             href="/assets/favicon-196.png"
           />
-
           <link rel="apple-touch-icon" href="/assets/apple-icon-180.png" />
-
           <meta name="apple-mobile-web-app-capable" content="yes" />
-
-          {/* <link
+          <link
             rel="apple-touch-startup-image"
             href="/assets/apple-splash-2048-2732.jpg"
             media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
@@ -104,6 +98,26 @@ export default class MyDocument extends Document {
             rel="apple-touch-startup-image"
             href="/assets/apple-splash-2160-1620.jpg"
             media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+          />
+          <link
+            rel="apple-touch-startup-image"
+            href="/assets/apple-splash-1290-2796.jpg"
+            media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+          />
+          <link
+            rel="apple-touch-startup-image"
+            href="/assets/apple-splash-2796-1290.jpg"
+            media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+          />
+          <link
+            rel="apple-touch-startup-image"
+            href="/assets/apple-splash-1179-2556.jpg"
+            media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+          />
+          <link
+            rel="apple-touch-startup-image"
+            href="/assets/apple-splash-2556-1179.jpg"
+            media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
           />
           <link
             rel="apple-touch-startup-image"
@@ -184,15 +198,38 @@ export default class MyDocument extends Document {
             rel="apple-touch-startup-image"
             href="/assets/apple-splash-1136-640.jpg"
             media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
-          /> */}
-          <meta name="theme-color" content="#3490de" />
+          />
+          <meta name="theme-color" content="#020723" />
           <link rel="manifest" href="/manifest.json" />
 
-          {/* Fresnel */}
-          {/* <style
-            type="text/css"
-            dangerouslySetInnerHTML={{ __html: mediaStyles }}
-          /> */}
+          {/* Facebook Meta Tags */}
+
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://www.nsens.org" />
+          <meta property="og:title" content="nSens" />
+          <meta
+            property="og:description"
+            content="nSens: Empower Your Knowledge Sharing with Interactive Graphs and Notebooks."
+          />
+          <meta
+            property="og:image"
+            content="https://www.nsens.org/landing_opengraph.webp"
+          />
+
+          {/* Twitter Meta Tags */}
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta property="twitter:domain" content="nsens.org" />
+          <meta property="twitter:url" content="https://www.nsens.org" />
+          <meta name="twitter:title" content="nSens" />
+          <meta
+            name="twitter:description"
+            content="nSens: Empower Your Knowledge Sharing with Interactive Graphs and Notebooks."
+          />
+          <meta
+            name="twitter:image"
+            content="https://www.nsens.org/landing_opengraph.webp"
+          />
         </Head>
         <body>
           <Main />

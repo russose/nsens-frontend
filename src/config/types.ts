@@ -7,10 +7,10 @@ export interface IPosition {
   y: number;
 }
 
-export interface IStar {
-  position: IPosition;
-  opacity: number;
-}
+// export interface IStar {
+//   position: IPosition;
+//   opacity: number;
+// }
 
 export enum Tlanguage {
   fr = "fr",
@@ -65,72 +65,103 @@ export enum TScenarioStepID {
 
 export enum TPages {
   Home = "Home",
+  KnowbooksSaved = "KnowbooksSaved",
+  KnowbooksMine = "KnowbooksMine",
   Search = "Search",
-  About = "About",
+  // About = "About",
   User = "User",
   ChangePassword = "ChangePassword",
   ItemNetwork = "ItemNetwork",
-  ItemCircle = "ItemCircle",
-  ItemFlat = "ItemFlat",
-
   Knowbooks = "Knowbooks",
-  StaticKnowbook = "StaticKnowbook",
   Knowbook = "Knowbook",
   KnowbookSpecial = "KnowbookSpecial",
-
-  Random = "Random",
-  // ArticleSlide = "ArticleSlide",
 }
 
-export enum TPageHeaderModes {
-  // homeFeaturedKnowbooks = "homeFeaturedKnowbooks",
-  // homeUserKnowbooks = "homeUserKnowbooks",
-  itemAllRelated = "itemAllRelated",
-  none = "none",
-}
+// export enum TPageHeaderModes {
+//   // homeFeaturedKnowbooks = "homeFeaturedKnowbooks",
+//   // homeUserKnowbooks = "homeUserKnowbooks",
+//   itemAllRelated = "itemAllRelated",
+//   none = "none",
+// }
 
-export enum TSpecialPages {
+// export enum TKnowbooksPages {
+//   Mostviewed = "Mostviewed",
+//   AllSaved = "AllSaved",
+//   NoKnowbook = "NoKnowbook",
+// }
+
+export enum TKnowbooksPages {
+  publicKnowbooks = "publicKnowbooks",
+  myKnowbooks = "myKnowbooks",
+  staticKnowbooks = "staticKnowbooks",
   Mostviewed = "Mostviewed",
   AllSaved = "AllSaved",
-  NoKnowbook = "NoKnowbook",
+  // NoKnowbook = "NoKnowbook",
 }
+
+export interface IKnowbookQuery {
+  type: TKnowbooksPages;
+  title: KnowbookName;
+  // owner: number;
+  id: KnowbookID;
+}
+
+// export enum TKnowbooksStores {
+//   followedPublicKnowbooks = "followedPublicKnowbooks",
+//   publicKnowbooks = "publicKnowbooks",
+//   knowbooks = "knowbooks",
+// }
 
 export enum initStateCat {
   core = "core",
   // staticKnowbooksFull = "staticKnowbooksFull",
   userData = "userData",
   itemRelated = "itemRelated",
+  staticKnowbooks = "staticKnowbooks",
+
+  alreadyRendered = "alreadyRendered",
 }
 
 export enum TUiStringStorage {
   searchPattern = "searchPattern",
   articleContent = "articleContent",
-  editKnowbookNewValue = "editKnowbookNewValue",
-  renameKnowbookNewName = "renameKnowbookNewName",
-  loginScreenUsername = "loginScreenUsername",
+  // editKnowbookNewValue = "editKnowbookNewValue",
+  // renameKnowbookNewName = "renameKnowbookNewName",
+  sharingInformation = "sharingInformation",
+  loginScreenEmail = "loginScreenEmail",
   loginScreenUsername_ = "loginScreenUsername_",
   loginScreenPassword = "loginScreenPassword",
 
   loginScreenError = "loginScreenError",
-  changePasswordUsername = "changePasswordUsername",
+  changePasswordEmail = "changePasswordEmail",
   changePasswordPassword = "changePasswordPassword",
   changePasswordValidationCode = "changePasswordValidationCode",
   changePasswordError = "changePasswordError",
-  dropdownselection = "dropdownselection",
+  currentHomeTab = "currentHomeTab",
 }
 
 export enum TUiBooleanStorage {
-  renameKnowbookOpened = "renameKnowbookOpened",
+  // renameKnowbookOpened = "renameKnowbookOpened",
   showLoading = "showLoading",
-  editKnowbookOpened = "editKnowbookOpened",
-  showArticle = "showArticle",
+  showEditKnowbooks = "showEditKnowbooks",
+  showWikiArticle = "showWikiArticle",
+
+  showArxivCentent = "showArxivCentent",
+
+  showBookCentent = "showBookCentent",
   showHistory = "showHistory",
+
+  showSharing = "showSharing",
+
+  showEditKnowbookProps = "showEditKnowbookProps",
+  showEditUserProps = "showEditUserProps",
   renderGraphNetwork = "renderGraphNetwork",
 }
 
 export enum TUiNumberStorage {
-  R0 = "R0",
-  SVGMaxElementCircle = "SVGMaxElementCircle",
+  currentHomeTabIndex = "currentHomeTabIndex",
+  currentSearchTabIndex = "currentSearchTabIndex",
+  indexLastBestKnowbooks = "indexLastBestKnowbooks",
 }
 
 export type TconfigDataDisplay = typeof configDataMobile;
@@ -160,47 +191,40 @@ export interface IparamsAtom {
   title: string;
 }
 
-export interface ICardKnowProps {
-  id: AtomID | KnowbookID;
-  stores: IStores;
-  title: string;
-  image_url: string;
-  image_handler: handlerT;
-  color_image?: string;
-
-  // pathname: string;
-  // queryObject: any;
-  amount: number | string;
-  rename_handler: handlerT;
-  delete_handler: handlerT;
-}
-
-export interface IPageSVG {
-  mode: TPageHeaderModes;
-  header: SVG_T;
-  body: SVG_T;
-}
+// export interface IPageSVG {
+//   mode: TPageHeaderModes;
+//   header: SVG_T;
+//   body: SVG_T;
+// }
 
 export enum TButtonID {
   HOME = "HOME",
   LOGIN = "LOGIN",
   INFO = "INFO",
-  SAVE = "SAVE",
-  EDIT = "EDIT",
+  FOLLOW_PUBLIC = "FOLLOW_PUBLIC",
+  EDIT_CONTENT = "EDIT_CONTENT",
   NETWORK = "NETWORK",
-  // CIRCLE = "CIRCLE",
-  NETWORKFLAT = "NETWORKFLAT",
 
-  KNOWBOOKS = "KNOWBOOKS",
-  KNOWBOOK = "KNOWBOOK",
   ARTICLE = "ARTICLE",
-  SEPARATOR = "SEPARATOR",
   BACK = "BACK",
-
   ARTICLE_BACK = "ARTICLE_BACK",
   ARTICLE_NEXT = "ARTICLE_NEXT",
-
   HISTORY = "HISTORY",
+  DELETE = "DELETE",
+  EDIT_KNOWBOOK = "EDIT_KNOWBOOK",
+  LINK = "LINK",
+
+  EDIT_USER = "EDIT_USER",
+
+  LOGOUT = "LOGOUT",
+
+  KNOWBOOKS_BEST = "KNOWBOOKS_BEST",
+
+  KNOWBOOK_FOLLOWED = "KNOWBOOK_FOLLOWED",
+
+  KNOWBOOK_MINE = "KNOWBOOK_MINE",
+
+  SEARCH = "SEARCH",
 }
 
 export interface IButton {
@@ -209,14 +233,47 @@ export interface IButton {
   iconColor?: IconT; //handler
   disabled?: boolean;
   hidden?: boolean;
+  // tooltip?: string;
 }
 
-export type UserID = string;
+export type UserID = number;
 export type AtomID = string;
-export type KnowbookID = string;
+export type KnowbookName = string;
+
+export type KnowbookID = number;
+
+export type NodeID = AtomID | KnowbookID;
+
+// export interface IPublicKnowbookKey {
+//   name: KnowbookID;
+//   owner: number;
+// }
+
+export enum TSource {
+  wiki = "wiki",
+  arxiv = "arxiv",
+  books = "books",
+}
+
+export enum TPrefixSource {
+  // wiki = "wiki",
+  arxiv = "arx_",
+  books = "bks_",
+}
+
+export interface ISearchResults {
+  [TSource.wiki]: AtomID[];
+  [TSource.books]: AtomID[];
+  [TSource.arxiv]: AtomID[];
+  knowbooksIds: KnowbookID[];
+}
 
 export interface IUser {
-  username: UserID;
+  userId?: UserID;
+  email: string;
+  username: string;
+  banned?: boolean;
+  publicKnowbooks: string;
 }
 
 export interface IAtom {
@@ -229,51 +286,127 @@ export interface IAtom {
   image_url: string;
   image_width: number;
   image_height: number;
-  thumbnail_url: string;
+  // thumbnail_url: string;
   related: string;
+  source: TSource;
+
+  //Only Arxiv
+  url: string;
+  author: string;
+  summary: string;
+  attachment: string;
 }
 
-export enum StaticKnowbookFamilyType {
-  FEATURED = "FEATURED",
-  TREND = "TREND",
-  VITAL = "VITAL",
+// export interface IAtom {
+//   id: AtomID;
+//   wikibase_item: string;
+//   pageid_wp: number;
+//   title: string;
+//   title_en: string;
+//   language: Tlanguage;
+//   image_url: string;
+//   image_width: number;
+//   image_height: number;
+//   thumbnail_url: string;
+//   related: string;
+// }
+
+// export enum StaticKnowbookFamilyType {
+//   FEATURED = "FEATURED",
+//   TREND = "TREND",
+//   VITAL = "VITAL",
+// }
+
+// export interface ICardKnowProps {
+//   id: AtomID | KnowbookID;
+//   stores: IStores;
+//   title: string;
+//   image_url: string;
+//   image_handler: handlerT;
+//   color_image?: string;
+//   amount: number | string;
+//   buttons: IButton[];
+
+//   nb_saved: number;
+//   public: boolean;
+//   size_factor?: number;
+// }
+
+export interface ICardKnowProps {
+  id: AtomID | KnowbookID;
+  stores: IStores;
+  knowbook: IKnowbook;
+  // title: string;
+  // image_url: string;
+  image_handler: handlerT;
+  color_image?: string;
+  // amount: number | string;
+  buttons: IButton[];
+  // nb_saved: number;
+  // public: boolean;
+  size_factor?: number;
 }
 
-export interface IKnowbook {
-  id: number;
-  name: KnowbookID;
-  language: Tlanguage;
-  items: AtomID[];
-}
-
-export interface IKnowbookFull {
-  id: number; //internal ide for back only (database)
-  name: KnowbookID;
-  language: Tlanguage;
-  items: IAtom[];
-}
-
-export interface IKnowbookStatic extends IKnowbookFull {
-  type: StaticKnowbookFamilyType;
-  name_display: string;
-}
-
-export interface IStaticKnowbookDefinition {
-  type: StaticKnowbookFamilyType;
-  nameOrPeriod: string;
-  name_display?: string;
-  lang?: Tlanguage;
-  items?: AtomID[];
+export interface IKnowbookProps {
+  name?: KnowbookName;
+  description?: string;
+  sourceUrl?: string;
+  public?: boolean;
   image_url?: string;
 }
 
-export interface IStaticKnowbookWithItemsDefinition {
-  type: StaticKnowbookFamilyType;
-  nameOrPeriod: string;
-  name_display: string;
-  lang: Tlanguage;
-  items: IAtom[];
+export interface IKnowbook {
+  id: KnowbookID;
+  name: KnowbookName;
+  description: string;
+  sourceUrl: string;
+  owner: number;
+  owner_username?: string;
+  language: Tlanguage;
+  public: boolean;
+  image_url: string;
+  // image_rank: number;
+  items: AtomID[];
+  nb_saved: number;
 }
+
+// export interface IKnowbookStatic {
+//   type: StaticKnowbookFamilyType;
+//   name: string;
+//   name_display: string;
+//   language: Tlanguage;
+//   image_url?: string;
+//   items?: AtomID[];
+// }
+
+export interface IKnowbookFull {
+  id: KnowbookID;
+  name: KnowbookName;
+  description: string;
+  sourceUrl: string;
+  owner: number;
+  owner_username?: string;
+  language: Tlanguage;
+  public: boolean;
+  image_url: string;
+  // image_rank: number;
+  items: IAtom[];
+  nb_saved: number;
+}
+
+// export interface IKnowbookFullStatic {
+//   type: StaticKnowbookFamilyType;
+//   name: string;
+//   name_display: string;
+//   language: Tlanguage;
+//   image_url?: string;
+//   items: IAtom[];
+// }
+
+// export interface IKnowbookStatic extends IKnowbookFull {
+//   type: StaticKnowbookFamilyType;
+//   name_display: string;
+// }
 
 export interface IRelatedAtom {
   relation: string;
@@ -285,38 +418,26 @@ export interface IRelatedAtomFull {
   item: IAtom;
 }
 
-export enum TLogAction {
-  search = "search",
-  save = "save",
-  archive = "archive",
-  addRenameKnowbook = "addRenameKnowbook",
-  addKnowbookItem = "addKnowbookItem",
-  removeKnowbookItem = "removeKnowbookItem",
-  removeKnowbook = "removeKnowbook",
-  createUser = "createUser",
-  loginUser = "loginUser",
-}
-
-// export interface IFeature {
-//   title: string;
-//   description: string;
-//   icon: IconT;
+// export interface ISlider {
+//   id: string;
+//   position: number;
+//   max: number;
+//   positionOneStep: number;
+//   maxOneStep: number;
 // }
 
-export interface ISlider {
-  id: string;
-  position: number;
-  max: number;
-  positionOneStep: number;
-  maxOneStep: number;
+export enum TRelationName {
+  group = "group identifier for graph",
+  hide_relation = "hide_relation",
 }
 
 export interface INode {
-  x: number;
-  y: number;
+  // x?: number; //To be deleted when old viz removed
+  // y?: number; //To be deleted when old viz removed
   relation_name: string;
   pos: number;
-  item: AtomID;
+  // item: AtomID;
+  id: string;
 }
 
 export interface ILink {
@@ -329,8 +450,20 @@ export interface IGraph {
   links: ILink[];
 }
 
-export type SVG_T = any;
+export enum TKnowbookUpdateAction {
+  // wiki = "wiki",
+  add = "add",
+  delete = "delete",
+}
 
+export interface IKnowbookUpdate {
+  KnowbookId: KnowbookID;
+  KnowbookName: KnowbookName;
+  itemId: AtomID;
+  action: TKnowbookUpdateAction;
+}
+
+// export type SVG_T = any;
 export type IconT = any;
 export type ColorT = any;
 export type SizeT = any;
@@ -343,3 +476,20 @@ export type eventT = any;
 export type reactComponentT = any;
 
 export type JSONDataT = any;
+
+/** LOGS ****/
+
+export enum TLogAction {
+  search = "search",
+  arxivDownload = "arxivDownload",
+  arxivMoreInfo = "arxivMoreInfo",
+  booksGoToAmazon = "booksGoToAmazon",
+  error = "error",
+  misc = "misc",
+}
+
+export interface ILog {
+  action: TLogAction;
+  details: string;
+  anonymous?: boolean;
+}

@@ -1,0 +1,25 @@
+[
+  {
+    "name": "bks: Liste des 100 meilleurs livres de tous les temps",
+    "language": "fr",
+    "items_name": [
+      "Voyage au bout de la nuit - Louis-Ferdinand Céline",
+      "Vie et opinions de Tristram Shandy, gentilhomme - Laurence Sterne",
+      "Une maison de poupée - Henrik Ibsen",
+      "Ulysse - James Joyce",
+      "Trilogie : Molloy, Malone meurt, L'Innommable - Samuel Beckett",
+      "Saison de la migration vers le nord - Tayeb Salih",
+      "Saga de Njáll le Brûlé - Anonyme",
+      "Romancero gitano - Federico García Lorca",
+      "Récits divers - Anton Tchekhov",
+      "Rāmāyana - Valmiki",
+      "Pedro Páramo - Juan Rulfo",
+      "Othello ou le Maure de Venise - William Shakespeare",
+      "Orgueil et Préjugés - Jane Austen",
+      "Œdipe roi - Sophocle",
+      "Odyssée - Homère",
+      "Nostromo - Joseph Conrad",
+      "Mrs Dalloway - Virginia Woolf"
+    ]
+  }
+]

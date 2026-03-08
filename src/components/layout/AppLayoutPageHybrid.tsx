@@ -1,31 +1,33 @@
-import React from "react";
-import { observer } from "mobx-react-lite";
 import { Box } from "gestalt";
+import { observer } from "mobx-react-lite";
+import React from "react";
 import {
   ColorT,
-  reactComponentT,
   TUiBooleanStorage,
+  configGeneral,
+  reactComponentT,
 } from "../../config/globals";
 import { IStores } from "../../stores/RootStore";
-import { configGeneral } from "../../config/globals";
-import ContentLoading from "../ContentLoading";
-import DialogsAllLogged from "../DialogsAllLogged";
-import dynamic from "next/dynamic";
-import DialogsAllNotLogged from "../DialogsAllNotLogged";
+import ComponentLoading from "../ComponentLoading";
+import DialogsAll from "../DialogsAll";
 
-const AppLayoutPageHybridSVGBody_D = dynamic(
-  () => import("./AppLayoutPageHybridSVGBody"),
-  {
-    ssr: false,
-  }
-);
+// const AppLayoutPageHybridSVGBody_D = dynamic(
+//   () => import("./AppLayoutPageHybridSVGBody"),
+//   {
+//     ssr: false,
+//   }
+// );
+
+// const DialogsAll_D = dynamic(() => import("../DialogsAll"), {
+//   ssr: false,
+// });
 
 interface IPageLayoutProps {
   children?: React.ReactNode;
   stores: IStores;
   // titleSEO: string;
   top: reactComponentT;
-  svgBody: boolean;
+  // svgBody: boolean;
   bottom?: reactComponentT;
 }
 
@@ -34,20 +36,21 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
 ) => {
   const color_top: ColorT = configGeneral.colors.top;
   const opacity_top: ColorT = configGeneral.colors.top_opacity;
-  const bottom_bar: ColorT = configGeneral.colors.bottom_bar;
+  // const bottom_bar: ColorT = configGeneral.colors.bottom_bar;
   const color_background: ColorT = configGeneral.colors.background;
   const heightHeader =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightHeader;
   const heightBody =
     props.stores.baseStore.GUI_CONFIG.display.layout.heightBody;
-  const heightBottom =
-    props.stores.baseStore.GUI_CONFIG.display.layout.heightBottom;
+  // const heightBottom =
+  //   props.stores.baseStore.GUI_CONFIG.display.layout.heightBottom;
 
   // console.log("rendered", "appLayoutHybrid");
 
+  // const fixedZindex = new FixedZIndex(0);
+
   return (
     <>
-      {/* <HeaderSEO stores={props.stores} title={props.titleSEO} /> */}
       <Box padding={0} height="100vh" width="100%" color={color_background}>
         <Box
           padding={0}
@@ -73,7 +76,7 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
               {props.stores.uiStore.getUiBooleanStorage(
                 TUiBooleanStorage.showLoading
               ) ? (
-                <ContentLoading stores={props.stores} />
+                <ComponentLoading stores={props.stores} />
               ) : (
                 <Box
                   color={color_background}
@@ -81,7 +84,7 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
                   direction="column"
                   justifyContent="between"
                 >
-                  {props.svgBody ? (
+                  {/* {props.svgBody ? (
                     <>
                       <AppLayoutPageHybridSVGBody_D stores={props.stores}>
                         {props.children}
@@ -89,13 +92,14 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
                     </>
                   ) : (
                     <>{props.children}</>
-                  )}
+                  )} */}
+                  <>{props.children}</>
                 </Box>
               )}
             </Box>
           </Box>
         </Box>
-        {props.svgBody ? (
+        {/* {props.svgBody ? (
           <>
             <Box
               color={bottom_bar}
@@ -107,7 +111,7 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
           </>
         ) : (
           <></>
-        )}
+        )} */}
 
         <Box padding={0} position="fixed" bottom width="100%">
           {props.bottom}
@@ -131,13 +135,19 @@ const AppLayoutPageHybrid: React.FunctionComponent<IPageLayoutProps> = (
         <></>
       )} */}
 
-      <DialogsAllNotLogged stores={props.stores} />
+      {/* <DialogsAllNotLogged stores={props.stores} />
 
       {props.stores.baseStore.isLogged ? (
         <DialogsAllLogged stores={props.stores} />
       ) : (
         <></>
-      )}
+      )} */}
+
+      {/* <Box zIndex={fixedZindex}>
+        <DialogsAll stores={props.stores} />
+      </Box> */}
+
+      <DialogsAll stores={props.stores} />
     </>
   );
 };
